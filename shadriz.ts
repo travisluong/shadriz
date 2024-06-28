@@ -25,6 +25,7 @@ program
         []
       );
       await runCommand(`cd ${name} && npm i dotenv uuidv7`, []);
+      await runCommand(`cd ${name} && npm i @auth/drizzle-adapter`, []);
       copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
@@ -38,6 +39,7 @@ function copyTemplates(name: string) {
     "lib/config.ts.hbs",
     "scripts/migrate.ts.hbs",
     "drizzle.config.ts.hbs",
+    "lib/schema.ts.hbs",
   ];
   for (const filePath of templatesToCopy) {
     copyTemplate(name, filePath);
