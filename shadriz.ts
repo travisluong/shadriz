@@ -26,6 +26,7 @@ program
       );
       await runCommand(`cd ${name} && npm i dotenv uuidv7`, []);
       await runCommand(`cd ${name} && npm i @auth/drizzle-adapter`, []);
+      await runCommand(`cd ${name} && npx shadcn-ui@latest init -y -d`, []);
       copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
