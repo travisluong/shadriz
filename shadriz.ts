@@ -36,6 +36,8 @@ function copyTemplates(name: string) {
     ".env.local.hbs",
     "lib/db.ts.hbs",
     "lib/config.ts.hbs",
+    "scripts/migrate.ts.hbs",
+    "drizzle.config.ts.hbs",
   ];
   for (const filePath of templatesToCopy) {
     copyTemplate(name, filePath);
