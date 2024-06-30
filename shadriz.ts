@@ -25,8 +25,13 @@ program
         []
       );
       await runCommand(`cd ${name} && npm i dotenv uuidv7`, []);
-      await runCommand(`cd ${name} && npm i @auth/drizzle-adapter`, []);
+      await runCommand(
+        `cd ${name} && npm i @auth/drizzle-adapter next-auth@beta`,
+        []
+      );
+      await runCommand(`cd ${name} && npm i nodemailer`, []);
       await runCommand(`cd ${name} && npx shadcn-ui@latest init -y -d`, []);
+      await runCommand(`cd ${name} && npx drizzle-kit generate:mysql`, []);
       copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
@@ -41,6 +46,9 @@ function copyTemplates(name: string) {
     "scripts/migrate.ts.hbs",
     "drizzle.config.ts.hbs",
     "lib/schema.ts.hbs",
+    "app/api/auth/[...nextauth]/route.ts.hbs",
+    "components/sign-in.ts.hbs",
+    "auth.ts.hbs",
   ];
   for (const filePath of templatesToCopy) {
     copyTemplate(name, filePath);

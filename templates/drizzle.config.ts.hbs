@@ -2,10 +2,10 @@ import { defineConfig } from "drizzle-kit";
 import { config } from "./lib/config";
 
 export default defineConfig({
+  dialect: "mysql",
   schema: "./lib/schema.ts",
-  driver: "mysql2",
   dbCredentials: {
-    uri: config.DB_URL,
+    url: config.DB_URL,
   },
   verbose: true,
   strict: true,
