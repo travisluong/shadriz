@@ -7,7 +7,9 @@ const program = new Command();
 
 program
   .name("shadriz")
-  .description("Full Stack Framework Next.js ShadCN/UI and Drizzle ORM")
+  .description(
+    "shadriz - Full Stack Framework Next.js ShadCN/UI and Drizzle ORM"
+  )
   .version("0.0.1");
 
 program
@@ -31,11 +33,37 @@ program
       );
       await runCommand(`cd ${name} && npm i nodemailer`, []);
       await runCommand(`cd ${name} && npx shadcn-ui@latest init -y -d`, []);
-      await runCommand(`cd ${name} && npx drizzle-kit generate:mysql`, []);
+      await runCommand(`cd ${name} && npx drizzle-kit generate`, []);
       copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
     }
+  });
+
+program
+  .command("db")
+  .description("Generate Drizzle ORM configuration")
+  .argument("<dialect>", "sql dialect: pg, mysql, sqlite")
+  .action(async (dialect, options) => {
+    console.log(dialect);
+  });
+
+program
+  .command("auth")
+  .description("Generate Auth.js configuration")
+  .argument("<provider>", "provider: github, google")
+  .action(async (provider, options) => {
+    console.log(provider);
+  });
+
+program
+  .command("scaffold")
+  .description(
+    "Generate CRUD ui, db schema, db migration, and server actions for a table"
+  )
+  .argument("<table>", "table: post, product, order, etc")
+  .action(async (table, options) => {
+    console.log(table);
   });
 
 function copyTemplates(name: string) {
