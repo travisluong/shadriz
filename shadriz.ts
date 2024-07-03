@@ -2,6 +2,8 @@ import { Command } from "commander";
 import { spawn } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
+import chalk from "chalk";
+import Handlebars from "handlebars";
 
 const program = new Command();
 
@@ -45,7 +47,12 @@ program
   .description("Generate Drizzle ORM configuration")
   .argument("<dialect>", "sql dialect: pg, mysql, sqlite")
   .action(async (dialect, options) => {
-    console.log(dialect);
+    const dialects = ["pg", "mysql", "sqlite"];
+    if (!dialects.includes(dialect)) {
+      console.error(chalk.red(`${dialect} dialect invalid`));
+      process.exit(1);
+    }
+    renderTemplate("drizzle.config.ts.hbs", { dialect: dialect });
   });
 
 program
@@ -81,6 +88,23 @@ function copyTemplates(name: string) {
   for (const filePath of templatesToCopy) {
     copyTemplate(name, filePath);
   }
+}
+
+function renderTemplate(filePath: string, data: any) {
+  const templatePath = path.join(__dirname, "templates", filePath);
+  const templateContent = fs.readFileSync(templatePath, "utf-8");
+  const compiled = Handlebars.compile(templateContent);
+  const content = compiled(data);
+  const arr = filePath.split(".");
+  arr.pop();
+  const outputFilePath = arr.join(".");
+  const outputPath = path.join(process.cwd(), outputFilePath);
+  const resolvedPath = path.resolve(outputPath);
+  const dir = path.dirname(resolvedPath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(resolvedPath, content);
 }
 
 function copyTemplate(name: string, filePath: string) {
