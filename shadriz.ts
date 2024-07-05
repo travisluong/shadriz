@@ -12,6 +12,7 @@ interface ShadrizDBStrategy {
   copySchema: () => void;
   appendDbUrl: () => void;
   copyDbInstance: () => void;
+  scaffold: ({ table, columns }: { table: string; columns: string[] }) => void;
 }
 
 const pgStrategy: ShadrizDBStrategy = {
@@ -41,7 +42,7 @@ const pgStrategy: ShadrizDBStrategy = {
     });
   },
   appendDbUrl: function (): void {
-    dbCommon.appendDbUrl("postgres://user:password@host:port/db");
+    common.appendDbUrl("postgres://user:password@host:port/db");
   },
   copyDbInstance: function (): void {
     renderTemplate({
@@ -49,6 +50,37 @@ const pgStrategy: ShadrizDBStrategy = {
       outputPath: "lib/db.ts",
       data: {},
     });
+  },
+  scaffold: function ({
+    table,
+    columns,
+  }: {
+    table: string;
+    columns: string[];
+  }): void {
+    // compile columns
+    let columnsCode = "";
+    for (const column of columns) {
+      const [columnName, dataType] = column.split(":");
+      switch (dataType) {
+        case "varchar":
+          columnsCode += `    ${columnName}: varchar(\"${columnName}, { length: 255 }\"),\n`;
+          break;
+        case "text":
+          columnsCode += `    ${columnName}: text(\"${columnName}\"),\n`;
+        default:
+          break;
+      }
+    }
+    // compile str
+    const str = compileTemplate({
+      inputPath: "lib/schema.ts.pg.table.hbs",
+      data: { table, columns: columnsCode },
+    });
+
+    console.log(str);
+
+    common.appendToFile("lib/schema.ts", str);
   },
 };
 
@@ -78,7 +110,7 @@ const mysql2Strategy: ShadrizDBStrategy = {
     });
   },
   appendDbUrl: function (): void {
-    dbCommon.appendDbUrl("mysql://user:password@host:port/db");
+    common.appendDbUrl("mysql://user:password@host:port/db");
   },
   copyDbInstance: function (): void {
     renderTemplate({
@@ -86,6 +118,15 @@ const mysql2Strategy: ShadrizDBStrategy = {
       outputPath: "lib/db.ts",
       data: {},
     });
+  },
+  scaffold: function ({
+    table,
+    columns,
+  }: {
+    table: string;
+    columns: string[];
+  }): void {
+    throw new Error("Function not implemented.");
   },
 };
 
@@ -115,7 +156,7 @@ const betterSqlite3Strategy: ShadrizDBStrategy = {
     });
   },
   appendDbUrl: function (): void {
-    dbCommon.appendDbUrl("sqlite.db");
+    common.appendDbUrl("sqlite.db");
   },
   copyDbInstance: function (): void {
     renderTemplate({
@@ -123,6 +164,15 @@ const betterSqlite3Strategy: ShadrizDBStrategy = {
       outputPath: "lib/db.ts",
       data: {},
     });
+  },
+  scaffold: function ({
+    table,
+    columns,
+  }: {
+    table: string;
+    columns: string[];
+  }): void {
+    throw new Error("Function not implemented.");
   },
 };
 
@@ -132,7 +182,7 @@ const dbStrategies: { [key: string]: ShadrizDBStrategy } = {
   "better-sqlite3": betterSqlite3Strategy,
 };
 
-const dbCommon = {
+const common = {
   copyConfig: function () {
     renderTemplate({
       inputPath: "lib/config.ts.hbs",
@@ -150,8 +200,12 @@ const dbCommon = {
   appendDbUrl: function (url: string) {
     const filePath = ".env.local";
     const textToAppend = "DB_URL=" + url;
+    common.appendToFile(filePath, textToAppend);
+  },
+  appendToFile(filePath: string, textToAppend: string) {
     try {
-      fs.appendFileSync(filePath, textToAppend);
+      const joinedFilePath = path.join(process.cwd(), filePath);
+      fs.appendFileSync(joinedFilePath, textToAppend);
     } catch (error) {
       console.error(error);
     }
@@ -207,8 +261,8 @@ program
     dbStrategy.copyDrizzleConfig();
     dbStrategy.copyMigrateScript();
     dbStrategy.copySchema();
-    dbCommon.copyConfig();
-    dbCommon.copyEnvLocal();
+    common.copyConfig();
+    common.copyEnvLocal();
     dbStrategy.appendDbUrl();
     dbStrategy.copyDbInstance();
   });
@@ -227,8 +281,17 @@ program
     "Generate CRUD ui, db schema, db migration, and server actions for a table"
   )
   .argument("<table>", "table: post, product, order, etc")
+  .requiredOption("-c, --columns <columns...>", "specify columns")
+  .requiredOption("-d, --database <database>", "specify database")
   .action(async (table, options) => {
     console.log(table);
+    console.log(options);
+    if (!(options.database in dbStrategies)) {
+      console.log(chalk.red(`${options.database} invalid strategy`));
+      process.exit(1);
+    }
+    const strategy = dbStrategies[options.database];
+    strategy.scaffold({ table, columns: options.columns });
   });
 
 function copyTemplates(name: string) {
@@ -255,10 +318,7 @@ function renderTemplate({
   outputPath: string;
   data: any;
 }) {
-  const templatePath = path.join(__dirname, "templates", inputPath);
-  const templateContent = fs.readFileSync(templatePath, "utf-8");
-  const compiled = Handlebars.compile(templateContent);
-  const content = compiled(data);
+  const content = compileTemplate({ inputPath, data });
   const joinedOutputPath = path.join(process.cwd(), outputPath);
   const resolvedPath = path.resolve(joinedOutputPath);
   const dir = path.dirname(resolvedPath);
@@ -266,6 +326,20 @@ function renderTemplate({
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(resolvedPath, content);
+}
+
+function compileTemplate({
+  inputPath,
+  data,
+}: {
+  inputPath: string;
+  data: any;
+}): string {
+  const templatePath = path.join(__dirname, "templates", inputPath);
+  const templateContent = fs.readFileSync(templatePath, "utf-8");
+  const compiled = Handlebars.compile(templateContent, { noEscape: true });
+  const content = compiled(data);
+  return content;
 }
 
 function copyTemplate(name: string, filePath: string) {
