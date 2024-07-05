@@ -60,16 +60,20 @@ const pgStrategy: ShadrizDBStrategy = {
   }): void {
     // compile columns
     let columnsCode = "";
-    for (const column of columns) {
+    for (const [index, column] of columns.entries()) {
       const [columnName, dataType] = column.split(":");
       switch (dataType) {
         case "varchar":
-          columnsCode += `    ${columnName}: varchar(\"${columnName}, { length: 255 }\"),\n`;
+          columnsCode += `    ${columnName}: varchar(\"${columnName}\", { length: 255 }),`;
           break;
         case "text":
-          columnsCode += `    ${columnName}: text(\"${columnName}\"),\n`;
+          columnsCode += `    ${columnName}: text(\"${columnName}\"),`;
+          break;
         default:
           break;
+      }
+      if (index !== columns.length - 1) {
+        columnsCode += "\n";
       }
     }
     // compile str
