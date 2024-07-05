@@ -5,6 +5,159 @@ import * as path from "path";
 import chalk from "chalk";
 import Handlebars from "handlebars";
 
+interface ShadrizDBStrategy {
+  installDependencies: () => void;
+  copyDrizzleConfig: () => void;
+  copyMigrateScript: () => void;
+  copySchema: () => void;
+  appendDbUrl: () => void;
+  copyDbInstance: () => void;
+}
+
+const pgStrategy: ShadrizDBStrategy = {
+  installDependencies: async function () {
+    await runCommand("npm i pg", []);
+    await runCommand("npm i -D @types/pg", []);
+  },
+  copyDrizzleConfig: function (): void {
+    renderTemplate({
+      inputPath: "drizzle.config.ts.hbs",
+      outputPath: "drizzle.config.ts",
+      data: { dialect: "postgresql" },
+    });
+  },
+  copyMigrateScript: function (): void {
+    renderTemplate({
+      inputPath: "scripts/migrate.ts.pg.hbs",
+      outputPath: "scripts/migrate.ts",
+      data: {},
+    });
+  },
+  copySchema: function (): void {
+    renderTemplate({
+      inputPath: "lib/schema.ts.pg.hbs",
+      outputPath: "lib/schema.ts",
+      data: {},
+    });
+  },
+  appendDbUrl: function (): void {
+    dbCommon.appendDbUrl("postgres://user:password@host:port/db");
+  },
+  copyDbInstance: function (): void {
+    renderTemplate({
+      inputPath: "lib/db.ts.pg.hbs",
+      outputPath: "lib/db.ts",
+      data: {},
+    });
+  },
+};
+
+const mysql2Strategy: ShadrizDBStrategy = {
+  installDependencies: async function () {
+    await runCommand("npm i mysql2", []);
+  },
+  copyDrizzleConfig: function (): void {
+    renderTemplate({
+      inputPath: "drizzle.config.ts.mysql2.hbs",
+      outputPath: "drizzle.config.ts",
+      data: { dialect: "mysql" },
+    });
+  },
+  copyMigrateScript: function (): void {
+    renderTemplate({
+      inputPath: "scripts/migrate.ts.mysql2.hbs",
+      outputPath: "scripts/migrate.ts",
+      data: {},
+    });
+  },
+  copySchema: function (): void {
+    renderTemplate({
+      inputPath: "lib/schema.ts.mysql2.hbs",
+      outputPath: "lib/schema.ts",
+      data: {},
+    });
+  },
+  appendDbUrl: function (): void {
+    dbCommon.appendDbUrl("mysql://user:password@host:port/db");
+  },
+  copyDbInstance: function (): void {
+    renderTemplate({
+      inputPath: "lib/db.ts.mysql2.hbs",
+      outputPath: "lib/db.ts",
+      data: {},
+    });
+  },
+};
+
+const betterSqlite3Strategy: ShadrizDBStrategy = {
+  installDependencies: async function () {
+    await runCommand("npm i better-sqlite3", []);
+  },
+  copyDrizzleConfig: function (): void {
+    renderTemplate({
+      inputPath: "drizzle.config.ts.hbs",
+      outputPath: "drizzle.config.ts",
+      data: { dialect: "sqlite" },
+    });
+  },
+  copyMigrateScript: function (): void {
+    renderTemplate({
+      inputPath: "scripts/migrate.ts.better-sqlite3.hbs",
+      outputPath: "scripts/migrate.ts",
+      data: {},
+    });
+  },
+  copySchema: function (): void {
+    renderTemplate({
+      inputPath: "lib/schema.ts.better-sqlite3.hbs",
+      outputPath: "lib/schema.ts",
+      data: {},
+    });
+  },
+  appendDbUrl: function (): void {
+    dbCommon.appendDbUrl("sqlite.db");
+  },
+  copyDbInstance: function (): void {
+    renderTemplate({
+      inputPath: "lib/db.ts.better-sqlite3.hbs",
+      outputPath: "lib/db.ts",
+      data: {},
+    });
+  },
+};
+
+const dbStrategies: { [key: string]: ShadrizDBStrategy } = {
+  pg: pgStrategy,
+  mysql2: mysql2Strategy,
+  "better-sqlite3": betterSqlite3Strategy,
+};
+
+const dbCommon = {
+  copyConfig: function () {
+    renderTemplate({
+      inputPath: "lib/config.ts.hbs",
+      outputPath: "lib/config.ts",
+      data: {},
+    });
+  },
+  copyEnvLocal: function () {
+    renderTemplate({
+      inputPath: ".env.local.hbs",
+      outputPath: ".env.local",
+      data: {},
+    });
+  },
+  appendDbUrl: function (url: string) {
+    const filePath = ".env.local";
+    const textToAppend = "DB_URL=" + url;
+    try {
+      fs.appendFileSync(filePath, textToAppend);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+};
+
 const program = new Command();
 
 program
@@ -25,7 +178,7 @@ program
         []
       );
       await runCommand(
-        `cd ${name} && npm i drizzle-orm mysql2 --legacy-peer-deps && npm i -D drizzle-kit`,
+        `cd ${name} && npm i drizzle-orm --legacy-peer-deps && npm i -D drizzle-kit`,
         []
       );
       await runCommand(`cd ${name} && npm i dotenv uuidv7`, []);
@@ -33,9 +186,7 @@ program
         `cd ${name} && npm i @auth/drizzle-adapter next-auth@beta`,
         []
       );
-      await runCommand(`cd ${name} && npm i nodemailer`, []);
       await runCommand(`cd ${name} && npx shadcn-ui@latest init -y -d`, []);
-      await runCommand(`cd ${name} && npx drizzle-kit generate`, []);
       copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
@@ -45,14 +196,21 @@ program
 program
   .command("db")
   .description("Generate Drizzle ORM configuration")
-  .argument("<dialect>", "sql dialect: pg, mysql, sqlite")
-  .action(async (dialect, options) => {
-    const dialects = ["pg", "mysql", "sqlite"];
-    if (!dialects.includes(dialect)) {
-      console.error(chalk.red(`${dialect} dialect invalid`));
+  .argument("<strategy>", "sql strategy: pg, mysql, sqlite")
+  .action(async (strategy, options) => {
+    if (!(strategy in dbStrategies)) {
+      console.error(chalk.red(`${strategy} strategy invalid`));
       process.exit(1);
     }
-    renderTemplate("drizzle.config.ts.hbs", { dialect: dialect });
+    const dbStrategy = dbStrategies[strategy];
+    // await dbStrategy.installDependencies();
+    dbStrategy.copyDrizzleConfig();
+    dbStrategy.copyMigrateScript();
+    dbStrategy.copySchema();
+    dbCommon.copyConfig();
+    dbCommon.copyEnvLocal();
+    dbStrategy.appendDbUrl();
+    dbStrategy.copyDbInstance();
   });
 
 program
@@ -78,8 +236,6 @@ function copyTemplates(name: string) {
     ".env.local.hbs",
     "lib/db.ts.hbs",
     "lib/config.ts.hbs",
-    "scripts/migrate.ts.hbs",
-    "drizzle.config.ts.hbs",
     "lib/schema.ts.hbs",
     "app/api/auth/[...nextauth]/route.ts.hbs",
     "components/sign-in.ts.hbs",
@@ -90,16 +246,21 @@ function copyTemplates(name: string) {
   }
 }
 
-function renderTemplate(filePath: string, data: any) {
-  const templatePath = path.join(__dirname, "templates", filePath);
+function renderTemplate({
+  inputPath,
+  outputPath,
+  data,
+}: {
+  inputPath: string;
+  outputPath: string;
+  data: any;
+}) {
+  const templatePath = path.join(__dirname, "templates", inputPath);
   const templateContent = fs.readFileSync(templatePath, "utf-8");
   const compiled = Handlebars.compile(templateContent);
   const content = compiled(data);
-  const arr = filePath.split(".");
-  arr.pop();
-  const outputFilePath = arr.join(".");
-  const outputPath = path.join(process.cwd(), outputFilePath);
-  const resolvedPath = path.resolve(outputPath);
+  const joinedOutputPath = path.join(process.cwd(), outputPath);
+  const resolvedPath = path.resolve(joinedOutputPath);
   const dir = path.dirname(resolvedPath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });

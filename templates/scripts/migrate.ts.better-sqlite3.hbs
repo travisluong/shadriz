@@ -1,0 +1,18 @@
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { migrate } from "drizzle-orm/better-sqlite3/migrator";
+import Database from "better-sqlite3";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env.local" });
+
+const url = process.env.DB_URL;
+
+if (!url) {
+  throw new Error("url not found");
+}
+
+const betterSqlite = new Database(url);
+const db = drizzle(betterSqlite);
+
+migrate(db, { migrationsFolder: "drizzle" });
+betterSqlite.close()
