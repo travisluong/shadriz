@@ -15,6 +15,7 @@ const client = new Client({ connectionString: url });
 const db = drizzle(client);
 
 async function main() {
+  await client.connect();
   await migrate(db, { migrationsFolder: "drizzle" });
   await client.end();
 }

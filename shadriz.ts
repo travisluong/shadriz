@@ -58,7 +58,7 @@ const mysql2Strategy: ShadrizDBStrategy = {
   },
   copyDrizzleConfig: function (): void {
     renderTemplate({
-      inputPath: "drizzle.config.ts.mysql2.hbs",
+      inputPath: "drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
       data: { dialect: "mysql" },
     });
