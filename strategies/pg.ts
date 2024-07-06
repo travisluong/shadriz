@@ -1,4 +1,8 @@
-import { ShadrizDBStrategy } from "../lib/types";
+import {
+  ScaffoldOpts,
+  ShadrizDBStrategy,
+  ShadrizScaffoldUtils,
+} from "../lib/types";
 import {
   appendDbUrl,
   appendToFile,
@@ -43,27 +47,39 @@ export const pgStrategy: ShadrizDBStrategy = {
       data: {},
     });
   },
-  scaffold: function ({
-    table,
-    columns,
-  }: {
-    table: string;
-    columns: string[];
-  }): void {
+  scaffold: function (opts: ScaffoldOpts): void {
+    // app/posts/page.tsx
+    scaffoldUtils.addListView(opts);
+    // app/posts/[id]/page.tsx
+    scaffoldUtils.addDetailView(opts);
+    // app/posts/[id]/new/page.tsx
+    scaffoldUtils.addNewView(opts);
+    // app/posts/[id]/edit/page.tsx
+    scaffoldUtils.addEditView(opts);
+    // actions/posts/create-post.ts
+    scaffoldUtils.addCreateAction(opts);
+    // actions/posts/update-post.ts
+    scaffoldUtils.addUpdateAction(opts);
+    // actions/posts/delete-post.ts
+    scaffoldUtils.addDeleteAction(opts);
+    // components/posts/post-form.tsx
+
+    // components/posts/post-columns.tsx
+    scaffoldUtils.addColumnDef(opts);
+
+    // add code to schema
+    scaffoldUtils.addCodeToSchema(opts);
+  },
+};
+
+const scaffoldUtils: ShadrizScaffoldUtils = {
+  addCodeToSchema: function (opts: ScaffoldOpts): void {
+    const { table, columns } = opts;
     // compile columns
     let columnsCode = "";
     for (const [index, column] of columns.entries()) {
       const [columnName, dataType] = column.split(":");
-      switch (dataType) {
-        case "varchar":
-          columnsCode += `    ${columnName}: varchar(\"${columnName}\", { length: 255 }),`;
-          break;
-        case "text":
-          columnsCode += `    ${columnName}: text(\"${columnName}\"),`;
-          break;
-        default:
-          break;
-      }
+      columnsCode += this.getKeyValueStrForSchema({ dataType, columnName });
       if (index !== columns.length - 1) {
         columnsCode += "\n";
       }
@@ -74,8 +90,121 @@ export const pgStrategy: ShadrizDBStrategy = {
       data: { table, columns: columnsCode },
     });
 
-    console.log(str);
-
     appendToFile("lib/schema.ts", str);
+  },
+  getKeyValueStrForSchema: function ({
+    dataType,
+    columnName,
+  }: {
+    dataType: string;
+    columnName: string;
+  }): string {
+    switch (dataType) {
+      case "varchar":
+        return `    ${columnName}: varchar(\"${columnName}\", { length: 255 }),`;
+      case "text":
+        return `    ${columnName}: text(\"${columnName}\"),`;
+      default:
+        throw new Error("invalid dataType " + dataType);
+    }
+  },
+  addListView: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "app/table/page.tsx.hbs",
+      outputPath: `app/${opts.table}/page.tsx`,
+      data: { tableName: opts.table },
+    });
+  },
+  addDetailView: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "app/table/[id]/page.tsx.hbs",
+      outputPath: `app/${opts.table}/[id]/page.tsx`,
+      data: { tableName: opts.table },
+    });
+  },
+  addEditView: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "app/table/[id]/edit/page.tsx.hbs",
+      outputPath: `app/${opts.table}/[id]/edit/page.tsx`,
+      data: { tableName: opts.table },
+    });
+  },
+  addNewView: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "app/table/new/page.tsx.hbs",
+      outputPath: `app/${opts.table}/new/page.tsx`,
+      data: { tableName: opts.table },
+    });
+  },
+  addCreateAction: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "actions/table/create-table.ts",
+      outputPath: `actions/${opts.table}/create-${opts.table}`,
+      data: { tableName: opts.table },
+    });
+  },
+  addUpdateAction: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "actions/table/update-table.ts",
+      outputPath: `actions/${opts.table}/update-${opts.table}`,
+      data: { tableName: opts.table },
+    });
+  },
+  addDeleteAction: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "actions/table/delete-table.ts",
+      outputPath: `actions/${opts.table}/delete-${opts.table}`,
+      data: { tableName: opts.table },
+    });
+  },
+  addColumnDef: function (opts: ScaffoldOpts): void {
+    let columnKeyVals = "";
+    let columnDefs = "";
+    for (const [index, str] of opts.columns.entries()) {
+      const [columnName, dataType] = str.split(":");
+      columnKeyVals += this.getKeyValueStrForType({ columnName, dataType });
+      columnDefs += this.getColumnDefObjs(columnName);
+      if (index !== opts.columns.length - 1) {
+        columnKeyVals += "\n";
+        columnDefs += "\n";
+      }
+    }
+    const capitalizedTableName =
+      opts.table[0].toUpperCase() + opts.table.slice(1);
+    renderTemplate({
+      inputPath: "components/table/columns.tsx.hbs",
+      outputPath: `components/${opts.table}/${opts.table}-columns.tsx`,
+      data: {
+        columns: columnKeyVals,
+        columnDefs: columnDefs,
+        dataType: capitalizedTableName,
+      },
+    });
+  },
+  getKeyValueStrForType: function ({ columnName, dataType }) {
+    const jsType = this.getJsTypeByDataType(dataType);
+    switch (dataType) {
+      case "varchar":
+      case "text":
+        return `    ${columnName}: ${jsType},`;
+      default:
+        break;
+    }
+  },
+  getJsTypeByDataType: function (dataType: string) {
+    switch (dataType) {
+      case "varchar":
+      case "text":
+        return "string";
+      default:
+        throw new Error("invalid data type: " + dataType);
+    }
+  },
+  getColumnDefObjs: function (columnName: string) {
+    let code = "  {\n";
+    code += `    accessorKey: "${columnName}",\n`;
+    code += `    header: "${columnName}",\n`;
+    code += "  },";
+    return code;
   },
 };
