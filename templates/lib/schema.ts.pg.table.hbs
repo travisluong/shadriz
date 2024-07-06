@@ -5,3 +5,5 @@ export const {{table}} = pgTable(
 {{columns}}
   }
 )
+
+export type {{typeName}} = typeof {{table}}.$inferSelect;

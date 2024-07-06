@@ -1,11 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { {{drizzleInferredType}} } from "@/lib/schema";
 
-export type {{dataType}} = {
-{{columns}}
-};
-
-export const columns: ColumnDef<{{dataType}}>[] = [
+export const columns: ColumnDef<{{drizzleInferredType}}>[] = [
 {{columnDefs}}
 ];

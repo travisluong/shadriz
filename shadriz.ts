@@ -6,6 +6,7 @@ import { mysql2Strategy } from "./strategies/mysql2";
 import { betterSqlite3Strategy } from "./strategies/better-sqlite3";
 import {
   copyConfig,
+  copyDataTable,
   copyEnvLocal,
   copyTemplates,
   runCommand,
@@ -97,6 +98,7 @@ program
     }
     // await runCommand("npx shadcn-ui@latest add -y -o table", []);
     // await runCommand("npm install @tanstack/react-table", []);
+    copyDataTable();
     const strategy = dbStrategies[options.database];
     strategy.scaffold({ table, columns: options.columns });
   });

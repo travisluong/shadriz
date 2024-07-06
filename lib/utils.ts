@@ -128,3 +128,15 @@ export function appendToFile(filePath: string, textToAppend: string) {
     console.error(error);
   }
 }
+
+export function copyDataTable() {
+  renderTemplate({
+    inputPath: "components/ui/data-table.tsx.hbs",
+    outputPath: "components/ui/data-table.tsx",
+    data: {},
+  });
+}
+
+export function capitalize(str: string) {
+  return str[0].toUpperCase() + str.slice(1);
+}

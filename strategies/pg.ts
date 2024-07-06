@@ -6,6 +6,7 @@ import {
 import {
   appendDbUrl,
   appendToFile,
+  capitalize,
   compileTemplate,
   renderTemplate,
   runCommand,
@@ -87,7 +88,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     // compile str
     const str = compileTemplate({
       inputPath: "lib/schema.ts.pg.table.hbs",
-      data: { table, columns: columnsCode },
+      data: { table, columns: columnsCode, typeName: capitalize(table) },
     });
 
     appendToFile("lib/schema.ts", str);
@@ -112,49 +113,49 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     renderTemplate({
       inputPath: "app/table/page.tsx.hbs",
       outputPath: `app/${opts.table}/page.tsx`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addDetailView: function (opts: ScaffoldOpts): void {
     renderTemplate({
       inputPath: "app/table/[id]/page.tsx.hbs",
       outputPath: `app/${opts.table}/[id]/page.tsx`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addEditView: function (opts: ScaffoldOpts): void {
     renderTemplate({
       inputPath: "app/table/[id]/edit/page.tsx.hbs",
       outputPath: `app/${opts.table}/[id]/edit/page.tsx`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addNewView: function (opts: ScaffoldOpts): void {
     renderTemplate({
       inputPath: "app/table/new/page.tsx.hbs",
       outputPath: `app/${opts.table}/new/page.tsx`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addCreateAction: function (opts: ScaffoldOpts): void {
     renderTemplate({
       inputPath: "actions/table/create-table.ts",
       outputPath: `actions/${opts.table}/create-${opts.table}`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addUpdateAction: function (opts: ScaffoldOpts): void {
     renderTemplate({
       inputPath: "actions/table/update-table.ts",
       outputPath: `actions/${opts.table}/update-${opts.table}`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addDeleteAction: function (opts: ScaffoldOpts): void {
     renderTemplate({
       inputPath: "actions/table/delete-table.ts",
       outputPath: `actions/${opts.table}/delete-${opts.table}`,
-      data: { tableName: opts.table },
+      data: { table: opts.table },
     });
   },
   addColumnDef: function (opts: ScaffoldOpts): void {
@@ -169,15 +170,13 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
         columnDefs += "\n";
       }
     }
-    const capitalizedTableName =
-      opts.table[0].toUpperCase() + opts.table.slice(1);
+    const capitalizedTableName = capitalize(opts.table);
     renderTemplate({
       inputPath: "components/table/columns.tsx.hbs",
       outputPath: `components/${opts.table}/${opts.table}-columns.tsx`,
       data: {
-        columns: columnKeyVals,
         columnDefs: columnDefs,
-        dataType: capitalizedTableName,
+        drizzleInferredType: capitalizedTableName,
       },
     });
   },

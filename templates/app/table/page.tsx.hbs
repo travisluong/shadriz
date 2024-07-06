@@ -1,7 +1,14 @@
-export default function Page() {
+import { columns } from "@/components/{{table}}/{{table}}-columns";
+import { DataTable } from "@/components/ui/data-table";
+import { db } from "@/lib/db";
+
+export default async function Page() {
+  const data = await db.query.{{table}}.findMany();
+
   return (
     <div>
-      <h2>{{ tableName }}</h2>
+      <h2>{{table}}</h2>
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
