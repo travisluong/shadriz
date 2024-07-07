@@ -116,11 +116,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     // compile columns
     let columnsCode = "";
     for (const [index, column] of columns.entries()) {
-      const [columnName, dataType] = column.split(":");
-      columnsCode += scaffoldUtils.getKeyValueStrForSchema({
-        dataType,
-        columnName,
-      });
+      columnsCode += scaffoldUtils.getKeyValueStrForSchema(column);
       if (index !== columns.length - 1) {
         columnsCode += "\n";
       }
@@ -133,19 +129,13 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
 
     appendToFile("lib/schema.ts", str);
   },
-  getKeyValueStrForSchema: function ({
-    dataType,
-    columnName,
-  }: {
-    dataType: string;
-    columnName: string;
-  }): string {
-    const [dtype, arg1, arg2, arg3] = dataType.split("-");
+  getKeyValueStrForSchema: function (column: string): string {
+    const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
     const args = [arg1, arg2, arg3];
-    if (!(dtype in dataTypeStrategies)) {
-      throw new Error("data type strategy not found: " + dtype);
+    if (!(dataType in dataTypeStrategies)) {
+      throw new Error("data type strategy not found: " + dataType);
     }
-    const strategy = dataTypeStrategies[dtype];
+    const strategy = dataTypeStrategies[dataType];
     let str =
       "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
     if (args.includes("pk")) {

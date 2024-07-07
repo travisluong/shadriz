@@ -15,13 +15,7 @@ export interface ScaffoldOpts {
 
 export interface ShadrizScaffoldUtils {
   addCodeToSchema: (opts: ScaffoldOpts) => void;
-  getKeyValueStrForSchema: ({
-    dataType,
-    columnName,
-  }: {
-    dataType: string;
-    columnName: string;
-  }) => string;
+  getKeyValueStrForSchema: (column: string) => string;
   addListView: (opts: ScaffoldOpts) => void;
   addDetailView: (opts: ScaffoldOpts) => void;
   addEditView: (opts: ScaffoldOpts) => void;
