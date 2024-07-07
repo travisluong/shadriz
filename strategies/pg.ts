@@ -1,4 +1,6 @@
 import {
+  DataTypeStrategy,
+  DataTypeStrategyOpts,
   ScaffoldOpts,
   ShadrizDBStrategy,
   ShadrizScaffoldUtils,
@@ -11,6 +13,41 @@ import {
   renderTemplate,
   runCommand,
 } from "../lib/utils";
+
+const uuidStrategy: DataTypeStrategy = {
+  jsType: "string",
+  getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+    return `${opts.columnName}: uuid(\"${opts.columnName}\")`;
+  },
+};
+
+const varcharStrategy: DataTypeStrategy = {
+  jsType: "string",
+  getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+    return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+  },
+};
+
+const textStrategy: DataTypeStrategy = {
+  jsType: "string",
+  getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+    return `${opts.columnName}: text(\"${opts.columnName}\")`;
+  },
+};
+
+const integerStrategy: DataTypeStrategy = {
+  jsType: "number",
+  getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+    return `${opts.columnName}: integer(\"${opts.columnName}\")`;
+  },
+};
+
+const dataTypeStrategies: { [key: string]: DataTypeStrategy } = {
+  uuid: uuidStrategy,
+  varchar: varcharStrategy,
+  text: textStrategy,
+  integer: integerStrategy,
+};
 
 export const pgStrategy: ShadrizDBStrategy = {
   installDependencies: async function () {
@@ -80,7 +117,10 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     let columnsCode = "";
     for (const [index, column] of columns.entries()) {
       const [columnName, dataType] = column.split(":");
-      columnsCode += this.getKeyValueStrForSchema({ dataType, columnName });
+      columnsCode += scaffoldUtils.getKeyValueStrForSchema({
+        dataType,
+        columnName,
+      });
       if (index !== columns.length - 1) {
         columnsCode += "\n";
       }
@@ -100,14 +140,19 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     dataType: string;
     columnName: string;
   }): string {
-    switch (dataType) {
-      case "varchar":
-        return `    ${columnName}: varchar(\"${columnName}\", { length: 255 }),`;
-      case "text":
-        return `    ${columnName}: text(\"${columnName}\"),`;
-      default:
-        throw new Error("invalid dataType " + dataType);
+    const [dtype, arg1, arg2, arg3] = dataType.split("-");
+    const args = [arg1, arg2, arg3];
+    if (!(dtype in dataTypeStrategies)) {
+      throw new Error("data type strategy not found: " + dtype);
     }
+    const strategy = dataTypeStrategies[dtype];
+    let str =
+      "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
+    if (args.includes("pk")) {
+      str += ".primaryKey()";
+    }
+    str += ",";
+    return str;
   },
   addListView: function (opts: ScaffoldOpts): void {
     renderTemplate({
@@ -159,14 +204,11 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     });
   },
   addColumnDef: function (opts: ScaffoldOpts): void {
-    let columnKeyVals = "";
     let columnDefs = "";
     for (const [index, str] of opts.columns.entries()) {
       const [columnName, dataType] = str.split(":");
-      columnKeyVals += this.getKeyValueStrForType({ columnName, dataType });
       columnDefs += this.getColumnDefObjs(columnName);
       if (index !== opts.columns.length - 1) {
-        columnKeyVals += "\n";
         columnDefs += "\n";
       }
     }
@@ -179,25 +221,6 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
         drizzleInferredType: capitalizedTableName,
       },
     });
-  },
-  getKeyValueStrForType: function ({ columnName, dataType }) {
-    const jsType = this.getJsTypeByDataType(dataType);
-    switch (dataType) {
-      case "varchar":
-      case "text":
-        return `    ${columnName}: ${jsType},`;
-      default:
-        break;
-    }
-  },
-  getJsTypeByDataType: function (dataType: string) {
-    switch (dataType) {
-      case "varchar":
-      case "text":
-        return "string";
-      default:
-        throw new Error("invalid data type: " + dataType);
-    }
   },
   getColumnDefObjs: function (columnName: string) {
     let code = "  {\n";

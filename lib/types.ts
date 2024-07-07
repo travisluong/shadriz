@@ -30,13 +30,14 @@ export interface ShadrizScaffoldUtils {
   addUpdateAction: (opts: ScaffoldOpts) => void;
   addDeleteAction: (opts: ScaffoldOpts) => void;
   addColumnDef: (opts: ScaffoldOpts) => void;
-  getKeyValueStrForType({
-    dataType,
-    columnName,
-  }: {
-    dataType: string;
-    columnName: string;
-  });
-  getJsTypeByDataType: (dataType: string) => string;
   getColumnDefObjs: (columnName: string) => string;
+}
+
+export interface DataTypeStrategyOpts {
+  columnName: string;
+}
+
+export interface DataTypeStrategy {
+  jsType: string;
+  getKeyValueStrForSchema: (opts: DataTypeStrategyOpts) => string;
 }
