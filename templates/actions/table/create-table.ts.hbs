@@ -1,0 +1,34 @@
+"use server";
+
+import { db } from "@/lib/db";
+import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
+import { redirect } from "next/navigation";
+
+export interface Create{{capitalizedTable}}State {
+  errors?: {
+    title?: string[];
+    content?: string[];
+  };
+  message?: string;
+}
+
+export async function create{{capitalizedTable}}(
+  prevState: Create{{capitalizedTable}}State,
+  formData: FormData
+): Promise<Create{{capitalizedTable}}State> {
+  const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
+    title: formData.get("title"),
+    content: formData.get("content"),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "error",
+    };
+  }
+  await db.insert({{table}}).values({
+    title: validatedFields.data.title,
+    content: validatedFields.data.content,
+  });
+  redirect("/{{table}}");
+}

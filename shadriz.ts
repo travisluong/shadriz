@@ -98,6 +98,11 @@ program
     }
     // await runCommand("npx shadcn-ui@latest add -y -o table", []);
     // await runCommand("npm install @tanstack/react-table", []);
+    // await runCommand("npx shadcn-ui@latest add -y -o label", []);
+    // await runCommand("npx shadcn-ui@latest add -y -o input", []);
+    // await runCommand("npx shadcn-ui@latest add -y -o button", []);
+    // await runCommand("npx install zod", []);
+    // await runCommand("npx install drizzle-zod", []);
     copyDataTable();
     const strategy = dbStrategies[options.database];
     strategy.scaffold({ table, columns: options.columns });

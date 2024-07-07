@@ -7,3 +7,5 @@ export const {{table}} = pgTable(
 )
 
 export type {{typeName}} = typeof {{table}}.$inferSelect;
+
+export const insert{{typeName}}Schema = createInsertSchema({{table}})

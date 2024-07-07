@@ -1,0 +1,28 @@
+"use client";
+
+import { create{{capitalizedTable}}, Create{{capitalizedTable}}State } from "@/actions/{{table}}/create-{{table}}";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { useFormState } from "react-dom";
+
+export default function {{capitalizedTable}}Form() {
+  const initialState: Create{{capitalizedTable}}State = {};
+  const [state, dispatch] = useFormState(create{{capitalizedTable}}, initialState);
+
+  return (
+    <div>
+      <form action={dispatch}>
+{{formControls}}
+        <Button type="submit">Submit</Button>
+        <div>
+          {state.message === "error" && <p className="text-red-500">error</p>}
+          {state.message === "success" && (
+            <p className="text-green-500">success</p>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+}

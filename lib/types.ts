@@ -25,6 +25,8 @@ export interface ShadrizScaffoldUtils {
   addDeleteAction: (opts: ScaffoldOpts) => void;
   addColumnDef: (opts: ScaffoldOpts) => void;
   getColumnDefObjs: (columnName: string) => string;
+  addForm: (opts: ScaffoldOpts) => void;
+  getFormControlsHtml: (opts: ScaffoldOpts) => string;
 }
 
 export interface DataTypeStrategyOpts {
@@ -33,5 +35,6 @@ export interface DataTypeStrategyOpts {
 
 export interface DataTypeStrategy {
   jsType: string;
+  formTemplate: string;
   getKeyValueStrForSchema: (opts: DataTypeStrategyOpts) => string;
 }

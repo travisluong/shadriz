@@ -16,6 +16,7 @@ import {
 
 const uuidStrategy: DataTypeStrategy = {
   jsType: "string",
+  formTemplate: "components/table/input.tsx.hbs",
   getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
     return `${opts.columnName}: uuid(\"${opts.columnName}\")`;
   },
@@ -23,6 +24,7 @@ const uuidStrategy: DataTypeStrategy = {
 
 const varcharStrategy: DataTypeStrategy = {
   jsType: "string",
+  formTemplate: "components/table/input.tsx.hbs",
   getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
     return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
   },
@@ -30,6 +32,7 @@ const varcharStrategy: DataTypeStrategy = {
 
 const textStrategy: DataTypeStrategy = {
   jsType: "string",
+  formTemplate: "components/table/textarea.tsx.hbs",
   getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
     return `${opts.columnName}: text(\"${opts.columnName}\")`;
   },
@@ -37,6 +40,7 @@ const textStrategy: DataTypeStrategy = {
 
 const integerStrategy: DataTypeStrategy = {
   jsType: "number",
+  formTemplate: "components/table/input.tsx.hbs",
   getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
     return `${opts.columnName}: integer(\"${opts.columnName}\")`;
   },
@@ -101,10 +105,9 @@ export const pgStrategy: ShadrizDBStrategy = {
     // actions/posts/delete-post.ts
     scaffoldUtils.addDeleteAction(opts);
     // components/posts/post-form.tsx
-
+    scaffoldUtils.addForm(opts);
     // components/posts/post-columns.tsx
     scaffoldUtils.addColumnDef(opts);
-
     // add code to schema
     scaffoldUtils.addCodeToSchema(opts);
   },
@@ -141,6 +144,9 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     if (args.includes("pk")) {
       str += ".primaryKey()";
     }
+    if (args.includes("defaultuuidv7")) {
+      str += ".$defaultFn(() => uuidv7())";
+    }
     str += ",";
     return str;
   },
@@ -169,27 +175,27 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     renderTemplate({
       inputPath: "app/table/new/page.tsx.hbs",
       outputPath: `app/${opts.table}/new/page.tsx`,
-      data: { table: opts.table },
+      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
     });
   },
   addCreateAction: function (opts: ScaffoldOpts): void {
     renderTemplate({
-      inputPath: "actions/table/create-table.ts",
-      outputPath: `actions/${opts.table}/create-${opts.table}`,
-      data: { table: opts.table },
+      inputPath: "actions/table/create-table.ts.hbs",
+      outputPath: `actions/${opts.table}/create-${opts.table}.ts`,
+      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
     });
   },
   addUpdateAction: function (opts: ScaffoldOpts): void {
     renderTemplate({
-      inputPath: "actions/table/update-table.ts",
-      outputPath: `actions/${opts.table}/update-${opts.table}`,
+      inputPath: "actions/table/update-table.ts.hbs",
+      outputPath: `actions/${opts.table}/update-${opts.table}.ts`,
       data: { table: opts.table },
     });
   },
   addDeleteAction: function (opts: ScaffoldOpts): void {
     renderTemplate({
-      inputPath: "actions/table/delete-table.ts",
-      outputPath: `actions/${opts.table}/delete-${opts.table}`,
+      inputPath: "actions/table/delete-table.ts.hbs",
+      outputPath: `actions/${opts.table}/delete-${opts.table}.ts`,
       data: { table: opts.table },
     });
   },
@@ -218,5 +224,34 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     code += `    header: "${columnName}",\n`;
     code += "  },";
     return code;
+  },
+  addForm: function (opts: ScaffoldOpts): void {
+    const formControlsHtml = scaffoldUtils.getFormControlsHtml(opts);
+    renderTemplate({
+      inputPath: "components/table/form.tsx.hbs",
+      outputPath: `components/${opts.table}/${opts.table}-form.tsx`,
+      data: {
+        table: opts.table,
+        capitalizedTable: capitalize(opts.table),
+        formControls: formControlsHtml,
+      },
+    });
+  },
+  getFormControlsHtml: function (opts: ScaffoldOpts): string {
+    let html = "";
+    for (const [index, column] of opts.columns.entries()) {
+      const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
+      if (!(dataType in dataTypeStrategies))
+        throw new Error("invalid data type strategy: " + dataType);
+      const args = [arg1, arg2, arg3];
+      if (args.includes("pk")) continue;
+      const dataTypeStrategy = dataTypeStrategies[dataType];
+      html += compileTemplate({
+        inputPath: dataTypeStrategy.formTemplate,
+        data: { column: columnName },
+      });
+      if (index !== opts.columns.length - 1) html += "\n";
+    }
+    return html;
   },
 };
