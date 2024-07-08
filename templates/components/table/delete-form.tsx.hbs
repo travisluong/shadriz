@@ -1,0 +1,22 @@
+"use client";
+
+import { delete{{capitalizedTable}}, Delete{{capitalizedTable}}State } from "@/actions/{{table}}/delete-{{table}}";
+import { Button } from "../ui/button";
+import { useFormState } from "react-dom";
+import { {{capitalizedTable}} } from "@/lib/schema";
+
+export default function {{capitalizedTable}}DeleteForm({ data }: { data: {{capitalizedTable}} }) {
+  const initialState: Delete{{capitalizedTable}}State = {};
+  const [state, dispatch] = useFormState(delete{{capitalizedTable}}, initialState);
+
+  return (
+    <div>
+      <form action={dispatch}>
+        <input type="hidden" name="id" value={data.id} />
+        <Button type="submit" variant="destructive">
+          Delete
+        </Button>
+      </form>
+    </div>
+  );
+}

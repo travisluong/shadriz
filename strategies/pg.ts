@@ -102,6 +102,8 @@ export const pgStrategy: ShadrizDBStrategy = {
     scaffoldUtils.addNewView(opts);
     // app/posts/[id]/edit/page.tsx
     scaffoldUtils.addEditView(opts);
+    // app/posts/[id]/delete/page.tsx
+    scaffoldUtils.addDeleteView(opts);
     // actions/posts/create-post.ts
     scaffoldUtils.addCreateAction(opts);
     // actions/posts/update-post.ts
@@ -116,6 +118,8 @@ export const pgStrategy: ShadrizDBStrategy = {
     scaffoldUtils.addCodeToSchema(opts);
     // components/posts/post-update-form.tsx
     scaffoldUtils.addUpdateForm(opts);
+    // components/posts/post-delete-form.tsx
+    scaffoldUtils.addDeleteForm(opts);
   },
 };
 
@@ -184,6 +188,13 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
       data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
     });
   },
+  addDeleteView: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "app/table/[id]/delete/page.tsx.hbs",
+      outputPath: `app/${opts.table}/[id]/delete/page.tsx`,
+      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
+    });
+  },
   addCreateAction: function (opts: ScaffoldOpts): void {
     const columns = opts.columns
       .map((c) => c.split(":")[0])
@@ -216,7 +227,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     renderTemplate({
       inputPath: "actions/table/delete-table.ts.hbs",
       outputPath: `actions/${opts.table}/delete-${opts.table}.ts`,
-      data: { table: opts.table },
+      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
     });
   },
   addColumnDef: function (opts: ScaffoldOpts): void {
@@ -302,6 +313,16 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
         table: opts.table,
         capitalizedTable: capitalize(opts.table),
         formControls: formControlsHtml,
+      },
+    });
+  },
+  addDeleteForm: function (opts: ScaffoldOpts): void {
+    renderTemplate({
+      inputPath: "components/table/delete-form.tsx.hbs",
+      outputPath: `components/${opts.table}/${opts.table}-delete-form.tsx`,
+      data: {
+        table: opts.table,
+        capitalizedTable: capitalize(opts.table),
       },
     });
   },

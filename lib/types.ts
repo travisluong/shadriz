@@ -20,6 +20,7 @@ export interface ShadrizScaffoldUtils {
   addDetailView: (opts: ScaffoldOpts) => void;
   addEditView: (opts: ScaffoldOpts) => void;
   addNewView: (opts: ScaffoldOpts) => void;
+  addDeleteView: (opts: ScaffoldOpts) => void;
   addCreateAction: (opts: ScaffoldOpts) => void;
   addUpdateAction: (opts: ScaffoldOpts) => void;
   addDeleteAction: (opts: ScaffoldOpts) => void;
@@ -35,6 +36,7 @@ export interface ShadrizScaffoldUtils {
   getFormControlsHtml: (opts: ScaffoldOpts) => string;
   getUpdateFormControlsHtml: (opts: ScaffoldOpts) => string;
   addUpdateForm: (opts: ScaffoldOpts) => void;
+  addDeleteForm: (opts: ScaffoldOpts) => void;
 }
 
 export interface DataTypeStrategyOpts {

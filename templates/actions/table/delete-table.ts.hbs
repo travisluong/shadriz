@@ -1,0 +1,35 @@
+"use server";
+
+import { db } from "@/lib/db";
+import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
+export interface Delete{{capitalizedTable}}State {
+  errors?: {
+    id?: string[];
+  };
+  message?: string;
+}
+
+export async function delete{{capitalizedTable}}(
+  prevState: Delete{{capitalizedTable}}State,
+  formData: FormData
+): Promise<Delete{{capitalizedTable}}State> {
+  const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
+    id: formData.get("id"),
+  });
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "error",
+    };
+  }
+  if (!validatedFields.data.id) {
+    return {
+      message: "error",
+    };
+  }
+  await db.delete({{table}}).where(eq({{table}}.id, validatedFields.data.id));
+  redirect("/{{table}}");
+}
