@@ -2,6 +2,6 @@
           <Label>{{column}}</Label>
           <Input name="{{column}}" defaultValue={ data.{{column}} } />
           {state.errors?.{{column}}?.map((error) => (
-            <p className="text-red-500">{error}</p>
+            <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

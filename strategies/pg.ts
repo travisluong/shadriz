@@ -261,6 +261,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     let html = "";
     for (const [index, column] of opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
+      if (columnName === "id") continue;
       if (!(dataType in dataTypeStrategies))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
@@ -275,7 +276,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     return html;
   },
   addUpdateForm: function (opts: ScaffoldOpts): void {
-    const formControlsHtml = scaffoldUtils.getFormControlsHtml(opts);
+    const formControlsHtml = scaffoldUtils.getUpdateFormControlsHtml(opts);
     renderTemplate({
       inputPath: "components/table/update-form.tsx.hbs",
       outputPath: `components/${opts.table}/${opts.table}-update-form.tsx`,
@@ -290,6 +291,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     let html = "";
     for (const [index, column] of opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
+      if (columnName === "id") continue;
       if (!(dataType in dataTypeStrategies))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
