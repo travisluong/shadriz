@@ -1,4 +1,7 @@
         <div>
           <Label>{{column}}</Label>
           <Textarea name="{{column}}" />
+          {state.errors?.{{column}}?.map((error) => (
+            <p className="text-red-500">{error}</p>
+          ))}
         </div>
