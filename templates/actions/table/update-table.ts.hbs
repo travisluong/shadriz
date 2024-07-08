@@ -1,0 +1,50 @@
+"use server";
+
+import { db } from "@/lib/db";
+import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+
+export interface Update{{capitalizedTable}}State {
+  errors?: {
+    {{#each columns}}
+    {{this}}?: string[];
+    {{/each}}
+  };
+  message?: string;
+}
+
+export async function update{{capitalizedTable}}(
+  prevState: Update{{capitalizedTable}}State,
+  formData: FormData
+): Promise<Update{{capitalizedTable}}State> {
+  const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
+    id: formData.get("id"),
+    {{#each columns}}
+    {{this}}: formData.get("{{this}}"),
+    {{/each}}
+  });
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "error",
+    };
+  }
+  if (!validatedFields.data.id) {
+    return {
+      message: "error",
+    };
+  }
+  await db
+    .update({{table}})
+    .set({
+      {{#each columns}}
+      {{this}}: validatedFields.data.{{this}},
+      {{/each}}
+    })
+    .where(eq({{table}}.id, validatedFields.data.id));
+  return {
+    message: "success",
+  };
+}

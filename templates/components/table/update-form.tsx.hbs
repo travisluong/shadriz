@@ -1,0 +1,30 @@
+"use client";
+
+import { update{{capitalizedTable}}, Update{{capitalizedTable}}State } from "@/actions/{{table}}/update-{{table}}";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { useFormState } from "react-dom";
+import { {{capitalizedTable}} } from "@/lib/schema";
+
+export default function {{capitalizedTable}}UpdateForm({ data }: { data: {{capitalizedTable}} }) {
+  const initialState: Update{{capitalizedTable}}State = {};
+  const [state, dispatch] = useFormState(update{{capitalizedTable}}, initialState);
+
+  return (
+    <div>
+      <form action={dispatch}>
+        <input type="hidden" name="id" value={data.id} />
+{{formControls}}
+        <Button type="submit">Submit</Button>
+        <div>
+          {state.message === "error" && <p className="text-red-500">error</p>}
+          {state.message === "success" && (
+            <p className="text-green-500">success</p>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+}

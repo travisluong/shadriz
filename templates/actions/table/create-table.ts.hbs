@@ -6,8 +6,9 @@ import { redirect } from "next/navigation";
 
 export interface Create{{capitalizedTable}}State {
   errors?: {
-    title?: string[];
-    content?: string[];
+    {{#each columns}}
+    {{this}}?: string[];
+    {{/each}}
   };
   message?: string;
 }
@@ -17,8 +18,9 @@ export async function create{{capitalizedTable}}(
   formData: FormData
 ): Promise<Create{{capitalizedTable}}State> {
   const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
-    title: formData.get("title"),
-    content: formData.get("content"),
+    {{#each columns}}
+    {{this}}: formData.get("{{this}}"),
+    {{/each}}
   });
   if (!validatedFields.success) {
     return {
@@ -27,8 +29,9 @@ export async function create{{capitalizedTable}}(
     };
   }
   await db.insert({{table}}).values({
-    title: validatedFields.data.title,
-    content: validatedFields.data.content,
+    {{#each columns}}
+    {{this}}: validatedFields.data.{{this}},
+    {{/each}}
   });
   redirect("/{{table}}");
 }

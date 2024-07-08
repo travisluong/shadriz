@@ -7,7 +7,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { useFormState } from "react-dom";
 
-export default function {{capitalizedTable}}Form() {
+export default function {{capitalizedTable}}CreateForm() {
   const initialState: Create{{capitalizedTable}}State = {};
   const [state, dispatch] = useFormState(create{{capitalizedTable}}, initialState);
 
@@ -18,9 +18,6 @@ export default function {{capitalizedTable}}Form() {
         <Button type="submit">Submit</Button>
         <div>
           {state.message === "error" && <p className="text-red-500">error</p>}
-          {state.message === "success" && (
-            <p className="text-green-500">success</p>
-          )}
         </div>
       </form>
     </div>
