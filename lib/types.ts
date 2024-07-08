@@ -24,7 +24,13 @@ export interface ShadrizScaffoldUtils {
   addUpdateAction: (opts: ScaffoldOpts) => void;
   addDeleteAction: (opts: ScaffoldOpts) => void;
   addColumnDef: (opts: ScaffoldOpts) => void;
-  getColumnDefObjs: (columnName: string) => string;
+  getColumnDefObjs: ({
+    columnName,
+    table,
+  }: {
+    columnName: string;
+    table: string;
+  }) => string;
   addForm: (opts: ScaffoldOpts) => void;
   getFormControlsHtml: (opts: ScaffoldOpts) => string;
   getUpdateFormControlsHtml: (opts: ScaffoldOpts) => string;

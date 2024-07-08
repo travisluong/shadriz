@@ -5,4 +5,15 @@ import { {{drizzleInferredType}} } from "@/lib/schema";
 
 export const columns: ColumnDef<{{drizzleInferredType}}>[] = [
 {{columnDefs}}
+  {
+    id: "actions",
+    cell: (({ row }) => {
+        const id = row.getValue("id");
+        return (
+          <div>
+              <a href={`/{{table}}/${id}/edit`}>edit</a> | <a href={`/{{table}}/${id}/delete`}>delete</a>
+          </div>
+        )
+    })
+  }
 ];

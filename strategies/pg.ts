@@ -223,7 +223,10 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     let columnDefs = "";
     for (const [index, str] of opts.columns.entries()) {
       const [columnName, dataType] = str.split(":");
-      columnDefs += this.getColumnDefObjs(columnName);
+      columnDefs += scaffoldUtils.getColumnDefObjs({
+        columnName: columnName,
+        table: opts.table,
+      });
       if (index !== opts.columns.length - 1) {
         columnDefs += "\n";
       }
@@ -235,13 +238,28 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
       data: {
         columnDefs: columnDefs,
         drizzleInferredType: capitalizedTableName,
+        table: opts.table,
       },
     });
   },
-  getColumnDefObjs: function (columnName: string) {
+  getColumnDefObjs: function ({
+    columnName,
+    table,
+  }: {
+    columnName: string;
+    table: string;
+  }) {
     let code = "  {\n";
     code += `    accessorKey: "${columnName}",\n`;
     code += `    header: "${columnName}",\n`;
+
+    if (columnName === "id") {
+      code += `    cell: ({ row }) => {\n`;
+      code += `        const id = row.getValue("id") as string;\n`;
+      code += "        return <a href={`/" + table + "/${id}`}>{id}</a>;\n";
+      code += "    },\n";
+    }
+
     code += "  },";
     return code;
   },
