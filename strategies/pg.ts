@@ -109,7 +109,7 @@ export const pgStrategy: ShadrizDBStrategy = {
     // actions/posts/delete-post.ts
     scaffoldUtils.addDeleteAction(opts);
     // components/posts/post-form.tsx
-    scaffoldUtils.addForm(opts);
+    scaffoldUtils.addCreateForm(opts);
     // components/posts/post-columns.tsx
     scaffoldUtils.addColumnDef(opts);
     // add code to schema
@@ -263,7 +263,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
     code += "  },";
     return code;
   },
-  addForm: function (opts: ScaffoldOpts): void {
+  addCreateForm: function (opts: ScaffoldOpts): void {
     const formControlsHtml = scaffoldUtils.getFormControlsHtml(opts);
     renderTemplate({
       inputPath: "components/table/create-form.tsx.hbs",

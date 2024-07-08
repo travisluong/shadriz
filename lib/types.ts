@@ -31,7 +31,7 @@ export interface ShadrizScaffoldUtils {
     columnName: string;
     table: string;
   }) => string;
-  addForm: (opts: ScaffoldOpts) => void;
+  addCreateForm: (opts: ScaffoldOpts) => void;
   getFormControlsHtml: (opts: ScaffoldOpts) => string;
   getUpdateFormControlsHtml: (opts: ScaffoldOpts) => string;
   addUpdateForm: (opts: ScaffoldOpts) => void;
