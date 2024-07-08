@@ -5,12 +5,17 @@ export interface ShadrizDBStrategy {
   copySchema: () => void;
   appendDbUrl: () => void;
   copyDbInstance: () => void;
-  scaffold: ({ table, columns }: { table: string; columns: string[] }) => void;
+  scaffold: (opts: ScaffoldOpts) => void;
 }
 
 export interface ScaffoldOpts {
   table: string;
   columns: string[];
+}
+
+export interface GetColumnDefObjsOpts {
+  columnName: string;
+  table: string;
 }
 
 export interface ShadrizScaffoldUtils {
@@ -25,13 +30,7 @@ export interface ShadrizScaffoldUtils {
   addUpdateAction: (opts: ScaffoldOpts) => void;
   addDeleteAction: (opts: ScaffoldOpts) => void;
   addColumnDef: (opts: ScaffoldOpts) => void;
-  getColumnDefObjs: ({
-    columnName,
-    table,
-  }: {
-    columnName: string;
-    table: string;
-  }) => string;
+  getColumnDefObjs: (opts: GetColumnDefObjsOpts) => string;
   addCreateForm: (opts: ScaffoldOpts) => void;
   getFormControlsHtml: (opts: ScaffoldOpts) => string;
   getUpdateFormControlsHtml: (opts: ScaffoldOpts) => string;

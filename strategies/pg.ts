@@ -1,6 +1,7 @@
 import {
   DataTypeStrategy,
   DataTypeStrategyOpts,
+  GetColumnDefObjsOpts,
   ScaffoldOpts,
   ShadrizDBStrategy,
   ShadrizScaffoldUtils,
@@ -253,13 +254,7 @@ const scaffoldUtils: ShadrizScaffoldUtils = {
       },
     });
   },
-  getColumnDefObjs: function ({
-    columnName,
-    table,
-  }: {
-    columnName: string;
-    table: string;
-  }) {
+  getColumnDefObjs: function ({ columnName, table }: GetColumnDefObjsOpts) {
     let code = "  {\n";
     code += `    accessorKey: "${columnName}",\n`;
     code += `    header: "${columnName}",\n`;
