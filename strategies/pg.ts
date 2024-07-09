@@ -95,37 +95,37 @@ export const pgStrategy: ShadrizDBStrategy = {
     });
   },
   scaffold: function (opts: ScaffoldOpts): void {
-    // app/posts/page.tsx
+    // app/post/page.tsx
     scaffoldUtils.addListView(opts);
-    // app/posts/[id]/page.tsx
+    // app/post/[id]/page.tsx
     scaffoldUtils.addDetailView(opts);
-    // app/posts/[id]/new/page.tsx
+    // app/post/[id]/new/page.tsx
     scaffoldUtils.addNewView(opts);
-    // app/posts/[id]/edit/page.tsx
+    // app/post/[id]/edit/page.tsx
     scaffoldUtils.addEditView(opts);
-    // app/posts/[id]/delete/page.tsx
+    // app/post/[id]/delete/page.tsx
     scaffoldUtils.addDeleteView(opts);
-    // actions/posts/create-post.ts
+    // actions/post/create-post.ts
     scaffoldUtils.addCreateAction(opts);
-    // actions/posts/update-post.ts
+    // actions/post/update-post.ts
     scaffoldUtils.addUpdateAction(opts);
-    // actions/posts/delete-post.ts
+    // actions/post/delete-post.ts
     scaffoldUtils.addDeleteAction(opts);
-    // components/posts/post-form.tsx
+    // components/post/post-form.tsx
     scaffoldUtils.addCreateForm(opts);
-    // components/posts/post-columns.tsx
+    // components/post/post-columns.tsx
     scaffoldUtils.addColumnDef(opts);
-    // add code to schema
-    scaffoldUtils.addCodeToSchema(opts);
-    // components/posts/post-update-form.tsx
+    // lib/schema.ts
+    scaffoldUtils.appendCodeToSchema(opts);
+    // components/post/post-update-form.tsx
     scaffoldUtils.addUpdateForm(opts);
-    // components/posts/post-delete-form.tsx
+    // components/post/post-delete-form.tsx
     scaffoldUtils.addDeleteForm(opts);
   },
 };
 
 const scaffoldUtils: ShadrizScaffoldUtils = {
-  addCodeToSchema: function (opts: ScaffoldOpts): void {
+  appendCodeToSchema: function (opts: ScaffoldOpts): void {
     const { table, columns } = opts;
     // compile columns
     let columnsCode = "";

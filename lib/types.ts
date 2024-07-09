@@ -19,7 +19,7 @@ export interface GetColumnDefObjsOpts {
 }
 
 export interface ShadrizScaffoldUtils {
-  addCodeToSchema: (opts: ScaffoldOpts) => void;
+  appendCodeToSchema: (opts: ScaffoldOpts) => void;
   getKeyValueStrForSchema: (column: string) => string;
   addListView: (opts: ScaffoldOpts) => void;
   addDetailView: (opts: ScaffoldOpts) => void;
