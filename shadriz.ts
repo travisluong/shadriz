@@ -1,20 +1,22 @@
 import { Command } from "commander";
 import chalk from "chalk";
-import { ShadrizDBStrategy } from "./lib/types";
-import { pgStrategy } from "./strategies/pg";
+import { DialectStrategy, PackageStrategy } from "./lib/types";
+import { pgPackageStrategy } from "./strategies/pg";
 import { mysql2Strategy } from "./strategies/mysql2";
 import { betterSqlite3Strategy } from "./strategies/better-sqlite3";
-import {
-  copyConfig,
-  copyDataTable,
-  copyEnvLocal,
-  runCommand,
-} from "./lib/utils";
+import { copyTemplates, runCommand } from "./lib/utils";
+import { postgresqlDialectStrategy } from "./dialects/postgresql";
+import { sqliteDialectStrategy } from "./dialects/sqlite";
 
-const dbStrategies: { [key: string]: ShadrizDBStrategy } = {
-  pg: pgStrategy,
+const packageStrategyMap: { [key: string]: PackageStrategy } = {
+  pg: pgPackageStrategy,
   mysql2: mysql2Strategy,
   "better-sqlite3": betterSqlite3Strategy,
+};
+
+const dialectStrategyMap: { [key: string]: DialectStrategy } = {
+  postgresql: postgresqlDialectStrategy,
+  sqlite: sqliteDialectStrategy,
 };
 
 const program = new Command();
@@ -63,8 +65,13 @@ program
         `cd ${name} && npx shadcn-ui@latest add -y -o button`,
         []
       );
+      await runCommand(
+        `cd ${name} && npx shadcn-ui@latest add -y -o textarea`,
+        []
+      );
       await runCommand(`cd ${name} && npm install zod`, []);
       await runCommand(`cd ${name} && npm install drizzle-zod`, []);
+      copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
     }
@@ -75,19 +82,14 @@ program
   .description("Generate Drizzle ORM configuration")
   .argument("<strategy>", "pg, mysql2, better-sqlite3")
   .action(async (strategy, options) => {
-    if (!(strategy in dbStrategies)) {
+    if (!(strategy in packageStrategyMap)) {
       console.error(chalk.red(`${strategy} strategy invalid`));
       process.exit(1);
     }
-    const dbStrategy = dbStrategies[strategy];
-    // await dbStrategy.installDependencies();
-    dbStrategy.copyDrizzleConfig();
-    dbStrategy.copyMigrateScript();
-    dbStrategy.copySchema();
-    copyConfig();
-    copyEnvLocal();
-    dbStrategy.appendDbUrl();
-    dbStrategy.copyDbInstance();
+    const packageStrategy = packageStrategyMap[strategy];
+    const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
+    await packageStrategy.init();
+    dialectStrategy.init();
   });
 
 program
@@ -105,16 +107,15 @@ program
   )
   .argument("<table>", "table: post, product, order, etc")
   .requiredOption("-c, --columns <columns...>", "specify columns")
-  .requiredOption("-d, --database <database>", "specify database")
+  .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .action(async (table, options) => {
     console.log(table);
     console.log(options);
-    if (!(options.database in dbStrategies)) {
-      console.log(chalk.red(`${options.database} invalid strategy`));
+    if (!(options.dialect in dialectStrategyMap)) {
+      console.log(chalk.red(`${options.dialect} invalid strategy`));
       process.exit(1);
     }
-    copyDataTable();
-    const strategy = dbStrategies[options.database];
+    const strategy = dialectStrategyMap[options.dialect];
     strategy.scaffold({ table, columns: options.columns });
   });
 

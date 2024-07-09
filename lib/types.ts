@@ -1,10 +1,19 @@
-export interface ShadrizDBStrategy {
+export type Dialects = "postgresql" | "mysql" | "sqlite";
+
+export interface PackageStrategy {
+  dialect: Dialects;
+  init: () => void;
   installDependencies: () => void;
-  copyDrizzleConfig: () => void;
   copyMigrateScript: () => void;
-  copySchema: () => void;
   appendDbUrl: () => void;
   copyDbInstance: () => void;
+}
+
+export interface DialectStrategy {
+  dialect: Dialects;
+  init: () => void;
+  copyDrizzleConfig: () => void;
+  copySchema: () => void;
   scaffold: (opts: ScaffoldOpts) => void;
 }
 
@@ -18,7 +27,7 @@ export interface DataTypeStrategyMap {
 }
 
 export interface ScaffoldProcessorOpts extends ScaffoldOpts {
-  schemaTemplatePath: string;
+  schemaTableTemplatePath: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
 }
 

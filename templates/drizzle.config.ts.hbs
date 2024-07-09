@@ -1,11 +1,13 @@
 import { defineConfig } from "drizzle-kit";
-import { config } from "./lib/config";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env.local" });
 
 export default defineConfig({
   dialect: "{{dialect}}",
   schema: "./lib/schema.ts",
   dbCredentials: {
-    url: config.DB_URL,
+    url: process.env.DB_URL!,
   },
   verbose: true,
   strict: true,

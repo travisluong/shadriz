@@ -3,10 +3,12 @@ import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
 
+// only to be run during new command
 export function copyTemplates(name: string) {
   const templatesToCopy = [
     ".env.local.hbs",
     "lib/config.ts.hbs",
+    "components/ui/data-table.tsx.hbs",
     // "app/api/auth/[...nextauth]/route.ts.hbs",
     // "components/sign-in.ts.hbs",
     // "auth.ts.hbs",
@@ -50,12 +52,12 @@ export function compileTemplate({
 }
 
 export function copyTemplate(name: string, filePath: string) {
-  const templatePath = path.join(__dirname, "templates", filePath);
+  const templatePath = path.join(__dirname, "..", "templates", filePath);
   const templateContent = fs.readFileSync(templatePath, "utf-8");
   const arr = filePath.split(".");
   arr.pop();
   const outputFilePath = arr.join(".");
-  const outputPath = path.join(__dirname, `${name}`, outputFilePath);
+  const outputPath = path.join(process.cwd(), `${name}`, outputFilePath);
   const resolvedPath = path.resolve(outputPath);
   const dir = path.dirname(resolvedPath);
   if (!fs.existsSync(dir)) {
@@ -96,22 +98,6 @@ export async function runCommand(command: string, args: string[]) {
   });
 }
 
-export function copyConfig() {
-  renderTemplate({
-    inputPath: "lib/config.ts.hbs",
-    outputPath: "lib/config.ts",
-    data: {},
-  });
-}
-
-export function copyEnvLocal() {
-  renderTemplate({
-    inputPath: ".env.local.hbs",
-    outputPath: ".env.local",
-    data: {},
-  });
-}
-
 export function appendDbUrl(url: string) {
   const filePath = ".env.local";
   const textToAppend = "DB_URL=" + url;
@@ -125,14 +111,6 @@ export function appendToFile(filePath: string, textToAppend: string) {
   } catch (error) {
     console.error(error);
   }
-}
-
-export function copyDataTable() {
-  renderTemplate({
-    inputPath: "components/ui/data-table.tsx.hbs",
-    outputPath: "components/ui/data-table.tsx",
-    data: {},
-  });
 }
 
 export function capitalize(str: string) {

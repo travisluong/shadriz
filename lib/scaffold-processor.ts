@@ -46,7 +46,11 @@ export class ScaffoldProcessor {
     this.addDeleteForm();
   }
   appendCodeToSchema(): void {
-    const { table, columns, schemaTemplatePath } = this.opts;
+    const {
+      table,
+      columns,
+      schemaTableTemplatePath: schemaTemplatePath,
+    } = this.opts;
     // compile columns
     let columnsCode = "";
     for (const [index, column] of columns.entries()) {
