@@ -15,7 +15,6 @@ export interface ScaffoldOpts {
 
 export interface GetColumnDefObjsOpts {
   columnName: string;
-  table: string;
 }
 
 export interface ShadrizScaffoldUtils {

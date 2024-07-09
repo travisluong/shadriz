@@ -10,8 +10,8 @@ export const columns: ColumnDef<{{drizzleInferredType}}>[] = [
     cell: (({ row }) => {
         const id = row.getValue("id");
         return (
-          <div>
-              <a href={`/{{table}}/${id}/edit`}>edit</a> | <a href={`/{{table}}/${id}/delete`}>delete</a>
+          <div className="text-blue-500">
+              <a href={`/{{table}}/${id}`}>view</a> | <a href={`/{{table}}/${id}/edit`}>edit</a> | <a href={`/{{table}}/${id}/delete`}>delete</a>
           </div>
         )
     })
