@@ -64,7 +64,7 @@ export const pgStrategy: ShadrizDBStrategy = {
   },
   copySchema: function (): void {
     renderTemplate({
-      inputPath: "lib/schema.ts.pg.hbs",
+      inputPath: "lib/schema.ts.postgresql.hbs",
       outputPath: "lib/schema.ts",
       data: {},
     });
@@ -82,7 +82,7 @@ export const pgStrategy: ShadrizDBStrategy = {
   scaffold: function (opts: ScaffoldOpts): void {
     const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
       ...opts,
-      schemaTemplatePath: "lib/schema.ts.pg.table.hbs",
+      schemaTemplatePath: "lib/schema.ts.postgresql.table.hbs",
       dataTypeStrategyMap: dataTypeStrategies,
     };
     const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);

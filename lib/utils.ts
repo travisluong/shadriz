@@ -6,12 +6,10 @@ import Handlebars from "handlebars";
 export function copyTemplates(name: string) {
   const templatesToCopy = [
     ".env.local.hbs",
-    "lib/db.ts.hbs",
     "lib/config.ts.hbs",
-    "lib/schema.ts.hbs",
-    "app/api/auth/[...nextauth]/route.ts.hbs",
-    "components/sign-in.ts.hbs",
-    "auth.ts.hbs",
+    // "app/api/auth/[...nextauth]/route.ts.hbs",
+    // "components/sign-in.ts.hbs",
+    // "auth.ts.hbs",
   ];
   for (const filePath of templatesToCopy) {
     copyTemplate(name, filePath);

@@ -1,5 +1,31 @@
-import { ShadrizDBStrategy } from "../lib/types";
+import { ScaffoldProcessor } from "../lib/scaffold-processor";
+import {
+  DataTypeStrategyMap,
+  DataTypeStrategyOpts,
+  ScaffoldOpts,
+  ScaffoldProcessorOpts,
+  ShadrizDBStrategy,
+} from "../lib/types";
 import { appendDbUrl, renderTemplate, runCommand } from "../lib/utils";
+
+const dataTypeStrategies: DataTypeStrategyMap = {
+  integer: {
+    jsType: "number",
+    formTemplate: "components/table/input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
+      return `integer("${opts.columnName}")`;
+    },
+  },
+  text: {
+    jsType: "string",
+    formTemplate: "components/table/textarea.tsx.hbs",
+    updateFormTemplate: "components/table/update-textarea.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: text(\"${opts.columnName}\")`;
+    },
+  },
+};
 
 export const betterSqlite3Strategy: ShadrizDBStrategy = {
   installDependencies: async function () {
@@ -21,7 +47,7 @@ export const betterSqlite3Strategy: ShadrizDBStrategy = {
   },
   copySchema: function (): void {
     renderTemplate({
-      inputPath: "lib/schema.ts.better-sqlite3.hbs",
+      inputPath: "lib/schema.ts.sqlite.hbs",
       outputPath: "lib/schema.ts",
       data: {},
     });
@@ -36,13 +62,13 @@ export const betterSqlite3Strategy: ShadrizDBStrategy = {
       data: {},
     });
   },
-  scaffold: function ({
-    table,
-    columns,
-  }: {
-    table: string;
-    columns: string[];
-  }): void {
-    throw new Error("Function not implemented.");
+  scaffold: function (opts: ScaffoldOpts): void {
+    const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
+      ...opts,
+      schemaTemplatePath: "lib/schema.ts.sqlite.table.hbs",
+      dataTypeStrategyMap: dataTypeStrategies,
+    };
+    const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
+    scaffoldProcessor.process();
   },
 };

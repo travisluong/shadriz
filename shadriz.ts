@@ -8,7 +8,6 @@ import {
   copyConfig,
   copyDataTable,
   copyEnvLocal,
-  copyTemplates,
   runCommand,
 } from "./lib/utils";
 
@@ -47,7 +46,25 @@ program
         []
       );
       await runCommand(`cd ${name} && npx shadcn-ui@latest init -y -d`, []);
-      copyTemplates(name);
+      await runCommand(
+        `cd ${name} && npx shadcn-ui@latest add -y -o table`,
+        []
+      );
+      await runCommand(`cd ${name} && npm install @tanstack/react-table`, []);
+      await runCommand(
+        `cd ${name} && npx shadcn-ui@latest add -y -o label`,
+        []
+      );
+      await runCommand(
+        `cd ${name} && npx shadcn-ui@latest add -y -o input`,
+        []
+      );
+      await runCommand(
+        `cd ${name} && npx shadcn-ui@latest add -y -o button`,
+        []
+      );
+      await runCommand(`cd ${name} && npm install zod`, []);
+      await runCommand(`cd ${name} && npm install drizzle-zod`, []);
     } catch (error) {
       console.error("Error running command:", error);
     }
@@ -56,7 +73,7 @@ program
 program
   .command("db")
   .description("Generate Drizzle ORM configuration")
-  .argument("<strategy>", "sql strategy: pg, mysql, sqlite")
+  .argument("<strategy>", "pg, mysql2, better-sqlite3")
   .action(async (strategy, options) => {
     if (!(strategy in dbStrategies)) {
       console.error(chalk.red(`${strategy} strategy invalid`));
@@ -96,13 +113,6 @@ program
       console.log(chalk.red(`${options.database} invalid strategy`));
       process.exit(1);
     }
-    // await runCommand("npx shadcn-ui@latest add -y -o table", []);
-    // await runCommand("npm install @tanstack/react-table", []);
-    // await runCommand("npx shadcn-ui@latest add -y -o label", []);
-    // await runCommand("npx shadcn-ui@latest add -y -o input", []);
-    // await runCommand("npx shadcn-ui@latest add -y -o button", []);
-    // await runCommand("npx install zod", []);
-    // await runCommand("npx install drizzle-zod", []);
     copyDataTable();
     const strategy = dbStrategies[options.database];
     strategy.scaffold({ table, columns: options.columns });
