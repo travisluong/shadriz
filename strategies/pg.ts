@@ -1,4 +1,4 @@
-import { scaffoldUtils } from "../lib/scaffold-utils";
+import { ScaffoldUtil } from "../lib/scaffold-utils";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
@@ -85,6 +85,7 @@ export const pgStrategy: ShadrizDBStrategy = {
       schemaTemplatePath: "lib/schema.ts.pg.table.hbs",
       dataTypeStrategyMap: dataTypeStrategies,
     };
-    scaffoldUtils.execute(scaffoldUtilOpts);
+    const scaffoldUtil = new ScaffoldUtil(scaffoldUtilOpts);
+    scaffoldUtil.execute();
   },
 };

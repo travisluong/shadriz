@@ -23,28 +23,34 @@ import {
 // components/post/post-create-form.tsx
 // components/post/post-update-form.tsx
 // components/post/post-delete-form.tsx
-export const scaffoldUtils = {
-  execute: function (opts: ScaffoldUtilOpts): void {
-    scaffoldUtils.appendCodeToSchema(opts);
-    scaffoldUtils.addListView(opts);
-    scaffoldUtils.addDetailView(opts);
-    scaffoldUtils.addNewView(opts);
-    scaffoldUtils.addEditView(opts);
-    scaffoldUtils.addDeleteView(opts);
-    scaffoldUtils.addCreateAction(opts);
-    scaffoldUtils.addUpdateAction(opts);
-    scaffoldUtils.addDeleteAction(opts);
-    scaffoldUtils.addColumnDef(opts);
-    scaffoldUtils.addCreateForm(opts);
-    scaffoldUtils.addUpdateForm(opts);
-    scaffoldUtils.addDeleteForm(opts);
-  },
-  appendCodeToSchema: function (opts: ScaffoldUtilOpts): void {
-    const { table, columns, schemaTemplatePath } = opts;
+export class ScaffoldUtil {
+  opts: ScaffoldUtilOpts;
+
+  constructor(opts: ScaffoldUtilOpts) {
+    this.opts = opts;
+  }
+
+  execute(): void {
+    this.appendCodeToSchema();
+    this.addListView();
+    this.addDetailView();
+    this.addNewView();
+    this.addEditView();
+    this.addDeleteView();
+    this.addCreateAction();
+    this.addUpdateAction();
+    this.addDeleteAction();
+    this.addColumnDef();
+    this.addCreateForm();
+    this.addUpdateForm();
+    this.addDeleteForm();
+  }
+  appendCodeToSchema(): void {
+    const { table, columns, schemaTemplatePath } = this.opts;
     // compile columns
     let columnsCode = "";
     for (const [index, column] of columns.entries()) {
-      columnsCode += scaffoldUtils.getKeyValueStrForSchema({ ...opts, column });
+      columnsCode += this.getKeyValueStrForSchema({ ...this.opts, column });
       if (index !== columns.length - 1) {
         columnsCode += "\n";
       }
@@ -56,10 +62,8 @@ export const scaffoldUtils = {
     });
 
     appendToFile("lib/schema.ts", str);
-  },
-  getKeyValueStrForSchema: function (
-    opts: GetKeyValueStrForSchemaOpts
-  ): string {
+  }
+  getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column, dataTypeStrategyMap } = opts;
     const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
     const args = [arg1, arg2, arg3];
@@ -77,174 +81,186 @@ export const scaffoldUtils = {
     }
     str += ",";
     return str;
-  },
-  addListView: function (opts: ScaffoldUtilOpts): void {
+  }
+  addListView(): void {
     renderTemplate({
       inputPath: "app/table/page.tsx.hbs",
-      outputPath: `app/${opts.table}/page.tsx`,
-      data: { table: opts.table },
+      outputPath: `app/${this.opts.table}/page.tsx`,
+      data: { table: this.opts.table },
     });
-  },
-  addDetailView: function (opts: ScaffoldUtilOpts): void {
+  }
+  addDetailView(): void {
     renderTemplate({
       inputPath: "app/table/[id]/page.tsx.hbs",
-      outputPath: `app/${opts.table}/[id]/page.tsx`,
-      data: { table: opts.table },
+      outputPath: `app/${this.opts.table}/[id]/page.tsx`,
+      data: { table: this.opts.table },
     });
-  },
-  addEditView: function (opts: ScaffoldUtilOpts): void {
+  }
+  addEditView(): void {
     renderTemplate({
       inputPath: "app/table/[id]/edit/page.tsx.hbs",
-      outputPath: `app/${opts.table}/[id]/edit/page.tsx`,
-      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
+      outputPath: `app/${this.opts.table}/[id]/edit/page.tsx`,
+      data: {
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
+      },
     });
-  },
-  addNewView: function (opts: ScaffoldUtilOpts): void {
+  }
+  addNewView(): void {
     renderTemplate({
       inputPath: "app/table/new/page.tsx.hbs",
-      outputPath: `app/${opts.table}/new/page.tsx`,
-      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
+      outputPath: `app/${this.opts.table}/new/page.tsx`,
+      data: {
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
+      },
     });
-  },
-  addDeleteView: function (opts: ScaffoldUtilOpts): void {
+  }
+  addDeleteView(): void {
     renderTemplate({
       inputPath: "app/table/[id]/delete/page.tsx.hbs",
-      outputPath: `app/${opts.table}/[id]/delete/page.tsx`,
-      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
+      outputPath: `app/${this.opts.table}/[id]/delete/page.tsx`,
+      data: {
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
+      },
     });
-  },
-  addCreateAction: function (opts: ScaffoldUtilOpts): void {
-    const columns = opts.columns
+  }
+  addCreateAction(): void {
+    const columns = this.opts.columns
       .map((c) => c.split(":")[0])
       .filter((c) => c !== "id");
     renderTemplate({
       inputPath: "actions/table/create-table.ts.hbs",
-      outputPath: `actions/${opts.table}/create-${opts.table}.ts`,
+      outputPath: `actions/${this.opts.table}/create-${this.opts.table}.ts`,
       data: {
-        table: opts.table,
-        capitalizedTable: capitalize(opts.table),
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
         columns: columns,
       },
     });
-  },
-  addUpdateAction: function (opts: ScaffoldUtilOpts): void {
-    const columns = opts.columns
+  }
+  addUpdateAction(): void {
+    const columns = this.opts.columns
       .map((c) => c.split(":")[0])
       .filter((c) => c !== "id");
     renderTemplate({
       inputPath: "actions/table/update-table.ts.hbs",
-      outputPath: `actions/${opts.table}/update-${opts.table}.ts`,
+      outputPath: `actions/${this.opts.table}/update-${this.opts.table}.ts`,
       data: {
-        table: opts.table,
-        capitalizedTable: capitalize(opts.table),
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
         columns: columns,
       },
     });
-  },
-  addDeleteAction: function (opts: ScaffoldUtilOpts): void {
+  }
+  addDeleteAction(): void {
     renderTemplate({
       inputPath: "actions/table/delete-table.ts.hbs",
-      outputPath: `actions/${opts.table}/delete-${opts.table}.ts`,
-      data: { table: opts.table, capitalizedTable: capitalize(opts.table) },
+      outputPath: `actions/${this.opts.table}/delete-${this.opts.table}.ts`,
+      data: {
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
+      },
     });
-  },
-  addColumnDef: function (opts: ScaffoldUtilOpts): void {
+  }
+  addColumnDef(): void {
     let columnDefs = "";
-    for (const [index, str] of opts.columns.entries()) {
+    for (const [index, str] of this.opts.columns.entries()) {
       const [columnName, dataType] = str.split(":");
-      columnDefs += scaffoldUtils.getColumnDefObjs({
+      columnDefs += this.getColumnDefObjs({
         columnName: columnName,
       });
-      if (index !== opts.columns.length - 1) {
+      if (index !== this.opts.columns.length - 1) {
         columnDefs += "\n";
       }
     }
-    const capitalizedTableName = capitalize(opts.table);
+    const capitalizedTableName = capitalize(this.opts.table);
     renderTemplate({
       inputPath: "components/table/columns.tsx.hbs",
-      outputPath: `components/${opts.table}/${opts.table}-columns.tsx`,
+      outputPath: `components/${this.opts.table}/${this.opts.table}-columns.tsx`,
       data: {
         columnDefs: columnDefs,
         drizzleInferredType: capitalizedTableName,
-        table: opts.table,
+        table: this.opts.table,
       },
     });
-  },
-  getColumnDefObjs: function ({ columnName }: GetColumnDefObjsOpts) {
+  }
+  getColumnDefObjs({ columnName }: GetColumnDefObjsOpts) {
     let code = "  {\n";
     code += `    accessorKey: "${columnName}",\n`;
     code += `    header: "${columnName}",\n`;
     code += "  },";
     return code;
-  },
-  addCreateForm: function (opts: ScaffoldUtilOpts): void {
-    const formControlsHtml = scaffoldUtils.getFormControlsHtml(opts);
+  }
+  addCreateForm(): void {
+    const formControlsHtml = this.getFormControlsHtml();
     renderTemplate({
       inputPath: "components/table/create-form.tsx.hbs",
-      outputPath: `components/${opts.table}/${opts.table}-create-form.tsx`,
+      outputPath: `components/${this.opts.table}/${this.opts.table}-create-form.tsx`,
       data: {
-        table: opts.table,
-        capitalizedTable: capitalize(opts.table),
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
         formControls: formControlsHtml,
       },
     });
-  },
-  getFormControlsHtml: function (opts: ScaffoldUtilOpts): string {
+  }
+  getFormControlsHtml(): string {
     let html = "";
-    for (const [index, column] of opts.columns.entries()) {
+    for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
       if (columnName === "id") continue;
-      if (!(dataType in opts.dataTypeStrategyMap))
+      if (!(dataType in this.opts.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
       if (args.includes("pk")) continue;
-      const dataTypeStrategy = opts.dataTypeStrategyMap[dataType];
+      const dataTypeStrategy = this.opts.dataTypeStrategyMap[dataType];
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
         data: { column: columnName },
       });
-      if (index !== opts.columns.length - 1) html += "\n";
+      if (index !== this.opts.columns.length - 1) html += "\n";
     }
     return html;
-  },
-  addUpdateForm: function (opts: ScaffoldUtilOpts): void {
-    const formControlsHtml = scaffoldUtils.getUpdateFormControlsHtml(opts);
+  }
+  addUpdateForm(): void {
+    const formControlsHtml = this.getUpdateFormControlsHtml();
     renderTemplate({
       inputPath: "components/table/update-form.tsx.hbs",
-      outputPath: `components/${opts.table}/${opts.table}-update-form.tsx`,
+      outputPath: `components/${this.opts.table}/${this.opts.table}-update-form.tsx`,
       data: {
-        table: opts.table,
-        capitalizedTable: capitalize(opts.table),
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
         formControls: formControlsHtml,
       },
     });
-  },
-  addDeleteForm: function (opts: ScaffoldUtilOpts): void {
+  }
+  addDeleteForm(): void {
     renderTemplate({
       inputPath: "components/table/delete-form.tsx.hbs",
-      outputPath: `components/${opts.table}/${opts.table}-delete-form.tsx`,
+      outputPath: `components/${this.opts.table}/${this.opts.table}-delete-form.tsx`,
       data: {
-        table: opts.table,
-        capitalizedTable: capitalize(opts.table),
+        table: this.opts.table,
+        capitalizedTable: capitalize(this.opts.table),
       },
     });
-  },
-  getUpdateFormControlsHtml: function (opts: ScaffoldUtilOpts): string {
+  }
+  getUpdateFormControlsHtml(): string {
     let html = "";
-    for (const [index, column] of opts.columns.entries()) {
+    for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
       if (columnName === "id") continue;
-      if (!(dataType in opts.dataTypeStrategyMap))
+      if (!(dataType in this.opts.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
       if (args.includes("pk")) continue;
-      const dataTypeStrategy = opts.dataTypeStrategyMap[dataType];
+      const dataTypeStrategy = this.opts.dataTypeStrategyMap[dataType];
       html += compileTemplate({
         inputPath: dataTypeStrategy.updateFormTemplate,
         data: { column: columnName },
       });
-      if (index !== opts.columns.length - 1) html += "\n";
+      if (index !== this.opts.columns.length - 1) html += "\n";
     }
     return html;
-  },
-};
+  }
+}
