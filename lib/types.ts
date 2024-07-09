@@ -17,7 +17,7 @@ export interface DataTypeStrategyMap {
   [key: string]: DataTypeStrategy;
 }
 
-export interface ScaffoldUtilOpts extends ScaffoldOpts {
+export interface ScaffoldProcessorOpts extends ScaffoldOpts {
   schemaTemplatePath: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
 }
@@ -26,7 +26,7 @@ export interface GetColumnDefObjsOpts {
   columnName: string;
 }
 
-export interface GetKeyValueStrForSchemaOpts extends ScaffoldUtilOpts {
+export interface GetKeyValueStrForSchemaOpts extends ScaffoldProcessorOpts {
   column: string;
 }
 

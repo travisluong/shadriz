@@ -1,9 +1,9 @@
-import { ScaffoldUtil } from "../lib/scaffold-utils";
+import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   ScaffoldOpts,
-  ScaffoldUtilOpts,
+  ScaffoldProcessorOpts,
   ShadrizDBStrategy,
 } from "../lib/types";
 import { appendDbUrl, renderTemplate, runCommand } from "../lib/utils";
@@ -80,12 +80,12 @@ export const pgStrategy: ShadrizDBStrategy = {
     });
   },
   scaffold: function (opts: ScaffoldOpts): void {
-    const scaffoldUtilOpts: ScaffoldUtilOpts = {
+    const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
       ...opts,
       schemaTemplatePath: "lib/schema.ts.pg.table.hbs",
       dataTypeStrategyMap: dataTypeStrategies,
     };
-    const scaffoldUtil = new ScaffoldUtil(scaffoldUtilOpts);
-    scaffoldUtil.execute();
+    const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
+    scaffoldProcessor.process();
   },
 };

@@ -1,14 +1,14 @@
 import {
   GetColumnDefObjsOpts,
   GetKeyValueStrForSchemaOpts,
-  ScaffoldUtilOpts,
-} from "../lib/types";
+  ScaffoldProcessorOpts,
+} from "./types";
 import {
   appendToFile,
   capitalize,
   compileTemplate,
   renderTemplate,
-} from "../lib/utils";
+} from "./utils";
 
 // lib/schema.ts
 // app/post/page.tsx
@@ -23,14 +23,14 @@ import {
 // components/post/post-create-form.tsx
 // components/post/post-update-form.tsx
 // components/post/post-delete-form.tsx
-export class ScaffoldUtil {
-  opts: ScaffoldUtilOpts;
+export class ScaffoldProcessor {
+  opts: ScaffoldProcessorOpts;
 
-  constructor(opts: ScaffoldUtilOpts) {
+  constructor(opts: ScaffoldProcessorOpts) {
     this.opts = opts;
   }
 
-  execute(): void {
+  process(): void {
     this.appendCodeToSchema();
     this.addListView();
     this.addDetailView();
