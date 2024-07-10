@@ -7,6 +7,7 @@ export interface PackageStrategy {
   copyMigrateScript: () => void;
   appendDbUrl: () => void;
   copyDbInstance: () => void;
+  copyDBInstanceForScripts: () => void;
 }
 
 export interface DialectStrategy {

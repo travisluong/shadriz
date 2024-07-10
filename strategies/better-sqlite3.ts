@@ -29,4 +29,11 @@ export const betterSqlite3Strategy: PackageStrategy = {
       data: {},
     });
   },
+  copyDBInstanceForScripts: function (): void {
+    renderTemplate({
+      inputPath: "scripts/dbc.ts.better-sqlite3.hbs",
+      outputPath: "scripts/dbc.ts",
+      data: {},
+    });
+  },
 };

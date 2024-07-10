@@ -1,4 +1,5 @@
+import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { betterSqlite, dbc } from "./dbc";
 
-migrate(db, { migrationsFolder: "drizzle" });
+migrate(dbc, { migrationsFolder: "drizzle" });
 betterSqlite.close()
