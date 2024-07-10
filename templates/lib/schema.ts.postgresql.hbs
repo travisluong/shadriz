@@ -5,7 +5,8 @@ import {
   text,
   primaryKey,
   integer,
-  uuid
+  uuid,
+  varchar
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 import { createInsertSchema } from "drizzle-zod";
@@ -19,6 +20,7 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  password: text("password"),
 })
  
 export const accounts = pgTable(

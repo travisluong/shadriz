@@ -1,0 +1,8 @@
+import { drizzle } from "drizzle-orm/mysql2";
+import { createConnection } from "mysql2";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env.local" });
+
+export const connection = createConnection(process.env.DB_URL);
+export const dbc = drizzle(connection);

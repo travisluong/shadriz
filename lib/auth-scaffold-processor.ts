@@ -1,4 +1,9 @@
-import { compileTemplate, renderTemplate, runCommand } from "./utils";
+import {
+  appendToFile,
+  compileTemplate,
+  renderTemplate,
+  runCommand,
+} from "./utils";
 
 type Providers = "github" | "google" | "credentials";
 
@@ -9,6 +14,7 @@ interface AuthScaffoldOpts {
 interface AuthStrategy {
   importTemplatePath: string;
   authTemplatePath: string;
+  envTemplatePath: string;
 }
 
 interface AuthStrategyMap {
@@ -19,16 +25,19 @@ interface AuthStrategyMap {
 
 const authStrategyMap: AuthStrategyMap = {
   github: {
-    importTemplatePath: "lib/auth.ts.github.imports.hbs",
-    authTemplatePath: "lib/auth.ts.github.hbs",
+    importTemplatePath: "auth/auth.ts.github.imports.hbs",
+    authTemplatePath: "auth/auth.ts.github.hbs",
+    envTemplatePath: "auth/auth.ts.github.env.hbs",
   },
   google: {
-    importTemplatePath: "lib/auth.ts.google.imports.hbs",
-    authTemplatePath: "lib/auth.ts.google.hbs",
+    importTemplatePath: "auth/auth.ts.google.imports.hbs",
+    authTemplatePath: "auth/auth.ts.google.hbs",
+    envTemplatePath: "auth/auth.ts.google.env.hbs",
   },
   credentials: {
-    importTemplatePath: "lib/auth.ts.credentials.imports.hbs",
-    authTemplatePath: "lib/auth.ts.credentials.hbs",
+    importTemplatePath: "auth/auth.ts.credentials.imports.hbs",
+    authTemplatePath: "auth/auth.ts.credentials.hbs",
+    envTemplatePath: "auth/auth.ts.credentials.env.hbs",
   },
 };
 
@@ -46,6 +55,7 @@ export class AuthScaffoldProcessor {
     this.addAuthConfig();
     this.addAuthRouteHandler();
     this.addAuthMiddleware();
+    this.appendSecretsToEnv();
   }
 
   async installDependencies() {
@@ -73,8 +83,8 @@ export class AuthScaffoldProcessor {
       providersCode += ",\n";
     }
     renderTemplate({
-      inputPath: "lib/auth.ts.hbs",
-      outputPath: "lib/auth.ts",
+      inputPath: "auth/auth.ts.hbs",
+      outputPath: "auth.ts",
       data: { importsCode: importsCode, providersCode: providersCode },
     });
   }
@@ -93,5 +103,17 @@ export class AuthScaffoldProcessor {
       outputPath: "middleware.ts",
       data: {},
     });
+  }
+
+  appendSecretsToEnv() {
+    for (const provider of this.opts.providers) {
+      const strategy = authStrategyMap[provider];
+      let envVars = compileTemplate({
+        inputPath: strategy.envTemplatePath,
+        data: {},
+      });
+      envVars = "\n" + envVars;
+      appendToFile(".env.local", envVars);
+    }
   }
 }
