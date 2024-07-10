@@ -10,7 +10,7 @@ export const betterSqlite3Strategy: PackageStrategy = {
     betterSqlite3Strategy.copyDbInstance();
   },
   installDependencies: async function () {
-    await runCommand("npm i better-sqlite3", []);
+    await runCommand("npm i better-sqlite3");
   },
   copyMigrateScript: function (): void {
     renderTemplate({

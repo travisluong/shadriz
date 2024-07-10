@@ -1,9 +1,9 @@
-import { ShadrizDBStrategy } from "../lib/types";
+import { PackageStrategy } from "../lib/types";
 import { appendDbUrl, renderTemplate, runCommand } from "../lib/utils";
 
-export const mysql2Strategy: ShadrizDBStrategy = {
+export const mysql2Strategy: PackageStrategy = {
   installDependencies: async function () {
-    await runCommand("npm i mysql2", []);
+    await runCommand("npm i mysql2");
   },
   copyDrizzleConfig: function (): void {
     renderTemplate({

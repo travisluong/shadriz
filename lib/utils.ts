@@ -66,10 +66,10 @@ export function copyTemplate(name: string, filePath: string) {
   fs.writeFileSync(resolvedPath, templateContent);
 }
 
-export async function runCommand(command: string, args: string[]) {
-  console.log(`Executing command: ${command} ${args.join(" ")}`);
+export async function runCommand(command: string) {
+  console.log(`Executing command: ${command}`);
 
-  const child = spawn(command, args, { shell: true });
+  const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
     console.log(`${data.toString()}`);
@@ -88,11 +88,7 @@ export async function runCommand(command: string, args: string[]) {
       if (code === 0) {
         resolve(null);
       } else {
-        reject(
-          new Error(
-            `Command ${command} ${args.join(" ")} exited with code ${code}`
-          )
-        );
+        reject(new Error(`Command ${command} exited with code ${code}`));
       }
     });
   });

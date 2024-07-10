@@ -4,9 +4,10 @@ import { DialectStrategy, PackageStrategy } from "./lib/types";
 import { pgPackageStrategy } from "./strategies/pg";
 import { mysql2Strategy } from "./strategies/mysql2";
 import { betterSqlite3Strategy } from "./strategies/better-sqlite3";
-import { copyTemplates, runCommand, runInstallScript } from "./lib/utils";
+import { copyTemplates, runInstallScript } from "./lib/utils";
 import { postgresqlDialectStrategy } from "./dialects/postgresql";
 import { sqliteDialectStrategy } from "./dialects/sqlite";
+import { AuthScaffoldProcessor } from "./lib/auth-scaffold-processor";
 
 const packageStrategyMap: { [key: string]: PackageStrategy } = {
   pg: pgPackageStrategy,
@@ -59,9 +60,11 @@ program
 program
   .command("auth")
   .description("Generate Auth.js configuration")
-  .argument("<provider>", "provider: github, google")
-  .action(async (provider, options) => {
-    console.log(provider);
+  .argument("<providers...>", "github, google, credentials")
+  .action(async (providers, options) => {
+    console.log(providers);
+    const authScaffold = new AuthScaffoldProcessor({ providers: providers });
+    authScaffold.init();
   });
 
 program
