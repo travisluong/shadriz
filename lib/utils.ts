@@ -116,3 +116,33 @@ export function appendToFile(filePath: string, textToAppend: string) {
 export function capitalize(str: string) {
   return str[0].toUpperCase() + str.slice(1);
 }
+
+export async function runInstallScript(name: string) {
+  const script = spawn("sh ./scripts/install.sh", [name], { shell: true });
+
+  script.stdout.on("data", (data) => {
+    console.log(`${data}`);
+  });
+
+  script.stderr.on("data", (data) => {
+    console.error(`${data}`);
+  });
+
+  script.on("close", (code) => {
+    console.log(`Script exited with code ${code}`);
+  });
+
+  return new Promise((resolve, reject) => {
+    script.on("error", (error) => {
+      reject(error);
+    });
+
+    script.on("close", (code) => {
+      if (code === 0) {
+        resolve(null);
+      } else {
+        reject(new Error(`Script exited with code ${code}`));
+      }
+    });
+  });
+}

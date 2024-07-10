@@ -4,7 +4,7 @@ import { DialectStrategy, PackageStrategy } from "./lib/types";
 import { pgPackageStrategy } from "./strategies/pg";
 import { mysql2Strategy } from "./strategies/mysql2";
 import { betterSqlite3Strategy } from "./strategies/better-sqlite3";
-import { copyTemplates, runCommand } from "./lib/utils";
+import { copyTemplates, runCommand, runInstallScript } from "./lib/utils";
 import { postgresqlDialectStrategy } from "./dialects/postgresql";
 import { sqliteDialectStrategy } from "./dialects/sqlite";
 
@@ -34,43 +34,7 @@ program
   .argument("<name>", "name of project")
   .action(async (name, options) => {
     try {
-      await runCommand(
-        `npx create-next-app ${name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`,
-        []
-      );
-      await runCommand(
-        `cd ${name} && npm i drizzle-orm --legacy-peer-deps && npm i -D drizzle-kit`,
-        []
-      );
-      await runCommand(`cd ${name} && npm i dotenv uuidv7`, []);
-      await runCommand(
-        `cd ${name} && npm i @auth/drizzle-adapter next-auth@beta`,
-        []
-      );
-      await runCommand(`cd ${name} && npx shadcn-ui@latest init -y -d`, []);
-      await runCommand(
-        `cd ${name} && npx shadcn-ui@latest add -y -o table`,
-        []
-      );
-      await runCommand(`cd ${name} && npm install @tanstack/react-table`, []);
-      await runCommand(
-        `cd ${name} && npx shadcn-ui@latest add -y -o label`,
-        []
-      );
-      await runCommand(
-        `cd ${name} && npx shadcn-ui@latest add -y -o input`,
-        []
-      );
-      await runCommand(
-        `cd ${name} && npx shadcn-ui@latest add -y -o button`,
-        []
-      );
-      await runCommand(
-        `cd ${name} && npx shadcn-ui@latest add -y -o textarea`,
-        []
-      );
-      await runCommand(`cd ${name} && npm install zod`, []);
-      await runCommand(`cd ${name} && npm install drizzle-zod`, []);
+      await runInstallScript(name);
       copyTemplates(name);
     } catch (error) {
       console.error("Error running command:", error);
