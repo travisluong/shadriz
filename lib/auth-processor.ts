@@ -7,7 +7,7 @@ import {
 
 type Providers = "github" | "google" | "credentials";
 
-interface AuthScaffoldOpts {
+interface AuthProcessorOpts {
   providers: Providers[];
 }
 
@@ -41,8 +41,8 @@ const authStrategyMap: AuthStrategyMap = {
   },
 };
 
-export class AuthScaffoldProcessor {
-  constructor(public opts: AuthScaffoldOpts) {}
+export class AuthProcessor {
+  constructor(public opts: AuthProcessorOpts) {}
 
   async init() {
     for (const provider of this.opts.providers) {
