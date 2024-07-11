@@ -1,39 +1,50 @@
-import { PackageStrategy } from "../lib/types";
+import { DbDialect, PackageStrategy } from "../lib/types";
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
-export const betterSqlite3Strategy: PackageStrategy = {
-  dialect: "sqlite",
-  init: async function () {
-    await betterSqlite3Strategy.installDependencies();
-    betterSqlite3Strategy.copyMigrateScript();
-    betterSqlite3Strategy.appendDbUrl();
-    betterSqlite3Strategy.copyDbInstance();
-  },
-  installDependencies: async function () {
+export class BetterSqlite3Strategy implements PackageStrategy {
+  dialect: DbDialect = "sqlite";
+
+  async init() {
+    await this.installDependencies();
+    this.copyMigrateScript();
+    this.appendDbUrl();
+    this.copyDbInstance();
+    this.copyDBInstanceForScripts();
+  }
+
+  async installDependencies() {
     await spawnCommand("npm i better-sqlite3");
-  },
-  copyMigrateScript: function (): void {
+  }
+
+  copyMigrateScript(): void {
     renderTemplate({
       inputPath: "scripts/migrate.ts.better-sqlite3.hbs",
       outputPath: "scripts/migrate.ts",
-      data: {},
     });
-  },
-  appendDbUrl: function (): void {
+  }
+
+  appendDbUrl(): void {
     appendDbUrl("sqlite.db");
-  },
-  copyDbInstance: function (): void {
+  }
+
+  copyDbInstance(): void {
     renderTemplate({
       inputPath: "lib/db.ts.better-sqlite3.hbs",
       outputPath: "lib/db.ts",
-      data: {},
     });
-  },
-  copyDBInstanceForScripts: function (): void {
+  }
+
+  copyDBInstanceForScripts(): void {
     renderTemplate({
       inputPath: "scripts/dbc.ts.better-sqlite3.hbs",
       outputPath: "scripts/dbc.ts",
-      data: {},
     });
-  },
-};
+  }
+
+  copyCreateUserScript() {
+    renderTemplate({
+      inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
+      outputPath: "scripts/create-user.ts",
+    });
+  }
+}

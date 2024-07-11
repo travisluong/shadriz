@@ -69,8 +69,6 @@ export class ScaffoldProcessor {
   }
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column, dataTypeStrategyMap } = opts;
-    console.log(dataTypeStrategyMap);
-
     const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
     const args = [arg1, arg2, arg3];
     if (!(dataType in dataTypeStrategyMap)) {

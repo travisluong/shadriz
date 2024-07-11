@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { renderTemplate, spawnCommand } from "./utils";
+import { logInfo, renderTemplate, spawnCommand } from "./utils";
 import path from "path";
 
 interface TemplateToCopy {
@@ -54,9 +54,9 @@ export class NewProjectProcessor {
   }
 
   async createNewProject() {
-    const cmd = `npx create-next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`;
-    console.log(chalk.bgBlue(cmd));
-    await this.runCommand(cmd);
+    await this.runCommand(
+      `npx create-next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`
+    );
   }
 
   changeDir() {
@@ -65,14 +65,13 @@ export class NewProjectProcessor {
 
   async installDependencies() {
     for (const cmd of this.installCommands) {
-      console.log(chalk.bgBlue(cmd));
       const output = await this.runCommand(cmd);
     }
   }
 
   copyTemplates() {
     for (const templateToCopy of this.templatesToCopy) {
-      console.log(chalk.bgBlue("copy " + templateToCopy.outputPath));
+      logInfo("copy " + templateToCopy.outputPath);
       renderTemplate({
         inputPath: templateToCopy.inputPath,
         outputPath: templateToCopy.outputPath,
@@ -82,7 +81,6 @@ export class NewProjectProcessor {
 
   async initShadcn() {
     for (const cmd of this.shadcnCommands) {
-      console.log(chalk.bgBlue(cmd));
       await this.runCommand(cmd);
     }
   }

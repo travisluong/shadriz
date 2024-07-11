@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
 import { promisify } from "util";
+import chalk from "chalk";
 
 const execPromise = promisify(exec);
 
@@ -45,7 +46,7 @@ export function compileTemplate({
   data,
 }: {
   inputPath: string;
-  data: any;
+  data?: any;
 }): string {
   const templatePath = path.join(__dirname, "..", "templates", inputPath);
   const templateContent = fs.readFileSync(templatePath, "utf-8");
@@ -70,6 +71,7 @@ export function copyTemplate(name: string, filePath: string) {
 }
 
 export async function spawnCommand(command: string) {
+  console.log(chalk.bgGreen(command));
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -123,6 +125,19 @@ export function appendToFile(filePath: string, textToAppend: string) {
   }
 }
 
+export function prependToFile(filePath: string, textToPrepend: string) {
+  try {
+    const joinedFilePath = path.join(process.cwd(), filePath);
+    const fileContent = fs.readFileSync(joinedFilePath, "utf-8");
+    const updatedContent = textToPrepend + fileContent;
+    fs.writeFileSync(joinedFilePath, updatedContent, "utf-8");
+  } catch (error) {
+    console.error(
+      `Error while prepending content to the file: ${error.message}`
+    );
+  }
+}
+
 export function capitalize(str: string) {
   return str[0].toUpperCase() + str.slice(1);
 }
@@ -155,4 +170,8 @@ export async function runInstallScript(name: string) {
       }
     });
   });
+}
+
+export function logInfo(str: string) {
+  console.log(chalk.bgBlue(str));
 }

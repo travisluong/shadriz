@@ -1,33 +1,51 @@
-import { PackageStrategy } from "../lib/types";
+import { DbDialect, PackageStrategy } from "../lib/types";
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
-export const pgPackageStrategy: PackageStrategy = {
-  dialect: "postgresql",
-  init: async function () {
-    await pgPackageStrategy.installDependencies();
-    pgPackageStrategy.copyMigrateScript();
-    pgPackageStrategy.appendDbUrl();
-    pgPackageStrategy.copyDbInstance();
-  },
-  installDependencies: async function () {
+export class PgPackageStrategy implements PackageStrategy {
+  dialect: DbDialect = "postgresql";
+
+  async init() {
+    await this.installDependencies();
+    this.copyMigrateScript();
+    this.appendDbUrl();
+    this.copyDbInstance();
+    this.copyDBInstanceForScripts();
+  }
+
+  async installDependencies() {
     await spawnCommand("npm i pg");
     await spawnCommand("npm i -D @types/pg");
-  },
-  copyMigrateScript: function (): void {
+  }
+
+  copyMigrateScript(): void {
     renderTemplate({
       inputPath: "scripts/migrate.ts.pg.hbs",
       outputPath: "scripts/migrate.ts",
-      data: {},
     });
-  },
-  appendDbUrl: function (): void {
+  }
+
+  appendDbUrl(): void {
     appendDbUrl("postgres://user:password@host:port/db");
-  },
-  copyDbInstance: function (): void {
+  }
+
+  copyDbInstance(): void {
     renderTemplate({
       inputPath: "lib/db.ts.pg.hbs",
       outputPath: "lib/db.ts",
-      data: {},
     });
-  },
-};
+  }
+
+  copyDBInstanceForScripts(): void {
+    renderTemplate({
+      inputPath: "scripts/dbc.ts.pg.hbs",
+      outputPath: "scripts/dbc.ts",
+    });
+  }
+
+  copyCreateUserScript() {
+    renderTemplate({
+      inputPath: "scripts/create-user.ts.pg.hbs",
+      outputPath: "scripts/create-user.ts",
+    });
+  }
+}

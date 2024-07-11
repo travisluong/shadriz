@@ -1,6 +1,9 @@
+import chalk from "chalk";
 import {
   appendToFile,
   compileTemplate,
+  logInfo,
+  prependToFile,
   renderTemplate,
   spawnCommand,
 } from "./utils";
@@ -54,8 +57,9 @@ export class AuthProcessor {
     await this.appendAuthSecretToEnv();
     this.addAuthConfig();
     this.addAuthRouteHandler();
-    this.addAuthMiddleware();
+    // this.addAuthMiddleware();
     this.appendSecretsToEnv();
+    this.prependAdapterAccountTypeToSchema();
   }
 
   async installDependencies() {
@@ -67,6 +71,7 @@ export class AuthProcessor {
   }
 
   addAuthConfig() {
+    logInfo("adding auth config");
     let importsCode = "";
     let providersCode = "";
     for (const provider of this.opts.providers) {
@@ -90,22 +95,23 @@ export class AuthProcessor {
   }
 
   addAuthRouteHandler() {
+    logInfo("adding nextauth api routes");
     renderTemplate({
       inputPath: "app/api/auth/[...nextauth]/route.ts.hbs",
       outputPath: "app/api/auth/[...nextauth]/route.ts",
-      data: {},
     });
   }
 
-  addAuthMiddleware() {
-    renderTemplate({
-      inputPath: "middleware.ts.hbs",
-      outputPath: "middleware.ts",
-      data: {},
-    });
-  }
+  // addAuthMiddleware() {
+  //   renderTemplate({
+  //     inputPath: "middleware.ts.hbs",
+  //     outputPath: "middleware.ts",
+  //     data: {},
+  //   });
+  // }
 
   appendSecretsToEnv() {
+    logInfo("adding secrets to .env.local");
     for (const provider of this.opts.providers) {
       const strategy = authStrategyMap[provider];
       let envVars = compileTemplate({
@@ -115,5 +121,13 @@ export class AuthProcessor {
       envVars = "\n" + envVars;
       appendToFile(".env.local", envVars);
     }
+  }
+
+  prependAdapterAccountTypeToSchema() {
+    logInfo("adding imports to schema");
+    prependToFile(
+      "lib/schema.ts",
+      'import type { AdapterAccountType } from "next-auth/adapters";\n'
+    );
   }
 }

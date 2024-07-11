@@ -2,11 +2,12 @@ import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
+  DbDialect,
   DialectStrategy,
   ScaffoldOpts,
   ScaffoldProcessorOpts,
 } from "../lib/types";
-import { renderTemplate } from "../lib/utils";
+import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
 
 const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   integer: {
@@ -27,27 +28,30 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export const sqliteDialectStrategy: DialectStrategy = {
-  dialect: "sqlite",
-  init: function (): void {
-    sqliteDialectStrategy.copyDrizzleConfig();
-    sqliteDialectStrategy.copySchema();
-  },
-  copyDrizzleConfig: function (): void {
+export class SqliteDialectStrategy implements DialectStrategy {
+  dialect: DbDialect = "sqlite";
+
+  init(): void {
+    this.copyDrizzleConfig();
+    this.copySchema();
+  }
+
+  copyDrizzleConfig(): void {
     renderTemplate({
       inputPath: "drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
       data: { dialect: "sqlite" },
     });
-  },
-  copySchema: function (): void {
+  }
+
+  copySchema(): void {
     renderTemplate({
       inputPath: "lib/schema.ts.sqlite.hbs",
       outputPath: "lib/schema.ts",
-      data: {},
     });
-  },
-  scaffold: function (opts: ScaffoldOpts): void {
+  }
+
+  scaffold(opts: ScaffoldOpts): void {
     const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
       ...opts,
       schemaTableTemplatePath: "lib/schema.ts.sqlite.table.hbs",
@@ -55,5 +59,12 @@ export const sqliteDialectStrategy: DialectStrategy = {
     };
     const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
     scaffoldProcessor.process();
-  },
-};
+  }
+
+  appendAuthSchema() {
+    const text = compileTemplate({
+      inputPath: "lib/schema.ts.sqlite.auth.hbs",
+    });
+    appendToFile("lib/schema.ts", text);
+  }
+}

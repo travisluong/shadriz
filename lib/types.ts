@@ -1,21 +1,23 @@
-export type Dialects = "postgresql" | "mysql" | "sqlite";
+export type DbDialect = "postgresql" | "mysql" | "sqlite";
 
 export interface PackageStrategy {
-  dialect: Dialects;
+  dialect: DbDialect;
   init: () => void;
   installDependencies: () => void;
   copyMigrateScript: () => void;
   appendDbUrl: () => void;
   copyDbInstance: () => void;
   copyDBInstanceForScripts: () => void;
+  copyCreateUserScript: () => void;
 }
 
 export interface DialectStrategy {
-  dialect: Dialects;
+  dialect: DbDialect;
   init: () => void;
   copyDrizzleConfig: () => void;
   copySchema: () => void;
   scaffold: (opts: ScaffoldOpts) => void;
+  appendAuthSchema: () => void;
 }
 
 export interface ScaffoldOpts {

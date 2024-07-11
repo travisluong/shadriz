@@ -6,7 +6,7 @@ import {
   ScaffoldOpts,
   ScaffoldProcessorOpts,
 } from "../lib/types";
-import { renderTemplate } from "../lib/utils";
+import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
 
 const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   uuid: {
@@ -43,27 +43,31 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export const postgresqlDialectStrategy: DialectStrategy = {
-  dialect: "postgresql",
-  init: function (): void {
-    postgresqlDialectStrategy.copyDrizzleConfig();
-    postgresqlDialectStrategy.copySchema();
-  },
-  copyDrizzleConfig: function (): void {
+export class PostgresqlDialectStrategy implements DialectStrategy {
+  dialect: "postgresql";
+
+  init(): void {
+    this.copyDrizzleConfig();
+    this.copySchema();
+  }
+
+  copyDrizzleConfig(): void {
     renderTemplate({
       inputPath: "drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
       data: { dialect: "postgresql" },
     });
-  },
-  copySchema: function (): void {
+  }
+
+  copySchema(): void {
     renderTemplate({
       inputPath: "lib/schema.ts.postgresql.hbs",
       outputPath: "lib/schema.ts",
       data: {},
     });
-  },
-  scaffold: function (opts: ScaffoldOpts): void {
+  }
+
+  scaffold(opts: ScaffoldOpts): void {
     const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
       ...opts,
       schemaTableTemplatePath: "lib/schema.ts.postgresql.table.hbs",
@@ -71,5 +75,12 @@ export const postgresqlDialectStrategy: DialectStrategy = {
     };
     const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
     scaffoldProcessor.process();
-  },
-};
+  }
+
+  appendAuthSchema() {
+    const text = compileTemplate({
+      inputPath: "lib/schema.ts.sqlite.auth.hbs",
+    });
+    appendToFile("lib/schema.ts", text);
+  }
+}

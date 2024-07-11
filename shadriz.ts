@@ -1,23 +1,23 @@
 import { Command } from "commander";
 import chalk from "chalk";
 import { DialectStrategy, PackageStrategy } from "./lib/types";
-import { pgPackageStrategy } from "./strategies/pg";
+import { PgPackageStrategy } from "./strategies/pg";
 import { mysql2Strategy } from "./strategies/mysql2";
-import { betterSqlite3Strategy } from "./strategies/better-sqlite3";
-import { postgresqlDialectStrategy } from "./dialects/postgresql";
-import { sqliteDialectStrategy } from "./dialects/sqlite";
+import { BetterSqlite3Strategy } from "./strategies/better-sqlite3";
+import { PostgresqlDialectStrategy } from "./dialects/postgresql";
+import { SqliteDialectStrategy } from "./dialects/sqlite";
 import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
 
 const packageStrategyMap: { [key: string]: PackageStrategy } = {
-  pg: pgPackageStrategy,
+  pg: new PgPackageStrategy(),
   mysql2: mysql2Strategy,
-  "better-sqlite3": betterSqlite3Strategy,
+  "better-sqlite3": new BetterSqlite3Strategy(),
 };
 
 const dialectStrategyMap: { [key: string]: DialectStrategy } = {
-  postgresql: postgresqlDialectStrategy,
-  sqlite: sqliteDialectStrategy,
+  postgresql: new PostgresqlDialectStrategy(),
+  sqlite: new SqliteDialectStrategy(),
 };
 
 const program = new Command();
@@ -52,7 +52,11 @@ program
       process.exit(1);
     }
     const packageStrategy = packageStrategyMap[strategy];
+    console.log(packageStrategy);
+
     const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
+    console.log(dialectStrategy);
+
     await packageStrategy.init();
     dialectStrategy.init();
   });
@@ -61,10 +65,16 @@ program
   .command("auth")
   .description("Generate Auth.js configuration")
   .argument("<providers...>", "github, google, credentials")
+  .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .action(async (providers, options) => {
-    console.log(providers);
+    if (!(options.dialect in dialectStrategyMap)) {
+      console.log(chalk.bgRed(`invalid dialect ${options.dialect}`));
+      process.exit(1);
+    }
     const authScaffold = new AuthProcessor({ providers: providers });
+    const dialectStrategy = dialectStrategyMap[options.dialect];
     authScaffold.init();
+    dialectStrategy.appendAuthSchema();
   });
 
 program
@@ -79,7 +89,7 @@ program
     console.log(table);
     console.log(options);
     if (!(options.dialect in dialectStrategyMap)) {
-      console.log(chalk.red(`${options.dialect} invalid strategy`));
+      console.log(chalk.red(`invalid dialect: ${options.dialect}`));
       process.exit(1);
     }
     const strategy = dialectStrategyMap[options.dialect];
