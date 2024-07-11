@@ -1,21 +1,20 @@
 import { Command } from "commander";
 import chalk from "chalk";
-import { DialectStrategy, PackageStrategy } from "./lib/types";
-import { PgPackageStrategy } from "./strategies/pg";
-import { mysql2Strategy } from "./strategies/mysql2";
-import { BetterSqlite3Strategy } from "./strategies/better-sqlite3";
-import { PostgresqlDialectStrategy } from "./dialects/postgresql";
-import { SqliteDialectStrategy } from "./dialects/sqlite";
+import { PgPackageStrategy } from "./db-packages/pg-package-strategy";
+import { BetterSqlite3PackageStrategy } from "./db-packages/better-sqlite3-package-strategy";
+import { PostgresqlDialectStrategy } from "./db-dialects/postgresql-dialect-strategy";
+import { SqliteDialectStrategy } from "./db-dialects/sqlite-dialect-strategy";
 import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
+import { BaseDbDialectStrategy } from "./db-dialects/base-db-dialect-strategy";
+import { BaseDbPackageStrategy } from "./db-packages/base-db-package-strategy";
 
-const packageStrategyMap: { [key: string]: PackageStrategy } = {
+const packageStrategyMap: { [key: string]: BaseDbPackageStrategy } = {
   pg: new PgPackageStrategy(),
-  mysql2: mysql2Strategy,
-  "better-sqlite3": new BetterSqlite3Strategy(),
+  "better-sqlite3": new BetterSqlite3PackageStrategy(),
 };
 
-const dialectStrategyMap: { [key: string]: DialectStrategy } = {
+const dialectStrategyMap: { [key: string]: BaseDbDialectStrategy } = {
   postgresql: new PostgresqlDialectStrategy(),
   sqlite: new SqliteDialectStrategy(),
 };

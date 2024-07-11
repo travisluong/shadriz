@@ -1,50 +1,50 @@
-import { DbDialect, PackageStrategy } from "../lib/types";
+import { DbDialect } from "../lib/types";
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
+import { BaseDbPackageStrategy } from "./base-db-package-strategy";
 
-export class PgPackageStrategy implements PackageStrategy {
-  dialect: DbDialect = "postgresql";
+export class BetterSqlite3PackageStrategy extends BaseDbPackageStrategy {
+  dialect: DbDialect = "sqlite";
 
   async init() {
     await this.installDependencies();
     this.copyMigrateScript();
     this.appendDbUrl();
     this.copyDbInstance();
-    this.copyDBInstanceForScripts();
+    this.copyDbInstanceForScripts();
   }
 
   async installDependencies() {
-    await spawnCommand("npm i pg");
-    await spawnCommand("npm i -D @types/pg");
+    await spawnCommand("npm i better-sqlite3");
   }
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "scripts/migrate.ts.pg.hbs",
+      inputPath: "scripts/migrate.ts.better-sqlite3.hbs",
       outputPath: "scripts/migrate.ts",
     });
   }
 
   appendDbUrl(): void {
-    appendDbUrl("postgres://user:password@host:port/db");
+    appendDbUrl("sqlite.db");
   }
 
   copyDbInstance(): void {
     renderTemplate({
-      inputPath: "lib/db.ts.pg.hbs",
+      inputPath: "lib/db.ts.better-sqlite3.hbs",
       outputPath: "lib/db.ts",
     });
   }
 
-  copyDBInstanceForScripts(): void {
+  copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/dbc.ts.pg.hbs",
+      inputPath: "scripts/dbc.ts.better-sqlite3.hbs",
       outputPath: "scripts/dbc.ts",
     });
   }
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "scripts/create-user.ts.pg.hbs",
+      inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }

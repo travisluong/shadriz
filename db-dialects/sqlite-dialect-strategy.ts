@@ -2,27 +2,20 @@ import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
-  DialectStrategy,
+  DbDialect,
   ScaffoldOpts,
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
+import { BaseDbDialectStrategy } from "./base-db-dialect-strategy";
 
-const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
-  uuid: {
-    jsType: "string",
+const sqliteDataTypeStrategies: DataTypeStrategyMap = {
+  integer: {
+    jsType: "number",
     formTemplate: "components/table/input.tsx.hbs",
     updateFormTemplate: "components/table/update-input.tsx.hbs",
-    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: uuid(\"${opts.columnName}\")`;
-    },
-  },
-  varchar: {
-    jsType: "string",
-    formTemplate: "components/table/input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
-    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
+      return `integer("${opts.columnName}")`;
     },
   },
   text: {
@@ -33,18 +26,10 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
   },
-  integer: {
-    jsType: "number",
-    formTemplate: "components/table/input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
-    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: integer(\"${opts.columnName}\")`;
-    },
-  },
 };
 
-export class PostgresqlDialectStrategy implements DialectStrategy {
-  dialect: "postgresql";
+export class SqliteDialectStrategy extends BaseDbDialectStrategy {
+  dialect: DbDialect = "sqlite";
 
   init(): void {
     this.copyDrizzleConfig();
@@ -55,23 +40,22 @@ export class PostgresqlDialectStrategy implements DialectStrategy {
     renderTemplate({
       inputPath: "drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
-      data: { dialect: "postgresql" },
+      data: { dialect: "sqlite" },
     });
   }
 
   copySchema(): void {
     renderTemplate({
-      inputPath: "lib/schema.ts.postgresql.hbs",
+      inputPath: "lib/schema.ts.sqlite.hbs",
       outputPath: "lib/schema.ts",
-      data: {},
     });
   }
 
   scaffold(opts: ScaffoldOpts): void {
     const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
       ...opts,
-      schemaTableTemplatePath: "lib/schema.ts.postgresql.table.hbs",
-      dataTypeStrategyMap: postgresqlDataTypeStrategies,
+      schemaTableTemplatePath: "lib/schema.ts.sqlite.table.hbs",
+      dataTypeStrategyMap: sqliteDataTypeStrategies,
     };
     const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
     scaffoldProcessor.process();
@@ -86,7 +70,7 @@ export class PostgresqlDialectStrategy implements DialectStrategy {
 
   copyCreateUserScript(): void {
     renderTemplate({
-      inputPath: "scripts/create-user.ts.pg.hbs",
+      inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }
