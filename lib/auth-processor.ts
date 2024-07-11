@@ -1,6 +1,9 @@
 import {
   appendToFile,
   compileTemplate,
+  logCmd,
+  logGhost,
+  logInfo,
   prependToFile,
   renderTemplate,
   spawnCommand,
@@ -58,6 +61,7 @@ export class AuthProcessor {
     // this.addAuthMiddleware();
     this.appendSecretsToEnv();
     this.prependAdapterAccountTypeToSchema();
+    await this.printCompletionMessage();
   }
 
   async installDependencies() {
@@ -127,5 +131,38 @@ export class AuthProcessor {
       "lib/schema.ts",
       'import type { AdapterAccountType } from "next-auth/adapters";\n'
     );
+  }
+
+  async printCompletionMessage() {
+    logGhost("\n✅ auth setup success: " + this.opts.providers.join(", "));
+    logGhost("\n👉 recommended next steps:");
+    logInfo("\nrun migrations:");
+    logCmd("npx drizzle-kit generate");
+    logCmd("npx drizzle-kit migrate");
+    if (this.opts.providers.includes("github")) {
+      logInfo("setup github provider:");
+      logGhost(
+        "go to github > settings > developer settings > oauth apps > new oauth app"
+      );
+      logGhost("callback: http://localhost:3000/api/auth/callback/github");
+      logGhost("update AUTH_GITHUB_ID in .env.local");
+      logGhost("update AUTH_GITHUB_SECRET in .env.local");
+    }
+    if (this.opts.providers.includes("google")) {
+      logInfo("setup google provider:");
+      logGhost("go to console.cloud.google.com > new project");
+      logGhost("search oauth > create oauth consent screen");
+      logGhost("create oauth 2.0 client");
+      logGhost("callback: http://localhost:3000/api/auth/callback/google");
+      logGhost("update AUTH_GOOGLE_ID in .env.local");
+      logGhost("update AUTH_GOOGLE_SECRET in .env.local");
+    }
+    if (this.opts.providers.includes("credentials")) {
+      logInfo("create a test user for credentials provider:");
+      logCmd("npx tsx scripts/create-user.ts foo@example.com password123");
+    }
+    logInfo("test login:");
+    logCmd("npm run dev");
+    logGhost("go to http://localhost:3000/api/auth/signin");
   }
 }

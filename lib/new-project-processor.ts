@@ -1,10 +1,4 @@
-import {
-  logGhost,
-  logSuccess,
-  logWarning,
-  renderTemplate,
-  spawnCommand,
-} from "./utils";
+import { logCmd, logGhost, renderTemplate, spawnCommand } from "./utils";
 import path from "path";
 
 interface TemplateToCopy {
@@ -94,10 +88,9 @@ export class NewProjectProcessor {
   }
 
   printCompletionMessage() {
-    logSuccess("success. project created at: " + this.name);
-    logGhost(``);
-    logWarning(`next step:`);
-    logGhost(`cd ${this.name}`);
-    logGhost(`npx shadriz db`);
+    logGhost("\n✅ new project success: " + this.name);
+    logGhost("\n👉 recommended next step:");
+    logCmd(`cd ${this.name}`);
+    logCmd(`npx shadriz db -h`);
   }
 }

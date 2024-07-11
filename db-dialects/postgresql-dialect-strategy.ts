@@ -80,7 +80,7 @@ export class PostgresqlDialectStrategy extends BaseDbDialectStrategy {
 
   appendAuthSchema() {
     const text = compileTemplate({
-      inputPath: "lib/schema.ts.sqlite.auth.hbs",
+      inputPath: "lib/schema.ts.postgresql.auth.hbs",
     });
     appendToFile("lib/schema.ts", text);
   }

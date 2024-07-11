@@ -1,6 +1,6 @@
         <div>
           <Label>{{column}}</Label>
-          <Textarea name="{{column}}" defaultValue={ data.{{column}} } />
+          <Textarea name="{{column}}" defaultValue={ data.{{column}} ?? "" } />
           {state.errors?.{{column}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}

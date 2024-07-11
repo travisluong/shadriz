@@ -7,6 +7,9 @@ import {
   appendToFile,
   capitalize,
   compileTemplate,
+  logCmd,
+  logGhost,
+  logInfo,
   renderTemplate,
 } from "./utils";
 
@@ -44,6 +47,7 @@ export class ScaffoldProcessor {
     this.addCreateForm();
     this.addUpdateForm();
     this.addDeleteForm();
+    this.printCompletionMessage();
   }
   appendCodeToSchema(): void {
     const {
@@ -266,5 +270,11 @@ export class ScaffoldProcessor {
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
     return html;
+  }
+  printCompletionMessage() {
+    logGhost("\n✅ scaffolding success: " + this.opts.table);
+    logInfo("\n👉 recommended next steps:");
+    logCmd("npx drizzle-kit generate");
+    logCmd("npx drizzle-kit migrate");
   }
 }

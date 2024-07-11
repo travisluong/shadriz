@@ -55,6 +55,7 @@ program
     const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
     await packageStrategy.init();
     dialectStrategy.init();
+    dialectStrategy.printInitCompletionMessage();
   });
 
 program
@@ -69,9 +70,9 @@ program
     }
     const authScaffold = new AuthProcessor({ providers: providers });
     const dialectStrategy = dialectStrategyMap[options.dialect];
-    authScaffold.init();
     dialectStrategy.appendAuthSchema();
     dialectStrategy.copyCreateUserScript();
+    await authScaffold.init();
   });
 
 program
