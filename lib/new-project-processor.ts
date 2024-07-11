@@ -1,5 +1,10 @@
-import chalk from "chalk";
-import { logInfo, renderTemplate, spawnCommand } from "./utils";
+import {
+  logGhost,
+  logSuccess,
+  logWarning,
+  renderTemplate,
+  spawnCommand,
+} from "./utils";
 import path from "path";
 
 interface TemplateToCopy {
@@ -50,7 +55,7 @@ export class NewProjectProcessor {
     await this.installDependencies();
     await this.initShadcn();
     this.copyTemplates();
-    console.log(chalk.bgGreen("✅ success. project created at " + this.name));
+    this.printCompletionMessage();
   }
 
   async createNewProject() {
@@ -71,7 +76,6 @@ export class NewProjectProcessor {
 
   copyTemplates() {
     for (const templateToCopy of this.templatesToCopy) {
-      logInfo("copy " + templateToCopy.outputPath);
       renderTemplate({
         inputPath: templateToCopy.inputPath,
         outputPath: templateToCopy.outputPath,
@@ -87,5 +91,13 @@ export class NewProjectProcessor {
 
   async runCommand(cmd) {
     await spawnCommand(cmd);
+  }
+
+  printCompletionMessage() {
+    logSuccess("success. project created at: " + this.name);
+    logGhost(``);
+    logWarning(`next step:`);
+    logGhost(`cd ${this.name}`);
+    logGhost(`npx shadriz db`);
   }
 }

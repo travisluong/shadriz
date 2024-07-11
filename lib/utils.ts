@@ -31,6 +31,7 @@ export function renderTemplate({
   outputPath: string;
   data?: any;
 }) {
+  logInfo("adding: " + outputPath);
   const content = compileTemplate({ inputPath, data });
   const joinedOutputPath = path.join(process.cwd(), outputPath);
   const resolvedPath = path.resolve(joinedOutputPath);
@@ -71,7 +72,7 @@ export function copyTemplate(name: string, filePath: string) {
 }
 
 export async function spawnCommand(command: string) {
-  console.log(chalk.bgGreen(command));
+  logInfo("running: " + command);
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -117,6 +118,7 @@ export function appendDbUrl(url: string) {
 }
 
 export function appendToFile(filePath: string, textToAppend: string) {
+  logInfo("appending to: " + filePath);
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     fs.appendFileSync(joinedFilePath, textToAppend);
@@ -126,6 +128,7 @@ export function appendToFile(filePath: string, textToAppend: string) {
 }
 
 export function prependToFile(filePath: string, textToPrepend: string) {
+  logInfo("prepending to: " + filePath);
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     const fileContent = fs.readFileSync(joinedFilePath, "utf-8");
@@ -174,4 +177,20 @@ export async function runInstallScript(name: string) {
 
 export function logInfo(str: string) {
   console.log(chalk.bgBlue(str));
+}
+
+export function logError(str: string) {
+  console.log(chalk.bgRed(str));
+}
+
+export function logSuccess(str: string) {
+  console.log(chalk.bgGreen(str));
+}
+
+export function logWarning(str: string) {
+  console.log(chalk.bgYellow(str));
+}
+
+export function logGhost(str: string) {
+  console.log(chalk.white(str));
 }
