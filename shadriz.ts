@@ -33,13 +33,9 @@ program
   .command("new")
   .description("Create a new project with latest dependencies")
   .argument("<name>", "name of project")
-  .option("-v, --verbose", "show stdout and stderr of each command")
   .action(async (name, options) => {
     try {
-      const opts = {
-        verbose: options.verbose,
-      };
-      const newProjectProcessor = new NewProjectProcessor(name, opts);
+      const newProjectProcessor = new NewProjectProcessor(name);
       newProjectProcessor.init();
     } catch (error) {
       console.error("Error running command:", error);

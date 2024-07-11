@@ -7,10 +7,6 @@ interface TemplateToCopy {
   outputPath: string;
 }
 
-interface NewProjectProcessorOpts {
-  verbose: boolean;
-}
-
 export class NewProjectProcessor {
   installCommands = [
     "npm install drizzle-orm --legacy-peer-deps",
@@ -46,12 +42,7 @@ export class NewProjectProcessor {
     },
   ];
 
-  constructor(public name: string, public opts?: NewProjectProcessorOpts) {
-    this.opts = {
-      verbose: false,
-      ...opts,
-    };
-  }
+  constructor(public name: string) {}
 
   async init() {
     await this.createNewProject();
