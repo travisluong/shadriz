@@ -12,6 +12,14 @@ export abstract class BaseDbDialectStrategy {
   public printInitCompletionMessage() {
     logGhost("\n✅ db setup success: " + this.dialect);
     logGhost("\n👉 recommended next step:");
+    switch (this.dialect) {
+      case "mysql":
+      case "postgresql":
+        logGhost("- update DB_URL in .env.local");
+        break;
+      default:
+        break;
+    }
     logCmd("npx shadriz auth -h");
     logCmd("npx shadriz scaffold -h");
   }
