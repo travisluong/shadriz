@@ -1,7 +1,10 @@
-import { spawn } from "child_process";
+import { spawn, exec } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
+import { promisify } from "util";
+
+const execPromise = promisify(exec);
 
 // only to be run during new command
 export function copyTemplates(name: string) {
@@ -25,7 +28,7 @@ export function renderTemplate({
 }: {
   inputPath: string;
   outputPath: string;
-  data: any;
+  data?: any;
 }) {
   const content = compileTemplate({ inputPath, data });
   const joinedOutputPath = path.join(process.cwd(), outputPath);
@@ -66,9 +69,7 @@ export function copyTemplate(name: string, filePath: string) {
   fs.writeFileSync(resolvedPath, templateContent);
 }
 
-export async function runCommand(command: string) {
-  console.log(`Executing command: ${command}`);
-
+export async function spawnCommand(command: string) {
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -92,6 +93,19 @@ export async function runCommand(command: string) {
       }
     });
   });
+}
+
+export async function execCommand(command) {
+  try {
+    const { stdout, stderr } = await execPromise(command);
+    if (stderr) {
+      console.error(`Error: ${stderr}`);
+    }
+    return stdout;
+  } catch (error) {
+    console.error(`Execution failed: ${error}`);
+    throw error;
+  }
 }
 
 export function appendDbUrl(url: string) {

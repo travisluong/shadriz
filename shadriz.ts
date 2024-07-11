@@ -8,6 +8,7 @@ import { copyTemplates, runInstallScript } from "./lib/utils";
 import { postgresqlDialectStrategy } from "./dialects/postgresql";
 import { sqliteDialectStrategy } from "./dialects/sqlite";
 import { AuthScaffoldProcessor } from "./lib/auth-scaffold-processor";
+import { NewProjectProcessor } from "./lib/new-project-processor";
 
 const packageStrategyMap: { [key: string]: PackageStrategy } = {
   pg: pgPackageStrategy,
@@ -33,10 +34,14 @@ program
   .command("new")
   .description("Create a new project with latest dependencies")
   .argument("<name>", "name of project")
+  .option("-v, --verbose", "show stdout and stderr of each command")
   .action(async (name, options) => {
     try {
-      await runInstallScript(name);
-      copyTemplates(name);
+      const opts = {
+        verbose: options.verbose,
+      };
+      const newProjectProcessor = new NewProjectProcessor(name, opts);
+      newProjectProcessor.init();
     } catch (error) {
       console.error("Error running command:", error);
     }

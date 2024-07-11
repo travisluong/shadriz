@@ -1,5 +1,5 @@
 import { PackageStrategy } from "../lib/types";
-import { appendDbUrl, renderTemplate, runCommand } from "../lib/utils";
+import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
 export const pgPackageStrategy: PackageStrategy = {
   dialect: "postgresql",
@@ -10,8 +10,8 @@ export const pgPackageStrategy: PackageStrategy = {
     pgPackageStrategy.copyDbInstance();
   },
   installDependencies: async function () {
-    await runCommand("npm i pg");
-    await runCommand("npm i -D @types/pg");
+    await spawnCommand("npm i pg");
+    await spawnCommand("npm i -D @types/pg");
   },
   copyMigrateScript: function (): void {
     renderTemplate({

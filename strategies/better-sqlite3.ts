@@ -1,5 +1,5 @@
 import { PackageStrategy } from "../lib/types";
-import { appendDbUrl, renderTemplate, runCommand } from "../lib/utils";
+import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
 export const betterSqlite3Strategy: PackageStrategy = {
   dialect: "sqlite",
@@ -10,7 +10,7 @@ export const betterSqlite3Strategy: PackageStrategy = {
     betterSqlite3Strategy.copyDbInstance();
   },
   installDependencies: async function () {
-    await runCommand("npm i better-sqlite3");
+    await spawnCommand("npm i better-sqlite3");
   },
   copyMigrateScript: function (): void {
     renderTemplate({

@@ -2,7 +2,7 @@ import {
   appendToFile,
   compileTemplate,
   renderTemplate,
-  runCommand,
+  spawnCommand,
 } from "./utils";
 
 type Providers = "github" | "google" | "credentials";
@@ -59,11 +59,11 @@ export class AuthScaffoldProcessor {
   }
 
   async installDependencies() {
-    await runCommand("npm i @auth/drizzle-adapter next-auth@beta");
+    await spawnCommand("npm i @auth/drizzle-adapter next-auth@beta");
   }
 
   async appendAuthSecretToEnv() {
-    await runCommand("npx auth secret");
+    await spawnCommand("npx auth secret");
   }
 
   addAuthConfig() {

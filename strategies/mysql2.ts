@@ -1,9 +1,9 @@
 import { PackageStrategy } from "../lib/types";
-import { appendDbUrl, renderTemplate, runCommand } from "../lib/utils";
+import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
 export const mysql2Strategy: PackageStrategy = {
   installDependencies: async function () {
-    await runCommand("npm i mysql2");
+    await spawnCommand("npm i mysql2");
   },
   copyDrizzleConfig: function (): void {
     renderTemplate({
