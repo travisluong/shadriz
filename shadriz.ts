@@ -75,6 +75,7 @@ program
     const dialectStrategy = dialectStrategyMap[options.dialect];
     authScaffold.init();
     dialectStrategy.appendAuthSchema();
+    dialectStrategy.copyCreateUserScript();
   });
 
 program

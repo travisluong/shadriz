@@ -83,4 +83,11 @@ export class PostgresqlDialectStrategy implements DialectStrategy {
     });
     appendToFile("lib/schema.ts", text);
   }
+
+  copyCreateUserScript(): void {
+    renderTemplate({
+      inputPath: "scripts/create-user.ts.pg.hbs",
+      outputPath: "scripts/create-user.ts",
+    });
+  }
 }

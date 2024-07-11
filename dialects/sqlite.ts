@@ -67,4 +67,11 @@ export class SqliteDialectStrategy implements DialectStrategy {
     });
     appendToFile("lib/schema.ts", text);
   }
+
+  copyCreateUserScript(): void {
+    renderTemplate({
+      inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
+      outputPath: "scripts/create-user.ts",
+    });
+  }
 }

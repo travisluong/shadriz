@@ -18,6 +18,7 @@ export interface DialectStrategy {
   copySchema: () => void;
   scaffold: (opts: ScaffoldOpts) => void;
   appendAuthSchema: () => void;
+  copyCreateUserScript(): void;
 }
 
 export interface ScaffoldOpts {
