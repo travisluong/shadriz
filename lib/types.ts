@@ -26,8 +26,10 @@ export interface DataTypeStrategyOpts {
   columnName: string;
 }
 
+type JSType = "string" | "number" | "boolean" | "object";
+
 export interface DataTypeStrategy {
-  jsType: string;
+  jsType: JSType;
   formTemplate: string;
   updateFormTemplate: string;
   getKeyValueStrForSchema: (opts: DataTypeStrategyOpts) => string;

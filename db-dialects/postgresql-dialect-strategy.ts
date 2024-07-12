@@ -11,36 +11,164 @@ import {
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
 
 const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
-  uuid: {
-    jsType: "string",
-    formTemplate: "components/table/input.tsx.hbs",
+  integer: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
     updateFormTemplate: "components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: uuid(\"${opts.columnName}\")`;
+      return `${opts.columnName}: integer(\"${opts.columnName}\")`;
     },
   },
-  varchar: {
-    jsType: "string",
-    formTemplate: "components/table/input.tsx.hbs",
+  smallint: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
     updateFormTemplate: "components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+      return `${opts.columnName}: smallint(\"${opts.columnName}\")`;
+    },
+  },
+  bigint: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: bigint(\"${opts.columnName}\", { mode: "number" })`;
+    },
+  },
+  serial: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: serial(\"${opts.columnName}\")`;
+    },
+  },
+  smallserial: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: smallserial(\"${opts.columnName}\")`;
+    },
+  },
+  bigserial: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: bigserial(\"${opts.columnName}\", { mode: "number" })`;
+    },
+  },
+  boolean: {
+    jsType: "boolean",
+    formTemplate: "components/table/create-checkbox.tsx.hbs",
+    updateFormTemplate: "components/table/update-checkbox.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: boolean(\"${opts.columnName}\")`;
     },
   },
   text: {
     jsType: "string",
-    formTemplate: "components/table/textarea.tsx.hbs",
+    formTemplate: "components/table/create-textarea.tsx.hbs",
     updateFormTemplate: "components/table/update-textarea.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
   },
-  integer: {
-    jsType: "number",
-    formTemplate: "components/table/input.tsx.hbs",
+  varchar: {
+    jsType: "string",
+    formTemplate: "components/table/create-input.tsx.hbs",
     updateFormTemplate: "components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: integer(\"${opts.columnName}\")`;
+      return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+    },
+  },
+  char: {
+    jsType: "string",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: char(\"${opts.columnName}\", { length: 255 })`;
+    },
+  },
+  numeric: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: numeric(\"${opts.columnName}\")`;
+    },
+  },
+  decimal: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: decimal(\"${opts.columnName}\")`;
+    },
+  },
+  real: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: real(\"${opts.columnName}\")`;
+    },
+  },
+  doublePrecision: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: doublePrecision(\"${opts.columnName}\")`;
+    },
+  },
+  json: {
+    jsType: "object",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: json(\"${opts.columnName}\")`;
+    },
+  },
+  jsonb: {
+    jsType: "object",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: jsonb(\"${opts.columnName}\")`;
+    },
+  },
+  time: {
+    jsType: "string",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: time(\"${opts.columnName}\")`;
+    },
+  },
+  timestamp: {
+    jsType: "string",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: timestamp(\"${opts.columnName}\")`;
+    },
+  },
+  date: {
+    jsType: "string",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: date(\"${opts.columnName}\")`;
+    },
+  },
+  uuid: {
+    jsType: "string",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: uuid(\"${opts.columnName}\")`;
     },
   },
 };
