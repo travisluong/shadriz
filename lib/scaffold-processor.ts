@@ -271,7 +271,7 @@ export class ScaffoldProcessor {
   }
   printCompletionMessage() {
     log.white("\n✅ scaffolding success: " + this.opts.table);
-    log.bgBlue("\n👉 recommended next steps:");
+    log.reminder();
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
   }

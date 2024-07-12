@@ -28,4 +28,8 @@ export const log = {
   todo(str: string) {
     console.log(chalk.gray("- ") + chalk.white(str));
   },
+
+  reminder() {
+    console.log("🔔 reminder:");
+  },
 };

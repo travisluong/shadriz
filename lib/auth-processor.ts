@@ -133,7 +133,7 @@ export class AuthProcessor {
 
   async printCompletionMessage() {
     log.white("\n✅ auth setup success: " + this.opts.providers.join(", "));
-    log.white("\n👉 recommended next steps:");
+    log.reminder();
     log.bgBlue("\nrun migrations:");
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");

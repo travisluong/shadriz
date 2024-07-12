@@ -1,5 +1,10 @@
 import { DbDialect } from "../lib/types";
-import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
+import {
+  appendDbUrl,
+  appendToFile,
+  renderTemplate,
+  spawnCommand,
+} from "../lib/utils";
 import { BaseDbPackageStrategy } from "./base-db-package-strategy";
 
 export class BetterSqlite3PackageStrategy extends BaseDbPackageStrategy {
@@ -11,6 +16,7 @@ export class BetterSqlite3PackageStrategy extends BaseDbPackageStrategy {
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
+    this.appendSqliteToGitignore();
   }
 
   async installDependencies() {
@@ -47,5 +53,9 @@ export class BetterSqlite3PackageStrategy extends BaseDbPackageStrategy {
       inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
       outputPath: "scripts/create-user.ts",
     });
+  }
+
+  appendSqliteToGitignore() {
+    appendToFile(".gitignore", "\nsqlite.db");
   }
 }
