@@ -19,9 +19,7 @@ export async function update{{capitalizedTable}}(
 ): Promise<Update{{capitalizedTable}}State> {
   const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
     id: formData.get("id"),
-    {{#each columns}}
-    {{this}}: formData.get("{{this}}"),
-    {{/each}}
+{{formDataKeyVal}}
   });
   if (!validatedFields.success) {
     console.log(validatedFields.error.flatten().fieldErrors);

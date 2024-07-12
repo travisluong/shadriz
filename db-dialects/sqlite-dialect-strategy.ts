@@ -12,18 +12,42 @@ import { BaseDbDialectStrategy } from "./base-db-dialect-strategy";
 const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   integer: {
     jsType: "number",
-    formTemplate: "components/table/input.tsx.hbs",
+    formTemplate: "components/table/create-input.tsx.hbs",
     updateFormTemplate: "components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
-      return `integer("${opts.columnName}")`;
+      return `${opts.columnName}: integer("${opts.columnName}")`;
+    },
+  },
+  real: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: real("${opts.columnName}")`;
     },
   },
   text: {
     jsType: "string",
-    formTemplate: "components/table/textarea.tsx.hbs",
+    formTemplate: "components/table/create-textarea.tsx.hbs",
     updateFormTemplate: "components/table/update-textarea.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
+    },
+  },
+  boolean: {
+    jsType: "boolean",
+    formTemplate: "components/table/create-checkbox.tsx.hbs",
+    updateFormTemplate: "components/table/update-checkbox.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: integer("${opts.columnName}", { mode: "boolean" } )`;
+    },
+  },
+  bigint: {
+    jsType: "number",
+    formTemplate: "components/table/create-input.tsx.hbs",
+    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: blob("${opts.columnName}", { mode: "bigint" })`;
     },
   },
 };

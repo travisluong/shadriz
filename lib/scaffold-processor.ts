@@ -133,9 +133,9 @@ export class ScaffoldProcessor {
     });
   }
   addCreateAction(): void {
-    const columns = this.opts.columns
-      .map((c) => c.split(":")[0])
-      .filter((c) => c !== "id");
+    const columns = this.getColumnsArr();
+    const formDataKeyVal = this.getFormDataKeyVal();
+
     renderTemplate({
       inputPath: "actions/table/create-table.ts.hbs",
       outputPath: `actions/${this.opts.table}/create-${this.opts.table}.ts`,
@@ -143,13 +143,14 @@ export class ScaffoldProcessor {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
         columns: columns,
+        formDataKeyVal: formDataKeyVal,
       },
     });
   }
   addUpdateAction(): void {
-    const columns = this.opts.columns
-      .map((c) => c.split(":")[0])
-      .filter((c) => c !== "id");
+    const columns = this.getColumnsArr();
+    const formDataKeyVal = this.getFormDataKeyVal();
+
     renderTemplate({
       inputPath: "actions/table/update-table.ts.hbs",
       outputPath: `actions/${this.opts.table}/update-${this.opts.table}.ts`,
@@ -157,6 +158,7 @@ export class ScaffoldProcessor {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
         columns: columns,
+        formDataKeyVal: formDataKeyVal,
       },
     });
   }
@@ -274,5 +276,21 @@ export class ScaffoldProcessor {
     log.reminder();
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
+  }
+  getColumnsArr() {
+    return this.opts.columns
+      .map((c) => c.split(":")[0])
+      .filter((c) => c !== "id");
+  }
+  getFormDataKeyVal() {
+    return this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => arr[0] !== "id")
+      .map((arr) =>
+        arr[1] === "boolean"
+          ? `    ${arr[0]}: !!formData.get("${arr[0]}"),\n`
+          : `    ${arr[0]}: formData.get("${arr[0]}"),\n`
+      )
+      .join("");
   }
 }

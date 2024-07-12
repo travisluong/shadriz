@@ -18,9 +18,7 @@ export async function create{{capitalizedTable}}(
   formData: FormData
 ): Promise<Create{{capitalizedTable}}State> {
   const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
-    {{#each columns}}
-    {{this}}: formData.get("{{this}}"),
-    {{/each}}
+{{formDataKeyVal}}
   });
   if (!validatedFields.success) {
     return {

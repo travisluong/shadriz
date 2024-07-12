@@ -25,6 +25,7 @@ export class NewProjectProcessor {
     "npx shadcn-ui@latest add -y -o input",
     "npx shadcn-ui@latest add -y -o button",
     "npx shadcn-ui@latest add -y -o textarea",
+    "npx shadcn-ui@latest add -y -o checkbox",
   ];
 
   templatesToCopy: TemplateToCopy[] = [

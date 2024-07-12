@@ -1,0 +1,7 @@
+        <div>
+          <Label>{{column}}</Label>
+          <Checkbox name="{{column}}" />
+          {state.errors?.{{column}}?.map((error) => (
+            <p className="text-red-500" key={error}>{error}</p>
+          ))}
+        </div>
