@@ -20,7 +20,7 @@ export class BetterSqlite3PackageStrategy extends BaseDbPackageStrategy {
   }
 
   async installDependencies() {
-    await spawnCommand("npm i better-sqlite3");
+    await spawnCommand("npm install better-sqlite3");
   }
 
   copyMigrateScript(): void {

@@ -14,8 +14,8 @@ export class PgPackageStrategy extends BaseDbPackageStrategy {
   }
 
   async installDependencies() {
-    await spawnCommand("npm i pg");
-    await spawnCommand("npm i -D @types/pg");
+    await spawnCommand("npm install pg");
+    await spawnCommand("npm install -D @types/pg");
   }
 
   copyMigrateScript(): void {

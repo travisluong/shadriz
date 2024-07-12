@@ -63,10 +63,10 @@ export class AuthProcessor {
   }
 
   async installDependencies() {
-    await spawnCommand("npm i @auth/drizzle-adapter next-auth@beta");
+    await spawnCommand("npm install @auth/drizzle-adapter next-auth@beta");
     if (this.opts.providers.includes("credentials")) {
-      await spawnCommand("npm i bcrypt");
-      await spawnCommand("npm i -D @types/bcrypt");
+      await spawnCommand("npm install bcrypt");
+      await spawnCommand("npm install -D @types/bcrypt");
     }
   }
 
