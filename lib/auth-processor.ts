@@ -1,13 +1,11 @@
 import {
   appendToFile,
   compileTemplate,
-  logCmd,
-  logGhost,
-  logInfo,
   prependToFile,
   renderTemplate,
   spawnCommand,
 } from "./utils";
+import { log } from "./log";
 
 type Providers = "github" | "google" | "credentials";
 
@@ -54,13 +52,13 @@ export class AuthProcessor {
         throw new Error("invalid provider: " + provider);
       }
     }
-    await this.installDependencies();
-    await this.appendAuthSecretToEnv();
-    this.addAuthConfig();
-    this.addAuthRouteHandler();
-    // this.addAuthMiddleware();
-    this.appendSecretsToEnv();
-    this.prependAdapterAccountTypeToSchema();
+    // await this.installDependencies();
+    // await this.appendAuthSecretToEnv();
+    // this.addAuthConfig();
+    // this.addAuthRouteHandler();
+    // // this.addAuthMiddleware();
+    // this.appendSecretsToEnv();
+    // this.prependAdapterAccountTypeToSchema();
     await this.printCompletionMessage();
   }
 
@@ -134,35 +132,35 @@ export class AuthProcessor {
   }
 
   async printCompletionMessage() {
-    logGhost("\n✅ auth setup success: " + this.opts.providers.join(", "));
-    logGhost("\n👉 recommended next steps:");
-    logInfo("\nrun migrations:");
-    logCmd("npx drizzle-kit generate");
-    logCmd("npx drizzle-kit migrate");
+    log.ghost("\n✅ auth setup success: " + this.opts.providers.join(", "));
+    log.ghost("\n👉 recommended next steps:");
+    log.info("\nrun migrations:");
+    log.cmd("npx drizzle-kit generate");
+    log.cmd("npx drizzle-kit migrate");
     if (this.opts.providers.includes("github")) {
-      logInfo("setup github provider:");
-      logGhost(
+      log.info("setup github provider:");
+      log.ghost(
         "go to github > settings > developer settings > oauth apps > new oauth app"
       );
-      logGhost("callback: http://localhost:3000/api/auth/callback/github");
-      logGhost("update AUTH_GITHUB_ID in .env.local");
-      logGhost("update AUTH_GITHUB_SECRET in .env.local");
+      log.ghost("callback: http://localhost:3000/api/auth/callback/github");
+      log.ghost("update AUTH_GITHUB_ID in .env.local");
+      log.ghost("update AUTH_GITHUB_SECRET in .env.local");
     }
     if (this.opts.providers.includes("google")) {
-      logInfo("setup google provider:");
-      logGhost("go to console.cloud.google.com > new project");
-      logGhost("search oauth > create oauth consent screen");
-      logGhost("create oauth 2.0 client");
-      logGhost("callback: http://localhost:3000/api/auth/callback/google");
-      logGhost("update AUTH_GOOGLE_ID in .env.local");
-      logGhost("update AUTH_GOOGLE_SECRET in .env.local");
+      log.info("setup google provider:");
+      log.ghost("go to console.cloud.google.com > new project");
+      log.ghost("search oauth > create oauth consent screen");
+      log.ghost("create oauth 2.0 client");
+      log.ghost("callback: http://localhost:3000/api/auth/callback/google");
+      log.ghost("update AUTH_GOOGLE_ID in .env.local");
+      log.ghost("update AUTH_GOOGLE_SECRET in .env.local");
     }
     if (this.opts.providers.includes("credentials")) {
-      logInfo("create a test user for credentials provider:");
-      logCmd("npx tsx scripts/create-user.ts foo@example.com password123");
+      log.info("create a test user for credentials provider:");
+      log.cmd("npx tsx scripts/create-user.ts foo@example.com password123");
     }
-    logInfo("test login:");
-    logCmd("npm run dev");
-    logGhost("go to http://localhost:3000/api/auth/signin");
+    log.info("test login:");
+    log.cmd("npm run dev");
+    log.ghost("go to http://localhost:3000/api/auth/signin");
   }
 }

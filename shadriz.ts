@@ -8,7 +8,7 @@ import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
 import { BaseDbDialectStrategy } from "./db-dialects/base-db-dialect-strategy";
 import { BaseDbPackageStrategy } from "./db-packages/base-db-package-strategy";
-import { logError } from "./lib/utils";
+import { log } from "./lib/log";
 
 const packageStrategyMap: { [key: string]: BaseDbPackageStrategy } = {
   pg: new PgPackageStrategy(),
@@ -53,8 +53,8 @@ program
     }
     const packageStrategy = packageStrategyMap[strategy];
     const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
-    await packageStrategy.init();
-    dialectStrategy.init();
+    // await packageStrategy.init();
+    // dialectStrategy.init();
     dialectStrategy.printInitCompletionMessage();
   });
 
@@ -65,7 +65,7 @@ program
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .action(async (providers, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
-      logError(`invalid dialect ${options.dialect}`);
+      log.error(`invalid dialect ${options.dialect}`);
       process.exit(1);
     }
     const authScaffold = new AuthProcessor({ providers: providers });
@@ -85,7 +85,7 @@ program
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .action(async (table, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
-      logError(`invalid dialect: ${options.dialect}`);
+      log.error(`invalid dialect: ${options.dialect}`);
       process.exit(1);
     }
     const strategy = dialectStrategyMap[options.dialect];

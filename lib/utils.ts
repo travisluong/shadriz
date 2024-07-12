@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
-import chalk from "chalk";
+import { log } from "./log";
 
 export function renderTemplate({
   inputPath,
@@ -21,7 +21,7 @@ export function renderTemplate({
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(resolvedPath, content);
-  logSuccess("added: " + outputPath);
+  log.success("added: " + outputPath);
 }
 
 export function compileTemplate({
@@ -39,7 +39,7 @@ export function compileTemplate({
 }
 
 export async function spawnCommand(command: string) {
-  logInfo("running: " + command);
+  log.info("running: " + command);
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -75,7 +75,7 @@ export function appendToFile(filePath: string, textToAppend: string) {
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     fs.appendFileSync(joinedFilePath, textToAppend);
-    logWarning("modified: " + filePath);
+    log.warning("modified: " + filePath);
   } catch (error) {
     console.error(error);
   }
@@ -87,7 +87,7 @@ export function prependToFile(filePath: string, textToPrepend: string) {
     const fileContent = fs.readFileSync(joinedFilePath, "utf-8");
     const updatedContent = textToPrepend + fileContent;
     fs.writeFileSync(joinedFilePath, updatedContent, "utf-8");
-    logWarning("modified: " + filePath);
+    log.warning("modified: " + filePath);
   } catch (error) {
     console.error(
       `Error while prepending content to the file: ${error.message}`
@@ -97,28 +97,4 @@ export function prependToFile(filePath: string, textToPrepend: string) {
 
 export function capitalize(str: string) {
   return str[0].toUpperCase() + str.slice(1);
-}
-
-export function logInfo(str: string) {
-  console.log(chalk.bgBlue(str));
-}
-
-export function logError(str: string) {
-  console.log(chalk.bgRed(str));
-}
-
-export function logSuccess(str: string) {
-  console.log(chalk.bgGreen(str));
-}
-
-export function logWarning(str: string) {
-  console.log(chalk.bgYellow(str));
-}
-
-export function logGhost(str: string) {
-  console.log(chalk.white(str));
-}
-
-export function logCmd(str: string) {
-  console.log(chalk.gray("$ ") + chalk.white(str));
 }

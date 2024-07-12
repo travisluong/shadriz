@@ -1,4 +1,5 @@
-import { logCmd, logGhost, renderTemplate, spawnCommand } from "./utils";
+import { log } from "./log";
+import { renderTemplate, spawnCommand } from "./utils";
 import path from "path";
 
 interface TemplateToCopy {
@@ -88,9 +89,9 @@ export class NewProjectProcessor {
   }
 
   printCompletionMessage() {
-    logGhost("\n✅ new project success: " + this.name);
-    logGhost("\n👉 recommended next step:");
-    logCmd(`cd ${this.name}`);
-    logCmd(`npx shadriz db -h`);
+    log.ghost("\n✅ new project success: " + this.name);
+    log.ghost("\n👉 recommended next step:");
+    log.cmd(`cd ${this.name}`);
+    log.cmd(`npx shadriz db -h`);
   }
 }

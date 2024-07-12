@@ -7,11 +7,9 @@ import {
   appendToFile,
   capitalize,
   compileTemplate,
-  logCmd,
-  logGhost,
-  logInfo,
   renderTemplate,
 } from "./utils";
+import { log } from "./log";
 
 // lib/schema.ts
 // app/post/page.tsx
@@ -272,9 +270,9 @@ export class ScaffoldProcessor {
     return html;
   }
   printCompletionMessage() {
-    logGhost("\n✅ scaffolding success: " + this.opts.table);
-    logInfo("\n👉 recommended next steps:");
-    logCmd("npx drizzle-kit generate");
-    logCmd("npx drizzle-kit migrate");
+    log.ghost("\n✅ scaffolding success: " + this.opts.table);
+    log.info("\n👉 recommended next steps:");
+    log.cmd("npx drizzle-kit generate");
+    log.cmd("npx drizzle-kit migrate");
   }
 }
