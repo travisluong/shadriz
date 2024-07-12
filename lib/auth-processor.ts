@@ -11,6 +11,7 @@ type Providers = "github" | "google" | "credentials";
 
 interface AuthProcessorOpts {
   providers: Providers[];
+  pnpm: boolean;
 }
 
 interface AuthStrategy {
@@ -63,6 +64,14 @@ export class AuthProcessor {
   }
 
   async installDependencies() {
+    if (this.opts.pnpm) {
+      await spawnCommand("pnpm install @auth/drizzle-adapter next-auth@beta");
+      if (this.opts.providers.includes("credentials")) {
+        await spawnCommand("pnpm install bcrypt");
+        await spawnCommand("pnpm install -D @types/bcrypt");
+      }
+      return;
+    }
     await spawnCommand("npm install @auth/drizzle-adapter next-auth@beta");
     if (this.opts.providers.includes("credentials")) {
       await spawnCommand("npm install bcrypt");

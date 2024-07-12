@@ -286,11 +286,36 @@ export class ScaffoldProcessor {
     return this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => arr[0] !== "id")
-      .map((arr) =>
-        arr[1] === "boolean"
-          ? `    ${arr[0]}: !!formData.get("${arr[0]}"),\n`
-          : `    ${arr[0]}: formData.get("${arr[0]}"),\n`
-      )
+      .map((arr) => {
+        switch (arr[1]) {
+          case "integer":
+          case "smallint":
+          case "serial":
+            return `    ${arr[0]}: parseInt(formData.get("${arr[0]}") as string),\n`;
+          case "bigint":
+          case "bigserial":
+            return `    ${arr[0]}: BigInt(formData.get("${arr[0]}") as string)\n`;
+          case "boolean":
+            return `    ${arr[0]}: !!formData.get("${arr[0]}"),\n`;
+          case "text":
+          case "varchar":
+          case "char":
+          case "json":
+          case "jsonb":
+          case "time":
+          case "timestamp":
+          case "date":
+          case "uuid":
+            return `    ${arr[0]}: formData.get("${arr[0]}") as string,\n`;
+          case "numeric":
+          case "decimal":
+          case "real":
+          case "doublePrecision":
+            return `    ${arr[0]}: parseFloat(formData.get("${arr[0]}") as string),\n`;
+          default:
+            break;
+        }
+      })
       .join("");
   }
 }

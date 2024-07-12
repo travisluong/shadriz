@@ -6,16 +6,15 @@ import { PostgresqlDialectStrategy } from "./db-dialects/postgresql-dialect-stra
 import { SqliteDialectStrategy } from "./db-dialects/sqlite-dialect-strategy";
 import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
-import { BaseDbDialectStrategy } from "./db-dialects/base-db-dialect-strategy";
-import { BaseDbPackageStrategy } from "./db-packages/base-db-package-strategy";
 import { log } from "./lib/log";
+import { DbDialectStrategy, DbPackageStrategy } from "./lib/types";
 
-const packageStrategyMap: { [key: string]: BaseDbPackageStrategy } = {
+const packageStrategyMap: { [key: string]: DbPackageStrategy } = {
   pg: new PgPackageStrategy(),
   "better-sqlite3": new BetterSqlite3PackageStrategy(),
 };
 
-const dialectStrategyMap: { [key: string]: BaseDbDialectStrategy } = {
+const dialectStrategyMap: { [key: string]: DbDialectStrategy } = {
   postgresql: new PostgresqlDialectStrategy(),
   sqlite: new SqliteDialectStrategy(),
 };
@@ -33,9 +32,10 @@ program
   .command("new")
   .description("Create a new project with latest dependencies")
   .argument("<name>", "name of project")
+  .option("--pnpm", "run with pnpm")
   .action(async (name, options) => {
     try {
-      const newProjectProcessor = new NewProjectProcessor(name);
+      const newProjectProcessor = new NewProjectProcessor(name, options);
       newProjectProcessor.init();
     } catch (error) {
       console.error("Error running command:", error);
@@ -46,12 +46,14 @@ program
   .command("db")
   .description("Generate Drizzle ORM configuration")
   .argument("<strategy>", "pg, mysql2, better-sqlite3")
+  .option("--pnpm", "run with pnpm", false)
   .action(async (strategy, options) => {
     if (!(strategy in packageStrategyMap)) {
       console.error(chalk.red(`${strategy} strategy invalid`));
       process.exit(1);
     }
     const packageStrategy = packageStrategyMap[strategy];
+    packageStrategy.setPnpm(options.pnpm);
     const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
     await packageStrategy.init();
     dialectStrategy.init();
@@ -63,12 +65,16 @@ program
   .description("Generate Auth.js configuration")
   .argument("<providers...>", "github, google, credentials")
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
+  .option("--pnpm", "run with pnpm", false)
   .action(async (providers, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
       log.bgRed(`invalid dialect ${options.dialect}`);
       process.exit(1);
     }
-    const authScaffold = new AuthProcessor({ providers: providers });
+    const authScaffold = new AuthProcessor({
+      providers: providers,
+      pnpm: options.pnpm,
+    });
     const dialectStrategy = dialectStrategyMap[options.dialect];
     dialectStrategy.appendAuthSchema();
     dialectStrategy.copyCreateUserScript();

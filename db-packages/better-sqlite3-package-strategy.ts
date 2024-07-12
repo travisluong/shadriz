@@ -1,4 +1,8 @@
-import { DbDialect, DbPackageStrategy } from "../lib/types";
+import {
+  DbDialect,
+  DbPackageStrategy,
+  DbPackageStrategyOpts,
+} from "../lib/types";
 import {
   appendDbUrl,
   appendToFile,
@@ -7,7 +11,16 @@ import {
 } from "../lib/utils";
 
 export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
+  opts: DbPackageStrategyOpts = { pnpm: false };
+
   dialect: DbDialect = "sqlite";
+
+  constructor(opts?: DbPackageStrategyOpts) {
+    this.opts = {
+      ...this.opts,
+      ...opts,
+    };
+  }
 
   async init() {
     await this.installDependencies();
@@ -19,6 +32,10 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   }
 
   async installDependencies() {
+    if (this.opts.pnpm) {
+      await spawnCommand("pnpm install better-sqlite3");
+      return;
+    }
     await spawnCommand("npm install better-sqlite3");
   }
 
@@ -56,5 +73,9 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   appendSqliteToGitignore() {
     appendToFile(".gitignore", "\nsqlite.db");
+  }
+
+  setPnpm(val: boolean): void {
+    this.opts.pnpm = val;
   }
 }

@@ -1,4 +1,5 @@
 import { log } from "./log";
+import { NewProjectProcessorOpts } from "./types";
 import { renderTemplate, spawnCommand } from "./utils";
 import path from "path";
 
@@ -8,6 +9,8 @@ interface TemplateToCopy {
 }
 
 export class NewProjectProcessor {
+  opts: NewProjectProcessorOpts = { pnpm: false };
+
   installCommands = [
     "npm install drizzle-orm --legacy-peer-deps",
     "npm install -D drizzle-kit",
@@ -18,14 +21,19 @@ export class NewProjectProcessor {
     "npm install @tanstack/react-table",
   ];
 
+  pnpmInstallCommands = [
+    "pnpm install drizzle-orm",
+    "pnpm install -D drizzle-kit",
+    "pnpm install dotenv",
+    "pnpm install uuidv7",
+    "pnpm install zod",
+    "pnpm install drizzle-zod",
+    "pnpm install @tanstack/react-table",
+  ];
+
   shadcnCommands = [
     "npx shadcn-ui@latest init -y -d",
-    "npx shadcn-ui@latest add -y -o table",
-    "npx shadcn-ui@latest add -y -o label",
-    "npx shadcn-ui@latest add -y -o input",
-    "npx shadcn-ui@latest add -y -o button",
-    "npx shadcn-ui@latest add -y -o textarea",
-    "npx shadcn-ui@latest add -y -o checkbox",
+    "npx shadcn-ui@latest add -y -o table label input button textarea checkbox",
   ];
 
   templatesToCopy: TemplateToCopy[] = [
@@ -43,7 +51,12 @@ export class NewProjectProcessor {
     },
   ];
 
-  constructor(public name: string) {}
+  constructor(public name: string, opts?: NewProjectProcessorOpts) {
+    this.opts = {
+      ...this.opts,
+      ...opts,
+    };
+  }
 
   async init() {
     await this.createNewProject();
@@ -55,9 +68,15 @@ export class NewProjectProcessor {
   }
 
   async createNewProject() {
-    await this.runCommand(
-      `npx create-next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`
-    );
+    if (this.opts.pnpm) {
+      await this.runCommand(
+        `pnpm create next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`
+      );
+    } else {
+      await this.runCommand(
+        `npx create-next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`
+      );
+    }
   }
 
   changeDir() {
@@ -65,8 +84,14 @@ export class NewProjectProcessor {
   }
 
   async installDependencies() {
-    for (const cmd of this.installCommands) {
-      const output = await this.runCommand(cmd);
+    if (this.opts.pnpm) {
+      for (const cmd of this.pnpmInstallCommands) {
+        await this.runCommand(cmd);
+      }
+    } else {
+      for (const cmd of this.installCommands) {
+        await this.runCommand(cmd);
+      }
     }
   }
 

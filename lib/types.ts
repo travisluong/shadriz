@@ -55,4 +55,13 @@ export interface DbPackageStrategy {
   appendDbUrl(): void;
   copyDbInstance(): void;
   copyDbInstanceForScripts(): void;
+  setPnpm(val: boolean): void;
+}
+
+export interface NewProjectProcessorOpts {
+  pnpm: boolean;
+}
+
+export interface DbPackageStrategyOpts {
+  pnpm: boolean;
 }
