@@ -1,13 +1,14 @@
+import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   DbDialect,
+  DbDialectStrategy,
   ScaffoldOpts,
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
-import { BaseDbDialectStrategy } from "./base-db-dialect-strategy";
 
 const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   uuid: {
@@ -44,7 +45,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export class PostgresqlDialectStrategy extends BaseDbDialectStrategy {
+export class PostgresqlDialectStrategy implements DbDialectStrategy {
   dialect: DbDialect = "postgresql";
 
   init(): void {
@@ -90,5 +91,13 @@ export class PostgresqlDialectStrategy extends BaseDbDialectStrategy {
       inputPath: "scripts/create-user.ts.pg.hbs",
       outputPath: "scripts/create-user.ts",
     });
+  }
+
+  printInitCompletionMessage() {
+    log.success("db setup success: " + this.dialect);
+    log.reminder();
+    log.dash("update DB_URL in .env.local");
+    log.cmd("npx shadriz auth -h");
+    log.cmd("npx shadriz scaffold -h");
   }
 }

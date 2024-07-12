@@ -1,8 +1,7 @@
-import { DbDialect } from "../lib/types";
+import { DbDialect, DbPackageStrategy } from "../lib/types";
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
-import { BaseDbPackageStrategy } from "./base-db-package-strategy";
 
-export class PgPackageStrategy extends BaseDbPackageStrategy {
+export class PgPackageStrategy implements DbPackageStrategy {
   dialect: DbDialect = "postgresql";
 
   async init() {

@@ -1,13 +1,14 @@
+import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   DbDialect,
+  DbDialectStrategy,
   ScaffoldOpts,
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
-import { BaseDbDialectStrategy } from "./base-db-dialect-strategy";
 
 const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   integer: {
@@ -52,7 +53,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export class SqliteDialectStrategy extends BaseDbDialectStrategy {
+export class SqliteDialectStrategy implements DbDialectStrategy {
   dialect: DbDialect = "sqlite";
 
   init(): void {
@@ -97,5 +98,12 @@ export class SqliteDialectStrategy extends BaseDbDialectStrategy {
       inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
       outputPath: "scripts/create-user.ts",
     });
+  }
+
+  printInitCompletionMessage(): void {
+    log.success("db setup success: " + this.dialect);
+    log.reminder();
+    log.cmd("npx shadriz auth -h");
+    log.cmd("npx shadriz scaffold -h");
   }
 }

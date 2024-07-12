@@ -32,3 +32,25 @@ export interface DataTypeStrategy {
   updateFormTemplate: string;
   getKeyValueStrForSchema: (opts: DataTypeStrategyOpts) => string;
 }
+
+export interface DbDialectStrategy {
+  dialect: DbDialect;
+  init(): void;
+  scaffold(opts: ScaffoldOpts): void;
+  appendAuthSchema(): void;
+  copyCreateUserScript(): void;
+  copyDrizzleConfig(): void;
+  copySchema(): void;
+  printInitCompletionMessage(): void;
+}
+
+export interface DbPackageStrategy {
+  dialect: DbDialect;
+  init(): void;
+  copyCreateUserScript();
+  installDependencies(): void;
+  copyMigrateScript(): void;
+  appendDbUrl(): void;
+  copyDbInstance(): void;
+  copyDbInstanceForScripts(): void;
+}

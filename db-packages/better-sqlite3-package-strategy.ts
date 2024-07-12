@@ -1,13 +1,12 @@
-import { DbDialect } from "../lib/types";
+import { DbDialect, DbPackageStrategy } from "../lib/types";
 import {
   appendDbUrl,
   appendToFile,
   renderTemplate,
   spawnCommand,
 } from "../lib/utils";
-import { BaseDbPackageStrategy } from "./base-db-package-strategy";
 
-export class BetterSqlite3PackageStrategy extends BaseDbPackageStrategy {
+export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   dialect: DbDialect = "sqlite";
 
   async init() {
