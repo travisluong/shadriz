@@ -89,8 +89,8 @@ export class NewProjectProcessor {
   }
 
   printCompletionMessage() {
-    log.ghost("\n✅ new project success: " + this.name);
-    log.ghost("\n👉 recommended next step:");
+    log.white("\n✅ new project success: " + this.name);
+    log.white("\n👉 recommended next step:");
     log.cmd(`cd ${this.name}`);
     log.cmd(`npx shadriz db -h`);
   }

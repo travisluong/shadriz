@@ -10,8 +10,8 @@ export abstract class BaseDbDialectStrategy {
   protected abstract copyDrizzleConfig(): void;
   protected abstract copySchema(): void;
   public printInitCompletionMessage() {
-    log.ghost("\n✅ db setup success: " + this.dialect);
-    log.ghost("\n👉 reminder:");
+    log.white("\n✅ db setup success: " + this.dialect);
+    log.white("\n👉 reminder:");
     switch (this.dialect) {
       case "mysql":
       case "postgresql":

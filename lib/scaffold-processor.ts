@@ -270,8 +270,8 @@ export class ScaffoldProcessor {
     return html;
   }
   printCompletionMessage() {
-    log.ghost("\n✅ scaffolding success: " + this.opts.table);
-    log.info("\n👉 recommended next steps:");
+    log.white("\n✅ scaffolding success: " + this.opts.table);
+    log.bgBlue("\n👉 recommended next steps:");
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
   }

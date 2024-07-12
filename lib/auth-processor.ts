@@ -132,35 +132,35 @@ export class AuthProcessor {
   }
 
   async printCompletionMessage() {
-    log.ghost("\n✅ auth setup success: " + this.opts.providers.join(", "));
-    log.ghost("\n👉 recommended next steps:");
-    log.info("\nrun migrations:");
+    log.white("\n✅ auth setup success: " + this.opts.providers.join(", "));
+    log.white("\n👉 recommended next steps:");
+    log.bgBlue("\nrun migrations:");
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
     if (this.opts.providers.includes("github")) {
-      log.info("setup github provider:");
-      log.ghost(
+      log.bgBlue("setup github provider:");
+      log.white(
         "go to github > settings > developer settings > oauth apps > new oauth app"
       );
-      log.ghost("callback: http://localhost:3000/api/auth/callback/github");
-      log.ghost("update AUTH_GITHUB_ID in .env.local");
-      log.ghost("update AUTH_GITHUB_SECRET in .env.local");
+      log.white("callback: http://localhost:3000/api/auth/callback/github");
+      log.white("update AUTH_GITHUB_ID in .env.local");
+      log.white("update AUTH_GITHUB_SECRET in .env.local");
     }
     if (this.opts.providers.includes("google")) {
-      log.info("setup google provider:");
-      log.ghost("go to console.cloud.google.com > new project");
-      log.ghost("search oauth > create oauth consent screen");
-      log.ghost("create oauth 2.0 client");
-      log.ghost("callback: http://localhost:3000/api/auth/callback/google");
-      log.ghost("update AUTH_GOOGLE_ID in .env.local");
-      log.ghost("update AUTH_GOOGLE_SECRET in .env.local");
+      log.bgBlue("setup google provider:");
+      log.white("go to console.cloud.google.com > new project");
+      log.white("search oauth > create oauth consent screen");
+      log.white("create oauth 2.0 client");
+      log.white("callback: http://localhost:3000/api/auth/callback/google");
+      log.white("update AUTH_GOOGLE_ID in .env.local");
+      log.white("update AUTH_GOOGLE_SECRET in .env.local");
     }
     if (this.opts.providers.includes("credentials")) {
-      log.info("create a test user for credentials provider:");
+      log.bgBlue("create a test user for credentials provider:");
       log.cmd("npx tsx scripts/create-user.ts foo@example.com password123");
     }
-    log.info("test login:");
+    log.bgBlue("test login:");
     log.cmd("npm run dev");
-    log.ghost("go to http://localhost:3000/api/auth/signin");
+    log.white("go to http://localhost:3000/api/auth/signin");
   }
 }

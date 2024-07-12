@@ -1,23 +1,23 @@
 import chalk from "chalk";
 
 export const log = {
-  info(str: string) {
+  bgBlue(str: string) {
     console.log(chalk.bgBlue(str));
   },
 
-  error(str: string) {
+  bgRed(str: string) {
     console.log(chalk.bgRed(str));
   },
 
-  success(str: string) {
+  bgGreen(str: string) {
     console.log(chalk.bgGreen(str));
   },
 
-  warning(str: string) {
+  bgYellow(str: string) {
     console.log(chalk.bgYellow(str));
   },
 
-  ghost(str: string) {
+  white(str: string) {
     console.log(chalk.white(str));
   },
 

@@ -53,8 +53,8 @@ program
     }
     const packageStrategy = packageStrategyMap[strategy];
     const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
-    // await packageStrategy.init();
-    // dialectStrategy.init();
+    await packageStrategy.init();
+    dialectStrategy.init();
     dialectStrategy.printInitCompletionMessage();
   });
 
@@ -65,7 +65,7 @@ program
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .action(async (providers, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
-      log.error(`invalid dialect ${options.dialect}`);
+      log.bgRed(`invalid dialect ${options.dialect}`);
       process.exit(1);
     }
     const authScaffold = new AuthProcessor({ providers: providers });
@@ -85,7 +85,7 @@ program
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .action(async (table, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
-      log.error(`invalid dialect: ${options.dialect}`);
+      log.bgRed(`invalid dialect: ${options.dialect}`);
       process.exit(1);
     }
     const strategy = dialectStrategyMap[options.dialect];

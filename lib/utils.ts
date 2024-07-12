@@ -21,7 +21,7 @@ export function renderTemplate({
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(resolvedPath, content);
-  log.success("added: " + outputPath);
+  log.bgGreen("added: " + outputPath);
 }
 
 export function compileTemplate({
@@ -39,7 +39,7 @@ export function compileTemplate({
 }
 
 export async function spawnCommand(command: string) {
-  log.info("running: " + command);
+  log.bgBlue("running: " + command);
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -75,7 +75,7 @@ export function appendToFile(filePath: string, textToAppend: string) {
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     fs.appendFileSync(joinedFilePath, textToAppend);
-    log.warning("modified: " + filePath);
+    log.bgYellow("modified: " + filePath);
   } catch (error) {
     console.error(error);
   }
@@ -87,7 +87,7 @@ export function prependToFile(filePath: string, textToPrepend: string) {
     const fileContent = fs.readFileSync(joinedFilePath, "utf-8");
     const updatedContent = textToPrepend + fileContent;
     fs.writeFileSync(joinedFilePath, updatedContent, "utf-8");
-    log.warning("modified: " + filePath);
+    log.bgYellow("modified: " + filePath);
   } catch (error) {
     console.error(
       `Error while prepending content to the file: ${error.message}`
