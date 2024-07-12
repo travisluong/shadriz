@@ -25,11 +25,19 @@ export const log = {
     console.log(chalk.gray("$ ") + chalk.white(str));
   },
 
-  todo(str: string) {
+  dash(str: string) {
     console.log(chalk.gray("- ") + chalk.white(str));
   },
 
   reminder() {
-    console.log("🔔 reminder:");
+    console.log(chalk.yellowBright("\n🔔 reminder:"));
+  },
+
+  point(str: string) {
+    console.log("👉 " + chalk.white(str));
+  },
+
+  success(str: string) {
+    console.log("\n✅ " + chalk.greenBright(str));
   },
 };

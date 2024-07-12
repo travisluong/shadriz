@@ -10,12 +10,12 @@ export abstract class BaseDbDialectStrategy {
   protected abstract copyDrizzleConfig(): void;
   protected abstract copySchema(): void;
   public printInitCompletionMessage() {
-    log.white("\n✅ db setup success: " + this.dialect);
-    log.white("\n👉 reminder:");
+    log.success("db setup success: " + this.dialect);
+    log.reminder();
     switch (this.dialect) {
       case "mysql":
       case "postgresql":
-        log.todo("update DB_URL in .env.local");
+        log.dash("update DB_URL in .env.local");
         break;
       default:
         break;

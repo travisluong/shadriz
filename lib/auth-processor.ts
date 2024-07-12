@@ -132,35 +132,35 @@ export class AuthProcessor {
   }
 
   async printCompletionMessage() {
-    log.white("\n✅ auth setup success: " + this.opts.providers.join(", "));
+    log.success("auth setup success: " + this.opts.providers.join(", "));
     log.reminder();
-    log.bgBlue("\nrun migrations:");
+    log.bgYellow("run migrations:");
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
     if (this.opts.providers.includes("github")) {
-      log.bgBlue("setup github provider:");
-      log.white(
+      log.bgYellow("setup github provider:");
+      log.dash(
         "go to github > settings > developer settings > oauth apps > new oauth app"
       );
-      log.white("callback: http://localhost:3000/api/auth/callback/github");
-      log.white("update AUTH_GITHUB_ID in .env.local");
-      log.white("update AUTH_GITHUB_SECRET in .env.local");
+      log.dash("callback: http://localhost:3000/api/auth/callback/github");
+      log.dash("update AUTH_GITHUB_ID in .env.local");
+      log.dash("update AUTH_GITHUB_SECRET in .env.local");
     }
     if (this.opts.providers.includes("google")) {
-      log.bgBlue("setup google provider:");
-      log.white("go to console.cloud.google.com > new project");
-      log.white("search oauth > create oauth consent screen");
-      log.white("create oauth 2.0 client");
-      log.white("callback: http://localhost:3000/api/auth/callback/google");
-      log.white("update AUTH_GOOGLE_ID in .env.local");
-      log.white("update AUTH_GOOGLE_SECRET in .env.local");
+      log.bgYellow("setup google provider:");
+      log.dash("go to console.cloud.google.com > new project");
+      log.dash("search oauth > create oauth consent screen");
+      log.dash("create oauth 2.0 client");
+      log.dash("callback: http://localhost:3000/api/auth/callback/google");
+      log.dash("update AUTH_GOOGLE_ID in .env.local");
+      log.dash("update AUTH_GOOGLE_SECRET in .env.local");
     }
     if (this.opts.providers.includes("credentials")) {
-      log.bgBlue("create a test user for credentials provider:");
+      log.bgYellow("create credentials provider test user:");
       log.cmd("npx tsx scripts/create-user.ts foo@example.com password123");
     }
-    log.bgBlue("test login:");
+    log.bgYellow("test login:");
     log.cmd("npm run dev");
-    log.white("go to http://localhost:3000/api/auth/signin");
+    log.dash("go to http://localhost:3000/api/auth/signin");
   }
 }
