@@ -52,13 +52,13 @@ export class AuthProcessor {
         throw new Error("invalid provider: " + provider);
       }
     }
-    // await this.installDependencies();
-    // await this.appendAuthSecretToEnv();
-    // this.addAuthConfig();
-    // this.addAuthRouteHandler();
-    // // this.addAuthMiddleware();
-    // this.appendSecretsToEnv();
-    // this.prependAdapterAccountTypeToSchema();
+    await this.installDependencies();
+    await this.appendAuthSecretToEnv();
+    this.addAuthConfig();
+    this.addAuthRouteHandler();
+    // this.addAuthMiddleware();
+    this.appendSecretsToEnv();
+    this.prependAdapterAccountTypeToSchema();
     await this.printCompletionMessage();
   }
 
