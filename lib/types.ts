@@ -10,8 +10,7 @@ export interface DataTypeStrategyMap {
 }
 
 export interface ScaffoldProcessorOpts extends ScaffoldOpts {
-  schemaTableTemplatePath: string;
-  dataTypeStrategyMap: DataTypeStrategyMap;
+  dbDialectStrategy: DbDialectStrategy;
 }
 
 export interface GetColumnDefObjsOpts {
@@ -38,8 +37,9 @@ export interface DataTypeStrategy {
 
 export interface DbDialectStrategy {
   dialect: DbDialect;
+  schemaTableTemplatePath: string;
+  dataTypeStrategyMap: DataTypeStrategyMap;
   init(): void;
-  scaffold(opts: ScaffoldOpts): void;
   appendAuthSchema(): void;
   copyCreateUserScript(): void;
   copyDrizzleConfig(): void;

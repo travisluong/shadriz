@@ -48,11 +48,7 @@ export class ScaffoldProcessor {
     this.printCompletionMessage();
   }
   appendCodeToSchema(): void {
-    const {
-      table,
-      columns,
-      schemaTableTemplatePath: schemaTemplatePath,
-    } = this.opts;
+    const { table, columns } = this.opts;
     // compile columns
     let columnsCode = "";
     for (const [index, column] of columns.entries()) {
@@ -63,14 +59,15 @@ export class ScaffoldProcessor {
     }
     // compile str
     const str = compileTemplate({
-      inputPath: schemaTemplatePath,
+      inputPath: this.opts.dbDialectStrategy.schemaTableTemplatePath,
       data: { table, columns: columnsCode, typeName: capitalize(table) },
     });
 
     appendToFile("lib/schema.ts", str);
   }
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
-    const { column, dataTypeStrategyMap } = opts;
+    const { column } = opts;
+    const { dataTypeStrategyMap } = this.opts.dbDialectStrategy;
     const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
     const args = [arg1, arg2, arg3];
     if (!(dataType in dataTypeStrategyMap)) {
@@ -140,7 +137,8 @@ export class ScaffoldProcessor {
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
-        const strategy = this.opts.dataTypeStrategyMap[dataType];
+        const strategy =
+          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
         return strategy.getKeyValStrForFormData({ columnName: col });
       })
       .join("");
@@ -163,7 +161,8 @@ export class ScaffoldProcessor {
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
-        const strategy = this.opts.dataTypeStrategyMap[dataType];
+        const strategy =
+          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
         return strategy.getKeyValStrForFormData({ columnName: col });
       })
       .join("");
@@ -235,11 +234,12 @@ export class ScaffoldProcessor {
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
       if (columnName === "id") continue;
-      if (!(dataType in this.opts.dataTypeStrategyMap))
+      if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
       if (args.includes("pk")) continue;
-      const dataTypeStrategy = this.opts.dataTypeStrategyMap[dataType];
+      const dataTypeStrategy =
+        this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
         data: { column: columnName },
@@ -274,14 +274,15 @@ export class ScaffoldProcessor {
     let html = "";
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
-      if (!(dataType in this.opts.dataTypeStrategyMap))
+      if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
       let updateFormTemplate = "";
       if (args.includes("pk")) {
         updateFormTemplate = "components/table/update-input-hidden.tsx.hbs";
       } else {
-        const dataTypeStrategy = this.opts.dataTypeStrategyMap[dataType];
+        const dataTypeStrategy =
+          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
         updateFormTemplate = dataTypeStrategy.updateFormTemplate;
       }
       html += compileTemplate({
@@ -293,7 +294,7 @@ export class ScaffoldProcessor {
     return html;
   }
   printCompletionMessage() {
-    log.white("\n✅ scaffolding success: " + this.opts.table);
+    log.success("scaffolding success: " + this.opts.table);
     log.reminder();
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");

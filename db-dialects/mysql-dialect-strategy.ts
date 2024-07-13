@@ -1,13 +1,10 @@
 import { formDataUtils } from "../lib/form-data-utils";
 import { log } from "../lib/log";
-import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
-  ScaffoldOpts,
-  ScaffoldProcessorOpts,
 } from "../lib/types";
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
 
@@ -258,6 +255,8 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
   dialect: DbDialect = "mysql";
+  schemaTableTemplatePath: string = "lib/schema.ts.mysql.table.hbs";
+  dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
 
   init(): void {
     this.copyDrizzleConfig();
@@ -278,16 +277,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
       outputPath: "lib/schema.ts",
       data: {},
     });
-  }
-
-  scaffold(opts: ScaffoldOpts): void {
-    const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
-      ...opts,
-      schemaTableTemplatePath: "lib/schema.ts.mysql.table.hbs",
-      dataTypeStrategyMap: mysqlDataTypeStrategies,
-    };
-    const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
-    scaffoldProcessor.process();
   }
 
   appendAuthSchema() {

@@ -1,13 +1,10 @@
 import { formDataUtils } from "../lib/form-data-utils";
 import { log } from "../lib/log";
-import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
-  ScaffoldOpts,
-  ScaffoldProcessorOpts,
 } from "../lib/types";
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
 
@@ -235,6 +232,8 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  schemaTableTemplatePath: string = "lib/schema.ts.postgresql.table.hbs";
+  dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
 
   init(): void {
@@ -256,16 +255,6 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
       outputPath: "lib/schema.ts",
       data: {},
     });
-  }
-
-  scaffold(opts: ScaffoldOpts): void {
-    const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
-      ...opts,
-      schemaTableTemplatePath: "lib/schema.ts.postgresql.table.hbs",
-      dataTypeStrategyMap: postgresqlDataTypeStrategies,
-    };
-    const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
-    scaffoldProcessor.process();
   }
 
   appendAuthSchema() {

@@ -1,13 +1,10 @@
 import { formDataUtils } from "../lib/form-data-utils";
 import { log } from "../lib/log";
-import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
-  ScaffoldOpts,
-  ScaffoldProcessorOpts,
 } from "../lib/types";
 import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
 
@@ -70,6 +67,8 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  schemaTableTemplatePath: string = "lib/schema.ts.sqlite.table.hbs";
+  dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";
 
   init(): void {
@@ -90,16 +89,6 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
       inputPath: "lib/schema.ts.sqlite.hbs",
       outputPath: "lib/schema.ts",
     });
-  }
-
-  scaffold(opts: ScaffoldOpts): void {
-    const scaffoldProcessorOpts: ScaffoldProcessorOpts = {
-      ...opts,
-      schemaTableTemplatePath: "lib/schema.ts.sqlite.table.hbs",
-      dataTypeStrategyMap: sqliteDataTypeStrategies,
-    };
-    const scaffoldProcessor = new ScaffoldProcessor(scaffoldProcessorOpts);
-    scaffoldProcessor.process();
   }
 
   appendAuthSchema() {
