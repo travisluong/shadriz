@@ -22,4 +22,8 @@ export const formDataUtils = {
   float(col: string): string {
     return `    ${col}: parseFloat(formData.get("${col}") as string),\n`;
   },
+
+  bigint(col: string): string {
+    return `    ${col}: BigInt(formData.get("${col}") as string),\n`;
+  },
 };

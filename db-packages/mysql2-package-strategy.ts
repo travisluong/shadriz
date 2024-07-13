@@ -1,48 +1,71 @@
-import { PackageStrategy } from "../lib/types";
+import {
+  DbDialect,
+  DbPackageStrategy,
+  DbPackageStrategyOpts,
+} from "../lib/types";
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
-export const mysql2Strategy: PackageStrategy = {
-  installDependencies: async function () {
+export class Mysql2PackageStrategy implements DbPackageStrategy {
+  opts: DbPackageStrategyOpts = { pnpm: false };
+
+  dialect: DbDialect = "mysql";
+
+  constructor(opts?: DbPackageStrategyOpts) {
+    this.opts = {
+      ...this.opts,
+      ...opts,
+    };
+  }
+
+  async init() {
+    await this.installDependencies();
+    this.copyMigrateScript();
+    this.appendDbUrl();
+    this.copyDbInstance();
+    this.copyDbInstanceForScripts();
+  }
+
+  async installDependencies() {
+    if (this.opts.pnpm) {
+      await spawnCommand("pnpm install mysql2");
+      return;
+    }
     await spawnCommand("npm install mysql2");
-  },
-  copyDrizzleConfig: function (): void {
-    renderTemplate({
-      inputPath: "drizzle.config.ts.hbs",
-      outputPath: "drizzle.config.ts",
-      data: { dialect: "mysql" },
-    });
-  },
-  copyMigrateScript: function (): void {
+  }
+
+  copyMigrateScript(): void {
     renderTemplate({
       inputPath: "scripts/migrate.ts.mysql2.hbs",
       outputPath: "scripts/migrate.ts",
-      data: {},
     });
-  },
-  copySchema: function (): void {
-    renderTemplate({
-      inputPath: "lib/schema.ts.mysql2.hbs",
-      outputPath: "lib/schema.ts",
-      data: {},
-    });
-  },
-  appendDbUrl: function (): void {
+  }
+
+  appendDbUrl(): void {
     appendDbUrl("mysql://user:password@host:port/db");
-  },
-  copyDbInstance: function (): void {
+  }
+
+  copyDbInstance(): void {
     renderTemplate({
       inputPath: "lib/db.ts.mysql2.hbs",
       outputPath: "lib/db.ts",
-      data: {},
     });
-  },
-  scaffold: function ({
-    table,
-    columns,
-  }: {
-    table: string;
-    columns: string[];
-  }): void {
-    throw new Error("Function not implemented.");
-  },
-};
+  }
+
+  copyDbInstanceForScripts(): void {
+    renderTemplate({
+      inputPath: "scripts/dbc.ts.mysql2.hbs",
+      outputPath: "scripts/dbc.ts",
+    });
+  }
+
+  copyCreateUserScript() {
+    renderTemplate({
+      inputPath: "scripts/create-user.ts.mysql2.hbs",
+      outputPath: "scripts/create-user.ts",
+    });
+  }
+
+  setPnpm(val: boolean): void {
+    this.opts.pnpm = val;
+  }
+}

@@ -1,3 +1,4 @@
+import { formDataUtils } from "../lib/form-data-utils";
 import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../lib/scaffold-processor";
 import {
@@ -18,6 +19,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
       return `${opts.columnName}: integer("${opts.columnName}")`;
     },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.integer(opts.columnName);
+    },
   },
   real: {
     jsType: "number",
@@ -25,6 +29,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate: "components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: real("${opts.columnName}")`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.float(opts.columnName);
     },
   },
   text: {
@@ -34,6 +41,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.string(opts.columnName);
+    },
   },
   boolean: {
     jsType: "boolean",
@@ -42,6 +52,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: integer("${opts.columnName}", { mode: "boolean" } )`;
     },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.boolean(opts.columnName);
+    },
   },
   bigint: {
     jsType: "number",
@@ -49,6 +62,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate: "components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: blob("${opts.columnName}", { mode: "bigint" })`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.bigint(opts.columnName);
     },
   },
 };

@@ -8,14 +8,18 @@ import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
 import { log } from "./lib/log";
 import { DbDialectStrategy, DbPackageStrategy } from "./lib/types";
+import { Mysql2PackageStrategy } from "./db-packages/mysql2-package-strategy";
+import { MysqlDialectStrategy } from "./db-dialects/mysql-dialect-strategy";
 
 const packageStrategyMap: { [key: string]: DbPackageStrategy } = {
   pg: new PgPackageStrategy(),
+  mysql2: new Mysql2PackageStrategy(),
   "better-sqlite3": new BetterSqlite3PackageStrategy(),
 };
 
 const dialectStrategyMap: { [key: string]: DbDialectStrategy } = {
   postgresql: new PostgresqlDialectStrategy(),
+  mysql: new MysqlDialectStrategy(),
   sqlite: new SqliteDialectStrategy(),
 };
 

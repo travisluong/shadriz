@@ -134,7 +134,16 @@ export class ScaffoldProcessor {
   }
   addCreateAction(): void {
     const columns = this.getColumnsArr();
-    const formDataKeyVal = this.getFormDataKeyVal();
+    const formDataKeyVal = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => !arr.includes("pk"))
+      .map((arr) => {
+        const col = arr[0];
+        const dataType = arr[1];
+        const strategy = this.opts.dataTypeStrategyMap[dataType];
+        return strategy.getKeyValStrForFormData({ columnName: col });
+      })
+      .join("");
 
     renderTemplate({
       inputPath: "actions/table/create-table.ts.hbs",
@@ -149,7 +158,15 @@ export class ScaffoldProcessor {
   }
   addUpdateAction(): void {
     const columns = this.getColumnsArr();
-    const formDataKeyVal = this.getFormDataKeyVal();
+    const formDataKeyVal = this.opts.columns
+      .map((c) => c.split(":"))
+      .map((arr) => {
+        const col = arr[0];
+        const dataType = arr[1];
+        const strategy = this.opts.dataTypeStrategyMap[dataType];
+        return strategy.getKeyValStrForFormData({ columnName: col });
+      })
+      .join("");
 
     renderTemplate({
       inputPath: "actions/table/update-table.ts.hbs",
@@ -286,16 +303,5 @@ export class ScaffoldProcessor {
       .map((c) => c.split(":"))
       .filter((arr) => !arr.includes("pk"))
       .map((arr) => arr[0]);
-  }
-  getFormDataKeyVal() {
-    return this.opts.columns
-      .map((c) => c.split(":"))
-      .map((arr) => {
-        const col = arr[0];
-        const dataType = arr[1];
-        const strategy = this.opts.dataTypeStrategyMap[dataType];
-        return strategy.getKeyValStrForFormData({ columnName: col });
-      })
-      .join("");
   }
 }

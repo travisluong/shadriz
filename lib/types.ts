@@ -48,6 +48,7 @@ export interface DbDialectStrategy {
 }
 
 export interface DbPackageStrategy {
+  opts: DbPackageStrategyOpts;
   dialect: DbDialect;
   init(): void;
   copyCreateUserScript();

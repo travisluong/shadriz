@@ -1,0 +1,11 @@
+
+export const {{table}} = mysqlTable(
+  "{{table}}",
+  {
+{{columns}}
+  }
+)
+
+export type {{typeName}} = typeof {{table}}.$inferSelect;
+
+export const insert{{typeName}}Schema = createInsertSchema({{table}})
