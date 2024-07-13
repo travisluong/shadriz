@@ -32,7 +32,8 @@ export interface DataTypeStrategy {
   jsType: JSType;
   formTemplate: string;
   updateFormTemplate: string;
-  getKeyValueStrForSchema: (opts: DataTypeStrategyOpts) => string;
+  getKeyValueStrForSchema(opts: DataTypeStrategyOpts): string;
+  getKeyValStrForFormData(opts: DataTypeStrategyOpts): string;
 }
 
 export interface DbDialectStrategy {

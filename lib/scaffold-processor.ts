@@ -257,14 +257,18 @@ export class ScaffoldProcessor {
     let html = "";
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
-      if (columnName === "id") continue;
       if (!(dataType in this.opts.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
-      if (args.includes("pk")) continue;
-      const dataTypeStrategy = this.opts.dataTypeStrategyMap[dataType];
+      let updateFormTemplate = "";
+      if (args.includes("pk")) {
+        updateFormTemplate = "components/table/update-input-hidden.tsx.hbs";
+      } else {
+        const dataTypeStrategy = this.opts.dataTypeStrategyMap[dataType];
+        updateFormTemplate = dataTypeStrategy.updateFormTemplate;
+      }
       html += compileTemplate({
-        inputPath: dataTypeStrategy.updateFormTemplate,
+        inputPath: updateFormTemplate,
         data: { column: columnName },
       });
       if (index !== this.opts.columns.length - 1) html += "\n";
@@ -279,42 +283,19 @@ export class ScaffoldProcessor {
   }
   getColumnsArr() {
     return this.opts.columns
-      .map((c) => c.split(":")[0])
-      .filter((c) => c !== "id");
+      .map((c) => c.split(":"))
+      .filter((arr) => !arr.includes("pk"))
+      .map((arr) => arr[0]);
   }
   getFormDataKeyVal() {
     return this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => arr[0] !== "id")
+      .filter((arr) => !arr.includes("pk"))
       .map((arr) => {
-        switch (arr[1]) {
-          case "integer":
-          case "smallint":
-          case "serial":
-            return `    ${arr[0]}: parseInt(formData.get("${arr[0]}") as string),\n`;
-          case "bigint":
-          case "bigserial":
-            return `    ${arr[0]}: BigInt(formData.get("${arr[0]}") as string)\n`;
-          case "boolean":
-            return `    ${arr[0]}: !!formData.get("${arr[0]}"),\n`;
-          case "text":
-          case "varchar":
-          case "char":
-          case "json":
-          case "jsonb":
-          case "time":
-          case "timestamp":
-          case "date":
-          case "uuid":
-            return `    ${arr[0]}: formData.get("${arr[0]}") as string,\n`;
-          case "numeric":
-          case "decimal":
-          case "real":
-          case "doublePrecision":
-            return `    ${arr[0]}: parseFloat(formData.get("${arr[0]}") as string),\n`;
-          default:
-            break;
-        }
+        const col = arr[0];
+        const dataType = arr[1];
+        const strategy = this.opts.dataTypeStrategyMap[dataType];
+        return strategy.getKeyValStrForFormData({ columnName: col });
       })
       .join("");
   }

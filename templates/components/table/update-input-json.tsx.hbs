@@ -1,0 +1,7 @@
+        <div>
+          <Label>{{column}}</Label>
+          <Input name="{{column}}" defaultValue={ JSON.stringify(data.{{column}}) ?? "" } />
+          {state.errors?.{{column}}?.map((error) => (
+            <p className="text-red-500" key={error}>{error}</p>
+          ))}
+        </div>
