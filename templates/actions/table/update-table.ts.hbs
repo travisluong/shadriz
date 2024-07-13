@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 export interface Update{{capitalizedTable}}State {
   errors?: {
@@ -41,6 +42,11 @@ export async function update{{capitalizedTable}}(
       {{/each}}
     })
     .where(eq({{table}}.id, validatedFields.data.id));
+
+  revalidatePath("/{{table}}");
+  revalidatePath("/{{table}}/" + validatedFields.data.id);
+  revalidatePath("/{{table}}/" + validatedFields.data.id + "/edit");
+
   return {
     message: "success",
   };

@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export interface Delete{{capitalizedTable}}State {
@@ -31,5 +32,6 @@ export async function delete{{capitalizedTable}}(
     };
   }
   await db.delete({{table}}).where(eq({{table}}.id, validatedFields.data.id));
+  revalidatePath("/{{table}}");
   redirect("/{{table}}");
 }

@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export interface Create{{capitalizedTable}}State {
   errors?: {
@@ -31,5 +32,6 @@ export async function create{{capitalizedTable}}(
     {{this}}: validatedFields.data.{{this}},
     {{/each}}
   });
+  revalidatePath("/{{table}}");
   redirect("/{{table}}");
 }
