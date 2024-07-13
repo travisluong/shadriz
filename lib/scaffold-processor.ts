@@ -290,7 +290,6 @@ export class ScaffoldProcessor {
   getFormDataKeyVal() {
     return this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !arr.includes("pk"))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];

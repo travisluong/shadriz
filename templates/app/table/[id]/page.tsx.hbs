@@ -14,11 +14,11 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <h2>{{table}}</h2>
+      <h2>post</h2>
       <div>
         {Object.entries(data).map((entry) => (
           <p>
-            {entry[0]}: {entry[1]}
+            {entry[0]}: {JSON.stringify(entry[1])}
           </p>
         ))}
       </div>
