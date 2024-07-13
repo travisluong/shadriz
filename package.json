@@ -1,13 +1,14 @@
 {
   "name": "shadriz",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "bin": {
     "shadriz": "./dist/index.js"
   },
   "scripts": {
     "test": "vitest",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "author": "fullstackbook",
   "license": "ISC",
