@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import { PgPackageStrategy } from "./db-packages/pg-package-strategy";
 import { BetterSqlite3PackageStrategy } from "./db-packages/better-sqlite3-package-strategy";
