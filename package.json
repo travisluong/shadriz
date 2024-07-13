@@ -1,15 +1,19 @@
 {
   "name": "shadriz",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "vitest"
+  "main": "dist/index.js",
+  "bin": {
+    "shadriz": "./dist/index.js"
   },
-  "author": "",
+  "scripts": {
+    "test": "vitest",
+    "build": "tsc"
+  },
+  "author": "fullstackbook",
   "license": "ISC",
-  "description": "",
+  "description": "a full stack framework next.js shadcnui and drizzle orm",
   "dependencies": {
-    "chalk": "^5.3.0",
+    "chalk": "^4.1.2",
     "commander": "^12.1.0",
     "handlebars": "^4.7.8"
   },

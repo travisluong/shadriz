@@ -88,7 +88,7 @@ export function prependToFile(filePath: string, textToPrepend: string) {
     const updatedContent = textToPrepend + fileContent;
     fs.writeFileSync(joinedFilePath, updatedContent, "utf-8");
     log.bgYellow("modified: " + filePath);
-  } catch (error) {
+  } catch (error: any) {
     console.error(
       `Error while prepending content to the file: ${error.message}`
     );

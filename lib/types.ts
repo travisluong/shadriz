@@ -51,7 +51,7 @@ export interface DbPackageStrategy {
   opts: DbPackageStrategyOpts;
   dialect: DbDialect;
   init(): void;
-  copyCreateUserScript();
+  copyCreateUserScript(): void;
   installDependencies(): void;
   copyMigrateScript(): void;
   appendDbUrl(): void;

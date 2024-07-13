@@ -110,7 +110,7 @@ export class NewProjectProcessor {
     }
   }
 
-  async runCommand(cmd) {
+  async runCommand(cmd: string) {
     await spawnCommand(cmd);
   }
 
