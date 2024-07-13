@@ -1,6 +1,6 @@
 {
   "name": "shadriz",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "main": "dist/index.js",
   "bin": {
     "shadriz": "./dist/index.js"
@@ -8,7 +8,8 @@
   "scripts": {
     "test": "vitest",
     "build": "tsc && cp -R templates dist/templates",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "publish": "npm run build && npm publish"
   },
   "author": "fullstackbook",
   "license": "ISC",
