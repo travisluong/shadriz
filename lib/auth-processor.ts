@@ -171,5 +171,9 @@ export class AuthProcessor {
     log.bgYellow("test login:");
     log.cmd("npm run dev");
     log.dash("go to http://localhost:3000/api/auth/signin");
+    log.bgYellow("protect resources:");
+    log.dash(
+      "see: https://authjs.dev/getting-started/session-management/protecting"
+    );
   }
 }
