@@ -1,8 +1,8 @@
 import { migrate } from "drizzle-orm/mysql2/migrator";
-import { connection, dbc } from "./dbc";
+import { connection, sdb } from "./sdb";
 
 async function main() {
-  await migrate(dbc, { migrationsFolder: "drizzle" });
+  await migrate(sdb, { migrationsFolder: "drizzle" });
   await connection.end();
 }
 

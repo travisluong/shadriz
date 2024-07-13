@@ -55,8 +55,8 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/dbc.ts.pg.hbs",
-      outputPath: "scripts/dbc.ts",
+      inputPath: "scripts/sdb.ts.pg.hbs",
+      outputPath: "scripts/sdb.ts",
     });
   }
 

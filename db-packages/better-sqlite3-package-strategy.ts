@@ -59,8 +59,8 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/dbc.ts.better-sqlite3.hbs",
-      outputPath: "scripts/dbc.ts",
+      inputPath: "scripts/sdb.ts.better-sqlite3.hbs",
+      outputPath: "scripts/sdb.ts",
     });
   }
 

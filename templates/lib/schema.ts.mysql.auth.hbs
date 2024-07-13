@@ -11,6 +11,7 @@ export const users = mysqlTable("user", {
     fsp: 3,
   }),
   image: varchar("image", { length: 255 }),
+  password: varchar("password", { length: 255 }),
 })
  
 export const accounts = mysqlTable(

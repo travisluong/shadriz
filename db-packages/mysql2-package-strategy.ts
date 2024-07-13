@@ -53,8 +53,8 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/dbc.ts.mysql2.hbs",
-      outputPath: "scripts/dbc.ts",
+      inputPath: "scripts/sdb.ts.mysql2.hbs",
+      outputPath: "scripts/sdb.ts",
     });
   }
 
