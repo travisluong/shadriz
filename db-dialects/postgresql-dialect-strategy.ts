@@ -232,6 +232,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  dialectArgsMap = {
+    "default-now": ".defaultNow()",
+  };
   schemaTableTemplatePath: string = "lib/schema.ts.postgresql.table.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
@@ -277,9 +280,5 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
     log.dash("update DB_URL in .env.local");
     log.cmd("npx shadriz auth -h");
     log.cmd("npx shadriz scaffold -h");
-  }
-
-  dialectPkArgHandler(args: string[]): string {
-    return "";
   }
 }

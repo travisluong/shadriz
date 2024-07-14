@@ -39,13 +39,13 @@ export interface DbDialectStrategy {
   dialect: DbDialect;
   schemaTableTemplatePath: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
+  dialectArgsMap: { [key: string]: string };
   init(): void;
   appendAuthSchema(): void;
   copyCreateUserScript(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;
   printInitCompletionMessage(): void;
-  dialectPkArgHandler(args: string[]): string;
 }
 
 export interface DbPackageStrategy {

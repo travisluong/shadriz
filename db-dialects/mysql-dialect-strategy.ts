@@ -254,6 +254,10 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  dialectArgsMap = {
+    "pk-auto": ".primaryKey().autoincrement()",
+    "default-now": ".defaultNow()",
+  };
   dialect: DbDialect = "mysql";
   schemaTableTemplatePath: string = "lib/schema.ts.mysql.table.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
@@ -299,13 +303,5 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     log.dash("update DB_URL in .env.local");
     log.cmd("npx shadriz auth -h");
     log.cmd("npx shadriz scaffold -h");
-  }
-
-  dialectPkArgHandler(args: string[]): string {
-    let str = "";
-    if (args.includes("auto")) {
-      str += ".autoincrement()";
-    }
-    return str;
   }
 }

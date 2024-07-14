@@ -67,6 +67,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  dialectArgsMap = {
+    "pk-auto": ".primaryKey({ autoIncrement: true })",
+    "default-now": ".default(sql`(CURRENT_DATE)`)",
+  };
   schemaTableTemplatePath: string = "lib/schema.ts.sqlite.table.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";
@@ -110,13 +114,5 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     log.reminder();
     log.cmd("npx shadriz auth -h");
     log.cmd("npx shadriz scaffold -h");
-  }
-
-  dialectPkArgHandler(args: string[]): string {
-    let str = "";
-    if (args.includes("pk-auto")) {
-      str += ".primaryKey({ autoIncrement: true })";
-    }
-    return str;
   }
 }

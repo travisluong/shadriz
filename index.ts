@@ -30,13 +30,13 @@ const program = new Command();
 program
   .name("shadriz")
   .description(
-    "shadriz - Full Stack Framework Next.js ShadCN/UI and Drizzle ORM"
+    "shadriz - full stack framework next.js shadcn/ui and drizzle orm"
   )
   .version("1.0.5");
 
 program
   .command("new")
-  .description("Create a new project with latest dependencies")
+  .description("create a new project with latest dependencies")
   .argument("<name>", "name of project")
   .option("--pnpm", "run with pnpm")
   .action(async (name, options) => {
@@ -50,7 +50,7 @@ program
 
 program
   .command("db")
-  .description("Generate Drizzle ORM configuration")
+  .description("generate drizzle orm configuration")
   .argument("<strategy>", "pg, mysql2, better-sqlite3")
   .option("--pnpm", "run with pnpm", false)
   .action(async (strategy, options) => {
@@ -68,7 +68,20 @@ program
 
 program
   .command("auth")
-  .description("Generate Auth.js configuration")
+  .summary("generate auth.js configuration")
+  .description(
+    `generate auth.js configuration
+
+postgresql example with github, google, and credentials provider:
+  auth github google credentials -d postgresql
+
+mysql example with github and google provider:
+  auth github google -d mysql
+
+sqlite example with credentials provider:
+  auth credentials -d sqlite
+    `
+  )
   .argument("<providers...>", "github, google, credentials")
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .option("--pnpm", "run with pnpm", false)
@@ -89,12 +102,34 @@ program
 
 program
   .command("scaffold")
+  .summary("scaffold crud ui, db schema, migration, and actions")
   .description(
-    "Generate CRUD ui, db schema, db migration, and server actions for a table"
+    `Generate CRUD ui, db schema, db migration, and server actions for a table
+
+postgresql example:
+  scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 user_id:uuid:fk-users.id title:varchar created_at:timestamp:default-now
+  scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 user_id:uuid:fk-users.id title:varchar created_at:timestamp:default-now
+  scaffold post -d postgresql -c id:bigserial:pk user_id:uuid:fk-users.id title:varchar created_at:timestamp:default-now
+  scaffold post -d postgresql -c id:serial:pk user_id:uuid:fk-users.id title:varchar created_at:timestamp:default-now
+
+mysql example:
+  scaffold post -d mysql -c id:varchar:pk:default-uuidv7 user_id:varchar:fk-users.id title:varchar created_at:timestamp:default-now
+  scaffold post -d mysql -c id:varchar:pk:default-uuidv4 user_id:varchar:fk-users.id title:varchar created_at:timestamp:default-now
+  scaffold post -d mysql -c id:serial:pk user_id:varchar:fk-users.id title:varchar created_at:timestamp:default-now
+  scaffold post -d mysql -c id:integer:pk-auto user_id:varchar:fk-users.id title:varchar created_at:timestamp:default-now
+
+sqlite example:
+  scaffold post -d sqlite -c id:text:pk:default-uuidv7 user_id:text:fk-users.id title:text created_at:text:default-now
+  scaffold post -d sqlite -c id:text:pk:default-uuidv4 user_id:text:fk-users.id title:text created_at:text:default-now
+  scaffold post -d sqlite -c id:integer:pk-auto user_id:text:fk-users.id title:text created_at:text:default-now
+`
   )
   .argument("<table>", "table: post, product, order, etc")
-  .requiredOption("-c, --columns <columns...>", "specify columns")
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
+  .requiredOption(
+    "-c, --columns <columns...>",
+    "column_name:data_type:column-arg1:column-arg2"
+  )
   .action(async (table, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
       log.bgRed(`invalid dialect: ${options.dialect}`);

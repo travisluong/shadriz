@@ -27,6 +27,12 @@ import { log } from "./log";
 export class ScaffoldProcessor {
   opts: ScaffoldProcessorOpts;
 
+  commonArgMap: { [key: string]: string } = {
+    pk: ".primaryKey()",
+    "default-uuidv7": ".$defaultFn(() => uuidv7())",
+    "default-uuidv4": ".$defaultFn(() => crypto.randomUUID())",
+  };
+
   constructor(opts: ScaffoldProcessorOpts) {
     this.opts = opts;
   }
@@ -68,16 +74,23 @@ export class ScaffoldProcessor {
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column } = opts;
     const { dataTypeStrategyMap } = this.opts.dbDialectStrategy;
-    const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
-    const args = [arg1, arg2, arg3];
+    const [columnName, dataType, arg1, arg2] = column.split(":");
+    const args = [arg1, arg2];
     if (!(dataType in dataTypeStrategyMap)) {
       throw new Error("data type strategy not found: " + dataType);
     }
+    this.validateArgs(args);
     const strategy = dataTypeStrategyMap[dataType];
     let str =
       "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
-    str += this.commonPkArgHandler(args);
-    str += this.opts.dbDialectStrategy.dialectPkArgHandler(args);
+    for (const arg of args) {
+      if (arg in this.commonArgMap) {
+        str += this.commonArgMap[arg];
+      }
+      if (arg in this.opts.dbDialectStrategy.dialectArgsMap) {
+        str += this.opts.dbDialectStrategy.dialectArgsMap[arg];
+      }
+    }
     str += this.commonFkArgHandler(args);
     str += ",";
     return str;
@@ -127,10 +140,16 @@ export class ScaffoldProcessor {
     });
   }
   addCreateAction(): void {
-    const columns = this.getColumnsArr();
+    const columns = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
+      .filter((arr) => !this.includesItemThatStartsWithDefault(arr))
+      .map((arr) => arr[0]);
+
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => !this.includesItemThatStartsWithPk(arr))
+      .filter((arr) => !this.includesItemThatStartsWithDefault(arr))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
@@ -152,7 +171,11 @@ export class ScaffoldProcessor {
     });
   }
   addUpdateAction(): void {
-    const columns = this.getColumnsArr();
+    const columns = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
+      .map((arr) => arr[0]);
+
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
       .map((arr) => {
@@ -230,11 +253,11 @@ export class ScaffoldProcessor {
     let html = "";
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
-      if (columnName === "id") continue;
       if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
-      if (args.includes("pk")) continue;
+      if (this.includesItemThatStartsWithPk(args)) continue;
+      if (this.includesItemThatStartsWithDefault(args)) continue;
       const dataTypeStrategy =
         this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
       html += compileTemplate({
@@ -275,7 +298,7 @@ export class ScaffoldProcessor {
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
       let updateFormTemplate = "";
-      if (args.includes("pk")) {
+      if (this.includesItemThatStartsWithPk(args)) {
         updateFormTemplate = "components/table/update-input-hidden.tsx.hbs";
       } else {
         const dataTypeStrategy =
@@ -296,24 +319,6 @@ export class ScaffoldProcessor {
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
   }
-  getColumnsArr() {
-    return this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
-      .map((arr) => arr[0]);
-  }
-  commonPkArgHandler(args: string[]): string {
-    if (args.includes("pk-uuidv7")) {
-      return ".primaryKey().$defaultFn(() => uuidv7())";
-    }
-    if (args.includes("pk-uuidv4")) {
-      return ".primaryKey().$defaultFn(() => crypto.randomUUID())";
-    }
-    if (args.includes("pk")) {
-      return ".primaryKey()";
-    }
-    return "";
-  }
   commonFkArgHandler(args: string[]): string {
     return args
       .filter((arg) => !!arg)
@@ -325,8 +330,38 @@ export class ScaffoldProcessor {
   }
   includesItemThatStartsWithPk(arr: string[]) {
     for (const str of arr) {
+      if (str === undefined) continue;
       if (str.startsWith("pk")) return true;
     }
     return false;
+  }
+  includesItemThatStartsWithDefault(arr: string[]) {
+    for (const str of arr) {
+      if (str === undefined) continue;
+      if (str.startsWith("default-")) return true;
+    }
+    return false;
+  }
+  validateArg(arg: string): boolean {
+    if (arg === undefined) {
+      return true;
+    }
+    if (arg in this.commonArgMap) {
+      return true;
+    }
+    if (arg in this.opts.dbDialectStrategy.dialectArgsMap) {
+      return true;
+    }
+    if (arg.startsWith("fk-")) {
+      return true;
+    }
+    return false;
+  }
+  validateArgs(args: string[]) {
+    for (const arg of args) {
+      if (!this.validateArg(arg)) {
+        throw new Error("invalid arg " + arg);
+      }
+    }
   }
 }
