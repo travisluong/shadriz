@@ -8,8 +8,7 @@
   "scripts": {
     "test": "vitest",
     "build": "tsc && cp -R templates dist/templates",
-    "start": "node dist/index.js",
-    "publish": "npm run build && npm publish"
+    "start": "node dist/index.js"
   },
   "author": "fullstackbook",
   "license": "ISC",
