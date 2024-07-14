@@ -1,0 +1,51 @@
+"use client";
+
+const readme = `{{readme}}`;
+
+export default function Page() {
+  return <div className="container">
+      <div dangerouslySetInnerHTML={ { __html: readme } }>
+      </div>
+      <style global jsx>{`
+        * {
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          padding: 20px;
+        }
+        h1 {
+          font-weight: bold;
+          font-size: 48px;
+          margin-bottom: 20px;
+        }
+        h2 {
+          font-weight: bold;
+          font-size: 36px;
+          margin-bottom: 20px;
+        }
+        h3 {
+          font-weight: bold;
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+        p {
+          margin-bottom: 20px;
+        }
+        pre {
+          background-color: lightgray;
+          padding: 20px;
+          margin-bottom: 20px;
+        }
+        code {
+          background-color: lightgray;
+        }
+        ul {
+          margin-bottom: 20px;
+        }
+        li {
+          margin-left: 20px;
+        }
+      `}</style>
+  </div>;
+}

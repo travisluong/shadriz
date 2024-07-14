@@ -1,12 +1,12 @@
-# shadriz - Full Stack Automation with Next.js, shadcn/ui, Drizzle ORM, TailwindCSS, Auth.js
+# 🤖 shadriz - Full Stack TypeScript Automation
 
 shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
 
-Free. Open Source.
+🆓 Free. 📖 Open Source.
 
-Spend more time creating value, less time on boilerplate.
+Spend more time creating value 💵, less time on boilerplate 🍽️.
 
-## Prerequisites
+## 🎓 Prerequisites
 
 Familiarity with the following technologies is recommended:
 
@@ -17,9 +17,9 @@ Familiarity with the following technologies is recommended:
 - Auth.js - Authentication
 - zod - Validation
 
-## Getting started
+## 🚀 Getting started
 
-### Create a new project.
+### 🆕 Create a new project
 
 This command will create a new Next.js project using the latest version, along with a number of pre-selected options. It will also install core dependencies, generate required files, and initialize shadcn/ui. Once you cd into the project, you'll see the non-committed changes applied to a fresh Next.js installation.
 
@@ -28,7 +28,7 @@ npx shadriz new demo
 cd demo
 ```
 
-### Initialize Drizzle ORM database configuration
+### 💧 Initialize Drizzle ORM database configuration
 
 Set up one of the following supported database packages. This command will install dependencies and generate the necessary configuration files for Drizzle ORM. After running the command, remember to update the `.env.local` file with your `DB_URL`.
 
@@ -38,7 +38,7 @@ npx shadriz db mysql2
 npx shadriz db better-sqlite3
 ```
 
-### Scaffold a full stack component.
+### 📚 Scaffold a full stack component
 
 This command will generate the CRUD UI, database migrations, server actions, and server components of a full stack component. The columns option `-c` or `--columns` takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
 
@@ -83,7 +83,7 @@ sqlite foreign key examples:
   scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
 ```
 
-## Set up authentication
+## 🔒 Set up authentication
 
 This command will generate the Auth.js configurations. The Auth.js docs recommend using an OAuth solution like google or github for security reasons. However, shadriz also provides a quick credentials solution of email/password, which is useful for prototyping.
 
@@ -98,17 +98,19 @@ npx shadriz auth github google -d mysql
 npx shadriz auth credentials -d sqlite
 ```
 
-## Inspirations
+## 💡 Inspirations
 
-### Ruby on Rails
+### 🚂 Ruby on Rails
 
-shadriz is inspired by the **convention over configuration** philosophy of Ruby on Rails, which allows anyone to rapidly prototype applications in minutes. shadriz is an "[omakase](https://dhh.dk/2012/rails-is-omakase.html)" of the author's favorite TypeScript ingredients. Nostalgia for Ruby on Rails style development is one factor that led to the creation of shadriz.
+shadriz is inspired by the **convention over configuration** philosophy of Ruby on Rails, which allows anyone to rapidly prototype applications in minutes. shadriz is an "[omakase](https://dhh.dk/2012/rails-is-omakase.html)" of the author's favorite TypeScript ingredients.
 
-### Next.js
+Nostalgia for Ruby on Rails style development is one factor that led to the creation of shadriz.
+
+### ⏭️ Next.js
 
 shadriz generates Next.js and React code that uses latest techniques, such as **server components and server actions**.
 
-### shadcn/ui
+### ⬛ shadcn/ui
 
 shadriz is inspired by the **non-dependency and transparency** of shadcn/ui, the tool that allows anyone to automatically copy and paste beautifully styled radix ui components into their projects.
 
@@ -116,18 +118,26 @@ shadriz essentially generates full stack components into your Next.js project. Y
 
 Like shadcn/ui, shadriz is not a dependency that you add to your node project. Instead, it is a CLI tool that installs third party packages and generates code.
 
-### Drizzle ORM
+### 💧 Drizzle ORM
 
 shadriz uses Drizzle ORM for the **best-of-both world of SQL-like and Relational Queries**, as well as the **automations for database migrations**.
 
-### TailwindCSS
+### 🍃 TailwindCSS
 
 shadriz is based on shadcn/ui which is has it's **styling based on TailwindCSS**, a CSS framework which provides reusable utility classes. TailwindCSS is chosen for it's benefits on **development speed and composability**.
 
-### Auth.js
+### 🔒 Auth.js
 
 shadriz uses Auth.js for it's authentication solution. However, running the Auth.js automation is totally optional, as some applications may not need authentication or a different auth solution is preferred.
 
 With one command, you can have authentication mostly setup and configured. Just add the client ids and secrets to the `.env.local` file and you're good to go.
 
 shadriz also provides a `script/create-user.ts` script to create users. This is also provided as an example on how to leverage Drizzle ORM in backend scripting using TypeScript. Note: this script is only generated if `credentials` is chosen as a provider.
+
+## 🧑‍💻 Author
+
+Built by [travisluong](https://www.travisluong.com), creator of 📚 [fullstackbook](https://www.fullstackbook.com) and ⚡ [deetcode](https://www.deetcode.com).
+
+## License
+
+MIT

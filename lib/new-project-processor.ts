@@ -2,6 +2,7 @@ import { log } from "./log";
 import { NewProjectProcessorOpts } from "./types";
 import { renderTemplate, spawnCommand } from "./utils";
 import path from "path";
+import { getHtml } from "./markdown";
 
 interface TemplateToCopy {
   inputPath: string;
@@ -33,7 +34,12 @@ export class NewProjectProcessor {
 
   shadcnCommands = [
     "npx shadcn-ui@latest init -y -d",
-    "npx shadcn-ui@latest add -y -o table label input button textarea checkbox",
+    "npx shadcn-ui@latest add -y -o table",
+    "npx shadcn-ui@latest add -y -o label",
+    "npx shadcn-ui@latest add -y -o input",
+    "npx shadcn-ui@latest add -y -o button",
+    "npx shadcn-ui@latest add -y -o textarea",
+    "npx shadcn-ui@latest add -y -o checkbox",
   ];
 
   templatesToCopy: TemplateToCopy[] = [
@@ -61,6 +67,7 @@ export class NewProjectProcessor {
   async init() {
     await this.createNewProject();
     this.changeDir();
+    await this.overrideHomePageWithShadrizPage();
     await this.installDependencies();
     await this.initShadcn();
     this.copyTemplates();
@@ -119,5 +126,14 @@ export class NewProjectProcessor {
     log.reminder();
     log.cmd(`cd ${this.name}`);
     log.cmd(`npx shadriz db -h`);
+  }
+
+  async overrideHomePageWithShadrizPage() {
+    const html = await getHtml();
+    renderTemplate({
+      inputPath: "app/page.tsx.hbs",
+      outputPath: "app/page.tsx",
+      data: { readme: html },
+    });
   }
 }
