@@ -76,12 +76,9 @@ export class ScaffoldProcessor {
     const strategy = dataTypeStrategyMap[dataType];
     let str =
       "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
-    if (args.includes("pk")) {
-      str += ".primaryKey()";
-    }
-    if (args.includes("defaultuuidv7")) {
-      str += ".$defaultFn(() => uuidv7())";
-    }
+    str += this.commonPkArgHandler(args);
+    str += this.opts.dbDialectStrategy.dialectPkArgHandler(args);
+    str += this.commonFkArgHandler(args);
     str += ",";
     return str;
   }
@@ -133,7 +130,7 @@ export class ScaffoldProcessor {
     const columns = this.getColumnsArr();
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !arr.includes("pk"))
+      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
@@ -302,7 +299,34 @@ export class ScaffoldProcessor {
   getColumnsArr() {
     return this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !arr.includes("pk"))
+      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
       .map((arr) => arr[0]);
+  }
+  commonPkArgHandler(args: string[]): string {
+    if (args.includes("pk-uuidv7")) {
+      return ".primaryKey().$defaultFn(() => uuidv7())";
+    }
+    if (args.includes("pk-uuidv4")) {
+      return ".primaryKey().$defaultFn(() => crypto.randomUUID())";
+    }
+    if (args.includes("pk")) {
+      return ".primaryKey()";
+    }
+    return "";
+  }
+  commonFkArgHandler(args: string[]): string {
+    return args
+      .filter((arg) => !!arg)
+      .filter((arg) => arg.startsWith("fk-"))
+      .map((arg) => arg.split("-"))
+      .map((arr) => arr[1])
+      .map((str) => `.references(() => ${str})`)
+      .join("");
+  }
+  includesItemThatStartsWithPk(arr: string[]) {
+    for (const str of arr) {
+      if (str.startsWith("pk")) return true;
+    }
+    return false;
   }
 }

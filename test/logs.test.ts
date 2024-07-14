@@ -22,6 +22,7 @@ test("db postgresql", () => {
 test("auth processor", () => {
   const a = new AuthProcessor({
     providers: ["google", "github", "credentials"],
+    pnpm: false,
   });
   a.printCompletionMessage();
 });

@@ -45,6 +45,7 @@ export interface DbDialectStrategy {
   copyDrizzleConfig(): void;
   copySchema(): void;
   printInitCompletionMessage(): void;
+  dialectPkArgHandler(args: string[]): string;
 }
 
 export interface DbPackageStrategy {

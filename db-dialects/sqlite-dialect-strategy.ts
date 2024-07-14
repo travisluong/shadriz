@@ -111,4 +111,12 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     log.cmd("npx shadriz auth -h");
     log.cmd("npx shadriz scaffold -h");
   }
+
+  dialectPkArgHandler(args: string[]): string {
+    let str = "";
+    if (args.includes("pk-auto")) {
+      str += ".primaryKey({ autoIncrement: true })";
+    }
+    return str;
+  }
 }

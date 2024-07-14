@@ -300,4 +300,12 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     log.cmd("npx shadriz auth -h");
     log.cmd("npx shadriz scaffold -h");
   }
+
+  dialectPkArgHandler(args: string[]): string {
+    let str = "";
+    if (args.includes("auto")) {
+      str += ".autoincrement()";
+    }
+    return str;
+  }
 }

@@ -278,4 +278,8 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
     log.cmd("npx shadriz auth -h");
     log.cmd("npx shadriz scaffold -h");
   }
+
+  dialectPkArgHandler(args: string[]): string {
+    return "";
+  }
 }
