@@ -1,10 +1,12 @@
-# 🤖 shadriz - Full Stack TypeScript Automation
+# 🤖 shadriz
 
-shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
+## Full Stack TypeScript Scaffolding Inspired by Ruby on Rails
+
+shadriz is a 📚 full stack automation tool for building TypeScript web applications using a curated selection of technologies.
+
+Spend more time creating 💵, less time on boilerplate 🍽️.
 
 🆓 Free. 📖 Open Source.
-
-Spend more time creating value 💵, less time on boilerplate 🍽️.
 
 ## 🎓 Prerequisites
 
@@ -23,7 +25,7 @@ Familiarity with the following technologies is recommended:
 
 This command will create a new Next.js project using the latest version, along with a number of pre-selected options. It will also install core dependencies, generate required files, and initialize shadcn/ui. Once you cd into the project, you'll see the non-committed changes applied to a fresh Next.js installation.
 
-```
+```bash
 npx shadriz new demo
 cd demo
 ```
@@ -32,7 +34,7 @@ cd demo
 
 Set up one of the following supported database packages. This command will install dependencies and generate the necessary configuration files for Drizzle ORM. After running the command, remember to update the `.env.local` file with your `DB_URL`.
 
-```
+```bash
 npx shadriz db pg
 npx shadriz db mysql2
 npx shadriz db better-sqlite3
@@ -46,48 +48,48 @@ Shadriz supports a variety of primary key configurations, basic foreign key conf
 
 After scaffolding, you'll have to run `npx drizzle-kit generate`. Then you will have to run `npx drizzle-kit migrate` to apply the migrations. Alternatively, you can also run `npx tsx scripts/migrate.ts`, which is a script shadriz provides as an example to programmatically trigger a migration.
 
-```
-postgresql uuid primary key examples:
-  scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 title:text created_at:timestamp:default-now
-  scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 title:text created_at:timestamp:default-now
+```bash
+# postgresql uuid primary key examples:
+scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 title:text created_at:timestamp:default-now
+scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 title:text created_at:timestamp:default-now
 
-postgresql auto increment primary key examples:
-  scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
-  scaffold post -d postgresql -c id:serial:pk title:text created_at:timestamp:default-now
+# postgresql auto increment primary key examples:
+scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
+scaffold post -d postgresql -c id:serial:pk title:text created_at:timestamp:default-now
 
-mysql uuid primary key examples:
-  scaffold post -d mysql -c id:varchar:pk:default-uuidv7 title:varchar created_at:timestamp:default-now
-  scaffold post -d mysql -c id:varchar:pk:default-uuidv4 title:varchar created_at:timestamp:default-now
+# mysql uuid primary key examples:
+scaffold post -d mysql -c id:varchar:pk:default-uuidv7 title:varchar created_at:timestamp:default-now
+scaffold post -d mysql -c id:varchar:pk:default-uuidv4 title:varchar created_at:timestamp:default-now
 
-mysql auto increment primary key examples:
-  scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
-  scaffold post -d mysql -c id:integer:pk-auto title:varchar created_at:timestamp:default-now
+# mysql auto increment primary key examples:
+scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
+scaffold post -d mysql -c id:integer:pk-auto title:varchar created_at:timestamp:default-now
 
-sqlite uuid primary key examples:
-  scaffold post -d sqlite -c id:text:pk:default-uuidv7 title:text created_at:text:default-now
-  scaffold post -d sqlite -c id:text:pk:default-uuidv4 title:text created_at:text:default-now
+# sqlite uuid primary key examples:
+scaffold post -d sqlite -c id:text:pk:default-uuidv7 title:text created_at:text:default-now
+scaffold post -d sqlite -c id:text:pk:default-uuidv4 title:text created_at:text:default-now
 
-sqlite auto increment primary key examples:
-  scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now
+# sqlite auto increment primary key examples:
+scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now
 
-postgresql foreign key examples:
-  scaffold post -d postgresql -c id:bigserial:pk title:text
-  scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id content:text
+# postgresql foreign key examples:
+scaffold post -d postgresql -c id:bigserial:pk title:text
+scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id content:text
 
-mysql foreign key examples:
-  scaffold post -d mysql -c id:serial:pk title:varchar
-  scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
+# mysql foreign key examples:
+scaffold post -d mysql -c id:serial:pk title:varchar
+scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
 
-sqlite foreign key examples:
-  scaffold post -d sqlite -c id:integer:pk-auto title:text
-  scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
+# sqlite foreign key examples:
+scaffold post -d sqlite -c id:integer:pk-auto title:text
+scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
 ```
 
 ## 🔒 Set up authentication
 
 This command will generate the Auth.js configurations. The Auth.js docs recommend using an OAuth solution like google or github for security reasons. However, shadriz also provides a quick credentials solution of email/password, which is useful for prototyping.
 
-```
+```bash
 # postgresql example with github, google, and credentials provider:
 npx shadriz auth github google credentials -d postgresql
 
@@ -124,7 +126,7 @@ shadriz uses Drizzle ORM for the **best-of-both world of SQL-like and Relational
 
 ### 🍃 TailwindCSS
 
-shadriz is based on shadcn/ui which is has it's **styling based on TailwindCSS**, a CSS framework which provides reusable utility classes. TailwindCSS is chosen for it's benefits on **development speed and composability**.
+shadriz is based on shadcn/ui which has it's **styling based on TailwindCSS**, a CSS framework which provides reusable utility classes. TailwindCSS is chosen for it's benefits on **development speed and composability**.
 
 ### 🔒 Auth.js
 

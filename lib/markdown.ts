@@ -1,35 +1,15 @@
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import rehypeFormat from "rehype-format";
-import rehypeStringify from "rehype-stringify";
-import rehypeRaw from "rehype-raw";
-import rehypePrism from "@mapbox/rehype-prism";
+import path from "path";
 import fs from "fs";
-import { join } from "path";
+import { marked } from "marked";
 
-export async function parseMarkdown(content: string) {
-  const processedContent = await unified()
-    .use(remarkParse)
-    .use(remarkRehype, { allowDangerousHtml: true })
-    .use(rehypeRaw)
-    .use(rehypeFormat)
-    // @ts-ignore
-    .use(rehypePrism)
-    .use(rehypeStringify)
-    .process(content);
-
-  return processedContent.toString();
-}
-
-function getMarkdown() {
-  const fullPath = join(__dirname, "..", "README.md");
+export function getMarkdown() {
+  const fullPath = path.join(__dirname, "..", "README.md");
   const fileContents = fs.readFileSync(fullPath, "utf8");
   return fileContents;
 }
 
-export async function getHtml() {
-  const markdown = getMarkdown();
-  const html = await parseMarkdown(markdown);
+export function getReadme() {
+  const md = getMarkdown();
+  const html = marked(md);
   return html;
 }

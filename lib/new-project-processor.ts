@@ -2,7 +2,7 @@ import { log } from "./log";
 import { NewProjectProcessorOpts } from "./types";
 import { renderTemplate, spawnCommand } from "./utils";
 import path from "path";
-import { getHtml } from "./markdown";
+import { getReadme } from "./markdown";
 
 interface TemplateToCopy {
   inputPath: string;
@@ -129,7 +129,7 @@ export class NewProjectProcessor {
   }
 
   async overrideHomePageWithShadrizPage() {
-    const html = await getHtml();
+    const html = getReadme();
     renderTemplate({
       inputPath: "app/page.tsx.hbs",
       outputPath: "app/page.tsx",
