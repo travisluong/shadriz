@@ -38,10 +38,12 @@ export interface DataTypeStrategy {
 export interface DbDialectStrategy {
   dialect: DbDialect;
   schemaTableTemplatePath: string;
+  drizzleDbCorePackage: string;
+  tableConstructor: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
   dialectArgsMap: { [key: string]: string };
   init(): void;
-  appendAuthSchema(): void;
+  addAuthSchema(): void;
   copyCreateUserScript(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;

@@ -3,7 +3,7 @@
 import { delete{{capitalizedTable}}, Delete{{capitalizedTable}}State } from "@/actions/{{table}}/delete-{{table}}";
 import { Button } from "../ui/button";
 import { useFormState } from "react-dom";
-import { {{capitalizedTable}} } from "@/lib/schema";
+import { {{capitalizedTable}} } from "@/schema/{{table}}";
 
 export default function {{capitalizedTable}}DeleteForm({ data }: { data: {{capitalizedTable}} }) {
   const initialState: Delete{{capitalizedTable}}State = {};

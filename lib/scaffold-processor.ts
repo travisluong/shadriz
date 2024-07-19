@@ -7,7 +7,10 @@ import {
   appendToFile,
   capitalize,
   compileTemplate,
+  getFilenamesFromFolder,
+  writeToFile,
   renderTemplate,
+  regenerateSchemaIndex,
 } from "./utils";
 import { log } from "./log";
 
@@ -38,7 +41,9 @@ export class ScaffoldProcessor {
   }
 
   process(): void {
-    this.appendCodeToSchema();
+    // this.appendCodeToSchema(); // single file schema
+    this.addSchema(); // multiple files schema
+    regenerateSchemaIndex();
     this.addListView();
     this.addDetailView();
     this.addNewView();
@@ -70,6 +75,57 @@ export class ScaffoldProcessor {
     });
 
     appendToFile("lib/schema.ts", str);
+  }
+  addSchema(): void {
+    const { table, columns } = this.opts;
+    // compile columns
+    let columnsCode = "";
+    for (const [index, column] of columns.entries()) {
+      columnsCode += this.getKeyValueStrForSchema({ ...this.opts, column });
+      if (index !== columns.length - 1) {
+        columnsCode += "\n";
+      }
+    }
+    // generate imports code
+    const importsCode = this.generateImportsCodeFromColumns(columns);
+
+    renderTemplate({
+      inputPath: this.opts.dbDialectStrategy.schemaTableTemplatePath,
+      outputPath: `schema/${table}.ts`,
+      data: {
+        table,
+        columns: columnsCode,
+        typeName: capitalize(table),
+        imports: importsCode,
+      },
+    });
+  }
+  generateImportsCodeFromColumns(columns: string[]) {
+    const dataTypeSet = new Set<string>();
+    for (const column of columns) {
+      const arr = column.split(":");
+      dataTypeSet.add(arr[1]);
+    }
+    let code = "import {\n";
+    code += `  ${this.opts.dbDialectStrategy.tableConstructor},\n`;
+    for (const dataType of dataTypeSet) {
+      code += `  ${dataType},\n`;
+    }
+    code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
+    code += `import { createInsertSchema } from "drizzle-zod";\n`;
+    const dependsOnUuidv7 = columns.filter((column) =>
+      column.indexOf("default-uuidv7")
+    ).length;
+    if (dependsOnUuidv7) {
+      code += `import { uuidv7 } from "uuidv7";\n`;
+    }
+    const dependsOnSql = columns.filter((column) =>
+      column.indexOf("sql")
+    ).length;
+    if (dependsOnSql) {
+      code += `import { sql } from "drizzle-orm";`;
+    }
+    return code;
   }
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column } = opts;

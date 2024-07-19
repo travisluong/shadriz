@@ -59,7 +59,6 @@ export class AuthProcessor {
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
     this.appendSecretsToEnv();
-    this.prependAdapterAccountTypeToSchema();
     await this.printCompletionMessage();
   }
 
@@ -131,13 +130,6 @@ export class AuthProcessor {
       envVars = "\n" + envVars;
       appendToFile(".env.local", envVars);
     }
-  }
-
-  prependAdapterAccountTypeToSchema() {
-    prependToFile(
-      "lib/schema.ts",
-      'import type { AdapterAccountType } from "next-auth/adapters";\n'
-    );
   }
 
   async printCompletionMessage() {

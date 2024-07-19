@@ -1,6 +1,14 @@
+import {
+  boolean,
+  int,
+  timestamp,
+  mysqlTable,
+  primaryKey,
+  varchar,
+} from "drizzle-orm/mysql-core"
+import type { AdapterAccountType } from "next-auth/adapters"
 
-
-export const users = mysqlTable("user", {
+export const user = mysqlTable("user", {
   id: varchar("id", { length: 255 })
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -14,12 +22,12 @@ export const users = mysqlTable("user", {
   password: varchar("password", { length: 255 }),
 })
  
-export const accounts = mysqlTable(
+export const account = mysqlTable(
   "account",
   {
     userId: varchar("userId", { length: 255 })
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     type: varchar("type", { length: 255 })
       .$type<AdapterAccountType>()
       .notNull(),
@@ -40,15 +48,15 @@ export const accounts = mysqlTable(
   })
 )
  
-export const sessions = mysqlTable("session", {
+export const session = mysqlTable("session", {
   sessionToken: varchar("sessionToken", { length: 255 }).primaryKey(),
   userId: varchar("userId", { length: 255 })
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
  
-export const verificationTokens = mysqlTable(
+export const verificationToken = mysqlTable(
   "verificationToken",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
@@ -62,13 +70,13 @@ export const verificationTokens = mysqlTable(
   })
 )
  
-export const authenticators = mysqlTable(
+export const authenticator = mysqlTable(
   "authenticator",
   {
     credentialID: varchar("credentialID", { length: 255 }).notNull().unique(),
     userId: varchar("userId", { length: 255 })
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     credentialPublicKey: varchar("credentialPublicKey", {
       length: 255,

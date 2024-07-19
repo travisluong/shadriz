@@ -1,8 +1,10 @@
 
 import NextAuth from "next-auth"
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 {{importsCode}}
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: DrizzleAdapter(db),
   providers: [
 {{providersCode}}
   ],

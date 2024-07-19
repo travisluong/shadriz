@@ -12,6 +12,7 @@ import { DbDialectStrategy, DbPackageStrategy } from "./lib/types";
 import { Mysql2PackageStrategy } from "./db-packages/mysql2-package-strategy";
 import { MysqlDialectStrategy } from "./db-dialects/mysql-dialect-strategy";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
+import { regenerateSchemaIndex } from "./lib/utils";
 
 const packageStrategyMap: { [key: string]: DbPackageStrategy } = {
   pg: new PgPackageStrategy(),
@@ -95,9 +96,10 @@ sqlite example with credentials provider:
       pnpm: options.pnpm,
     });
     const dialectStrategy = dialectStrategyMap[options.dialect];
-    dialectStrategy.appendAuthSchema();
+    dialectStrategy.addAuthSchema();
     dialectStrategy.copyCreateUserScript();
     await authScaffold.init();
+    regenerateSchemaIndex();
   });
 
 program

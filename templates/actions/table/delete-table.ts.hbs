@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{capitalizedTable}}Schema, {{table}} } from "@/lib/schema";
+import { insert{{capitalizedTable}}Schema, {{table}} } from "@/schema/{{table}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";

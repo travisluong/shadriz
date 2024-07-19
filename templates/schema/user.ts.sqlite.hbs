@@ -1,6 +1,7 @@
+import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
+import type { AdapterAccountType } from "next-auth/adapters"
 
-
-export const users = sqliteTable("user", {
+export const user = sqliteTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -10,13 +11,13 @@ export const users = sqliteTable("user", {
   image: text("image"),
   password: text("password")
 })
- 
-export const accounts = sqliteTable(
+
+export const account = sqliteTable(
   "account",
   {
     userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccountType>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
@@ -35,15 +36,15 @@ export const accounts = sqliteTable(
   })
 )
  
-export const sessions = sqliteTable("session", {
+export const session = sqliteTable("session", {
   sessionToken: text("sessionToken").primaryKey(),
   userId: text("userId")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
 })
  
-export const verificationTokens = sqliteTable(
+export const verificationToken = sqliteTable(
   "verificationToken",
   {
     identifier: text("identifier").notNull(),
@@ -57,13 +58,13 @@ export const verificationTokens = sqliteTable(
   })
 )
  
-export const authenticators = sqliteTable(
+export const authenticator = sqliteTable(
   "authenticator",
   {
     credentialID: text("credentialID").notNull().unique(),
     userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     providerAccountId: text("providerAccountId").notNull(),
     credentialPublicKey: text("credentialPublicKey").notNull(),
     counter: integer("counter").notNull(),

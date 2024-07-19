@@ -254,12 +254,14 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
+  tableConstructor: string = "mysqlTable";
   dialectArgsMap = {
     "pk-auto": ".primaryKey().autoincrement()",
     "default-now": ".defaultNow()",
   };
   dialect: DbDialect = "mysql";
-  schemaTableTemplatePath: string = "lib/schema.ts.mysql.table.hbs";
+  schemaTableTemplatePath: string = "schema/table.ts.mysql.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
 
   init(): void {
@@ -283,11 +285,11 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     });
   }
 
-  appendAuthSchema() {
-    const text = compileTemplate({
-      inputPath: "lib/schema.ts.mysql.auth.hbs",
+  addAuthSchema() {
+    renderTemplate({
+      inputPath: "schema/user.ts.mysql.hbs",
+      outputPath: "schema/user.ts",
     });
-    appendToFile("lib/schema.ts", text);
   }
 
   copyCreateUserScript(): void {

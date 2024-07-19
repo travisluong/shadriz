@@ -232,10 +232,12 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  drizzleDbCorePackage: string = "drizzle-orm/pg-core";
+  tableConstructor: string = "pgTable";
   dialectArgsMap = {
     "default-now": ".defaultNow()",
   };
-  schemaTableTemplatePath: string = "lib/schema.ts.postgresql.table.hbs";
+  schemaTableTemplatePath: string = "schema/table.ts.postgresql.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
 
@@ -260,11 +262,11 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
     });
   }
 
-  appendAuthSchema() {
-    const text = compileTemplate({
-      inputPath: "lib/schema.ts.postgresql.auth.hbs",
+  addAuthSchema() {
+    renderTemplate({
+      inputPath: "schema/user.ts.postgresql.hbs",
+      outputPath: "schema/user.ts",
     });
-    appendToFile("lib/schema.ts", text);
   }
 
   copyCreateUserScript(): void {

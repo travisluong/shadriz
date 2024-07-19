@@ -67,11 +67,13 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  tableConstructor: string = "sqliteTable";
   dialectArgsMap = {
     "pk-auto": ".primaryKey({ autoIncrement: true })",
     "default-now": ".default(sql`(CURRENT_DATE)`)",
   };
-  schemaTableTemplatePath: string = "lib/schema.ts.sqlite.table.hbs";
+  schemaTableTemplatePath: string = "schema/table.ts.sqlite.hbs";
+  drizzleDbCorePackage: string = "drizzle-orm/sqlite-core";
   dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";
 
@@ -95,11 +97,11 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     });
   }
 
-  appendAuthSchema() {
-    const text = compileTemplate({
-      inputPath: "lib/schema.ts.sqlite.auth.hbs",
+  addAuthSchema() {
+    renderTemplate({
+      inputPath: "schema/user.ts.sqlite.hbs",
+      outputPath: "schema/user.ts",
     });
-    appendToFile("lib/schema.ts", text);
   }
 
   copyCreateUserScript(): void {

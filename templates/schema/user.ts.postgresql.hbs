@@ -1,6 +1,14 @@
+import {
+  boolean,
+  timestamp,
+  pgTable,
+  text,
+  primaryKey,
+  integer,
+} from "drizzle-orm/pg-core"
+import type { AdapterAccountType } from "next-auth/adapters"
 
-
-export const users = pgTable("user", {
+export const user = pgTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -11,12 +19,12 @@ export const users = pgTable("user", {
   password: text("password"),
 })
  
-export const accounts = pgTable(
+export const account = pgTable(
   "account",
   {
     userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccountType>().notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
@@ -35,15 +43,15 @@ export const accounts = pgTable(
   })
 )
  
-export const sessions = pgTable("session", {
+export const session = pgTable("session", {
   sessionToken: text("sessionToken").primaryKey(),
   userId: text("userId")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
  
-export const verificationTokens = pgTable(
+export const verificationToken = pgTable(
   "verificationToken",
   {
     identifier: text("identifier").notNull(),
@@ -57,13 +65,13 @@ export const verificationTokens = pgTable(
   })
 )
  
-export const authenticators = pgTable(
+export const authenticator = pgTable(
   "authenticator",
   {
     credentialID: text("credentialID").notNull().unique(),
     userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     providerAccountId: text("providerAccountId").notNull(),
     credentialPublicKey: text("credentialPublicKey").notNull(),
     counter: integer("counter").notNull(),

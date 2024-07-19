@@ -95,6 +95,47 @@ export function prependToFile(filePath: string, textToPrepend: string) {
   }
 }
 
+export function writeToFile(filePath: string, text: string) {
+  try {
+    const joinedFilePath = path.join(process.cwd(), filePath);
+    fs.writeFileSync(joinedFilePath, text, "utf-8");
+    log.bgYellow("modified: " + filePath);
+  } catch (error: any) {
+    console.error(
+      `Error while prepending content to the file: ${error.message}`
+    );
+  }
+}
+
 export function capitalize(str: string) {
   return str[0].toUpperCase() + str.slice(1);
+}
+
+export function getFilenamesFromFolder(folderPath: string): string[] {
+  try {
+    const filenames = fs.readdirSync(folderPath);
+    return filenames.filter((file) => {
+      const filePath = path.join(process.cwd(), folderPath, file);
+      return fs.lstatSync(filePath).isFile();
+    });
+  } catch (error: any) {
+    console.error(`Error reading folder: ${error.message}`);
+    return [];
+  }
+}
+
+export function regenerateSchemaIndex(): void {
+  const filenames = getFilenamesFromFolder("schema");
+  const tablenames = filenames.map((filename) => filename.split(".")[0]);
+  let code = "";
+  for (const table of tablenames) {
+    code += `import { ${table} } from "@/schema/${table}";\n`;
+  }
+  code += "\n";
+  code += "export const schema = {\n";
+  for (const table of tablenames) {
+    code += `  ${table},\n`;
+  }
+  code += "};\n";
+  writeToFile(`lib/schema.ts`, code);
 }
