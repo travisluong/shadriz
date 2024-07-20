@@ -86,6 +86,7 @@ sqlite example with credentials provider:
   .argument("<providers...>", "github, google, credentials")
   .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .option("--pnpm", "run with pnpm", false)
+  .option("-s, --strategy <strategy>", "database, jwt", "database")
   .action(async (providers, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
       log.bgRed(`invalid dialect ${options.dialect}`);
@@ -94,11 +95,12 @@ sqlite example with credentials provider:
     const authScaffold = new AuthProcessor({
       providers: providers,
       pnpm: options.pnpm,
+      sessionStrategy: options.strategy,
     });
+    await authScaffold.init();
     const dialectStrategy = dialectStrategyMap[options.dialect];
     dialectStrategy.addAuthSchema();
     dialectStrategy.copyCreateUserScript();
-    await authScaffold.init();
     regenerateSchemaIndex();
   });
 

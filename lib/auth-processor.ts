@@ -8,10 +8,12 @@ import {
 import { log } from "./log";
 
 type Providers = "github" | "google" | "credentials";
+type SessionStrategy = "jwt" | "database";
 
 interface AuthProcessorOpts {
   providers: Providers[];
   pnpm: boolean;
+  sessionStrategy: SessionStrategy;
 }
 
 interface AuthStrategy {
@@ -48,13 +50,9 @@ export class AuthProcessor {
   constructor(public opts: AuthProcessorOpts) {}
 
   async init() {
-    for (const provider of this.opts.providers) {
-      if (!(provider in authStrategyMap)) {
-        throw new Error("invalid provider: " + provider);
-      }
-    }
-    await this.installDependencies();
-    await this.appendAuthSecretToEnv();
+    this.validateOptions();
+    // await this.installDependencies();
+    // await this.appendAuthSecretToEnv();
     this.addAuthConfig();
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
@@ -62,6 +60,25 @@ export class AuthProcessor {
     this.addPrivateLayout();
     this.addPrivateDashboard();
     await this.printCompletionMessage();
+  }
+
+  validateOptions() {
+    for (const provider of this.opts.providers) {
+      if (!(provider in authStrategyMap)) {
+        throw new Error("invalid provider: " + provider);
+      }
+    }
+
+    if (!["jwt", "database"].includes(this.opts.sessionStrategy)) {
+      throw new Error("invalid session strategy: " + this.opts.sessionStrategy);
+    }
+
+    if (
+      this.opts.providers.includes("credentials") &&
+      this.opts.sessionStrategy === "database"
+    ) {
+      throw new Error("credentials provider must use jwt");
+    }
   }
 
   async installDependencies() {
@@ -103,7 +120,11 @@ export class AuthProcessor {
     renderTemplate({
       inputPath: "auth/auth.ts.hbs",
       outputPath: "auth.ts",
-      data: { importsCode: importsCode, providersCode: providersCode },
+      data: {
+        importsCode: importsCode,
+        providersCode: providersCode,
+        sessionStrategy: this.opts.sessionStrategy,
+      },
     });
   }
 
