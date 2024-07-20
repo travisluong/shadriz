@@ -8,8 +8,8 @@ export function getMarkdown() {
   return fileContents;
 }
 
-export function getReadme() {
+export async function getReadme() {
   const md = getMarkdown();
-  const html = marked(md);
+  const html = await marked(md);
   return html;
 }

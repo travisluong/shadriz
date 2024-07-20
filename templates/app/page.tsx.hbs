@@ -1,56 +1,82 @@
-"use client";
-
-const readme = `{{readme}}`;
-
 export default function Page() {
-  return <div className="container">
-      <div dangerouslySetInnerHTML={ { __html: readme } }>
-      </div>
-      <style global jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-        }
-        .container {
-          padding: 20px;
-        }
-        h1 {
-          font-weight: bold;
-          font-size: 48px;
-          margin-bottom: 20px;
-        }
-        h2 {
-          font-weight: bold;
-          font-size: 36px;
-          margin-bottom: 20px;
-        }
-        h3 {
-          font-weight: bold;
-          font-size: 24px;
-          margin-bottom: 20px;
-        }
-        p {
-          margin-bottom: 20px;
-        }
-        pre {
-          background-color: lightgray;
-          padding: 20px;
-          margin-bottom: 20px;
-        }
-        code {
-          background-color: lightgray;
-        }
-        ul {
-          margin-bottom: 20px;
-        }
-        li {
-          margin-left: 20px;
-          list-style-type: square;
-        }
-        a {
-          text-decoration: underline;
-          color: blue;
-        }
-      `}</style>
-  </div>;
+  return (
+    <div>
+      <header className="bg-gray-100 shadow-md">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <div>🤖 shadriz</div>
+          <div>
+            <a href="/docs" className="text-blue-500 hover:text-blue-600 mr-4">
+              Docs
+            </a>
+            <a href="/signin" className="text-blue-500 hover:text-blue-600">
+              Sign In
+            </a>
+          </div>
+        </div>
+      </header>
+      <section className="bg-white">
+        <div className="container mx-auto px-6 py-16 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+            Full Stack TypeScript Automation
+          </h1>
+          <p className="mt-4 text-gray-600">
+            Ship in minutes instead of days. Spend more time creating. Less time
+            on boilerplate. Free. Open Source.
+          </p>
+          <a
+            href="/docs"
+            className="mt-6 inline-block bg-blue-500 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-600 transition duration-300"
+          >
+            Get Started
+          </a>
+        </div>
+      </section>
+
+      <section className="container bg-gray-100 mx-auto px-6 py-16">
+        <h2 className="text-3xl md:text-4xl font-bold text-center">
+          Technologies
+        </h2>
+        <div className="mt-12 flex flex-wrap">
+          <div className="w-full md:w-1/3 px-4 py-6">
+            <h3 className="text-2xl font-bold">Next.js</h3>
+            <p className="mt-2 text-gray-600">
+              React framework. Server components. Server actions.
+            </p>
+          </div>
+          <div className="w-full md:w-1/3 px-4 py-6">
+            <h3 className="text-2xl font-bold">shadcn/ui</h3>
+            <p className="mt-2 text-gray-600">
+              Pre-styled Radix UI components.
+            </p>
+          </div>
+          <div className="w-full md:w-1/3 px-4 py-6">
+            <h3 className="text-2xl font-bold">Drizzle ORM</h3>
+            <p className="mt-2 text-gray-600">
+              SQL-like and Relational queries. Database migrations.
+            </p>
+          </div>
+        </div>
+        <div className="mt-12 flex flex-wrap">
+          <div className="w-full md:w-1/3 px-4 py-6">
+            <h3 className="text-2xl font-bold">Auth.js</h3>
+            <p className="mt-2 text-gray-600">Authentication. OAuth.</p>
+          </div>
+          <div className="w-full md:w-1/3 px-4 py-6">
+            <h3 className="text-2xl font-bold">TailwindCSS</h3>
+            <p className="mt-2 text-gray-600">Utility-first CSS framework.</p>
+          </div>
+          <div className="w-full md:w-1/3 px-4 py-6">
+            <h3 className="text-2xl font-bold">Zod</h3>
+            <p className="mt-2 text-gray-600">Data validations.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="container mx-auto px-6 text-center">
+          <p>&copy; 2024 shadriz</p>
+        </div>
+      </footer>
+    </div>
+  );
 }

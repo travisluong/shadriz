@@ -1,0 +1,12 @@
+"use client";
+
+import "@/styles/docs.css";
+
+const readme = `{{readme}}`;
+
+export default function Page() {
+  return <div className="container">
+      <div dangerouslySetInnerHTML={ { __html: readme } }>
+      </div>
+  </div>;
+}

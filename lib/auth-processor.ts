@@ -59,6 +59,8 @@ export class AuthProcessor {
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
     this.appendSecretsToEnv();
+    this.addPrivateLayout();
+    this.addPrivateDashboard();
     await this.printCompletionMessage();
   }
 
@@ -130,6 +132,20 @@ export class AuthProcessor {
       envVars = "\n" + envVars;
       appendToFile(".env.local", envVars);
     }
+  }
+
+  addPrivateLayout() {
+    renderTemplate({
+      inputPath: "app/(private)/layout.tsx.hbs",
+      outputPath: "app/(private)/layout.tsx",
+    });
+  }
+
+  addPrivateDashboard() {
+    renderTemplate({
+      inputPath: "app/(private)/dashboard/page.tsx.hbs",
+      outputPath: "app/(private)/dashboard/page.tsx",
+    });
   }
 
   async printCompletionMessage() {

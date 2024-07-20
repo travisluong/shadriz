@@ -67,11 +67,21 @@ export class NewProjectProcessor {
   async init() {
     await this.createNewProject();
     this.changeDir();
-    await this.overrideHomePageWithShadrizPage();
+    this.addHomePage();
+    this.addSignInPage();
+    this.addDocsCSS();
+    await this.addDocsPage();
     await this.installDependencies();
     await this.initShadcn();
     this.copyTemplates();
     this.printCompletionMessage();
+  }
+
+  addDocsCSS() {
+    renderTemplate({
+      inputPath: "styles/docs.css",
+      outputPath: "styles/docs.css",
+    });
   }
 
   async createNewProject() {
@@ -128,12 +138,26 @@ export class NewProjectProcessor {
     log.cmd(`npx shadriz db -h`);
   }
 
-  async overrideHomePageWithShadrizPage() {
-    const html = getReadme();
+  async addDocsPage() {
+    const html = await getReadme();
+    renderTemplate({
+      inputPath: "app/docs/page.tsx.hbs",
+      outputPath: "app/docs/page.tsx",
+      data: { readme: html },
+    });
+  }
+
+  addHomePage() {
     renderTemplate({
       inputPath: "app/page.tsx.hbs",
       outputPath: "app/page.tsx",
-      data: { readme: html },
+    });
+  }
+
+  addSignInPage() {
+    renderTemplate({
+      inputPath: "app/signin/page.tsx.hbs",
+      outputPath: "app/signin/page.tsx",
     });
   }
 }
