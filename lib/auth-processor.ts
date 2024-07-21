@@ -51,15 +51,16 @@ export class AuthProcessor {
 
   async init() {
     this.validateOptions();
-    // await this.installDependencies();
-    // await this.appendAuthSecretToEnv();
+    await this.installDependencies();
+    await this.appendAuthSecretToEnv();
     this.addAuthConfig();
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
     this.appendSecretsToEnv();
     this.addPrivateLayout();
     this.addPrivateDashboard();
-    await this.printCompletionMessage();
+    this.addCustomSignInPage();
+    this.printCompletionMessage();
   }
 
   validateOptions() {
@@ -169,7 +170,14 @@ export class AuthProcessor {
     });
   }
 
-  async printCompletionMessage() {
+  addCustomSignInPage() {
+    renderTemplate({
+      inputPath: "app/signin/page.tsx.custom.hbs",
+      outputPath: "app/signin/page.tsx",
+    });
+  }
+
+  printCompletionMessage() {
     log.success("auth setup success: " + this.opts.providers.join(", "));
     log.reminder();
     log.bgYellow("run migrations:");
