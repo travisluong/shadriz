@@ -60,6 +60,8 @@ export class AuthProcessor {
     this.addPrivateLayout();
     this.addPrivateDashboard();
     this.addCustomSignInPage();
+    this.addProfilePage();
+    this.addSettingsPage();
     this.printCompletionMessage();
   }
 
@@ -174,6 +176,20 @@ export class AuthProcessor {
     renderTemplate({
       inputPath: "app/signin/page.tsx.custom.hbs",
       outputPath: "app/signin/page.tsx",
+    });
+  }
+
+  addProfilePage() {
+    renderTemplate({
+      inputPath: "app/(private)/profile/page.tsx.hbs",
+      outputPath: "app/(private)/profile/page.tsx",
+    });
+  }
+
+  addSettingsPage() {
+    renderTemplate({
+      inputPath: "app/(private)/settings/page.tsx.hbs",
+      outputPath: "app/(private)/settings/page.tsx",
     });
   }
 
