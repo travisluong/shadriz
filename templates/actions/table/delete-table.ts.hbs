@@ -5,6 +5,9 @@ import { insert{{capitalizedTable}}Schema, {{table}} } from "@/schema/{{table}}"
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+{{#if private}}
+import { auth } from "@/auth";
+{{/if}}
 
 export interface Delete{{capitalizedTable}}State {
   errors?: {
@@ -17,6 +20,13 @@ export async function delete{{capitalizedTable}}(
   prevState: Delete{{capitalizedTable}}State,
   formData: FormData
 ): Promise<Delete{{capitalizedTable}}State> {
+{{#if private}}
+  const session = await auth();
+  if (!session) {
+    throw new Error("access denied")
+  }
+{{/if}}
+
   const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
     id: formData.get("id"),
   });

@@ -154,21 +154,25 @@ export class ScaffoldProcessor {
   addListView(): void {
     renderTemplate({
       inputPath: "app/table/page.tsx.hbs",
-      outputPath: `app/${this.opts.table}/page.tsx`,
+      outputPath: `app/${this.privateRouteGroup()}${this.opts.table}/page.tsx`,
       data: { table: this.opts.table },
     });
   }
   addDetailView(): void {
     renderTemplate({
       inputPath: "app/table/[id]/page.tsx.hbs",
-      outputPath: `app/${this.opts.table}/[id]/page.tsx`,
+      outputPath: `app/${this.privateRouteGroup()}${
+        this.opts.table
+      }/[id]/page.tsx`,
       data: { table: this.opts.table },
     });
   }
   addEditView(): void {
     renderTemplate({
       inputPath: "app/table/[id]/edit/page.tsx.hbs",
-      outputPath: `app/${this.opts.table}/[id]/edit/page.tsx`,
+      outputPath: `app/${this.privateRouteGroup()}${
+        this.opts.table
+      }/[id]/edit/page.tsx`,
       data: {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
@@ -178,7 +182,9 @@ export class ScaffoldProcessor {
   addNewView(): void {
     renderTemplate({
       inputPath: "app/table/new/page.tsx.hbs",
-      outputPath: `app/${this.opts.table}/new/page.tsx`,
+      outputPath: `app/${this.privateRouteGroup()}${
+        this.opts.table
+      }/new/page.tsx`,
       data: {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
@@ -188,7 +194,9 @@ export class ScaffoldProcessor {
   addDeleteView(): void {
     renderTemplate({
       inputPath: "app/table/[id]/delete/page.tsx.hbs",
-      outputPath: `app/${this.opts.table}/[id]/delete/page.tsx`,
+      outputPath: `app/${this.privateRouteGroup()}${
+        this.opts.table
+      }/[id]/delete/page.tsx`,
       data: {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
@@ -223,6 +231,7 @@ export class ScaffoldProcessor {
         capitalizedTable: capitalize(this.opts.table),
         columns: columns,
         formDataKeyVal: formDataKeyVal,
+        private: this.opts.private,
       },
     });
   }
@@ -251,6 +260,7 @@ export class ScaffoldProcessor {
         capitalizedTable: capitalize(this.opts.table),
         columns: columns,
         formDataKeyVal: formDataKeyVal,
+        private: this.opts.private,
       },
     });
   }
@@ -261,6 +271,7 @@ export class ScaffoldProcessor {
       data: {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
+        private: this.opts.private,
       },
     });
   }
@@ -418,6 +429,13 @@ export class ScaffoldProcessor {
       if (!this.validateArg(arg)) {
         throw new Error("invalid arg " + arg);
       }
+    }
+  }
+  privateRouteGroup() {
+    if (this.opts.private) {
+      return "(private)/";
+    } else {
+      return "";
     }
   }
 }

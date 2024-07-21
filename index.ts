@@ -152,6 +152,11 @@ sqlite foreign key examples:
     "-c, --columns <columns...>",
     "column_name:data_type:column-arg1:column-arg2"
   )
+  .option(
+    "-p, --private",
+    "scaffold into app/(private) route group. requires auth to access",
+    false
+  )
   .action(async (table, options) => {
     if (!(options.dialect in dialectStrategyMap)) {
       log.bgRed(`invalid dialect: ${options.dialect}`);
@@ -162,6 +167,7 @@ sqlite foreign key examples:
       table: table,
       columns: options.columns,
       dbDialectStrategy: strategy,
+      private: options.private,
     });
     scaffoldProcessor.process();
   });

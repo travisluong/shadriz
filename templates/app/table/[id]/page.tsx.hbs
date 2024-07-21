@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <h2>post</h2>
+      <h1 className="text-3xl font-bold mb-6">{{table}}</h1>
       <div>
         {Object.entries(data).map((entry) => (
           <p key={entry[0]}>

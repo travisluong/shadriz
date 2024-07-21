@@ -4,6 +4,9 @@ import { db } from "@/lib/db";
 import { insert{{capitalizedTable}}Schema, {{table}} } from "@/schema/{{table}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+{{#if private}}
+import { auth } from "@/auth";
+{{/if}}
 
 export interface Update{{capitalizedTable}}State {
   errors?: {
@@ -18,6 +21,13 @@ export async function update{{capitalizedTable}}(
   prevState: Update{{capitalizedTable}}State,
   formData: FormData
 ): Promise<Update{{capitalizedTable}}State> {
+{{#if private}}
+  const session = await auth();
+  if (!session) {
+    throw new Error("access denied")
+  }
+{{/if}}
+
   const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
 {{formDataKeyVal}}
   });

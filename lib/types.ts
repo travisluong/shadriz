@@ -11,6 +11,7 @@ export interface DataTypeStrategyMap {
 
 export interface ScaffoldProcessorOpts extends ScaffoldOpts {
   dbDialectStrategy: DbDialectStrategy;
+  private: boolean;
 }
 
 export interface GetColumnDefObjsOpts {

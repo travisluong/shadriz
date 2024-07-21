@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <h2>delete {{table}}</h2>
+      <h1 className="text-3xl font-bold mb-6">Delete {{table}}</h1>
       <{{capitalizedTable}}DeleteForm data={data} />
     </div>
   );
