@@ -72,6 +72,8 @@ export class NewProjectProcessor {
     this.addDocsCSS();
     this.addHeader();
     this.addFooter();
+    this.addPublicLayout();
+    this.addDashboardPlaceholder();
     await this.addDocsPage();
     await this.installDependencies();
     await this.initShadcn();
@@ -181,6 +183,13 @@ export class NewProjectProcessor {
     renderTemplate({
       inputPath: "app/(public)/layout.tsx.hbs",
       outputPath: "app/(public)/layout.tsx",
+    });
+  }
+
+  addDashboardPlaceholder() {
+    renderTemplate({
+      inputPath: "app/(private)/dashboard/page.tsx.init.hbs",
+      outputPath: "app/(private)/dashboard/page.tsx",
     });
   }
 }

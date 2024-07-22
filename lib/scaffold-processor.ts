@@ -447,7 +447,7 @@ export class ScaffoldProcessor {
     if (this.opts.private) {
       return "(private)/";
     } else {
-      return "";
+      return "(public)/";
     }
   }
 }
