@@ -70,6 +70,8 @@ export class NewProjectProcessor {
     this.addHomePage();
     this.addSignInPage();
     this.addDocsCSS();
+    this.addHeader();
+    this.addFooter();
     await this.addDocsPage();
     await this.installDependencies();
     await this.initShadcn();
@@ -141,8 +143,8 @@ export class NewProjectProcessor {
   async addDocsPage() {
     const html = await getReadme();
     renderTemplate({
-      inputPath: "app/docs/page.tsx.hbs",
-      outputPath: "app/docs/page.tsx",
+      inputPath: "app/(public)/docs/page.tsx.hbs",
+      outputPath: "app/(public)/docs/page.tsx",
       data: { readme: html },
     });
   }
@@ -158,6 +160,27 @@ export class NewProjectProcessor {
     renderTemplate({
       inputPath: "app/signin/page.tsx.hbs",
       outputPath: "app/signin/page.tsx",
+    });
+  }
+
+  addHeader() {
+    renderTemplate({
+      inputPath: "components/header.tsx.hbs",
+      outputPath: "components/header.tsx",
+    });
+  }
+
+  addFooter() {
+    renderTemplate({
+      inputPath: "components/footer.tsx.hbs",
+      outputPath: "components/footer.tsx",
+    });
+  }
+
+  addPublicLayout() {
+    renderTemplate({
+      inputPath: "app/(public)/layout.tsx.hbs",
+      outputPath: "app/(public)/layout.tsx",
     });
   }
 }

@@ -53,6 +53,7 @@ export class AuthProcessor {
     this.validateOptions();
     await this.installDependencies();
     await this.appendAuthSecretToEnv();
+    await this.addShadcnAvatar();
     this.addAuthConfig();
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
@@ -191,6 +192,10 @@ export class AuthProcessor {
       inputPath: "app/(private)/settings/page.tsx.hbs",
       outputPath: "app/(private)/settings/page.tsx",
     });
+  }
+
+  async addShadcnAvatar() {
+    await spawnCommand("npx shadcn-ui@latest add -y -o avatar");
   }
 
   printCompletionMessage() {

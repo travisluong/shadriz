@@ -8,6 +8,11 @@ export default async function Page() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">{{table}}</h1>
+      <div className="text-right mr-2">
+        <a href="{{table}}/new" className="text-blue-500">
+          new
+        </a>
+      </div>
       <DataTable columns={columns} data={data} />
     </div>
   );

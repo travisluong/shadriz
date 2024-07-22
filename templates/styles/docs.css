@@ -38,7 +38,7 @@ li {
   margin-left: 20px;
   list-style-type: square;
 }
-a {
+.shadriz-docs a {
   text-decoration: underline;
   color: blue;
 }

@@ -14,9 +14,11 @@ export default function {{capitalizedTable}}CreateForm() {
 
   return (
     <div>
-      <form action={dispatch}>
+      <form action={dispatch} className="flex flex-col gap-2">
 {{formControls}}
-        <Button type="submit">Submit</Button>
+        <div>
+          <Button type="submit">Submit</Button>
+        </div>
         <div>
           {state.message === "error" && <p className="text-red-500">error</p>}
         </div>
