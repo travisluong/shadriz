@@ -6,9 +6,7 @@ import {
   spawnCommand,
 } from "./utils";
 import { log } from "./log";
-
-type Providers = "github" | "google" | "credentials";
-type SessionStrategy = "jwt" | "database";
+import { Providers, SessionStrategy } from "./types";
 
 interface AuthProcessorOpts {
   providers: Providers[];

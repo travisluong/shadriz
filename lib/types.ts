@@ -68,6 +68,14 @@ export interface NewProjectProcessorOpts {
   pnpm: boolean;
 }
 
+export interface InitProcessorOpts {
+  pnpm: boolean;
+}
+
 export interface DbPackageStrategyOpts {
   pnpm: boolean;
 }
+
+export type Providers = "github" | "google" | "credentials";
+
+export type SessionStrategy = "jwt" | "database";

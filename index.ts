@@ -8,11 +8,19 @@ import { SqliteDialectStrategy } from "./db-dialects/sqlite-dialect-strategy";
 import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
 import { log } from "./lib/log";
-import { DbDialectStrategy, DbPackageStrategy } from "./lib/types";
+import {
+  DbDialectStrategy,
+  DbPackageStrategy,
+  SessionStrategy,
+} from "./lib/types";
 import { Mysql2PackageStrategy } from "./db-packages/mysql2-package-strategy";
 import { MysqlDialectStrategy } from "./db-dialects/mysql-dialect-strategy";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
 import { regenerateSchemaIndex } from "./lib/utils";
+import { checkbox, select } from "@inquirer/prompts";
+import toggle from "inquirer-toggle";
+import { InitProcessor } from "./lib/init-processor";
+import { Providers } from "./lib/types";
 
 const packageStrategyMap: { [key: string]: DbPackageStrategy } = {
   pg: new PgPackageStrategy(),
@@ -46,6 +54,84 @@ program
       newProjectProcessor.init();
     } catch (error) {
       console.error("Error running command:", error);
+    }
+  });
+
+program
+  .command("init")
+  .description("initialize project")
+  .option("--pnpm", "run with pnpm", false)
+  .action(async (options) => {
+    try {
+      const dbChoice = await select({
+        message: "Which database library would you like to use?",
+        choices: [
+          { name: "pg", value: "pg" },
+          { name: "mysql2", value: "mysql2" },
+          { name: "better-sqlite3", value: "better-sqlite3" },
+        ],
+      });
+      const authChoice = await toggle({
+        message: "Do you want to use Auth.js for authentication?",
+        default: true,
+      });
+      console.log(dbChoice);
+      console.log(authChoice);
+      let providerChoices;
+      let authStrategyChoice;
+      if (authChoice) {
+        providerChoices = await checkbox({
+          message: "Select providers",
+          choices: [
+            { name: "github", value: "github" },
+            { name: "google", value: "google" },
+            { name: "credentials", value: "credentials" },
+          ],
+        });
+        authStrategyChoice = await select({
+          message: "Which session strategy do you want to use?",
+          choices: [
+            { name: "database", value: "database" },
+            { name: "jwt", value: "jwt" },
+          ],
+        });
+        console.log(providerChoices);
+        console.log(authStrategyChoice);
+      }
+
+      if (!authStrategyChoice) {
+        throw new Error("auth strategy choice invalid");
+      }
+
+      const initProcessor = new InitProcessor({ pnpm: options.pnpm });
+      await initProcessor.init();
+
+      const packageStrategy = packageStrategyMap[dbChoice];
+      packageStrategy.setPnpm(options.pnpm);
+      const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
+      await packageStrategy.init();
+      console.log(dialectStrategy);
+      dialectStrategy.init();
+      dialectStrategy.printInitCompletionMessage();
+
+      if (authChoice) {
+        if (!providerChoices) {
+          throw new Error("provider choices missing");
+        }
+        const providers: Providers[] = providerChoices as Providers[];
+        const authScaffold = new AuthProcessor({
+          providers: providers,
+          pnpm: options.pnpm,
+          sessionStrategy: authStrategyChoice as SessionStrategy,
+        });
+        await authScaffold.init();
+        const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
+        dialectStrategy.addAuthSchema();
+        dialectStrategy.copyCreateUserScript();
+        regenerateSchemaIndex();
+      }
+    } catch (error) {
+      log.bgRed(`${error}`);
     }
   });
 
