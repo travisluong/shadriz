@@ -6,7 +6,7 @@ import {
   GearIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function Layout({
   children,
@@ -15,7 +15,7 @@ export default async function Layout({
 }) {
   const session = await auth();
   if (!session) {
-    notFound();
+    redirect("/signin");
   }
   return (
     <div>

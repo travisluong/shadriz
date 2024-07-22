@@ -224,7 +224,7 @@ export class AuthProcessor {
     }
     if (this.opts.providers.includes("credentials")) {
       log.bgYellow("create credentials provider test user:");
-      log.cmd("npx tsx scripts/create-user.ts foo@example.com password123");
+      log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
     }
     log.bgYellow("test login:");
     log.cmd("npm run dev");

@@ -28,7 +28,7 @@ export async function delete{{capitalizedTable}}(
 {{/if}}
 
   const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
-    id: formData.get("id"),
+{{formDataKeyVal}}
   });
   if (!validatedFields.success) {
     return {

@@ -265,6 +265,17 @@ export class ScaffoldProcessor {
     });
   }
   addDeleteAction(): void {
+    const formDataKeyVal = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => arr[0] === "id")
+      .map((arr) => {
+        const col = arr[0];
+        const dataType = arr[1];
+        const strategy =
+          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        return strategy.getKeyValStrForFormData({ columnName: col });
+      })
+      .join("");
     renderTemplate({
       inputPath: "actions/table/delete-table.ts.hbs",
       outputPath: `actions/${this.opts.table}/delete-${this.opts.table}.ts`,
@@ -272,6 +283,7 @@ export class ScaffoldProcessor {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
         private: this.opts.private,
+        formDataKeyVal: formDataKeyVal,
       },
     });
   }
