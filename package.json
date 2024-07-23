@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "vitest",
-    "build": "tsc && cp -R templates dist/templates && cp -R README.md dist/",
+    "build": "tsc && cp -R templates dist && cp -R README.md dist/",
     "start": "node dist/index.js"
   },
   "author": "fullstackbook",
