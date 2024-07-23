@@ -30,7 +30,7 @@ export const log = {
   },
 
   reminder() {
-    console.log(chalk.yellowBright("\n🔔 note:"));
+    console.log(chalk.yellowBright("\n🔔 reminder:"));
   },
 
   point(str: string) {

@@ -6,10 +6,10 @@ import {
   spawnCommand,
 } from "./utils";
 import { log } from "./log";
-import { Providers, SessionStrategy } from "./types";
+import { AuthProvider, SessionStrategy } from "./types";
 
 interface AuthProcessorOpts {
-  providers: Providers[];
+  providers: AuthProvider[];
   pnpm: boolean;
   sessionStrategy: SessionStrategy;
 }
@@ -61,7 +61,6 @@ export class AuthProcessor {
     this.addCustomSignInPage();
     this.addProfilePage();
     this.addSettingsPage();
-    this.printCompletionMessage();
   }
 
   validateOptions() {
@@ -199,11 +198,12 @@ export class AuthProcessor {
   printCompletionMessage() {
     log.success("auth setup success: " + this.opts.providers.join(", "));
     log.reminder();
-    log.bgYellow("run migrations:");
+    log.white("\nupdate DB_URL in .env.local");
+    log.white("\nrun migrations:");
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
     if (this.opts.providers.includes("github")) {
-      log.bgYellow("setup github provider:");
+      log.white("\nsetup github provider:");
       log.dash(
         "go to github > settings > developer settings > oauth apps > new oauth app"
       );
@@ -212,24 +212,17 @@ export class AuthProcessor {
       log.dash("update AUTH_GITHUB_SECRET in .env.local");
     }
     if (this.opts.providers.includes("google")) {
-      log.bgYellow("setup google provider:");
-      log.dash("go to console.cloud.google.com > new project");
-      log.dash("search oauth > create oauth consent screen");
-      log.dash("create oauth 2.0 client");
+      log.white("\nsetup google provider:");
+      log.dash(
+        "go to console.cloud.google.com > new project > oauth consent screen + 2.0 client"
+      );
       log.dash("callback: http://localhost:3000/api/auth/callback/google");
       log.dash("update AUTH_GOOGLE_ID in .env.local");
       log.dash("update AUTH_GOOGLE_SECRET in .env.local");
     }
     if (this.opts.providers.includes("credentials")) {
-      log.bgYellow("create credentials provider test user:");
+      log.white("\ncreate credentials provider test user:");
       log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
     }
-    log.bgYellow("test login:");
-    log.cmd("npm run dev");
-    log.dash("go to http://localhost:3000/api/auth/signin");
-    log.bgYellow("protect resources:");
-    log.dash(
-      "see: https://authjs.dev/getting-started/session-management/protecting"
-    );
   }
 }

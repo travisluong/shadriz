@@ -1,173 +1,87 @@
 import { log } from "./log";
-import { InitProcessorOpts } from "./types";
-import { renderTemplate, spawnCommand } from "./utils";
+import {
+  DbDialect,
+  InitProcessorOpts,
+  AuthProvider,
+  SessionStrategy,
+} from "./types";
+import { regenerateSchemaIndex, renderTemplate, spawnCommand } from "./utils";
 import { getReadme } from "./markdown";
-
-interface TemplateToCopy {
-  inputPath: string;
-  outputPath: string;
-}
+import { NewProjectProcessor } from "./new-project-processor";
+import { BetterSqlite3PackageStrategy } from "../db-packages/better-sqlite3-package-strategy";
+import { Mysql2PackageStrategy } from "../db-packages/mysql2-package-strategy";
+import { PgPackageStrategy } from "../db-packages/pg-package-strategy";
+import { SqliteDialectStrategy } from "../db-dialects/sqlite-dialect-strategy";
+import { MysqlDialectStrategy } from "../db-dialects/mysql-dialect-strategy";
+import { PostgresqlDialectStrategy } from "../db-dialects/postgresql-dialect-strategy";
+import { AuthProcessor } from "./auth-processor";
 
 export class InitProcessor {
-  opts: InitProcessorOpts = { pnpm: false };
+  opts: InitProcessorOpts;
 
-  installCommands = [
-    "npm install drizzle-orm --legacy-peer-deps",
-    "npm install -D drizzle-kit",
-    "npm install dotenv",
-    "npm install uuidv7",
-    "npm install zod",
-    "npm install drizzle-zod",
-    "npm install @tanstack/react-table",
-  ];
-
-  pnpmInstallCommands = [
-    "pnpm install drizzle-orm",
-    "pnpm install -D drizzle-kit",
-    "pnpm install dotenv",
-    "pnpm install uuidv7",
-    "pnpm install zod",
-    "pnpm install drizzle-zod",
-    "pnpm install @tanstack/react-table",
-  ];
-
-  shadcnCommands = [
-    "npx shadcn-ui@latest init -y -d",
-    "npx shadcn-ui@latest add -y -o table",
-    "npx shadcn-ui@latest add -y -o label",
-    "npx shadcn-ui@latest add -y -o input",
-    "npx shadcn-ui@latest add -y -o button",
-    "npx shadcn-ui@latest add -y -o textarea",
-    "npx shadcn-ui@latest add -y -o checkbox",
-  ];
-
-  templatesToCopy: TemplateToCopy[] = [
-    {
-      inputPath: ".env.local.hbs",
-      outputPath: ".env.local",
-    },
-    {
-      inputPath: "lib/config.ts.hbs",
-      outputPath: "lib/config.ts",
-    },
-    {
-      inputPath: "components/ui/data-table.tsx.hbs",
-      outputPath: "components/ui/data-table.tsx",
-    },
-  ];
-
-  constructor(opts?: InitProcessorOpts) {
-    this.opts = {
-      ...this.opts,
-      ...opts,
-    };
+  constructor(opts: InitProcessorOpts) {
+    this.opts = opts;
   }
 
   async init() {
-    this.addHomePage();
-    this.addSignInPage();
-    this.addDocsCSS();
-    this.addHeader();
-    this.addFooter();
-    this.addPublicLayout();
-    this.addDashboardPlaceholder();
-    await this.addDocsPage();
-    await this.installDependencies();
-    await this.initShadcn();
-    this.copyTemplates();
-    this.printCompletionMessage();
-  }
-
-  addDocsCSS() {
-    renderTemplate({
-      inputPath: "styles/docs.css",
-      outputPath: "styles/docs.css",
+    // new project processor
+    const newProjectProcessor = new NewProjectProcessor({
+      pnpm: this.opts.pnpm,
     });
-  }
+    await newProjectProcessor.init();
 
-  async installDependencies() {
-    if (this.opts.pnpm) {
-      for (const cmd of this.pnpmInstallCommands) {
-        await this.runCommand(cmd);
-      }
-    } else {
-      for (const cmd of this.installCommands) {
-        await this.runCommand(cmd);
-      }
-    }
-  }
+    // package strategy pocessor
+    const packageStrategyProcessor = this.packageStrategyFactory();
 
-  copyTemplates() {
-    for (const templateToCopy of this.templatesToCopy) {
-      renderTemplate({
-        inputPath: templateToCopy.inputPath,
-        outputPath: templateToCopy.outputPath,
+    // dialect strategy processor
+    const dialectStrategyProcessor = this.dialectStrategyFactory(
+      packageStrategyProcessor.dialect
+    );
+
+    await packageStrategyProcessor.init();
+    dialectStrategyProcessor.init();
+
+    // auth processor
+    if (this.opts.authEnabled) {
+      const authProcessor = new AuthProcessor({
+        pnpm: this.opts.pnpm,
+        providers: this.opts.authProviders as AuthProvider[],
+        sessionStrategy: this.opts.authStrategy as SessionStrategy,
       });
+
+      await authProcessor.init();
+      dialectStrategyProcessor.addAuthSchema();
+      dialectStrategyProcessor.copyCreateUserScript();
+      regenerateSchemaIndex();
+      authProcessor.printCompletionMessage();
+    } else {
+      regenerateSchemaIndex();
     }
   }
 
-  async initShadcn() {
-    for (const cmd of this.shadcnCommands) {
-      await this.runCommand(cmd);
+  packageStrategyFactory() {
+    switch (this.opts.dbPackage) {
+      case "better-sqlite3":
+        return new BetterSqlite3PackageStrategy({ pnpm: this.opts.pnpm });
+      case "mysql2":
+        return new Mysql2PackageStrategy({ pnpm: this.opts.pnpm });
+      case "pg":
+        return new PgPackageStrategy({ pnpm: this.opts.pnpm });
+      default:
+        throw new Error("invalid db package: " + this.opts.dbPackage);
     }
   }
 
-  async runCommand(cmd: string) {
-    await spawnCommand(cmd);
-  }
-
-  printCompletionMessage() {
-    log.success("project initialized");
-  }
-
-  async addDocsPage() {
-    const html = await getReadme();
-    renderTemplate({
-      inputPath: "app/(public)/docs/page.tsx.hbs",
-      outputPath: "app/(public)/docs/page.tsx",
-      data: { readme: html },
-    });
-  }
-
-  addHomePage() {
-    renderTemplate({
-      inputPath: "app/page.tsx.hbs",
-      outputPath: "app/page.tsx",
-    });
-  }
-
-  addSignInPage() {
-    renderTemplate({
-      inputPath: "app/signin/page.tsx.hbs",
-      outputPath: "app/signin/page.tsx",
-    });
-  }
-
-  addHeader() {
-    renderTemplate({
-      inputPath: "components/header.tsx.hbs",
-      outputPath: "components/header.tsx",
-    });
-  }
-
-  addFooter() {
-    renderTemplate({
-      inputPath: "components/footer.tsx.hbs",
-      outputPath: "components/footer.tsx",
-    });
-  }
-
-  addPublicLayout() {
-    renderTemplate({
-      inputPath: "app/(public)/layout.tsx.hbs",
-      outputPath: "app/(public)/layout.tsx",
-    });
-  }
-
-  addDashboardPlaceholder() {
-    renderTemplate({
-      inputPath: "app/(private)/dashboard/page.tsx.init.hbs",
-      outputPath: "app/(private)/dashboard/page.tsx",
-    });
+  dialectStrategyFactory(dialect: DbDialect) {
+    switch (dialect) {
+      case "sqlite":
+        return new SqliteDialectStrategy();
+      case "mysql":
+        return new MysqlDialectStrategy();
+      case "postgresql":
+        return new PostgresqlDialectStrategy();
+      default:
+        throw new Error("invalid dialect: " + dialect);
+    }
   }
 }

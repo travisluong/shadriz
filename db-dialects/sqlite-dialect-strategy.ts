@@ -110,11 +110,4 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
       outputPath: "scripts/create-user.ts",
     });
   }
-
-  printInitCompletionMessage(): void {
-    log.success("db setup success: " + this.dialect);
-    log.reminder();
-    log.cmd("npx shadriz auth -h");
-    log.cmd("npx shadriz scaffold -h");
-  }
 }

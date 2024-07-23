@@ -298,12 +298,4 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
       outputPath: "scripts/create-user.ts",
     });
   }
-
-  printInitCompletionMessage() {
-    log.success("db setup success: " + this.dialect);
-    log.reminder();
-    log.dash("update DB_URL in .env.local");
-    log.cmd("npx shadriz auth -h");
-    log.cmd("npx shadriz scaffold -h");
-  }
 }

@@ -6,11 +6,7 @@ shadriz is a full stack automation tool for building TypeScript web applications
 
 shadriz is not a dependency that is added to your project. Instead, it is a command line code generation tool.
 
-shadriz is an "ephemeral" framework that is intended to be used at the start of your project.
-
-Spend more time creating, less time on boilerplate. Ship in minutes instead of days.
-
-Free. Open Source.
+Spend more time creating, less time on boilerplate. Ship in minutes instead of days. Free. Open Source.
 
 ## ⌨️ Tech Stack
 
@@ -25,53 +21,43 @@ Free. Open Source.
 
 ### Step 1: Create new project
 
-This command will create a new Next.js project using the latest version, along with a number of pre-selected options. It will install core dependencies, generate required files, and initialize shadcn/ui. Once you cd into the project, you'll see the non-committed changes applied to a fresh Next.js installation.
+Start by creating a new Next.js project using `create-next-app`.
 
 ```bash
-npx create-next-app@latest my-app --typescript --tailwind --eslint
+npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-src-dir --no-import-alias
 ```
 
-```bash
-npx shadriz new demo
-cd demo
-```
+### Step 2: Run the CLI
 
-### Run the CLI
+Run the `shadriz` init command to setup your project.
 
 ```bash
 npx shadriz@latest init
 ```
 
-### Step 2: Set up database
+### Step 3: Configure project
 
-Set up one of the following supported database packages. This command will install dependencies and generate the necessary configuration files for Drizzle ORM. After running the command, remember to update the `.env.local` file with your `DB_URL`.
+You will be asked a few questions to configure database and Auth.js. Note: You must choose `jwt` if credentials is selected.
 
-```bash
-npx shadriz db pg
-npx shadriz db mysql2
-npx shadriz db better-sqlite3
+```
+Which database library would you like to use? pg
+Do you want to use Auth.js for authentication? yes
+Which auth providers would you like to use? github, credentials
+Which session strategy would you like to use? jwt
 ```
 
-### Step 3: Set up authentication
+### Step 4: Complete project configuration
 
-This command will generate the Auth.js configurations. The Auth.js docs recommend using an OAuth solution like google or github. However, shadriz also provides a credentials solution of email/password, which is useful for prototyping.
+After initialization, you will be prompted to complete a few additional tasks:
 
-If you use credentials provider, the session strategy must be set to jwt.
+- Update the database url in `.env.local` to point to your database.
+- Run migrations.
+- Set up the providers.
+- Create a test user if `credentials` was selected.
 
-#### Examples
+### Step 5: Scaffold a full stack component
 
-```bash
-# postgresql example with github, google, and credentials provider:
-npx shadriz auth github google credentials -d postgresql -s jwt
-
-# mysql example with github and google provider:
-npx shadriz auth github google -d mysql
-
-# sqlite example with credentials provider:
-npx shadriz auth credentials -d sqlite
-```
-
-### Step 4: Scaffold a full stack component
+You can now scaffold full stack components.
 
 This command will generate the CRUD UI, database migrations, server actions, and server components of a full stack component. The columns option `-c` or `--columns` takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
 
@@ -126,11 +112,11 @@ scaffold post -d sqlite -c id:integer:pk-auto title:text
 scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
 ```
 
-### Step 5: Run migrations
+### Step 6: Run migrations
 
-After scaffolding, you'll have to run `npx drizzle-kit generate`. Then you will have to run `npx drizzle-kit migrate` to apply the migrations.
+After scaffolding, you'll have to run `npx drizzle-kit generate`.
 
-Alternatively, you can also run `npx tsx scripts/migrate.ts` to migrate. This is a script shadriz provides as an example to programmatically trigger a migration.
+Then you will have to run `npx drizzle-kit migrate` to apply the migrations.
 
 ## 💡 Inspirations
 

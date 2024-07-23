@@ -1,32 +1,16 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { PgPackageStrategy } from "./db-packages/pg-package-strategy";
-import { BetterSqlite3PackageStrategy } from "./db-packages/better-sqlite3-package-strategy";
 import { PostgresqlDialectStrategy } from "./db-dialects/postgresql-dialect-strategy";
 import { SqliteDialectStrategy } from "./db-dialects/sqlite-dialect-strategy";
-import { AuthProcessor } from "./lib/auth-processor";
-import { NewProjectProcessor } from "./lib/new-project-processor";
 import { log } from "./lib/log";
-import {
-  DbDialectStrategy,
-  DbPackageStrategy,
-  SessionStrategy,
-} from "./lib/types";
-import { Mysql2PackageStrategy } from "./db-packages/mysql2-package-strategy";
+import { DbDialectStrategy, DbPackage } from "./lib/types";
 import { MysqlDialectStrategy } from "./db-dialects/mysql-dialect-strategy";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
-import { regenerateSchemaIndex } from "./lib/utils";
 import { checkbox, select } from "@inquirer/prompts";
 import toggle from "inquirer-toggle";
 import { InitProcessor } from "./lib/init-processor";
-import { Providers } from "./lib/types";
-
-const packageStrategyMap: { [key: string]: DbPackageStrategy } = {
-  pg: new PgPackageStrategy(),
-  mysql2: new Mysql2PackageStrategy(),
-  "better-sqlite3": new BetterSqlite3PackageStrategy(),
-};
+import { spawnCommand } from "./lib/utils";
 
 const dialectStrategyMap: { [key: string]: DbDialectStrategy } = {
   postgresql: new PostgresqlDialectStrategy(),
@@ -45,16 +29,23 @@ program
 
 program
   .command("new")
-  .description("create a new project with latest dependencies")
+  .description(
+    "initialize a new next.js project using recommended settings for shadriz"
+  )
   .argument("<name>", "name of project")
-  .option("--pnpm", "run with pnpm")
+  .option("--pnpm", "run with pnpm", false)
   .action(async (name, options) => {
     try {
-      const newProjectProcessor = new NewProjectProcessor(name, options);
-      newProjectProcessor.init();
-    } catch (error) {
-      console.error("Error running command:", error);
-    }
+      if (options.pnpm) {
+        await spawnCommand(
+          `pnpm create next-app ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
+        );
+      } else {
+        await spawnCommand(
+          `npx create-next-app ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
+        );
+      }
+    } catch (error) {}
   });
 
 program
@@ -63,7 +54,7 @@ program
   .option("--pnpm", "run with pnpm", false)
   .action(async (options) => {
     try {
-      const dbChoice = await select({
+      const dbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
           { name: "pg", value: "pg" },
@@ -71,123 +62,44 @@ program
           { name: "better-sqlite3", value: "better-sqlite3" },
         ],
       });
-      const authChoice = await toggle({
+      const authEnabled = await toggle({
         message: "Do you want to use Auth.js for authentication?",
         default: true,
       });
-      console.log(dbChoice);
-      console.log(authChoice);
-      let providerChoices;
-      let authStrategyChoice;
-      if (authChoice) {
-        providerChoices = await checkbox({
-          message: "Select providers",
+      let authProviders;
+      let authStrategy;
+      if (authEnabled) {
+        authProviders = await checkbox({
+          message: "Which auth providers would you like to use?",
           choices: [
             { name: "github", value: "github" },
             { name: "google", value: "google" },
             { name: "credentials", value: "credentials" },
           ],
         });
-        authStrategyChoice = await select({
-          message: "Which session strategy do you want to use?",
+        authStrategy = await select({
+          message: "Which session strategy would you like to use?",
           choices: [
             { name: "database", value: "database" },
             { name: "jwt", value: "jwt" },
           ],
         });
-        console.log(providerChoices);
-        console.log(authStrategyChoice);
-      }
-
-      if (!authStrategyChoice) {
-        throw new Error("auth strategy choice invalid");
-      }
-
-      const initProcessor = new InitProcessor({ pnpm: options.pnpm });
-      await initProcessor.init();
-
-      const packageStrategy = packageStrategyMap[dbChoice];
-      packageStrategy.setPnpm(options.pnpm);
-      const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
-      await packageStrategy.init();
-      console.log(dialectStrategy);
-      dialectStrategy.init();
-      dialectStrategy.printInitCompletionMessage();
-
-      if (authChoice) {
-        if (!providerChoices) {
-          throw new Error("provider choices missing");
+        if (authProviders.includes("credentials") && authStrategy !== "jwt") {
+          log.bgRed("jwt is required if credentials is selected");
+          process.exit(1);
         }
-        const providers: Providers[] = providerChoices as Providers[];
-        const authScaffold = new AuthProcessor({
-          providers: providers,
-          pnpm: options.pnpm,
-          sessionStrategy: authStrategyChoice as SessionStrategy,
-        });
-        await authScaffold.init();
-        const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
-        dialectStrategy.addAuthSchema();
-        dialectStrategy.copyCreateUserScript();
-        regenerateSchemaIndex();
       }
+      const initProcessor = new InitProcessor({
+        pnpm: options.pnpm,
+        dbPackage: dbPackage as DbPackage,
+        authEnabled: authEnabled,
+        authProviders: authProviders,
+        authStrategy: authStrategy,
+      });
+      await initProcessor.init();
     } catch (error) {
       log.bgRed(`${error}`);
     }
-  });
-
-program
-  .command("db")
-  .description("generate drizzle orm configuration")
-  .argument("<strategy>", "pg, mysql2, better-sqlite3")
-  .option("--pnpm", "run with pnpm", false)
-  .action(async (strategy, options) => {
-    if (!(strategy in packageStrategyMap)) {
-      log.bgRed(`${strategy} strategy invalid`);
-      process.exit(1);
-    }
-    const packageStrategy = packageStrategyMap[strategy];
-    packageStrategy.setPnpm(options.pnpm);
-    const dialectStrategy = dialectStrategyMap[packageStrategy.dialect];
-    await packageStrategy.init();
-    dialectStrategy.init();
-    dialectStrategy.printInitCompletionMessage();
-  });
-
-program
-  .command("auth")
-  .summary("generate auth.js configuration")
-  .description(
-    `generate auth.js configuration
-
-postgresql example with github, google, and credentials provider:
-  auth github google credentials -d postgresql
-
-mysql example with github and google provider:
-  auth github google -d mysql
-
-sqlite example with credentials provider:
-  auth credentials -d sqlite
-    `
-  )
-  .argument("<providers...>", "github, google, credentials")
-  .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
-  .option("--pnpm", "run with pnpm", false)
-  .option("-s, --strategy <strategy>", "database, jwt", "database")
-  .action(async (providers, options) => {
-    if (!(options.dialect in dialectStrategyMap)) {
-      log.bgRed(`invalid dialect ${options.dialect}`);
-      process.exit(1);
-    }
-    const authScaffold = new AuthProcessor({
-      providers: providers,
-      pnpm: options.pnpm,
-      sessionStrategy: options.strategy,
-    });
-    await authScaffold.init();
-    const dialectStrategy = dialectStrategyMap[options.dialect];
-    dialectStrategy.addAuthSchema();
-    dialectStrategy.copyCreateUserScript();
-    regenerateSchemaIndex();
   });
 
 program

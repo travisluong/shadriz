@@ -1,7 +1,5 @@
-import { log } from "./log";
 import { NewProjectProcessorOpts } from "./types";
 import { renderTemplate, spawnCommand } from "./utils";
-import path from "path";
 import { getReadme } from "./markdown";
 
 interface TemplateToCopy {
@@ -10,7 +8,7 @@ interface TemplateToCopy {
 }
 
 export class NewProjectProcessor {
-  opts: NewProjectProcessorOpts = { pnpm: false };
+  opts: NewProjectProcessorOpts;
 
   installCommands = [
     "npm install drizzle-orm --legacy-peer-deps",
@@ -57,16 +55,11 @@ export class NewProjectProcessor {
     },
   ];
 
-  constructor(public name: string, opts?: NewProjectProcessorOpts) {
-    this.opts = {
-      ...this.opts,
-      ...opts,
-    };
+  constructor(opts: NewProjectProcessorOpts) {
+    this.opts = opts;
   }
 
   async init() {
-    await this.createNewProject();
-    this.changeDir();
     this.addHomePage();
     this.addSignInPage();
     this.addDocsCSS();
@@ -78,7 +71,6 @@ export class NewProjectProcessor {
     await this.installDependencies();
     await this.initShadcn();
     this.copyTemplates();
-    this.printCompletionMessage();
   }
 
   addDocsCSS() {
@@ -86,22 +78,6 @@ export class NewProjectProcessor {
       inputPath: "styles/docs.css",
       outputPath: "styles/docs.css",
     });
-  }
-
-  async createNewProject() {
-    if (this.opts.pnpm) {
-      await this.runCommand(
-        `pnpm create next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`
-      );
-    } else {
-      await this.runCommand(
-        `npx create-next-app ${this.name} --ts --eslint --tailwind --app --no-src-dir --no-import-alias`
-      );
-    }
-  }
-
-  changeDir() {
-    process.chdir(path.resolve(this.name));
   }
 
   async installDependencies() {
@@ -133,13 +109,6 @@ export class NewProjectProcessor {
 
   async runCommand(cmd: string) {
     await spawnCommand(cmd);
-  }
-
-  printCompletionMessage() {
-    log.success("new project success: " + this.name);
-    log.reminder();
-    log.cmd(`cd ${this.name}`);
-    log.cmd(`npx shadriz db -h`);
   }
 
   async addDocsPage() {

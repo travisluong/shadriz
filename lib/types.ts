@@ -48,7 +48,6 @@ export interface DbDialectStrategy {
   copyCreateUserScript(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;
-  printInitCompletionMessage(): void;
 }
 
 export interface DbPackageStrategy {
@@ -61,7 +60,6 @@ export interface DbPackageStrategy {
   appendDbUrl(): void;
   copyDbInstance(): void;
   copyDbInstanceForScripts(): void;
-  setPnpm(val: boolean): void;
 }
 
 export interface NewProjectProcessorOpts {
@@ -70,12 +68,18 @@ export interface NewProjectProcessorOpts {
 
 export interface InitProcessorOpts {
   pnpm: boolean;
+  dbPackage: DbPackage;
+  authEnabled: boolean;
+  authProviders?: string[];
+  authStrategy?: string;
 }
 
 export interface DbPackageStrategyOpts {
   pnpm: boolean;
 }
 
-export type Providers = "github" | "google" | "credentials";
+export type AuthProvider = "github" | "google" | "credentials";
 
 export type SessionStrategy = "jwt" | "database";
+
+export type DbPackage = "pg" | "mysql2" | "better-sqlite3";
