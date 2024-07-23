@@ -1,12 +1,11 @@
 import { formDataUtils } from "../lib/form-data-utils";
-import { log } from "../lib/log";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
 } from "../lib/types";
-import { appendToFile, compileTemplate, renderTemplate } from "../lib/utils";
+import { renderTemplate } from "../lib/utils";
 
 const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   int: {

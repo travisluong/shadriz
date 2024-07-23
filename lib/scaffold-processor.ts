@@ -7,8 +7,6 @@ import {
   appendToFile,
   capitalize,
   compileTemplate,
-  getFilenamesFromFolder,
-  writeToFile,
   renderTemplate,
   regenerateSchemaIndex,
 } from "./utils";

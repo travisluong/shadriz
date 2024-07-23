@@ -1,6 +1,3 @@
-import { AuthProcessor } from "./auth-processor";
-import { NewProjectProcessor } from "./new-project-processor";
-
 export type DbDialect = "postgresql" | "mysql" | "sqlite";
 
 export interface ScaffoldOpts {

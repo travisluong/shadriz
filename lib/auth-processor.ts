@@ -1,7 +1,6 @@
 import {
   appendToFile,
   compileTemplate,
-  prependToFile,
   renderTemplate,
   spawnCommand,
 } from "./utils";
