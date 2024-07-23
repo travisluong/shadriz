@@ -1,3 +1,6 @@
+import { AuthProcessor } from "./auth-processor";
+import { NewProjectProcessor } from "./new-project-processor";
+
 export type DbDialect = "postgresql" | "mysql" | "sqlite";
 
 export interface ScaffoldOpts {
@@ -64,14 +67,6 @@ export interface DbPackageStrategy {
 
 export interface NewProjectProcessorOpts {
   pnpm: boolean;
-}
-
-export interface InitProcessorOpts {
-  pnpm: boolean;
-  dbPackage: DbPackage;
-  authEnabled: boolean;
-  authProviders?: string[];
-  authStrategy?: string;
 }
 
 export interface DbPackageStrategyOpts {

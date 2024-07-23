@@ -1,22 +1,18 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { PostgresqlDialectStrategy } from "./db-dialects/postgresql-dialect-strategy";
-import { SqliteDialectStrategy } from "./db-dialects/sqlite-dialect-strategy";
 import { log } from "./lib/log";
-import { DbDialectStrategy, DbPackage } from "./lib/types";
-import { MysqlDialectStrategy } from "./db-dialects/mysql-dialect-strategy";
+import { AuthProvider, DbPackage, SessionStrategy } from "./lib/types";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
 import { checkbox, select } from "@inquirer/prompts";
 import toggle from "inquirer-toggle";
-import { InitProcessor } from "./lib/init-processor";
-import { spawnCommand } from "./lib/utils";
-
-const dialectStrategyMap: { [key: string]: DbDialectStrategy } = {
-  postgresql: new PostgresqlDialectStrategy(),
-  mysql: new MysqlDialectStrategy(),
-  sqlite: new SqliteDialectStrategy(),
-};
+import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
+import {
+  dialectStrategyFactory,
+  packageStrategyFactory,
+} from "./lib/strategy-factory";
+import { AuthProcessor } from "./lib/auth-processor";
+import { NewProjectProcessor } from "./lib/new-project-processor";
 
 const program = new Command();
 
@@ -66,10 +62,9 @@ program
         message: "Do you want to use Auth.js for authentication?",
         default: true,
       });
-      let authProviders;
-      let authStrategy;
+      let authProcessor;
       if (authEnabled) {
-        authProviders = await checkbox({
+        const authProviders = await checkbox({
           message: "Which auth providers would you like to use?",
           choices: [
             { name: "github", value: "github" },
@@ -77,7 +72,7 @@ program
             { name: "credentials", value: "credentials" },
           ],
         });
-        authStrategy = await select({
+        const authStrategy = await select({
           message: "Which session strategy would you like to use?",
           choices: [
             { name: "database", value: "database" },
@@ -88,15 +83,34 @@ program
           log.bgRed("jwt is required if credentials is selected");
           process.exit(1);
         }
+        authProcessor = new AuthProcessor({
+          pnpm: options.pnpm,
+          providers: authProviders as AuthProvider[],
+          sessionStrategy: authStrategy as SessionStrategy,
+        });
       }
-      const initProcessor = new InitProcessor({
+      const newProjectProcessor = new NewProjectProcessor({
+        pnpm: options.pnpm,
+      });
+      const dbPackageStrategy = packageStrategyFactory({
         pnpm: options.pnpm,
         dbPackage: dbPackage as DbPackage,
-        authEnabled: authEnabled,
-        authProviders: authProviders,
-        authStrategy: authStrategy,
       });
-      await initProcessor.init();
+      const dbDialectStrategy = dialectStrategyFactory(
+        dbPackageStrategy.dialect
+      );
+      await newProjectProcessor.init();
+      await dbPackageStrategy.init();
+      dbDialectStrategy.init();
+      if (authProcessor) {
+        await authProcessor.init();
+        dbDialectStrategy.addAuthSchema();
+        dbDialectStrategy.copyCreateUserScript();
+        regenerateSchemaIndex();
+        authProcessor.printCompletionMessage();
+      } else {
+        regenerateSchemaIndex();
+      }
     } catch (error) {
       log.bgRed(`${error}`);
     }
@@ -156,15 +170,11 @@ sqlite foreign key examples:
     false
   )
   .action(async (table, options) => {
-    if (!(options.dialect in dialectStrategyMap)) {
-      log.bgRed(`invalid dialect: ${options.dialect}`);
-      process.exit(1);
-    }
-    const strategy = dialectStrategyMap[options.dialect];
+    const dialectStrategy = dialectStrategyFactory(options.dialect);
     const scaffoldProcessor = new ScaffoldProcessor({
       table: table,
       columns: options.columns,
-      dbDialectStrategy: strategy,
+      dbDialectStrategy: dialectStrategy,
       private: options.private,
     });
     scaffoldProcessor.process();
