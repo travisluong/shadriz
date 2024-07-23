@@ -197,10 +197,6 @@ export class AuthProcessor {
   printCompletionMessage() {
     log.success("auth setup success: " + this.opts.providers.join(", "));
     log.reminder();
-    log.white("\nupdate DB_URL in .env.local");
-    log.white("\nrun migrations:");
-    log.cmd("npx drizzle-kit generate");
-    log.cmd("npx drizzle-kit migrate");
     if (this.opts.providers.includes("github")) {
       log.white("\nsetup github provider:");
       log.dash(
@@ -219,8 +215,12 @@ export class AuthProcessor {
       log.dash("update AUTH_GOOGLE_ID in .env.local");
       log.dash("update AUTH_GOOGLE_SECRET in .env.local");
     }
+    log.white("\nupdate DB_URL in .env.local");
+    log.white("\nrun migrations:");
+    log.cmd("npx drizzle-kit generate");
+    log.cmd("npx drizzle-kit migrate");
     if (this.opts.providers.includes("credentials")) {
-      log.white("\ncreate credentials provider test user:");
+      log.white("\ncreate test user for credentials provider:");
       log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
     }
   }
