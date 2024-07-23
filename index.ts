@@ -21,7 +21,7 @@ program
   .description(
     "shadriz - full stack framework next.js shadcn/ui and drizzle orm"
   )
-  .version("1.0.6");
+  .version("1.1.0");
 
 program
   .command("new")
