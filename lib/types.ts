@@ -75,3 +75,7 @@ export type AuthProvider = "github" | "google" | "credentials";
 export type SessionStrategy = "jwt" | "database";
 
 export type DbPackage = "pg" | "mysql2" | "better-sqlite3";
+
+export interface DarkModeProcessorOpts {
+  pnpm: boolean;
+}

@@ -42,3 +42,9 @@ li {
   text-decoration: underline;
   color: blue;
 }
+.dark pre {
+  background-color: #111827;
+}
+.dark code {
+  background-color: #111827;
+}

@@ -19,7 +19,7 @@ export default async function Layout({
   }
   return (
     <div>
-      <header className="bg-gray-300">
+      <header className="bg-gray-300 dark:bg-gray-900">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="font-bold">
             🍱 <a href="/">shadriz</a>
@@ -36,13 +36,13 @@ export default async function Layout({
       </header>
 
       <div className="flex">
-        <aside className="w-1/4 bg-gray-100 shadow-md min-h-screen">
+        <aside className="w-1/4 bg-gray-100 dark:bg-gray-950 shadow-md min-h-screen">
           <nav className="px-6 py-8">
             <ul>
               <li className="mb-4">
                 <a
                   href="/dashboard"
-                  className="flex items-center gap-2 text-gray-700 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
                 >
                   <DashboardIcon /> Dashboard
                 </a>
@@ -50,7 +50,7 @@ export default async function Layout({
               <li className="mb-4">
                 <a
                   href="/profile"
-                  className="flex items-center gap-2 text-gray-700 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
                 >
                   <PersonIcon /> Profile
                 </a>
@@ -58,7 +58,7 @@ export default async function Layout({
               <li className="mb-4">
                 <a
                   href="/settings"
-                  className="flex items-center gap-2 text-gray-700 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
                 >
                   <GearIcon /> Settings
                 </a>
@@ -72,7 +72,7 @@ export default async function Layout({
                 >
                   <button
                     type="submit"
-                    className="flex items-center gap-2 text-gray-700 hover:text-blue-500 font-semibold"
+                    className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
                   >
                     <ExitIcon /> Sign Out
                   </button>
@@ -81,7 +81,7 @@ export default async function Layout({
             </ul>
           </nav>
         </aside>
-        <main className="w-3/4 p-6 bg-white">{children}</main>
+        <main className="w-3/4 p-6 bg-white dark:bg-black">{children}</main>
       </div>
       <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-6 text-center">

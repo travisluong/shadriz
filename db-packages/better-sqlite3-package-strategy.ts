@@ -33,7 +33,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   async installDependencies() {
     if (this.opts.pnpm) {
-      await spawnCommand("pnpm install better-sqlite3");
+      await spawnCommand("pnpm add better-sqlite3");
       return;
     }
     await spawnCommand("npm install better-sqlite3");

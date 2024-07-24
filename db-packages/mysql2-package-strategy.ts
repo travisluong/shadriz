@@ -27,7 +27,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   async installDependencies() {
     if (this.opts.pnpm) {
-      await spawnCommand("pnpm install mysql2");
+      await spawnCommand("pnpm add mysql2");
       return;
     }
     await spawnCommand("npm install mysql2");

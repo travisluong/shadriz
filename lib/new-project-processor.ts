@@ -21,13 +21,13 @@ export class NewProjectProcessor {
   ];
 
   pnpmInstallCommands = [
-    "pnpm install drizzle-orm",
-    "pnpm install -D drizzle-kit",
-    "pnpm install dotenv",
-    "pnpm install uuidv7",
-    "pnpm install zod",
-    "pnpm install drizzle-zod",
-    "pnpm install @tanstack/react-table",
+    "pnpm add drizzle-orm",
+    "pnpm add -D drizzle-kit",
+    "pnpm add dotenv",
+    "pnpm add uuidv7",
+    "pnpm add zod",
+    "pnpm add drizzle-zod",
+    "pnpm add @tanstack/react-table",
   ];
 
   shadcnCommands = [
@@ -38,6 +38,16 @@ export class NewProjectProcessor {
     "npx shadcn-ui@latest add -y -o button",
     "npx shadcn-ui@latest add -y -o textarea",
     "npx shadcn-ui@latest add -y -o checkbox",
+  ];
+
+  pnpmShadcnCommands = [
+    "pnpm dlx shadcn-ui@latest init -y -d",
+    "pnpm dlx shadcn-ui@latest add -y -o table",
+    "pnpm dlx shadcn-ui@latest add -y -o label",
+    "pnpm dlx shadcn-ui@latest add -y -o input",
+    "pnpm dlx shadcn-ui@latest add -y -o button",
+    "pnpm dlx shadcn-ui@latest add -y -o textarea",
+    "pnpm dlx shadcn-ui@latest add -y -o checkbox",
   ];
 
   templatesToCopy: TemplateToCopy[] = [
@@ -102,8 +112,14 @@ export class NewProjectProcessor {
   }
 
   async initShadcn() {
-    for (const cmd of this.shadcnCommands) {
-      await this.runCommand(cmd);
+    if (this.opts.pnpm) {
+      for (const cmd of this.pnpmShadcnCommands) {
+        await this.runCommand(cmd);
+      }
+    } else {
+      for (const cmd of this.shadcnCommands) {
+        await this.runCommand(cmd);
+      }
     }
   }
 

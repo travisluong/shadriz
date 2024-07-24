@@ -83,10 +83,10 @@ export class AuthProcessor {
 
   async installDependencies() {
     if (this.opts.pnpm) {
-      await spawnCommand("pnpm install @auth/drizzle-adapter next-auth@beta");
+      await spawnCommand("pnpm add @auth/drizzle-adapter next-auth@beta");
       if (this.opts.providers.includes("credentials")) {
-        await spawnCommand("pnpm install bcrypt");
-        await spawnCommand("pnpm install -D @types/bcrypt");
+        await spawnCommand("pnpm add bcrypt");
+        await spawnCommand("pnpm add -D @types/bcrypt");
       }
       return;
     }
@@ -98,7 +98,11 @@ export class AuthProcessor {
   }
 
   async appendAuthSecretToEnv() {
-    await spawnCommand("npx auth secret");
+    if (this.opts.pnpm) {
+      await spawnCommand("pnpm dlx auth secret");
+    } else {
+      await spawnCommand("npx auth secret");
+    }
   }
 
   addAuthConfig() {
@@ -191,7 +195,11 @@ export class AuthProcessor {
   }
 
   async addShadcnAvatar() {
-    await spawnCommand("npx shadcn-ui@latest add -y -o avatar");
+    if (this.opts.pnpm) {
+      await spawnCommand("pnpm dlx shadcn-ui@latest add -y -o avatar");
+    } else {
+      await spawnCommand("npx shadcn-ui@latest add -y -o avatar");
+    }
   }
 
   printCompletionMessage() {

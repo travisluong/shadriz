@@ -13,6 +13,7 @@ import {
 } from "./lib/strategy-factory";
 import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
+import { DarkModeProcessor } from "./lib/dark-mode-processor";
 
 const program = new Command();
 
@@ -75,8 +76,8 @@ program
         const authStrategy = await select({
           message: "Which session strategy would you like to use?",
           choices: [
-            { name: "database", value: "database" },
             { name: "jwt", value: "jwt" },
+            { name: "database", value: "database" },
           ],
         });
         if (authProviders.includes("credentials") && authStrategy !== "jwt") {
@@ -89,6 +90,10 @@ program
           sessionStrategy: authStrategy as SessionStrategy,
         });
       }
+      const darkModeEnabled = await toggle({
+        message: "Do you want to add a dark mode toggle?",
+        default: true,
+      });
       const newProjectProcessor = new NewProjectProcessor({
         pnpm: options.pnpm,
       });
@@ -102,6 +107,12 @@ program
       await newProjectProcessor.init();
       await dbPackageStrategy.init();
       dbDialectStrategy.init();
+      if (darkModeEnabled) {
+        const darkModeProcessor = new DarkModeProcessor({
+          pnpm: options.pnpm,
+        });
+        await darkModeProcessor.init();
+      }
       if (authProcessor) {
         await authProcessor.init();
         dbDialectStrategy.addAuthSchema();

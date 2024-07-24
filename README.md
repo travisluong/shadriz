@@ -44,6 +44,7 @@ Which database library would you like to use? pg
 Do you want to use Auth.js for authentication? yes
 Which auth providers would you like to use? github, credentials
 Which session strategy would you like to use? jwt
+Do you want to add a dark mode toggle? yes
 ```
 
 ### Step 4: Complete project configuration

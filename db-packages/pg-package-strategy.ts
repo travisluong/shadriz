@@ -27,8 +27,8 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   async installDependencies() {
     if (this.opts.pnpm) {
-      await spawnCommand("pnpm install pg");
-      await spawnCommand("pnpm install -D @types/pg");
+      await spawnCommand("pnpm add pg");
+      await spawnCommand("pnpm add -D @types/pg");
       return;
     }
     await spawnCommand("npm install pg");
