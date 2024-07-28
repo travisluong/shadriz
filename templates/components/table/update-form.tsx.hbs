@@ -8,6 +8,8 @@ import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { useFormState } from "react-dom";
 import { {{capitalizedTable}} } from "@/schema/{{table}}";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function {{capitalizedTable}}UpdateForm({ data }: { data: {{capitalizedTable}} }) {
   const initialState: Update{{capitalizedTable}}State = {};

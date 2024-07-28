@@ -1,0 +1,13 @@
+        <div>
+          <Label>{{column}}</Label>
+          <Image
+            src={data.{{column}} ?? ""}
+            width="200"
+            height="200"
+            alt="{{column}}"
+          />
+          <div>
+            <Link href={data.{{column}} ?? ""}>{data.{{column}} ?? ""}</Link>
+          </div>
+          <Input type="file" name="{{column}}" />
+        </div>

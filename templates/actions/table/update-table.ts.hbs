@@ -1,11 +1,14 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{capitalizedTable}}Schema, {{table}} } from "@/schema/{{table}}";
+import { insert{{capitalizedTable}}Schema, {{table}}, {{capitalizedTable}} } from "@/schema/{{table}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 {{#if private}}
 import { auth } from "@/auth";
+{{/if}}
+{{#if importFileUtils}}
+import { getUploadPath, uploadFile } from "@/lib/file-utils";
 {{/if}}
 
 export interface Update{{capitalizedTable}}State {
@@ -44,13 +47,31 @@ export async function update{{capitalizedTable}}(
       message: "error",
     };
   }
+
+  let data: Partial<{{capitalizedTable}}> = {
+    {{#each columns}}
+    {{this}}: validatedFields.data.{{this}},
+    {{/each}}
+  };
+
+{{#each uploadColumnNames}}
+  const {{this}}File = formData.get("{{this}}") as File;
+
+  let {{this}}UploadPath;
+
+  if ({{this}}File.size) {
+    {{this}}UploadPath = getUploadPath({
+      file: {{this}}File,
+      dir: "/uploads/{{../table}}/",
+    });
+    data.{{this}} = {{this}}UploadPath;
+    uploadFile({ file: {{this}}File, uploadPath: {{this}}UploadPath });
+  }
+{{/each}}
+
   await db
     .update({{table}})
-    .set({
-      {{#each columns}}
-      {{this}}: validatedFields.data.{{this}},
-      {{/each}}
-    })
+    .set(data)
     .where(eq({{table}}.id, validatedFields.data.id));
 
   revalidatePath("/{{table}}");

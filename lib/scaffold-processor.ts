@@ -206,12 +206,16 @@ export class ScaffoldProcessor {
       .map((c) => c.split(":"))
       .filter((arr) => !this.includesItemThatStartsWithPk(arr))
       .filter((arr) => !this.includesItemThatStartsWithDefault(arr))
+      .filter((arr) => !this.isFileType(arr))
+      .filter((arr) => !this.isImageType(arr))
       .map((arr) => arr[0]);
 
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => !this.includesItemThatStartsWithPk(arr))
       .filter((arr) => !this.includesItemThatStartsWithDefault(arr))
+      .filter((arr) => !this.isFileType(arr))
+      .filter((arr) => !this.isImageType(arr))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
@@ -220,6 +224,11 @@ export class ScaffoldProcessor {
         return strategy.getKeyValStrForFormData({ columnName: col });
       })
       .join("");
+
+    const uploadColumnNames = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
+      .map((arr) => arr[0]);
 
     renderTemplate({
       inputPath: "actions/table/create-table.ts.hbs",
@@ -230,6 +239,8 @@ export class ScaffoldProcessor {
         columns: columns,
         formDataKeyVal: formDataKeyVal,
         private: this.opts.private,
+        uploadColumnNames: uploadColumnNames,
+        importFileUtils: uploadColumnNames.length > 0,
       },
     });
   }
@@ -237,10 +248,15 @@ export class ScaffoldProcessor {
     const columns = this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => !this.includesItemThatStartsWithPk(arr))
+      .filter((arr) => !this.isFileType(arr))
+      .filter((arr) => !this.isImageType(arr))
       .map((arr) => arr[0]);
+    console.log(columns);
 
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
+      .filter((arr) => !this.isFileType(arr))
+      .filter((arr) => !this.isImageType(arr))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
@@ -249,6 +265,11 @@ export class ScaffoldProcessor {
         return strategy.getKeyValStrForFormData({ columnName: col });
       })
       .join("");
+
+    const uploadColumnNames = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
+      .map((arr) => arr[0]);
 
     renderTemplate({
       inputPath: "actions/table/update-table.ts.hbs",
@@ -259,6 +280,8 @@ export class ScaffoldProcessor {
         columns: columns,
         formDataKeyVal: formDataKeyVal,
         private: this.opts.private,
+        uploadColumnNames: uploadColumnNames,
+        importFileUtils: uploadColumnNames.length > 0,
       },
     });
   }
@@ -330,6 +353,7 @@ export class ScaffoldProcessor {
     let html = "";
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
+      // TODO: validation should go earlier in process
       if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const args = [arg1, arg2, arg3];
@@ -418,6 +442,12 @@ export class ScaffoldProcessor {
       if (str.startsWith("default-")) return true;
     }
     return false;
+  }
+  isFileType(arr: string[]) {
+    return arr[1] === "file";
+  }
+  isImageType(arr: string[]) {
+    return arr[1] === "image";
   }
   validateArg(arg: string): boolean {
     if (arg === undefined) {

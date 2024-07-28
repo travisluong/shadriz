@@ -18,6 +18,8 @@ export class NewProjectProcessor {
     "npm install zod",
     "npm install drizzle-zod",
     "npm install @tanstack/react-table",
+    "npm install nanoid",
+    "npm install nanoid-dictionary@beta",
   ];
 
   pnpmInstallCommands = [
@@ -28,6 +30,8 @@ export class NewProjectProcessor {
     "pnpm add zod",
     "pnpm add drizzle-zod",
     "pnpm add @tanstack/react-table",
+    "pnpm add nanoid",
+    "pnpm add nanoid-dictionary@beta",
   ];
 
   shadcnCommands = [
@@ -77,6 +81,7 @@ export class NewProjectProcessor {
     this.addFooter();
     this.addPublicLayout();
     this.addDashboardPlaceholder();
+    this.addFileUtils();
     await this.addDocsPage();
     await this.installDependencies();
     await this.initShadcn();
@@ -175,6 +180,13 @@ export class NewProjectProcessor {
     renderTemplate({
       inputPath: "app/(private)/dashboard/page.tsx.init.hbs",
       outputPath: "app/(private)/dashboard/page.tsx",
+    });
+  }
+
+  addFileUtils() {
+    renderTemplate({
+      inputPath: "lib/file-utils.ts.hbs",
+      outputPath: "lib/file-utils.ts",
     });
   }
 }

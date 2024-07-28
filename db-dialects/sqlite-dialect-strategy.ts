@@ -63,6 +63,28 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.bigint(opts.columnName);
     },
   },
+  file: {
+    jsType: "string",
+    formTemplate: "components/table/create-file.tsx.hbs",
+    updateFormTemplate: "components/table/update-file.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: text(\"${opts.columnName}\")`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.string(opts.columnName);
+    },
+  },
+  image: {
+    jsType: "string",
+    formTemplate: "components/table/create-image.tsx.hbs",
+    updateFormTemplate: "components/table/update-image.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.columnName}: text(\"${opts.columnName}\")`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.string(opts.columnName);
+    },
+  },
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
