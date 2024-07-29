@@ -4,6 +4,7 @@ import { AuthError } from "next-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 export default async function SignInPage({
   searchParams,
@@ -14,16 +15,15 @@ export default async function SignInPage({
     <div className="flex min-h-screen justify-center items-center">
       <div className="flex flex-col gap-2 items-center border rounded p-5 max-w-xs">
         <div>Sign In</div>
-        {Object.values(providerMap)
-          .filter((provider) => provider.id !== "credentials")
-          .map((provider) => (
+
+        {{#if providers.google}}
             <form
-              key={provider.id}
+              key={"google"}
               className="flex flex-col gap-2 items-center w-full"
               action={async () => {
                 "use server";
                 try {
-                  await signIn(provider.id, {
+                  await signIn("google", {
                     redirectTo: "/dashboard",
                   });
                 } catch (error) {
@@ -35,21 +35,43 @@ export default async function SignInPage({
               }}
             >
               <Button className="w-full" type="submit">
-                <span>Sign in with {provider.name}</span>
+                <span>Sign in with Google</span>
               </Button>
             </form>
-          ))}
-        <div className="h-1 w-full border-b border-gray-200"></div>
-        {Object.values(providerMap)
-          .filter((provider) => provider.id === "credentials")
-          .map((provider) => (
+            <Separator className="my-4" />
+        {{/if}}
+        {{#if providers.github}}
             <form
-              key={provider.id}
+              key={"github"}
+              className="flex flex-col gap-2 items-center w-full"
+              action={async () => {
+                "use server";
+                try {
+                  await signIn("github", {
+                    redirectTo: "/dashboard",
+                  });
+                } catch (error) {
+                  if (error instanceof AuthError) {
+                    return redirect(`/signin/?error=${error.type}`);
+                  }
+                  throw error;
+                }
+              }}
+            >
+              <Button className="w-full" type="submit">
+                <span>Sign in with GitHub</span>
+              </Button>
+            </form>
+            <Separator className="my-4" />
+        {{/if}}
+        {{#if providers.credentials}}
+            <form
+              key={"credentials"}
               className="flex flex-col gap-2 items-center w-full"
               action={async (formData: FormData) => {
                 "use server";
                 try {
-                  await signIn(provider.id, {
+                  await signIn("credentials", {
                     redirectTo: "/dashboard",
                     email: formData.get("email"),
                     password: formData.get("password"),
@@ -75,27 +97,24 @@ export default async function SignInPage({
                 <Input type="password" name="password" placeholder="password" />
               </div>
               <Button className="w-full" type="submit">
-                <span>Sign in with {provider.name}</span>
+                <span>Sign in with Credentials</span>
               </Button>
             </form>
-          ))}
-        {Object.values(providerMap)
-          .filter((provider) => provider.id === "postmark")
-          .map(() => (
-            <div className="mt-5">
-              <form
-                className="flex flex-col gap-5"
-                action={async (formData) => {
-                  "use server";
-                  await signIn("postmark", formData);
-                }}
-              >
-                <Input type="text" name="email" placeholder="Email" />
-                <Button type="submit">Signin with Email</Button>
-              </form>
-            </div>
-          ))
-        }
+            <Separator className="my-4" />
+        {{/if}}
+        {{#if providers.postmark}}
+            <form
+              className="flex flex-col gap-5"
+              action={async (formData) => {
+                "use server";
+                await signIn("postmark", formData);
+              }}
+            >
+              <Input type="text" name="email" placeholder="Email" />
+              <Button type="submit">Signin with Email</Button>
+            </form>
+            <Separator className="my-4" />
+        {{/if}}
         {searchParams.error === "CallbackRouteError" && (
           <div className="text-red-500">Sign in failed</div>
         )}

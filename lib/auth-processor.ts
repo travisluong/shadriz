@@ -108,9 +108,6 @@ export class AuthProcessor {
   }
 
   async appendAuthSecretToEnv() {
-    if (!this.opts.install) {
-      return;
-    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm dlx auth secret");
     } else {
@@ -190,6 +187,14 @@ export class AuthProcessor {
     renderTemplate({
       inputPath: "app/signin/page.tsx.custom.hbs",
       outputPath: "app/signin/page.tsx",
+      data: {
+        providers: {
+          google: this.opts.providers.includes("google"),
+          github: this.opts.providers.includes("github"),
+          credentials: this.opts.providers.includes("credentials"),
+          postmark: this.opts.providers.includes("postmark"),
+        },
+      },
     });
   }
 
@@ -212,8 +217,10 @@ export class AuthProcessor {
       return;
     }
     if (this.opts.pnpm) {
+      await spawnCommand("pnpm dlx shadcn-ui@latest add -y -o separator");
       await spawnCommand("pnpm dlx shadcn-ui@latest add -y -o avatar");
     } else {
+      await spawnCommand("npx shadcn-ui@latest add -y -o separator");
       await spawnCommand("npx shadcn-ui@latest add -y -o avatar");
     }
   }

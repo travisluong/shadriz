@@ -72,7 +72,7 @@ export interface DbPackageStrategyOpts {
   install: boolean;
 }
 
-export type AuthProvider = "github" | "google" | "credentials";
+export type AuthProvider = "github" | "google" | "credentials" | "postmark";
 
 export type SessionStrategy = "jwt" | "database";
 
