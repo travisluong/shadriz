@@ -79,6 +79,23 @@ export default async function SignInPage({
               </Button>
             </form>
           ))}
+        {Object.values(providerMap)
+          .filter((provider) => provider.id === "postmark")
+          .map(() => (
+            <div className="mt-5">
+              <form
+                className="flex flex-col gap-5"
+                action={async (formData) => {
+                  "use server";
+                  await signIn("postmark", formData);
+                }}
+              >
+                <Input type="text" name="email" placeholder="Email" />
+                <Button type="submit">Signin with Email</Button>
+              </form>
+            </div>
+          ))
+        }
         {searchParams.error === "CallbackRouteError" && (
           <div className="text-red-500">Sign in failed</div>
         )}

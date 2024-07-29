@@ -23,6 +23,7 @@ interface AuthStrategyMap {
   github: AuthStrategy;
   google: AuthStrategy;
   credentials: AuthStrategy;
+  postmark: AuthStrategy;
 }
 
 const authStrategyMap: AuthStrategyMap = {
@@ -40,6 +41,11 @@ const authStrategyMap: AuthStrategyMap = {
     importTemplatePath: "auth/auth.ts.credentials.imports.hbs",
     authTemplatePath: "auth/auth.ts.credentials.hbs",
     envTemplatePath: "auth/auth.ts.credentials.env.hbs",
+  },
+  postmark: {
+    importTemplatePath: "auth/auth.ts.postmark.imports.hbs",
+    authTemplatePath: "auth/auth.ts.postmark.hbs",
+    envTemplatePath: "auth/auth.ts.postmark.env.hbs",
   },
 };
 
@@ -119,7 +125,7 @@ export class AuthProcessor {
         inputPath: strategy.authTemplatePath,
         data: {},
       });
-      providersCode += ",\n";
+      providersCode += "\n";
     }
     renderTemplate({
       inputPath: "auth/auth.ts.hbs",

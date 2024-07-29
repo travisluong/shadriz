@@ -23,9 +23,9 @@ export class DarkModeProcessor {
 
   async installDropdownMenu() {
     if (this.opts.pnpm) {
-      await spawnCommand(`pnpm dlx shadcn-ui@latest add dropdown-menu`);
+      await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o dropdown-menu`);
     } else {
-      await spawnCommand(`npx shadcn-ui@latest add dropdown-menu`);
+      await spawnCommand(`npx shadcn-ui@latest add -y -o dropdown-menu`);
     }
   }
 

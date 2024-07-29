@@ -71,6 +71,7 @@ program
             { name: "github", value: "github" },
             { name: "google", value: "google" },
             { name: "credentials", value: "credentials" },
+            { name: "postmark", value: "postmark" },
           ],
         });
         const authStrategy = await select({
