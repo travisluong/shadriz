@@ -1,5 +1,9 @@
 import { NewProjectProcessorOpts } from "./types";
-import { renderTemplate, spawnCommand } from "./utils";
+import {
+  renderTemplate,
+  renderTemplateIfNotExists,
+  spawnCommand,
+} from "./utils";
 import { getReadme } from "./markdown";
 
 interface TemplateToCopy {
@@ -112,7 +116,7 @@ export class NewProjectProcessor {
 
   copyTemplates() {
     for (const templateToCopy of this.templatesToCopy) {
-      renderTemplate({
+      renderTemplateIfNotExists({
         inputPath: templateToCopy.inputPath,
         outputPath: templateToCopy.outputPath,
       });

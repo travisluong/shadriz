@@ -18,6 +18,9 @@ interface AuthStrategy {
   importTemplatePath: string;
   authTemplatePath: string;
   envTemplatePath: string;
+  npmInstallDependencies?(): void;
+  pnpmInstallDependencies?(): void;
+  printCompletionMessage(): void;
 }
 
 interface AuthStrategyMap {
@@ -32,21 +35,58 @@ const authStrategyMap: AuthStrategyMap = {
     importTemplatePath: "auth/auth.ts.github.imports.hbs",
     authTemplatePath: "auth/auth.ts.github.hbs",
     envTemplatePath: "auth/auth.ts.github.env.hbs",
+    printCompletionMessage: function (): void {
+      log.white("\nsetup github provider:");
+      log.dash(
+        "go to github > settings > developer settings > oauth apps > new oauth app"
+      );
+      log.dash("callback: http://localhost:3000/api/auth/callback/github");
+      log.dash("update AUTH_GITHUB_ID in .env.local");
+      log.dash("update AUTH_GITHUB_SECRET in .env.local");
+    },
   },
   google: {
     importTemplatePath: "auth/auth.ts.google.imports.hbs",
     authTemplatePath: "auth/auth.ts.google.hbs",
     envTemplatePath: "auth/auth.ts.google.env.hbs",
+    printCompletionMessage: function (): void {
+      log.white("\nsetup google provider:");
+      log.dash(
+        "go to console.cloud.google.com > new project > oauth consent screen + 2.0 client"
+      );
+      log.dash("callback: http://localhost:3000/api/auth/callback/google");
+      log.dash("update AUTH_GOOGLE_ID in .env.local");
+      log.dash("update AUTH_GOOGLE_SECRET in .env.local");
+    },
   },
   credentials: {
     importTemplatePath: "auth/auth.ts.credentials.imports.hbs",
     authTemplatePath: "auth/auth.ts.credentials.hbs",
     envTemplatePath: "auth/auth.ts.credentials.env.hbs",
+    async npmInstallDependencies() {
+      await spawnCommand("npm install bcrypt");
+      await spawnCommand("npm install -D @types/bcrypt");
+    },
+    async pnpmInstallDependencies() {
+      await spawnCommand("pnpm add bcrypt");
+      await spawnCommand("pnpm add -D @types/bcrypt");
+    },
+    printCompletionMessage: function (): void {
+      log.white("\ncreate test user for credentials provider:");
+      log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
+    },
   },
   postmark: {
     importTemplatePath: "auth/auth.ts.postmark.imports.hbs",
     authTemplatePath: "auth/auth.ts.postmark.hbs",
     envTemplatePath: "auth/auth.ts.postmark.env.hbs",
+    printCompletionMessage: function (): void {
+      log.white("\nsetup postmark provider");
+      log.dash("go to postmark > server > api tokens");
+      log.dash("generate token");
+      log.dash("change the from email in auth.ts");
+      log.dash("update AUTH_POSTMARK_KEY in .env.local");
+    },
   },
 };
 
@@ -57,7 +97,7 @@ export class AuthProcessor {
     this.validateOptions();
     await this.installDependencies();
     await this.appendAuthSecretToEnv();
-    await this.addShadcnAvatar();
+    await this.addShadcnComponents();
     this.addAuthConfig();
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
@@ -94,20 +134,27 @@ export class AuthProcessor {
     }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm add @auth/drizzle-adapter next-auth@beta");
-      if (this.opts.providers.includes("credentials")) {
-        await spawnCommand("pnpm add bcrypt");
-        await spawnCommand("pnpm add -D @types/bcrypt");
+      for (const provider of this.opts.providers) {
+        const authStrategy = authStrategyMap[provider];
+        if (authStrategy.pnpmInstallDependencies) {
+          authStrategy.pnpmInstallDependencies();
+        }
       }
-      return;
-    }
-    await spawnCommand("npm install @auth/drizzle-adapter next-auth@beta");
-    if (this.opts.providers.includes("credentials")) {
-      await spawnCommand("npm install bcrypt");
-      await spawnCommand("npm install -D @types/bcrypt");
+    } else {
+      await spawnCommand("npm install @auth/drizzle-adapter next-auth@beta");
+      for (const provider of this.opts.providers) {
+        const authStrategy = authStrategyMap[provider];
+        if (authStrategy.npmInstallDependencies) {
+          authStrategy.npmInstallDependencies();
+        }
+      }
     }
   }
 
   async appendAuthSecretToEnv() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm dlx auth secret");
     } else {
@@ -212,7 +259,7 @@ export class AuthProcessor {
     });
   }
 
-  async addShadcnAvatar() {
+  async addShadcnComponents() {
     if (!this.opts.install) {
       return;
     }
@@ -228,31 +275,14 @@ export class AuthProcessor {
   printCompletionMessage() {
     log.success("auth setup success: " + this.opts.providers.join(", "));
     log.reminder();
-    if (this.opts.providers.includes("github")) {
-      log.white("\nsetup github provider:");
-      log.dash(
-        "go to github > settings > developer settings > oauth apps > new oauth app"
-      );
-      log.dash("callback: http://localhost:3000/api/auth/callback/github");
-      log.dash("update AUTH_GITHUB_ID in .env.local");
-      log.dash("update AUTH_GITHUB_SECRET in .env.local");
-    }
-    if (this.opts.providers.includes("google")) {
-      log.white("\nsetup google provider:");
-      log.dash(
-        "go to console.cloud.google.com > new project > oauth consent screen + 2.0 client"
-      );
-      log.dash("callback: http://localhost:3000/api/auth/callback/google");
-      log.dash("update AUTH_GOOGLE_ID in .env.local");
-      log.dash("update AUTH_GOOGLE_SECRET in .env.local");
-    }
-    log.white("\nupdate DB_URL in .env.local");
+    log.white("\nconfigure database:");
+    log.dash("update DB_URL in .env.local");
     log.white("\nrun migrations:");
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
-    if (this.opts.providers.includes("credentials")) {
-      log.white("\ncreate test user for credentials provider:");
-      log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
+    for (const provider of this.opts.providers) {
+      const authStrategy = authStrategyMap[provider];
+      authStrategy.printCompletionMessage();
     }
   }
 }

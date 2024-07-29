@@ -4,6 +4,27 @@ import * as path from "path";
 import Handlebars from "handlebars";
 import { log } from "./log";
 
+export function renderTemplateIfNotExists({
+  inputPath,
+  outputPath,
+  data,
+}: {
+  inputPath: string;
+  outputPath: string;
+  data?: any;
+}) {
+  const joinedOutputPath = path.join(process.cwd(), outputPath);
+  if (fs.existsSync(joinedOutputPath)) {
+    log.bgYellow("exists: " + outputPath);
+    return;
+  }
+  renderTemplate({
+    inputPath,
+    outputPath,
+    data,
+  });
+}
+
 export function renderTemplate({
   inputPath,
   outputPath,
