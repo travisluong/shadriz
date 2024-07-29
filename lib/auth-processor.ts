@@ -28,6 +28,7 @@ interface AuthStrategyMap {
   google: AuthStrategy;
   credentials: AuthStrategy;
   postmark: AuthStrategy;
+  nodemailer: AuthStrategy;
 }
 
 const authStrategyMap: AuthStrategyMap = {
@@ -86,6 +87,22 @@ const authStrategyMap: AuthStrategyMap = {
       log.dash("generate token");
       log.dash("change the from email in auth.ts");
       log.dash("update AUTH_POSTMARK_KEY in .env.local");
+    },
+  },
+  nodemailer: {
+    importTemplatePath: "auth/auth.ts.nodemailer.imports.hbs",
+    authTemplatePath: "auth/auth.ts.nodemailer.hbs",
+    envTemplatePath: "auth/auth.ts.nodemailer.env.hbs",
+    async npmInstallDependencies() {
+      await spawnCommand("npm install nodemailer");
+    },
+    async pnpmInstallDependencies() {
+      await spawnCommand("pnpm add nodemailer");
+    },
+    printCompletionMessage: function (): void {
+      log.white("\nsetup nodemailer provider");
+      log.dash("update EMAIL_SERVER in .env.local");
+      log.dash("update EMAIL_FROM in .env.local");
     },
   },
 };
@@ -240,6 +257,7 @@ export class AuthProcessor {
           github: this.opts.providers.includes("github"),
           credentials: this.opts.providers.includes("credentials"),
           postmark: this.opts.providers.includes("postmark"),
+          nodemailer: this.opts.providers.includes("nodemailer"),
         },
       },
     });

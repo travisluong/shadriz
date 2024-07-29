@@ -73,6 +73,7 @@ program
             { name: "google", value: "google" },
             { name: "credentials", value: "credentials" },
             { name: "postmark", value: "postmark" },
+            { name: "nodemailer", value: "nodemailer" },
           ],
         });
         const authStrategy = await select({

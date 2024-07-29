@@ -111,7 +111,20 @@ export default async function SignInPage({
               }}
             >
               <Input type="text" name="email" placeholder="Email" />
-              <Button type="submit">Signin with Email</Button>
+              <Button type="submit">Sign in with Email</Button>
+            </form>
+            <Separator className="my-4" />
+        {{/if}}
+        {{#if providers.nodemailer}}
+            <form
+              className="flex flex-col gap-5"
+              action={async (formData) => {
+                "use server";
+                await signIn("nodemailer", formData);
+              }}
+            >
+              <Input type="text" name="email" placeholder="Email" />
+              <Button type="submit">Sign in with Email</Button>
             </form>
             <Separator className="my-4" />
         {{/if}}
