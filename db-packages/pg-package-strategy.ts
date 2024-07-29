@@ -6,15 +6,12 @@ import {
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
 export class PgPackageStrategy implements DbPackageStrategy {
-  opts: DbPackageStrategyOpts = { pnpm: false };
+  opts: DbPackageStrategyOpts;
 
   dialect: DbDialect = "postgresql";
 
-  constructor(opts?: DbPackageStrategyOpts) {
-    this.opts = {
-      ...this.opts,
-      ...opts,
-    };
+  constructor(opts: DbPackageStrategyOpts) {
+    this.opts = opts;
   }
 
   async init() {
@@ -26,6 +23,9 @@ export class PgPackageStrategy implements DbPackageStrategy {
   }
 
   async installDependencies() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm add pg");
       await spawnCommand("pnpm add -D @types/pg");

@@ -11,6 +11,7 @@ interface AuthProcessorOpts {
   providers: AuthProvider[];
   pnpm: boolean;
   sessionStrategy: SessionStrategy;
+  install: boolean;
 }
 
 interface AuthStrategy {
@@ -88,6 +89,9 @@ export class AuthProcessor {
   }
 
   async installDependencies() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm add @auth/drizzle-adapter next-auth@beta");
       if (this.opts.providers.includes("credentials")) {
@@ -104,6 +108,9 @@ export class AuthProcessor {
   }
 
   async appendAuthSecretToEnv() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm dlx auth secret");
     } else {
@@ -201,6 +208,9 @@ export class AuthProcessor {
   }
 
   async addShadcnAvatar() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm dlx shadcn-ui@latest add -y -o avatar");
     } else {

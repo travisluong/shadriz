@@ -64,10 +64,12 @@ export interface DbPackageStrategy {
 
 export interface NewProjectProcessorOpts {
   pnpm: boolean;
+  install: boolean;
 }
 
 export interface DbPackageStrategyOpts {
   pnpm: boolean;
+  install: boolean;
 }
 
 export type AuthProvider = "github" | "google" | "credentials";
@@ -78,4 +80,5 @@ export type DbPackage = "pg" | "mysql2" | "better-sqlite3";
 
 export interface DarkModeProcessorOpts {
   pnpm: boolean;
+  install: boolean;
 }

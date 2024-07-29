@@ -14,6 +14,9 @@ export class DarkModeProcessor {
   }
 
   async installNextThemes() {
+    if (!this.opts.install) {
+      return false;
+    }
     if (this.opts.pnpm) {
       await spawnCommand(`pnpm add next-themes`);
     } else {
@@ -22,6 +25,9 @@ export class DarkModeProcessor {
   }
 
   async installDropdownMenu() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o dropdown-menu`);
     } else {

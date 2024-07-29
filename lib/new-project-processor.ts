@@ -96,6 +96,9 @@ export class NewProjectProcessor {
   }
 
   async installDependencies() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       for (const cmd of this.pnpmInstallCommands) {
         await this.runCommand(cmd);
@@ -117,6 +120,9 @@ export class NewProjectProcessor {
   }
 
   async initShadcn() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       for (const cmd of this.pnpmShadcnCommands) {
         await this.runCommand(cmd);

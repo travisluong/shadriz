@@ -6,15 +6,12 @@ import {
 import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
 
 export class Mysql2PackageStrategy implements DbPackageStrategy {
-  opts: DbPackageStrategyOpts = { pnpm: false };
+  opts: DbPackageStrategyOpts;
 
   dialect: DbDialect = "mysql";
 
-  constructor(opts?: DbPackageStrategyOpts) {
-    this.opts = {
-      ...this.opts,
-      ...opts,
-    };
+  constructor(opts: DbPackageStrategyOpts) {
+    this.opts = opts;
   }
 
   async init() {
@@ -26,6 +23,9 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
   }
 
   async installDependencies() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm add mysql2");
       return;

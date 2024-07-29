@@ -49,6 +49,7 @@ program
   .command("init")
   .description("initialize project")
   .option("--pnpm", "run with pnpm", false)
+  .option("--no-install", "skip installation of dependencies")
   .action(async (options) => {
     try {
       const dbPackage = await select({
@@ -89,6 +90,7 @@ program
           pnpm: options.pnpm,
           providers: authProviders as AuthProvider[],
           sessionStrategy: authStrategy as SessionStrategy,
+          install: options.install,
         });
       }
       const darkModeEnabled = await toggle({
@@ -97,10 +99,11 @@ program
       });
       const newProjectProcessor = new NewProjectProcessor({
         pnpm: options.pnpm,
+        install: options.install,
       });
-      const dbPackageStrategy = packageStrategyFactory({
+      const dbPackageStrategy = packageStrategyFactory(dbPackage, {
         pnpm: options.pnpm,
-        dbPackage: dbPackage as DbPackage,
+        install: options.install,
       });
       const dbDialectStrategy = dialectStrategyFactory(
         dbPackageStrategy.dialect
@@ -111,6 +114,7 @@ program
       if (darkModeEnabled) {
         const darkModeProcessor = new DarkModeProcessor({
           pnpm: options.pnpm,
+          install: options.install,
         });
         await darkModeProcessor.init();
       }

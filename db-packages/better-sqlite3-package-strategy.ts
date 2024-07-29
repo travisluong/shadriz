@@ -11,15 +11,12 @@ import {
 } from "../lib/utils";
 
 export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
-  opts: DbPackageStrategyOpts = { pnpm: false };
+  opts: DbPackageStrategyOpts;
 
   dialect: DbDialect = "sqlite";
 
-  constructor(opts?: DbPackageStrategyOpts) {
-    this.opts = {
-      ...this.opts,
-      ...opts,
-    };
+  constructor(opts: DbPackageStrategyOpts) {
+    this.opts = opts;
   }
 
   async init() {
@@ -32,6 +29,9 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   }
 
   async installDependencies() {
+    if (!this.opts.install) {
+      return;
+    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm add better-sqlite3");
       return;
