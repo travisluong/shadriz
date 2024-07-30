@@ -2,10 +2,9 @@
 
 import { Command } from "commander";
 import { log } from "./lib/log";
-import { AuthProvider, DbPackage, SessionStrategy } from "./lib/types";
+import { AuthProvider, SessionStrategy } from "./lib/types";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
-import { checkbox, select } from "@inquirer/prompts";
-import toggle from "inquirer-toggle";
+import { checkbox, select, confirm } from "@inquirer/prompts";
 import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
 import {
   dialectStrategyFactory,
@@ -60,7 +59,7 @@ program
           { name: "better-sqlite3", value: "better-sqlite3" },
         ],
       });
-      const authEnabled = await toggle({
+      const authEnabled = await confirm({
         message: "Do you want to use Auth.js for authentication?",
         default: true,
       });
@@ -94,7 +93,7 @@ program
           install: options.install,
         });
       }
-      const darkModeEnabled = await toggle({
+      const darkModeEnabled = await confirm({
         message: "Do you want to add a dark mode toggle?",
         default: true,
       });
