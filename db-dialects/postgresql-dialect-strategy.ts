@@ -253,6 +253,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  stripeSchemaTemplatePath: string = "stripe/schema/stripe.ts.postgresql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/pg-core";
   tableConstructor: string = "pgTable";
   dialectArgsMap = {

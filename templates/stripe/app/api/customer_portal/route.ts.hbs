@@ -1,0 +1,30 @@
+import { auth } from "@/auth";
+import { config } from "@/lib/config";
+import { db } from "@/lib/db";
+import { user } from "@/schema/user";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
+const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
+
+export async function POST(req: Request) {
+  const session = await auth();
+
+  if (!session || !session.user) {
+    return Response.json({ message: "unauthenticated" }, { status: 401 });
+  }
+
+  const userRes = await db.query.user.findFirst({
+    where: eq(user.id, session?.user.id!),
+  });
+
+  const returnUrl = `${req.headers.get("origin")}/subscription`;
+  const customerId = userRes?.stripe_customer_id;
+
+  const portalSession = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: returnUrl,
+  });
+
+  redirect(portalSession.url);
+}

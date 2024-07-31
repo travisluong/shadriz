@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import { log } from "./lib/log";
-import { AuthProvider, SessionStrategy } from "./lib/types";
+import { AuthProvider, PaymentInterval, SessionStrategy } from "./lib/types";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
@@ -13,6 +13,7 @@ import {
 import { AuthProcessor } from "./lib/auth-processor";
 import { NewProjectProcessor } from "./lib/new-project-processor";
 import { DarkModeProcessor } from "./lib/dark-mode-processor";
+import { StripeProcessor } from "./lib/stripe-processor";
 
 const program = new Command();
 
@@ -64,6 +65,8 @@ program
         default: true,
       });
       let authProcessor;
+      let stripeProcessor;
+      let stripeEnabled;
       if (authEnabled) {
         const authProviders = await checkbox({
           message: "Which auth providers would you like to use?",
@@ -92,6 +95,9 @@ program
           sessionStrategy: authStrategy as SessionStrategy,
           install: options.install,
         });
+        stripeEnabled = await confirm({
+          message: "Do you want to enable Stripe for payments?",
+        });
       }
       const darkModeEnabled = await confirm({
         message: "Do you want to add a dark mode toggle?",
@@ -108,6 +114,13 @@ program
       const dbDialectStrategy = dialectStrategyFactory(
         dbPackageStrategy.dialect
       );
+      if (stripeEnabled) {
+        stripeProcessor = new StripeProcessor({
+          dbDialectStrategy: dbDialectStrategy,
+          pnpm: options.pnpm,
+          install: options.install,
+        });
+      }
       await newProjectProcessor.init();
       await dbPackageStrategy.init();
       dbDialectStrategy.init();
@@ -122,6 +135,11 @@ program
         await authProcessor.init();
         dbDialectStrategy.addAuthSchema();
         dbDialectStrategy.copyCreateUserScript();
+
+        if (stripeProcessor) {
+          await stripeProcessor.init();
+        }
+
         regenerateSchemaIndex();
         authProcessor.printCompletionMessage();
       } else {

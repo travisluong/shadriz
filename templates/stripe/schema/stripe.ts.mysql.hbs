@@ -1,0 +1,74 @@
+import { sql } from "drizzle-orm";
+import {
+  int,
+  timestamp,
+  mysqlTable,
+  primaryKey,
+  varchar,
+  boolean,
+  text,
+  json,
+  unique,
+  date,
+  float,
+} from "drizzle-orm/mysql-core";
+import { uuidv7 } from "uuidv7";
+
+export const stripeWebhooks = mysqlTable("stripe_webhook", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
+  payload: json("payload"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const products = mysqlTable("product", {
+  id: varchar("id", { length: 255 })
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv7()),
+  slug: varchar("slug", { length: 255 }).unique(),
+  stripe_product_id: varchar("stripe_product_id", { length: 255 })
+    .notNull()
+    .unique(),
+  stripe_price_id: varchar("stripe_price_id", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  price: int("price").notNull(),
+  description: text("description"),
+  mode: varchar("mode", { length: 255 }).notNull(),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const orders = mysqlTable("order", {
+  id: varchar("id", { length: 255 })
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv7()),
+  user_id: varchar("user_id", { length: 255 }).references(() => users.id),
+  product_id: varchar("product_id", { length: 255 }).references(
+    () => products.id
+  ),
+  stripe_product_id: varchar("stripe_product_id", { length: 255 }).references(
+    () => products.stripe_product_id
+  ),
+  stripe_price_id: varchar("stripe_price_id", { length: 255 }),
+  amount_total: int("amount_total"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const subscriptions = mysqlTable("subscription", {
+  id: varchar("id", { length: 255 })
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => uuidv7()),
+  user_id: varchar("user_id", { length: 255 })
+    .notNull()
+    .unique()
+    .references(() => users.id),
+  start_date: date("start_date", { mode: "date" }).notNull(),
+  end_date: date("end_date", { mode: "date" }).notNull(),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow(),
+});

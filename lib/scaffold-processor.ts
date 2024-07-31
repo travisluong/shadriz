@@ -102,8 +102,11 @@ export class ScaffoldProcessor {
     const dataTypeSet = new Set<string>();
     for (const column of columns) {
       const arr = column.split(":");
-      dataTypeSet.add(arr[1]);
+      if (arr[1] !== "file" && arr[1] !== "image") {
+        dataTypeSet.add(arr[1]);
+      }
     }
+    console.log(dataTypeSet);
     let code = "import {\n";
     code += `  ${this.opts.dbDialectStrategy.tableConstructor},\n`;
     for (const dataType of dataTypeSet) {

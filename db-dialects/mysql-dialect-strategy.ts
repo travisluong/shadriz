@@ -275,6 +275,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  stripeSchemaTemplatePath: string = "stripe/schema/stripe.ts.mysql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
   tableConstructor: string = "mysqlTable";
   dialectArgsMap = {

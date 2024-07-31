@@ -1,0 +1,103 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { loadStripe } from "@stripe/stripe-js";
+import { config } from "@/lib/config";
+import { Metadata } from "next";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+
+const stripePromise = loadStripe(config.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+export const metadata: Metadata = {
+  title: "Pricing",
+};
+
+export default function Page() {
+  return (
+    <div className="flex max-w-7xl m-auto p-5 justify-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <Card className="min-w-80 sm:max-w-96 flex-grow-0">
+          <CardHeader className="bg-accent text-accent-foreground rounded-t-xl">
+            <CardTitle>One Time</CardTitle>
+            <CardDescription>Own forever</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <h2 className="font-bold text-3xl my-5">$100 One Time</h2>
+            <ul>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature A
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature B
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature C
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature D
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature E
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <form action="/api/checkout_sessions" method="POST">
+              <input type="hidden" name="slug" value="one-time" />
+              <Button type="submit">Purhcase</Button>
+            </form>
+          </CardFooter>
+        </Card>
+
+        <Card className="min-w-80 sm:max-w-96 flex-grow-0">
+          <CardHeader className="bg-accent text-accent-foreground rounded-t-xl">
+            <CardTitle>Monthly Plan</CardTitle>
+            <CardDescription>Billed monthly</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <h2 className="font-bold text-3xl my-5">$10 / Month</h2>
+            <ul>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature A
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature B
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature C
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature D
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature E
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <form action="/api/checkout_sessions" method="POST">
+              <input type="hidden" name="slug" value="monthly" />
+              <Button type="submit">Subscribe</Button>
+            </form>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+}

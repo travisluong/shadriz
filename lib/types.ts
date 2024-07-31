@@ -43,6 +43,7 @@ export interface DbDialectStrategy {
   tableConstructor: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
   dialectArgsMap: { [key: string]: string };
+  stripeSchemaTemplatePath: string;
   init(): void;
   addAuthSchema(): void;
   copyCreateUserScript(): void;
@@ -86,4 +87,10 @@ export type DbPackage = "pg" | "mysql2" | "better-sqlite3";
 export interface DarkModeProcessorOpts {
   pnpm: boolean;
   install: boolean;
+}
+
+export interface StripeProcessorOpts {
+  pnpm: boolean;
+  install: boolean;
+  dbDialectStrategy: DbDialectStrategy;
 }

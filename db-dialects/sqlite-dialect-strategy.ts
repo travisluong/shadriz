@@ -88,6 +88,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  stripeSchemaTemplatePath: string = "stripe/schema/stripe.ts.sqlite.hbs";
   tableConstructor: string = "sqliteTable";
   dialectArgsMap = {
     "pk-auto": ".primaryKey({ autoIncrement: true })",

@@ -20,6 +20,7 @@ export const user = mysqlTable("user", {
   }),
   image: varchar("image", { length: 255 }),
   password: varchar("password", { length: 255 }),
+  stripe_customer_id: varchar("stripe_customer_id", { length: 255 }),
 })
  
 export const account = mysqlTable(

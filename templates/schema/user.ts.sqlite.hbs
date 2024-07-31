@@ -9,7 +9,8 @@ export const user = sqliteTable("user", {
   email: text("email").notNull(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
-  password: text("password")
+  password: text("password"),
+  stripe_customer_id: text("stripe_customer_id"),
 })
 
 export const account = sqliteTable(

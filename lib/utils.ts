@@ -150,12 +150,12 @@ export function regenerateSchemaIndex(): void {
   const tablenames = filenames.map((filename) => filename.split(".")[0]);
   let code = "";
   for (const table of tablenames) {
-    code += `import { ${table} } from "@/schema/${table}";\n`;
+    code += `import * as ${table} from "@/schema/${table}";\n`;
   }
   code += "\n";
   code += "export const schema = {\n";
   for (const table of tablenames) {
-    code += `  ${table},\n`;
+    code += `  ...${table},\n`;
   }
   code += "};\n";
   writeToFile(`lib/schema.ts`, code);

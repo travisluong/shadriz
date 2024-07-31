@@ -1,0 +1,34 @@
+import { and, eq } from "drizzle-orm";
+import { db } from "./db";
+import { user } from "@/schema/user";
+import { product } from "@/schema/stripe";
+
+export async function hasProduct(userId: string, productId: string) {
+  const order = await db.query.order.findFirst({
+    where: and(eq(user.id, userId), eq(product.id, productId)),
+  });
+  if (!order) {
+    return false;
+  }
+  return true;
+}
+
+export async function hasActiveSubscription(userId: string) {
+  const subscription = await db.query.subscription.findFirst({
+    where: eq(user.id, userId),
+  });
+
+  if (!subscription) {
+    return false;
+  }
+
+  const expireDate = new Date(subscription.end_date);
+  expireDate.setDate(expireDate.getDate() + 2);
+  const now = new Date();
+
+  if (now < expireDate) {
+    return true;
+  }
+
+  return false;
+}

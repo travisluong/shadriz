@@ -1,0 +1,72 @@
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { user } from "./user";
+import { sql } from "drizzle-orm";
+
+export const stripe_webhook = sqliteTable("stripe_webhook", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  payload: text("payload"),
+  created_at: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const product = sqliteTable("product", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  slug: text("slug").unique(),
+  stripe_product_id: text("stripe_product_id").notNull().unique(),
+  stripe_price_id: text("stripe_price_id").notNull(),
+  name: text("name").notNull(),
+  price: integer("price").notNull(),
+  description: text("description"),
+  mode: text("mode").notNull(),
+  created_at: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  updated_at: text("updated_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const order = sqliteTable("order", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  user_id: text("user_id").references(() => user.id),
+  product_id: text("product_id").references(() => product.id),
+  stripe_product_id: text("stripe_product_id").references(
+    () => product.stripe_product_id
+  ),
+  stripe_price_id: text("stripe_price_id"),
+  amount_total: integer("amount_total"),
+  created_at: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});
+
+export const subscription = sqliteTable("subscription", {
+  id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => user.id),
+  product_id: text("product_id")
+    .notNull()
+    .references(() => product.id),
+  start_date: text("start_date").notNull(),
+  end_date: text("end_date").notNull(),
+  created_at: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  updated_at: text("updated_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+});

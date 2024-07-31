@@ -1,0 +1,63 @@
+import { auth } from "@/auth";
+import { config } from "@/lib/config";
+import { db } from "@/lib/db";
+import { product } from "@/schema/stripe";
+import { user } from "@/schema/user";
+import { eq } from "drizzle-orm";
+import { notFound, redirect } from "next/navigation";
+
+const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
+
+export async function POST(req: Request) {
+  const session = await auth();
+
+  if (!session || !session.user) {
+    redirect("/signin");
+  }
+
+  const userRes = await db.query.user.findFirst({
+    where: eq(user.id, session?.user.id!),
+  });
+
+  if (!userRes) {
+    notFound();
+  }
+
+  const formData = await req.formData();
+
+  const slug = formData.get("slug")?.toString();
+
+  if (!slug) {
+    notFound();
+  }
+
+  const productRes = await db.query.product.findFirst({
+    where: eq(product.slug, slug),
+  });
+
+  if (!productRes) {
+    notFound();
+  }
+
+  try {
+    // Create Checkout Sessions from body params.
+    const session = await stripe.checkout.sessions.create({
+      customer_email: userRes.email,
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price: productRes.stripe_price_id,
+          quantity: 1,
+        },
+      ],
+      mode: productRes?.mode,
+      success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
+      cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
+      allow_promotion_codes: true,
+    });
+    return Response.redirect(session.url);
+  } catch (err: any) {
+    console.error(err);
+    return Response.json(err.message, { status: 500 });
+  }
+}

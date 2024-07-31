@@ -1,0 +1,183 @@
+import { config } from "@/lib/config";
+import { db } from "@/lib/db";
+import { order, product, stripe_webhook, subscription } from "@/schema/stripe";
+import { user } from "@/schema/user";
+import { and, eq } from "drizzle-orm";
+
+const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
+
+const endpointSecret = config.STRIPE_WEBHOOK_SECRET;
+
+export async function POST(req: Request) {
+  const payload = await req.text();
+
+  await db.insert(stripe_webhook).values({
+    payload: payload,
+  });
+
+  const sig = req.headers.get("stripe-signature");
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+  } catch (err: any) {
+    console.error(err);
+    return Response.json(
+      { err: `webhook error: ${err.message}` },
+      { status: 400 }
+    );
+  }
+
+  switch (event.type) {
+    case "checkout.session.completed":
+      // Payment is successful and the subscription is created.
+      // You should provision the subscription and save the customer ID to your database.
+      await handleCheckoutSessionCompleted(event);
+      break;
+    case "invoice.paid":
+      // Continue to provision the subscription as payments continue to be made.
+      // Store the status in your database and check when a user accesses your service.
+      // This approach helps you avoid hitting rate limits.
+      await handleInvoicePaid(event);
+      break;
+    case "invoice.payment_failed":
+      // The payment failed or the customer does not have a valid payment method.
+      // The subscription becomes past_due. Notify your customer and send them to the
+      // customer portal to update their payment information.
+      await handleInvoicePaymentFailed(event);
+      break;
+    default:
+    // Unhandled event type
+  }
+
+  return Response.json({ message: "success" });
+}
+
+async function handleCheckoutSessionCompleted(event: any) {
+  console.log(event);
+  console.log(event.data);
+  console.log(event.data.object);
+  const email = event.data.object.customer_email;
+
+  const userRes = await db.query.user.findFirst({
+    where: eq(user.email, email),
+  });
+
+  if (!userRes) {
+    throw new Error(
+      "user not found during handle checkout session completed: " + email
+    );
+  }
+
+  // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+  const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
+    event.data.object.id,
+    {
+      expand: ["line_items"],
+    }
+  );
+  const lineItems = sessionWithLineItems.line_items;
+
+  console.log(lineItems.data);
+  for (const item of lineItems.data) {
+    const stripeProductId = item.price.product;
+    const stripePriceId = item.price.id;
+    const amountTotal = item.amount_total;
+
+    const productRes = await db.query.product.findFirst({
+      where: eq(product.stripe_product_id, stripeProductId),
+    });
+
+    if (!productRes) {
+      throw new Error("stripe product id not found in db: " + stripeProductId);
+    }
+
+    const productId = productRes.id;
+
+    await db
+      .update(user)
+      .set({ stripe_customer_id: event.data.object.customer })
+      .where(eq(user.id, userRes.id));
+
+    if (productRes.slug === "one-time") {
+      // only create an order here if it is the one-time purchase product
+      // for subscriptions, the order is created during the invoice paid event
+      await db.insert(order).values({
+        product_id: productId,
+        amount_total: amountTotal,
+        user_id: userRes.id,
+        stripe_product_id: stripeProductId,
+        stripe_price_id: stripePriceId,
+      });
+    }
+  }
+}
+
+async function handleInvoicePaid(event: any) {
+  const email = event.data.object.customer_email;
+
+  const userRes = await db.query.user.findFirst({
+    where: eq(user.email, email),
+  });
+
+  if (!userRes) {
+    throw new Error("user not found during invoice paid: " + email);
+  }
+
+  const data = event.data.object.lines.data;
+  const total = event.data.object.total;
+  const stripeCustomerId = event.data.object.customer;
+
+  for (let d of data) {
+    const stripeProductId = d.price.product;
+    const productRes = await db.query.product.findFirst({
+      where: eq(product.stripe_product_id, stripeProductId),
+    });
+    if (productRes?.slug === "monthly") {
+      const startDate = new Date(d.period.start * 1000);
+      const endDate = new Date(d.period.end * 1000);
+      const newSubscription = {
+        user_id: userRes.id,
+        product_id: productRes.id,
+        start_date: startDate.toISOString(),
+        end_date: endDate.toISOString(),
+      };
+
+      await db
+        .update(user)
+        .set({ stripe_customer_id: stripeCustomerId })
+        .where(eq(user.id, userRes.id));
+
+      const subscriptionRes = await db.query.subscription.findFirst({
+        where: and(eq(user.id, userRes.id), eq(product.id, productRes.id)),
+      });
+
+      if (subscriptionRes) {
+        await db
+          .update(subscription)
+          .set({
+            end_date: endDate.toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .where(eq(subscription.id, subscriptionRes.id));
+      } else {
+        await db.insert(subscription).values(newSubscription);
+      }
+
+      // for subscriptions, orders should only be created after invoice.paid event
+      await db.insert(order).values({
+        product_id: productRes.id,
+        amount_total: total,
+        stripe_price_id: d.price.id,
+        stripe_product_id: d.price.product,
+        user_id: userRes.id,
+      });
+    }
+  }
+}
+
+async function handleInvoicePaymentFailed(event: any) {
+  console.log("HANDLE INVOICE PAYMENT FAILED");
+  console.log(event);
+}

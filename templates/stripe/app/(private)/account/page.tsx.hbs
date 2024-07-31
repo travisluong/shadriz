@@ -1,0 +1,141 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { hasActiveSubscription } from "@/lib/access";
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import { order, product, subscription } from "@/schema/stripe";
+import { user } from "@/schema/user";
+import { RocketIcon } from "@radix-ui/react-icons";
+import { eq } from "drizzle-orm";
+import { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Account",
+};
+
+export default async function Page() {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/signin");
+  }
+
+  if (!session.user) {
+    throw new Error("user not found");
+  }
+
+  const data = await db
+    .select()
+    .from(order)
+    .innerJoin(product, eq(order.product_id, product.id))
+    .innerJoin(user, eq(user.id, order.user_id))
+    .where(eq(user.id, session?.user.id!));
+
+  if (!session) {
+    redirect("/signin");
+  }
+
+  const activeSubscription = await hasActiveSubscription(session.user.id!);
+
+  const subscriptionRes = await db.query.subscription.findFirst({
+    where: eq(subscription.user_id, session.user.id!),
+  });
+
+  return (
+    <div className="max-w-4xl m-auto p-5 flex flex-col gap-5">
+      <h1 className="font-retro uppercase">Subscription</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-retro uppercase text-sm">
+            Subscription Status
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-5">
+          {activeSubscription && (
+            <div className="flex gap-5">
+              <Badge className="bg-green-400">Subscription Active</Badge>
+              <div>Expires: {subscriptionRes?.end_date}</div>
+            </div>
+          )}
+          {subscriptionRes && !activeSubscription && (
+            <div className="flex gap-5">
+              <Badge className="bg-red-400">Subscription</Badge>
+              <div>Expired: {subscriptionRes.end_date}</div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      {subscriptionRes && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-retro uppercase text-sm">
+              Manage Subscription
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form action="/api/customer_portal" method="POST">
+              <Button type="submit">Customer Portal</Button>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-retro uppercase text-sm">
+            Order History
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {data.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead>Total</TableHead>
+                  <TableHead>Date</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((d) => (
+                  <TableRow key={d.order.id}>
+                    <TableCell>{d.product.name}</TableCell>
+                    <TableCell>{d.product.description}</TableCell>
+                    <TableCell>
+                      {d.order.amount_total &&
+                        (d.order.amount_total / 100).toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                    </TableCell>
+                    <TableCell>{d.order.created_at}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="flex flex-col gap-5">
+              No active subscriptions.
+              <Link href="/pro">
+                <Button>
+                  <RocketIcon className="w-4 h-4 mr-2" /> Purchase a Pro Plan
+                </Button>
+              </Link>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
