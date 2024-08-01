@@ -6,6 +6,7 @@ test("auth processor", () => {
     providers: ["google", "github", "credentials"],
     pnpm: false,
     sessionStrategy: "jwt",
+    install: false,
   });
   a.printCompletionMessage();
 });

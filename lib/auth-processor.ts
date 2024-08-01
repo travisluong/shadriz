@@ -202,6 +202,7 @@ export class AuthProcessor {
         importsCode: importsCode,
         providersCode: providersCode,
         sessionStrategy: this.opts.sessionStrategy,
+        isJwt: this.opts.sessionStrategy === "jwt",
       },
     });
   }

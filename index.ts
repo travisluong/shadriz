@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import { log } from "./lib/log";
-import { AuthProvider, PaymentInterval, SessionStrategy } from "./lib/types";
+import { AuthProvider, SessionStrategy } from "./lib/types";
 import { ScaffoldProcessor } from "./lib/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
@@ -142,6 +142,9 @@ program
 
         regenerateSchemaIndex();
         authProcessor.printCompletionMessage();
+        if (stripeProcessor) {
+          stripeProcessor.printCompletionMessage();
+        }
       } else {
         regenerateSchemaIndex();
       }

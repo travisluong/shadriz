@@ -1,6 +1,5 @@
 import { db } from "./lib/db";
 import NextAuth from "next-auth"
-import type { Provider } from "next-auth/providers"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 {{importsCode}}
 
@@ -8,15 +7,6 @@ const providers: Provider[] = [
 {{providersCode}}
 ]
 
-export const providerMap = providers.map((provider) => {
-  if (typeof provider === "function") {
-    const providerData = provider()
-    return { id: providerData.id, name: providerData.name }
-  } else {
-    return { id: provider.id, name: provider.name }
-  }
-})
- 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   session: {
@@ -26,4 +16,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/signin",
   },
+  {{#if isJwt}}
+  callbacks: {
+    session({ session, token }) {
+      session.user.id = token.sub!;
+    },
+  },
+  {{/if}}
 })

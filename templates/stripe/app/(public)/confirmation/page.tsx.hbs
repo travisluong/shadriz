@@ -1,0 +1,39 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon, RocketIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { success: boolean; canceled: boolean };
+}) {
+  const { success, canceled } = searchParams;
+  return (
+    <div className="max-w-7xl p-5 flex flex-col gap-5 m-auto">
+      <h1 className="font-bold font-retro uppercase">Confirmation</h1>
+      {success && (
+        <Alert>
+          <RocketIcon className="h-4 w-4" />
+          <AlertTitle>Success</AlertTitle>
+          <AlertDescription>
+            Thank you for purchasing.
+            <Link href="/dashboard" className="font-bold underline">
+              Click here to access paid features.
+            </Link>
+            .
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {canceled && (
+        <Alert>
+          <ExclamationTriangleIcon className="h-4 w-4" />
+          <AlertTitle>Checkout Canceled</AlertTitle>
+          <AlertDescription>
+            Checkout Session was canceled. Please try again.
+          </AlertDescription>
+        </Alert>
+      )}
+    </div>
+  );
+}
