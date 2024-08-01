@@ -1,5 +1,5 @@
 import {
-  appendToFile,
+  appendToFileIfTextNotExists,
   compileTemplate,
   renderTemplate,
   spawnCommand,
@@ -230,7 +230,7 @@ export class AuthProcessor {
         data: {},
       });
       envVars = "\n" + envVars;
-      appendToFile(".env.local", envVars);
+      appendToFileIfTextNotExists(".env.local", envVars);
     }
   }
 

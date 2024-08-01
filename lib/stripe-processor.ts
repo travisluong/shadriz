@@ -1,7 +1,7 @@
 import { log } from "./log";
 import { StripeProcessorOpts } from "./types";
 import {
-  appendToFile,
+  appendToFileIfTextNotExists,
   compileTemplate,
   renderTemplate,
   spawnCommand,
@@ -26,6 +26,7 @@ export class StripeProcessor {
     this.addCustomerPortalApiRoute();
     this.addWebhookApiRoute();
     this.addConfirmationPage();
+    this.addCreatePriceScript();
   }
 
   async installDependencies() {
@@ -87,7 +88,7 @@ export class StripeProcessor {
 
   appendStripeSecretsToEnvLocal() {
     const text = compileTemplate({ inputPath: "stripe/.env.local.hbs" });
-    appendToFile(".env.local", text);
+    appendToFileIfTextNotExists(".env.local", text);
   }
 
   addCheckOutSessionsApiRoute() {
@@ -126,7 +127,7 @@ export class StripeProcessor {
   }
 
   printCompletionMessage() {
-    log.white("stripe setup:");
+    log.white("\nstripe setup:");
     log.dash("go to stripe > developers > api keys");
     log.dash("update NEXT_STRIPE_PUBLISHABLE_KEY in .env.local");
     log.dash("update STRIPE_SECRET_KEY in .env.local");
@@ -135,7 +136,7 @@ export class StripeProcessor {
     log.dash("go to stripe > developers > webhooks");
     log.dash("update STRIPE_WEBHOOK_SECRET in .env.local");
 
-    log.white("\nadd local stripe listener:");
+    log.white("\nstart local stripe listener:");
     log.cmd("stripe login");
     log.cmd("stripe listen --forward-to localhost:3000/api/webhook");
     log.cmd("strip trigger payment_intent.succeeded");

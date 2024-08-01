@@ -6,6 +6,7 @@ import {
 import {
   appendDbUrl,
   appendToFile,
+  appendToFileIfTextNotExists,
   renderTemplate,
   spawnCommand,
 } from "../lib/utils";
@@ -72,7 +73,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   }
 
   appendSqliteToGitignore() {
-    appendToFile(".gitignore", "\nsqlite.db");
+    appendToFileIfTextNotExists(".gitignore", "\nsqlite.db");
   }
 
   setPnpm(val: boolean): void {

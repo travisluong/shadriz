@@ -89,7 +89,17 @@ export async function spawnCommand(command: string) {
 export function appendDbUrl(url: string) {
   const filePath = ".env.local";
   const textToAppend = "DB_URL=" + url;
-  appendToFile(filePath, textToAppend);
+  appendToFileIfTextNotExists(filePath, textToAppend);
+}
+
+export function appendToFileIfTextNotExists(
+  filePath: string,
+  textToAppend: string
+) {
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  if (!fileContent.includes(textToAppend)) {
+    appendToFile(filePath, textToAppend);
+  }
 }
 
 export function appendToFile(filePath: string, textToAppend: string) {

@@ -1,6 +1,7 @@
 import { db } from "./lib/db";
 import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import type { Provider } from "next-auth/providers";
 {{importsCode}}
 
 const providers: Provider[] = [
@@ -20,6 +21,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     session({ session, token }) {
       session.user.id = token.sub!;
+      return session;
     },
   },
   {{/if}}
