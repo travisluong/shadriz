@@ -1,6 +1,7 @@
 import { auth, signOut } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  BackpackIcon,
   DashboardIcon,
   ExitIcon,
   GearIcon,
@@ -61,6 +62,14 @@ export default async function Layout({
                   className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
                 >
                   <GearIcon /> Settings
+                </a>
+              </li>
+              <li className="mb-4">
+                <a
+                  href="/account"
+                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
+                >
+                  <BackpackIcon /> Account
                 </a>
               </li>
               <li className="mb-4">

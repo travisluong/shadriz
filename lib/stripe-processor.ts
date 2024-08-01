@@ -146,5 +146,8 @@ export class StripeProcessor {
 
     log.white("\ncreate products in stripe and db:");
     log.cmd("npx tsx scripts/create-price.ts");
+
+    log.white("\nsave customer portal settings:");
+    log.dash("https://dashboard.stripe.com/test/settings/billing/portal");
   }
 }
