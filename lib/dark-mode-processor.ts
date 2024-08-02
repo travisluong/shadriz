@@ -1,38 +1,54 @@
-import { DarkModeProcessorOpts } from "./types";
-import { renderTemplate, spawnCommand } from "./utils";
+import { DarkModeProcessorOpts, ShadrizProcessor } from "./types";
+import {
+  addShadcnComponents,
+  installDependencies,
+  installDevDependencies,
+  renderTemplate,
+  spawnCommand,
+} from "./utils";
 
-export class DarkModeProcessor {
+export class DarkModeProcessor implements ShadrizProcessor {
   constructor(public opts: DarkModeProcessorOpts) {}
 
+  dependencies = ["next-themes"];
+
+  devDependencies = [];
+
+  shadcnComponents: string[] = ["dropdown-menu"];
+
   async init() {
-    await this.installNextThemes();
-    await this.installDropdownMenu();
+    await this.install();
+    await this.render();
+  }
+
+  async install() {
+    if (!this.opts.install) {
+      return;
+    }
+
+    await installDependencies({
+      dependencies: this.dependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+
+    await installDevDependencies({
+      devDependencies: this.devDependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+
+    await addShadcnComponents({
+      shadcnComponents: this.shadcnComponents,
+      pnpm: this.opts.pnpm,
+    });
+  }
+
+  async render() {
     await this.addThemeProvider();
     await this.addRootLayout();
     await this.addModeToggle();
     await this.addHeader();
-  }
-
-  async installNextThemes() {
-    if (!this.opts.install) {
-      return false;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand(`pnpm add next-themes`);
-    } else {
-      await spawnCommand(`npm install next-themes`);
-    }
-  }
-
-  async installDropdownMenu() {
-    if (!this.opts.install) {
-      return;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o dropdown-menu`);
-    } else {
-      await spawnCommand(`npx shadcn-ui@latest add -y -o dropdown-menu`);
-    }
   }
 
   async addThemeProvider() {

@@ -1,22 +1,50 @@
 import { log } from "./log";
-import { StripeProcessorOpts } from "./types";
+import { ShadrizProcessor, StripeProcessorOpts } from "./types";
 import {
+  addShadcnComponents,
   appendToFileIfTextNotExists,
   compileTemplate,
+  installDependencies,
   renderTemplate,
   spawnCommand,
 } from "./utils";
 
-export class StripeProcessor {
+export class StripeProcessor implements ShadrizProcessor {
   opts: StripeProcessorOpts;
 
   constructor(opts: StripeProcessorOpts) {
     this.opts = opts;
   }
 
+  dependencies = ["@stripe/stripe-js", "stripe"];
+
+  devDependencies = [];
+
+  shadcnComponents: string[] = ["card", "badge", "alert"];
+
   async init() {
-    await this.installDependencies();
-    await this.addShadcnComponents();
+    await this.install();
+    await this.render();
+  }
+
+  async install(): Promise<void> {
+    if (!this.opts.install) {
+      return;
+    }
+
+    await installDependencies({
+      dependencies: this.dependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+
+    await addShadcnComponents({
+      shadcnComponents: this.shadcnComponents,
+      pnpm: this.opts.pnpm,
+    });
+  }
+
+  async render(): Promise<void> {
     this.addAccountPage();
     this.addPricingPage();
     this.addAccessUtil();
@@ -27,35 +55,6 @@ export class StripeProcessor {
     this.addWebhookApiRoute();
     this.addConfirmationPage();
     this.addCreatePriceScript();
-  }
-
-  async installDependencies() {
-    if (!this.opts.install) {
-      return;
-    }
-
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm add @stripe/stripe-js");
-      await spawnCommand("pnpm add stripe");
-    } else {
-      await spawnCommand("npm install @stripe/stripe-js");
-      await spawnCommand("npm install stripe");
-    }
-  }
-
-  async addShadcnComponents() {
-    if (!this.opts.install) {
-      return;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm dlx shadcn-ui@latest add card");
-      await spawnCommand("pnpm dlx shadcn-ui@latest add badge");
-      await spawnCommand("pnpm dlx shadcn-ui@latest add alert");
-    } else {
-      await spawnCommand("npx shadcn-ui@latest add card");
-      await spawnCommand("npx shadcn-ui@latest add badge");
-      await spawnCommand("npx shadcn-ui@latest add alert");
-    }
   }
 
   addAccountPage() {

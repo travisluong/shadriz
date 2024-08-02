@@ -5,39 +5,47 @@ import {
 } from "../lib/types";
 import {
   appendDbUrl,
-  appendToFile,
   appendToFileIfTextNotExists,
+  installDependencies,
   renderTemplate,
-  spawnCommand,
 } from "../lib/utils";
 
 export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
-  opts: DbPackageStrategyOpts;
-
-  dialect: DbDialect = "sqlite";
-
   constructor(opts: DbPackageStrategyOpts) {
     this.opts = opts;
   }
 
+  opts: DbPackageStrategyOpts;
+
+  dialect: DbDialect = "sqlite";
+
+  dependencies: string[] = ["better-sqlite3"];
+
+  devDependencies: string[] = [];
+
   async init() {
-    await this.installDependencies();
+    await this.install();
+    await this.render();
+  }
+
+  async install(): Promise<void> {
+    if (!this.opts.install) {
+      return;
+    }
+
+    await installDependencies({
+      dependencies: this.dependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+  }
+
+  async render(): Promise<void> {
     this.copyMigrateScript();
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
     this.appendSqliteToGitignore();
-  }
-
-  async installDependencies() {
-    if (!this.opts.install) {
-      return;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm add better-sqlite3");
-      return;
-    }
-    await spawnCommand("npm install better-sqlite3");
   }
 
   copyMigrateScript(): void {
@@ -74,9 +82,5 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   appendSqliteToGitignore() {
     appendToFileIfTextNotExists(".gitignore", "\nsqlite.db");
-  }
-
-  setPnpm(val: boolean): void {
-    this.opts.pnpm = val;
   }
 }

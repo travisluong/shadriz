@@ -50,6 +50,7 @@ program
   .description("initialize project")
   .option("--pnpm", "run with pnpm", false)
   .option("--no-install", "skip installation of dependencies")
+  .option("--latest", "install latest version for every dependency")
   .action(async (options) => {
     try {
       const dbPackage = await select({
@@ -94,6 +95,7 @@ program
           providers: authProviders as AuthProvider[],
           sessionStrategy: authStrategy as SessionStrategy,
           install: options.install,
+          latest: options.latest,
         });
         stripeEnabled = await confirm({
           message: "Do you want to enable Stripe for payments?",
@@ -106,10 +108,12 @@ program
       const newProjectProcessor = new NewProjectProcessor({
         pnpm: options.pnpm,
         install: options.install,
+        latest: options.latest,
       });
       const dbPackageStrategy = packageStrategyFactory(dbPackage, {
         pnpm: options.pnpm,
         install: options.install,
+        latest: options.latest,
       });
       const dbDialectStrategy = dialectStrategyFactory(
         dbPackageStrategy.dialect
@@ -119,6 +123,7 @@ program
           dbDialectStrategy: dbDialectStrategy,
           pnpm: options.pnpm,
           install: options.install,
+          latest: options.latest,
         });
       }
       await newProjectProcessor.init();
@@ -128,6 +133,7 @@ program
         const darkModeProcessor = new DarkModeProcessor({
           pnpm: options.pnpm,
           install: options.install,
+          latest: options.latest,
         });
         await darkModeProcessor.init();
       }

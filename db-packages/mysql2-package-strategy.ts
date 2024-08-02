@@ -3,34 +3,43 @@ import {
   DbPackageStrategy,
   DbPackageStrategyOpts,
 } from "../lib/types";
-import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
+import { appendDbUrl, installDependencies, renderTemplate } from "../lib/utils";
 
 export class Mysql2PackageStrategy implements DbPackageStrategy {
-  opts: DbPackageStrategyOpts;
-
-  dialect: DbDialect = "mysql";
-
   constructor(opts: DbPackageStrategyOpts) {
     this.opts = opts;
   }
 
+  opts: DbPackageStrategyOpts;
+
+  dialect: DbDialect = "mysql";
+
+  dependencies = ["mysql2"];
+
+  devDependencies = [];
+
   async init() {
-    await this.installDependencies();
+    await this.install();
+    await this.render();
+  }
+
+  async install(): Promise<void> {
+    if (!this.opts.install) {
+      return;
+    }
+
+    await installDependencies({
+      dependencies: this.dependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+  }
+
+  async render(): Promise<void> {
     this.copyMigrateScript();
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
-  }
-
-  async installDependencies() {
-    if (!this.opts.install) {
-      return;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm add mysql2");
-      return;
-    }
-    await spawnCommand("npm install mysql2");
   }
 
   copyMigrateScript(): void {
@@ -63,9 +72,5 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
       inputPath: "scripts/create-user.ts.mysql2.hbs",
       outputPath: "scripts/create-user.ts",
     });
-  }
-
-  setPnpm(val: boolean): void {
-    this.opts.pnpm = val;
   }
 }

@@ -1,3 +1,29 @@
+export interface ShadrizProcessorOpts {
+  pnpm: boolean;
+  install: boolean;
+  latest: boolean;
+}
+
+export interface NewProjectProcessorOpts extends ShadrizProcessorOpts {}
+
+export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
+
+export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
+
+export interface StripeProcessorOpts extends ShadrizProcessorOpts {
+  dbDialectStrategy: DbDialectStrategy;
+}
+
+export interface ShadrizProcessor {
+  opts: ShadrizProcessorOpts;
+  dependencies: string[];
+  devDependencies: string[];
+  shadcnComponents: string[];
+  init(): Promise<void>;
+  install(): Promise<void>;
+  render(): Promise<void>;
+}
+
 export type DbDialect = "postgresql" | "mysql" | "sqlite";
 
 export interface ScaffoldOpts {
@@ -54,23 +80,16 @@ export interface DbDialectStrategy {
 export interface DbPackageStrategy {
   opts: DbPackageStrategyOpts;
   dialect: DbDialect;
-  init(): void;
+  dependencies: string[];
+  devDependencies: string[];
+  init(): Promise<void>;
+  install(): Promise<void>;
+  render(): Promise<void>;
   copyCreateUserScript(): void;
-  installDependencies(): void;
   copyMigrateScript(): void;
   appendDbUrl(): void;
   copyDbInstance(): void;
   copyDbInstanceForScripts(): void;
-}
-
-export interface NewProjectProcessorOpts {
-  pnpm: boolean;
-  install: boolean;
-}
-
-export interface DbPackageStrategyOpts {
-  pnpm: boolean;
-  install: boolean;
 }
 
 export type AuthProvider =
@@ -83,14 +102,3 @@ export type AuthProvider =
 export type SessionStrategy = "jwt" | "database";
 
 export type DbPackage = "pg" | "mysql2" | "better-sqlite3";
-
-export interface DarkModeProcessorOpts {
-  pnpm: boolean;
-  install: boolean;
-}
-
-export interface StripeProcessorOpts {
-  pnpm: boolean;
-  install: boolean;
-  dbDialectStrategy: DbDialectStrategy;
-}

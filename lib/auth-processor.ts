@@ -1,25 +1,29 @@
 import {
+  addShadcnComponents,
   appendToFileIfTextNotExists,
   compileTemplate,
+  installDependencies,
+  installDevDependencies,
   renderTemplate,
   spawnCommand,
 } from "./utils";
 import { log } from "./log";
-import { AuthProvider, SessionStrategy } from "./types";
+import { AuthProvider, SessionStrategy, ShadrizProcessor } from "./types";
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];
   pnpm: boolean;
   sessionStrategy: SessionStrategy;
   install: boolean;
+  latest: boolean;
 }
 
 interface AuthStrategy {
   importTemplatePath: string;
   authTemplatePath: string;
   envTemplatePath: string;
-  npmInstallDependencies?(): void;
-  pnpmInstallDependencies?(): void;
+  dependencies?: string[];
+  devDependencies?: string[];
   printCompletionMessage(): void;
 }
 
@@ -64,14 +68,8 @@ const authStrategyMap: AuthStrategyMap = {
     importTemplatePath: "auth/auth.ts.credentials.imports.hbs",
     authTemplatePath: "auth/auth.ts.credentials.hbs",
     envTemplatePath: "auth/auth.ts.credentials.env.hbs",
-    async npmInstallDependencies() {
-      await spawnCommand("npm install bcrypt");
-      await spawnCommand("npm install -D @types/bcrypt");
-    },
-    async pnpmInstallDependencies() {
-      await spawnCommand("pnpm add bcrypt");
-      await spawnCommand("pnpm add -D @types/bcrypt");
-    },
+    dependencies: ["bcrypt"],
+    devDependencies: ["@types/bcrypt"],
     printCompletionMessage: function (): void {
       log.white("\ncreate test user for credentials provider:");
       log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
@@ -93,12 +91,7 @@ const authStrategyMap: AuthStrategyMap = {
     importTemplatePath: "auth/auth.ts.nodemailer.imports.hbs",
     authTemplatePath: "auth/auth.ts.nodemailer.hbs",
     envTemplatePath: "auth/auth.ts.nodemailer.env.hbs",
-    async npmInstallDependencies() {
-      await spawnCommand("npm install nodemailer");
-    },
-    async pnpmInstallDependencies() {
-      await spawnCommand("pnpm add nodemailer");
-    },
+    dependencies: ["nodemailer"],
     printCompletionMessage: function (): void {
       log.white("\nsetup nodemailer provider");
       log.dash("update EMAIL_SERVER in .env.local");
@@ -107,14 +100,43 @@ const authStrategyMap: AuthStrategyMap = {
   },
 };
 
-export class AuthProcessor {
+export class AuthProcessor implements ShadrizProcessor {
   constructor(public opts: AuthProcessorOpts) {}
+
+  dependencies = ["next-auth", "@auth/drizzle-adapter"];
+
+  devDependencies = [];
+
+  shadcnComponents: string[] = ["separator", "avatar"];
 
   async init() {
     this.validateOptions();
-    await this.installDependencies();
+    await this.install();
+    await this.render();
+  }
+
+  async install() {
+    if (!this.opts.install) {
+      return;
+    }
+
+    await installDependencies({
+      dependencies: this.dependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+
+    await this.installProviderDependencies();
+
+    await addShadcnComponents({
+      shadcnComponents: this.shadcnComponents,
+      pnpm: this.opts.pnpm,
+    });
+
     await this.appendAuthSecretToEnv();
-    await this.addShadcnComponents();
+  }
+
+  async render() {
     this.addAuthConfig();
     this.addAuthRouteHandler();
     // this.addAuthMiddleware();
@@ -145,33 +167,27 @@ export class AuthProcessor {
     }
   }
 
-  async installDependencies() {
-    if (!this.opts.install) {
-      return;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm add @auth/drizzle-adapter next-auth@beta");
-      for (const provider of this.opts.providers) {
-        const authStrategy = authStrategyMap[provider];
-        if (authStrategy.pnpmInstallDependencies) {
-          authStrategy.pnpmInstallDependencies();
-        }
+  async installProviderDependencies() {
+    for (const provider of this.opts.providers) {
+      const authStrategy = authStrategyMap[provider];
+      if (authStrategy.dependencies) {
+        await installDependencies({
+          dependencies: authStrategy.dependencies,
+          pnpm: this.opts.pnpm,
+          latest: this.opts.latest,
+        });
       }
-    } else {
-      await spawnCommand("npm install @auth/drizzle-adapter next-auth@beta");
-      for (const provider of this.opts.providers) {
-        const authStrategy = authStrategyMap[provider];
-        if (authStrategy.npmInstallDependencies) {
-          authStrategy.npmInstallDependencies();
-        }
+      if (authStrategy.devDependencies) {
+        await installDevDependencies({
+          devDependencies: authStrategy.devDependencies,
+          pnpm: this.opts.pnpm,
+          latest: this.opts.latest,
+        });
       }
     }
   }
 
   async appendAuthSecretToEnv() {
-    if (!this.opts.install) {
-      return;
-    }
     if (this.opts.pnpm) {
       await spawnCommand("pnpm dlx auth secret");
     } else {
@@ -276,19 +292,6 @@ export class AuthProcessor {
       inputPath: "app/(private)/settings/page.tsx.hbs",
       outputPath: "app/(private)/settings/page.tsx",
     });
-  }
-
-  async addShadcnComponents() {
-    if (!this.opts.install) {
-      return;
-    }
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm dlx shadcn-ui@latest add -y -o separator");
-      await spawnCommand("pnpm dlx shadcn-ui@latest add -y -o avatar");
-    } else {
-      await spawnCommand("npx shadcn-ui@latest add -y -o separator");
-      await spawnCommand("npx shadcn-ui@latest add -y -o avatar");
-    }
   }
 
   printCompletionMessage() {

@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
 import { log } from "./log";
+import packageShadrizJson from "../package-shadriz.json";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -169,4 +170,81 @@ export function regenerateSchemaIndex(): void {
   }
   code += "};\n";
   writeToFile(`lib/schema.ts`, code);
+}
+
+export async function installDependencies(opts: {
+  dependencies: string[];
+  pnpm: boolean;
+  latest: boolean;
+}) {
+  for (const str of opts.dependencies) {
+    const pinnedVersion =
+      packageShadrizJson.dependencies[
+        str as keyof typeof packageShadrizJson.dependencies
+      ];
+    if (!pinnedVersion) {
+      throw new Error("pinned version not found for dependency " + str);
+    }
+    let version;
+    if (pinnedVersion.includes("beta")) {
+      // priority 1
+      version = pinnedVersion;
+    } else if (opts.latest) {
+      // priority 2
+      version = "latest";
+    } else {
+      // priority 3
+      version = pinnedVersion;
+    }
+    if (opts.pnpm) {
+      await spawnCommand(`pnpm add ${str}@${version}`);
+    } else {
+      await spawnCommand(`npm install ${str}@${version}`);
+    }
+  }
+}
+
+export async function installDevDependencies(opts: {
+  devDependencies: string[];
+  pnpm: boolean;
+  latest: boolean;
+}) {
+  for (const str of opts.devDependencies) {
+    const pinnedVersion =
+      packageShadrizJson.devDependencies[
+        str as keyof typeof packageShadrizJson.devDependencies
+      ];
+    if (!pinnedVersion) {
+      throw new Error("pinned version not found for dev dependency " + str);
+    }
+    let version;
+    if (pinnedVersion.includes("beta")) {
+      // priority 1
+      version = pinnedVersion;
+    } else if (opts.latest) {
+      // priority 2
+      version = "latest";
+    } else {
+      // priority 3
+      version = pinnedVersion;
+    }
+    if (opts.pnpm) {
+      await spawnCommand(`pnpm add -D ${str}@${version}`);
+    } else {
+      await spawnCommand(`npm install -D ${str}@${version}`);
+    }
+  }
+}
+
+export async function addShadcnComponents(opts: {
+  shadcnComponents: string[];
+  pnpm: boolean;
+}) {
+  for (const component of opts.shadcnComponents) {
+    if (opts.pnpm) {
+      await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o ${component}`);
+    } else {
+      await spawnCommand(`npx shadcn-ui@latest add -y -o ${component}`);
+    }
+  }
 }

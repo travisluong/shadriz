@@ -3,36 +3,54 @@ import {
   DbPackageStrategy,
   DbPackageStrategyOpts,
 } from "../lib/types";
-import { appendDbUrl, renderTemplate, spawnCommand } from "../lib/utils";
+import {
+  appendDbUrl,
+  installDependencies,
+  installDevDependencies,
+  renderTemplate,
+} from "../lib/utils";
 
 export class PgPackageStrategy implements DbPackageStrategy {
-  opts: DbPackageStrategyOpts;
-
-  dialect: DbDialect = "postgresql";
-
   constructor(opts: DbPackageStrategyOpts) {
     this.opts = opts;
   }
 
+  opts: DbPackageStrategyOpts;
+
+  dialect: DbDialect = "postgresql";
+
+  dependencies = ["pg"];
+
+  devDependencies = ["@types/pg"];
+
   async init() {
-    await this.installDependencies();
+    await this.install();
     this.copyMigrateScript();
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
   }
 
-  async installDependencies() {
+  async install(): Promise<void> {
     if (!this.opts.install) {
       return;
     }
-    if (this.opts.pnpm) {
-      await spawnCommand("pnpm add pg");
-      await spawnCommand("pnpm add -D @types/pg");
-      return;
-    }
-    await spawnCommand("npm install pg");
-    await spawnCommand("npm install -D @types/pg");
+
+    await installDependencies({
+      dependencies: this.dependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+
+    await installDevDependencies({
+      devDependencies: this.devDependencies,
+      pnpm: this.opts.pnpm,
+      latest: this.opts.latest,
+    });
+  }
+
+  render(): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 
   copyMigrateScript(): void {
@@ -65,9 +83,5 @@ export class PgPackageStrategy implements DbPackageStrategy {
       inputPath: "scripts/create-user.ts.pg.hbs",
       outputPath: "scripts/create-user.ts",
     });
-  }
-
-  setPnpm(val: boolean): void {
-    this.opts.pnpm = val;
   }
 }
