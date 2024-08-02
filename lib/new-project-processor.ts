@@ -4,7 +4,7 @@ import {
   renderTemplateIfNotExists,
   spawnCommand,
 } from "./utils";
-import { getReadme } from "./markdown";
+import { getReadme, getTableOfContents } from "./markdown";
 
 interface TemplateToCopy {
   inputPath: string;
@@ -144,10 +144,11 @@ export class NewProjectProcessor {
 
   async addDocsPage() {
     const html = await getReadme();
+    const toc = await getTableOfContents();
     renderTemplate({
       inputPath: "app/(public)/docs/page.tsx.hbs",
       outputPath: "app/(public)/docs/page.tsx",
-      data: { readme: html },
+      data: { readme: html, toc: toc },
     });
   }
 

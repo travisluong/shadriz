@@ -27,6 +27,7 @@ pre {
   background-color: lightgray;
   padding: 20px;
   margin-bottom: 20px;
+  overflow: scroll;
 }
 code {
   background-color: lightgray;
@@ -40,7 +41,7 @@ li {
 }
 .shadriz-docs a {
   text-decoration: underline;
-  color: blue;
+  color: lightseagreen;
 }
 .dark pre {
   background-color: #111827;

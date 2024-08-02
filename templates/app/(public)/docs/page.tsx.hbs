@@ -5,8 +5,13 @@ import "@/styles/docs.css";
 const readme = `{{readme}}`;
 
 export default function Page() {
-  return <div className="container shadriz-docs">
-      <div dangerouslySetInnerHTML={ { __html: readme } }>
+  return <div className="shadriz-docs flex flex-col sm:flex-row">
+      <ul className="w-full sm:w-1/3">
+        {{#each toc}}
+        {{this}}
+        {{/each}}
+      </ul>
+      <div className="w-full sm:w-2/3" dangerouslySetInnerHTML={ { __html: readme } }>
       </div>
   </div>;
 }

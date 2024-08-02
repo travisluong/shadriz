@@ -1,7 +1,5 @@
 # 🍱 shadriz
 
-## Full Stack TypeScript Scaffolding Inspired by Ruby on Rails
-
 shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
 
 shadriz is not a dependency that is added to your project. Instead, it is a command line code generation tool.
