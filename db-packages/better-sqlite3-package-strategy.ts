@@ -46,11 +46,12 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
     this.appendSqliteToGitignore();
+    this.copyCreateUserScript();
   }
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "scripts/migrate.ts.better-sqlite3.hbs",
+      inputPath: "db-packages/scripts/migrate.ts.better-sqlite3.hbs",
       outputPath: "scripts/migrate.ts",
     });
   }
@@ -61,21 +62,21 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   copyDbInstance(): void {
     renderTemplate({
-      inputPath: "lib/db.ts.better-sqlite3.hbs",
+      inputPath: "db-packages/lib/db.ts.better-sqlite3.hbs",
       outputPath: "lib/db.ts",
     });
   }
 
   copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/sdb.ts.better-sqlite3.hbs",
+      inputPath: "db-packages/scripts/sdb.ts.better-sqlite3.hbs",
       outputPath: "scripts/sdb.ts",
     });
   }
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
+      inputPath: "db-packages/scripts/create-user.ts.better-sqlite3.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }

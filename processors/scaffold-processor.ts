@@ -154,14 +154,14 @@ export class ScaffoldProcessor {
   }
   addListView(): void {
     renderTemplate({
-      inputPath: "app/table/page.tsx.hbs",
+      inputPath: "scaffold-processor/app/table/page.tsx.hbs",
       outputPath: `app/${this.privateRouteGroup()}${this.opts.table}/page.tsx`,
       data: { table: this.opts.table },
     });
   }
   addDetailView(): void {
     renderTemplate({
-      inputPath: "app/table/[id]/page.tsx.hbs",
+      inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.privateRouteGroup()}${
         this.opts.table
       }/[id]/page.tsx`,
@@ -170,7 +170,7 @@ export class ScaffoldProcessor {
   }
   addEditView(): void {
     renderTemplate({
-      inputPath: "app/table/[id]/edit/page.tsx.hbs",
+      inputPath: "scaffold-processor/app/table/[id]/edit/page.tsx.hbs",
       outputPath: `app/${this.privateRouteGroup()}${
         this.opts.table
       }/[id]/edit/page.tsx`,
@@ -182,7 +182,7 @@ export class ScaffoldProcessor {
   }
   addNewView(): void {
     renderTemplate({
-      inputPath: "app/table/new/page.tsx.hbs",
+      inputPath: "scaffold-processor/app/table/new/page.tsx.hbs",
       outputPath: `app/${this.privateRouteGroup()}${
         this.opts.table
       }/new/page.tsx`,
@@ -194,7 +194,7 @@ export class ScaffoldProcessor {
   }
   addDeleteView(): void {
     renderTemplate({
-      inputPath: "app/table/[id]/delete/page.tsx.hbs",
+      inputPath: "scaffold-processor/app/table/[id]/delete/page.tsx.hbs",
       outputPath: `app/${this.privateRouteGroup()}${
         this.opts.table
       }/[id]/delete/page.tsx`,
@@ -234,7 +234,7 @@ export class ScaffoldProcessor {
       .map((arr) => arr[0]);
 
     renderTemplate({
-      inputPath: "actions/table/create-table.ts.hbs",
+      inputPath: "scaffold-processor/actions/table/create-table.ts.hbs",
       outputPath: `actions/${this.opts.table}/create-${this.opts.table}.ts`,
       data: {
         table: this.opts.table,
@@ -275,7 +275,7 @@ export class ScaffoldProcessor {
       .map((arr) => arr[0]);
 
     renderTemplate({
-      inputPath: "actions/table/update-table.ts.hbs",
+      inputPath: "scaffold-processor/actions/table/update-table.ts.hbs",
       outputPath: `actions/${this.opts.table}/update-${this.opts.table}.ts`,
       data: {
         table: this.opts.table,
@@ -301,7 +301,7 @@ export class ScaffoldProcessor {
       })
       .join("");
     renderTemplate({
-      inputPath: "actions/table/delete-table.ts.hbs",
+      inputPath: "scaffold-processor/actions/table/delete-table.ts.hbs",
       outputPath: `actions/${this.opts.table}/delete-${this.opts.table}.ts`,
       data: {
         table: this.opts.table,
@@ -324,7 +324,7 @@ export class ScaffoldProcessor {
     }
     const capitalizedTableName = capitalize(this.opts.table);
     renderTemplate({
-      inputPath: "components/table/columns.tsx.hbs",
+      inputPath: "scaffold-processor/components/table/columns.tsx.hbs",
       outputPath: `components/${this.opts.table}/${this.opts.table}-columns.tsx`,
       data: {
         columnDefs: columnDefs,
@@ -343,7 +343,7 @@ export class ScaffoldProcessor {
   addCreateForm(): void {
     const formControlsHtml = this.getFormControlsHtml();
     renderTemplate({
-      inputPath: "components/table/create-form.tsx.hbs",
+      inputPath: "scaffold-processor/components/table/create-form.tsx.hbs",
       outputPath: `components/${this.opts.table}/${this.opts.table}-create-form.tsx`,
       data: {
         table: this.opts.table,
@@ -375,7 +375,7 @@ export class ScaffoldProcessor {
   addUpdateForm(): void {
     const formControlsHtml = this.getUpdateFormControlsHtml();
     renderTemplate({
-      inputPath: "components/table/update-form.tsx.hbs",
+      inputPath: "scaffold-processor/components/table/update-form.tsx.hbs",
       outputPath: `components/${this.opts.table}/${this.opts.table}-update-form.tsx`,
       data: {
         table: this.opts.table,
@@ -386,7 +386,7 @@ export class ScaffoldProcessor {
   }
   addDeleteForm(): void {
     renderTemplate({
-      inputPath: "components/table/delete-form.tsx.hbs",
+      inputPath: "scaffold-processor/components/table/delete-form.tsx.hbs",
       outputPath: `components/${this.opts.table}/${this.opts.table}-delete-form.tsx`,
       data: {
         table: this.opts.table,
@@ -403,7 +403,8 @@ export class ScaffoldProcessor {
       const args = [arg1, arg2, arg3];
       let updateFormTemplate = "";
       if (this.includesItemThatStartsWithPk(args)) {
-        updateFormTemplate = "components/table/update-input-hidden.tsx.hbs";
+        updateFormTemplate =
+          "scaffold-processor/components/table/update-input-hidden.tsx.hbs";
       } else {
         const dataTypeStrategy =
           this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];

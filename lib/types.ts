@@ -4,7 +4,9 @@ export interface ShadrizProcessorOpts {
   latest: boolean;
 }
 
-export interface NewProjectProcessorOpts extends ShadrizProcessorOpts {}
+export interface NewProjectProcessorOpts extends ShadrizProcessorOpts {
+  darkMode: boolean;
+}
 
 export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
 
@@ -72,7 +74,6 @@ export interface DbDialectStrategy {
   stripeSchemaTemplatePath: string;
   init(): void;
   addAuthSchema(): void;
-  copyCreateUserScript(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;
 }

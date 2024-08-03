@@ -72,70 +72,65 @@ export class NewProjectProcessor implements ShadrizProcessor {
   }
 
   async render() {
-    console.log(1);
-
     const html = await getReadme();
-    console.log(2);
     const toc = await getTableOfContents();
-    console.log(3);
+
     renderTemplate({
-      inputPath: "app/(public)/docs/page.tsx.hbs",
+      inputPath: "new-project-processor/app/(public)/docs/page.tsx.hbs",
       outputPath: "app/(public)/docs/page.tsx",
       data: { readme: html, toc: toc },
     });
-    console.log(4);
+
     renderTemplate({
-      inputPath: "app/page.tsx.hbs",
+      inputPath: "new-project-processor/app/page.tsx.hbs",
       outputPath: "app/page.tsx",
     });
 
     renderTemplate({
-      inputPath: "app/signin/page.tsx.hbs",
+      inputPath: "new-project-processor/app/signin/page.tsx.hbs",
       outputPath: "app/signin/page.tsx",
     });
 
     renderTemplate({
-      inputPath: "components/header.tsx.hbs",
+      inputPath: "new-project-processor/components/header.tsx.hbs",
       outputPath: "components/header.tsx",
+      data: {
+        darkMode: this.opts.darkMode,
+      },
     });
 
     renderTemplate({
-      inputPath: "components/footer.tsx.hbs",
+      inputPath: "new-project-processor/components/footer.tsx.hbs",
       outputPath: "components/footer.tsx",
     });
 
     renderTemplate({
-      inputPath: "app/(public)/layout.tsx.hbs",
+      inputPath: "new-project-processor/app/(public)/layout.tsx.hbs",
       outputPath: "app/(public)/layout.tsx",
     });
 
     renderTemplate({
-      inputPath: "app/(private)/dashboard/page.tsx.init.hbs",
-      outputPath: "app/(private)/dashboard/page.tsx",
-    });
-
-    renderTemplate({
-      inputPath: "lib/file-utils.ts.hbs",
+      inputPath: "new-project-processor/lib/file-utils.ts.hbs",
       outputPath: "lib/file-utils.ts",
     });
 
     renderTemplate({
-      inputPath: "styles/docs.css",
+      inputPath: "new-project-processor/styles/docs.css",
       outputPath: "styles/docs.css",
     });
 
     renderTemplate({
-      inputPath: ".env.local.hbs",
+      inputPath: "new-project-processor/.env.local.hbs",
       outputPath: ".env.local",
     });
 
     renderTemplate({
-      inputPath: "lib/config.ts.hbs",
+      inputPath: "new-project-processor/lib/config.ts.hbs",
       outputPath: "lib/config.ts",
     });
 
     renderTemplate({
-      inputPath: "components/ui/data-table.tsx.hbs",
+      inputPath: "new-project-processor/components/ui/data-table.tsx.hbs",
       outputPath: "components/ui/data-table.tsx",
     });
   }

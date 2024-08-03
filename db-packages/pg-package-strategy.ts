@@ -29,6 +29,7 @@ export class PgPackageStrategy implements DbPackageStrategy {
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
+    this.copyCreateUserScript();
   }
 
   async install(): Promise<void> {
@@ -55,7 +56,7 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "scripts/migrate.ts.pg.hbs",
+      inputPath: "db-packages/scripts/migrate.ts.pg.hbs",
       outputPath: "scripts/migrate.ts",
     });
   }
@@ -66,21 +67,21 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   copyDbInstance(): void {
     renderTemplate({
-      inputPath: "lib/db.ts.pg.hbs",
+      inputPath: "db-packages/lib/db.ts.pg.hbs",
       outputPath: "lib/db.ts",
     });
   }
 
   copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/sdb.ts.pg.hbs",
+      inputPath: "db-packages/scripts/sdb.ts.pg.hbs",
       outputPath: "scripts/sdb.ts",
     });
   }
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "scripts/create-user.ts.pg.hbs",
+      inputPath: "db-packages/scripts/create-user.ts.pg.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }

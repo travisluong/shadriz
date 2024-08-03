@@ -37,9 +37,9 @@ interface AuthStrategyMap {
 
 const authStrategyMap: AuthStrategyMap = {
   github: {
-    importTemplatePath: "auth/auth.ts.github.imports.hbs",
-    authTemplatePath: "auth/auth.ts.github.hbs",
-    envTemplatePath: "auth/auth.ts.github.env.hbs",
+    importTemplatePath: "auth-processor/auth/auth.ts.github.imports.hbs",
+    authTemplatePath: "auth-processor/auth/auth.ts.github.hbs",
+    envTemplatePath: "auth-processor/auth/auth.ts.github.env.hbs",
     printCompletionMessage: function (): void {
       log.white("\nsetup github provider:");
       log.dash(
@@ -51,9 +51,9 @@ const authStrategyMap: AuthStrategyMap = {
     },
   },
   google: {
-    importTemplatePath: "auth/auth.ts.google.imports.hbs",
-    authTemplatePath: "auth/auth.ts.google.hbs",
-    envTemplatePath: "auth/auth.ts.google.env.hbs",
+    importTemplatePath: "auth-processor/auth/auth.ts.google.imports.hbs",
+    authTemplatePath: "auth-processor/auth/auth.ts.google.hbs",
+    envTemplatePath: "auth-processor/auth/auth.ts.google.env.hbs",
     printCompletionMessage: function (): void {
       log.white("\nsetup google provider:");
       log.dash(
@@ -65,9 +65,9 @@ const authStrategyMap: AuthStrategyMap = {
     },
   },
   credentials: {
-    importTemplatePath: "auth/auth.ts.credentials.imports.hbs",
-    authTemplatePath: "auth/auth.ts.credentials.hbs",
-    envTemplatePath: "auth/auth.ts.credentials.env.hbs",
+    importTemplatePath: "auth-processor/auth/auth.ts.credentials.imports.hbs",
+    authTemplatePath: "auth-processor/auth/auth.ts.credentials.hbs",
+    envTemplatePath: "auth-processor/auth/auth.ts.credentials.env.hbs",
     dependencies: ["bcrypt"],
     devDependencies: ["@types/bcrypt"],
     printCompletionMessage: function (): void {
@@ -76,9 +76,9 @@ const authStrategyMap: AuthStrategyMap = {
     },
   },
   postmark: {
-    importTemplatePath: "auth/auth.ts.postmark.imports.hbs",
-    authTemplatePath: "auth/auth.ts.postmark.hbs",
-    envTemplatePath: "auth/auth.ts.postmark.env.hbs",
+    importTemplatePath: "auth-processor/auth/auth.ts.postmark.imports.hbs",
+    authTemplatePath: "auth-processor/auth/auth.ts.postmark.hbs",
+    envTemplatePath: "auth-processor/auth/auth.ts.postmark.env.hbs",
     printCompletionMessage: function (): void {
       log.white("\nsetup postmark provider");
       log.dash("go to postmark > server > api tokens");
@@ -88,9 +88,9 @@ const authStrategyMap: AuthStrategyMap = {
     },
   },
   nodemailer: {
-    importTemplatePath: "auth/auth.ts.nodemailer.imports.hbs",
-    authTemplatePath: "auth/auth.ts.nodemailer.hbs",
-    envTemplatePath: "auth/auth.ts.nodemailer.env.hbs",
+    importTemplatePath: "auth-processor/auth/auth.ts.nodemailer.imports.hbs",
+    authTemplatePath: "auth-processor/auth/auth.ts.nodemailer.hbs",
+    envTemplatePath: "auth-processor/auth/auth.ts.nodemailer.env.hbs",
     dependencies: ["nodemailer"],
     printCompletionMessage: function (): void {
       log.white("\nsetup nodemailer provider");
@@ -212,7 +212,7 @@ export class AuthProcessor implements ShadrizProcessor {
       providersCode += "\n";
     }
     renderTemplate({
-      inputPath: "auth/auth.ts.hbs",
+      inputPath: "auth-processor/auth/auth.ts.hbs",
       outputPath: "auth.ts",
       data: {
         importsCode: importsCode,
@@ -225,7 +225,7 @@ export class AuthProcessor implements ShadrizProcessor {
 
   addAuthRouteHandler() {
     renderTemplate({
-      inputPath: "app/api/auth/[...nextauth]/route.ts.hbs",
+      inputPath: "auth-processor/app/api/auth/[...nextauth]/route.ts.hbs",
       outputPath: "app/api/auth/[...nextauth]/route.ts",
     });
   }
@@ -252,21 +252,21 @@ export class AuthProcessor implements ShadrizProcessor {
 
   addPrivateLayout() {
     renderTemplate({
-      inputPath: "app/(private)/layout.tsx.hbs",
+      inputPath: "auth-processor/app/(private)/layout.tsx.hbs",
       outputPath: "app/(private)/layout.tsx",
     });
   }
 
   addPrivateDashboard() {
     renderTemplate({
-      inputPath: "app/(private)/dashboard/page.tsx.hbs",
+      inputPath: "auth-processor/app/(private)/dashboard/page.tsx.hbs",
       outputPath: "app/(private)/dashboard/page.tsx",
     });
   }
 
   addCustomSignInPage() {
     renderTemplate({
-      inputPath: "app/signin/page.tsx.custom.hbs",
+      inputPath: "auth-processor/app/signin/page.tsx.custom.hbs",
       outputPath: "app/signin/page.tsx",
       data: {
         providers: {
@@ -282,14 +282,14 @@ export class AuthProcessor implements ShadrizProcessor {
 
   addProfilePage() {
     renderTemplate({
-      inputPath: "app/(private)/profile/page.tsx.hbs",
+      inputPath: "auth-processor/app/(private)/profile/page.tsx.hbs",
       outputPath: "app/(private)/profile/page.tsx",
     });
   }
 
   addSettingsPage() {
     renderTemplate({
-      inputPath: "app/(private)/settings/page.tsx.hbs",
+      inputPath: "auth-processor/app/(private)/settings/page.tsx.hbs",
       outputPath: "app/(private)/settings/page.tsx",
     });
   }

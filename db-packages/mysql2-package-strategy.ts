@@ -40,11 +40,12 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
+    this.copyCreateUserScript();
   }
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "scripts/migrate.ts.mysql2.hbs",
+      inputPath: "db-packages/scripts/migrate.ts.mysql2.hbs",
       outputPath: "scripts/migrate.ts",
     });
   }
@@ -55,21 +56,21 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   copyDbInstance(): void {
     renderTemplate({
-      inputPath: "lib/db.ts.mysql2.hbs",
+      inputPath: "db-packages/lib/db.ts.mysql2.hbs",
       outputPath: "lib/db.ts",
     });
   }
 
   copyDbInstanceForScripts(): void {
     renderTemplate({
-      inputPath: "scripts/sdb.ts.mysql2.hbs",
+      inputPath: "db-packages/scripts/sdb.ts.mysql2.hbs",
       outputPath: "scripts/sdb.ts",
     });
   }
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "scripts/create-user.ts.mysql2.hbs",
+      inputPath: "db-packages/scripts/create-user.ts.mysql2.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }

@@ -6,7 +6,6 @@ import {
   compileTemplate,
   installDependencies,
   renderTemplate,
-  spawnCommand,
 } from "../lib/utils";
 
 export class StripeProcessor implements ShadrizProcessor {
@@ -59,21 +58,21 @@ export class StripeProcessor implements ShadrizProcessor {
 
   addAccountPage() {
     renderTemplate({
-      inputPath: "stripe/app/(private)/account/page.tsx.hbs",
+      inputPath: "stripe-processor/app/(private)/account/page.tsx.hbs",
       outputPath: "app/(private)/account/page.tsx",
     });
   }
 
   addPricingPage() {
     renderTemplate({
-      inputPath: "stripe/app/(public)/pricing/page.tsx.hbs",
+      inputPath: "stripe-processor/app/(public)/pricing/page.tsx.hbs",
       outputPath: "app/(public)/pricing/page.tsx",
     });
   }
 
   addAccessUtil() {
     renderTemplate({
-      inputPath: "stripe/lib/access.ts.hbs",
+      inputPath: "stripe-processor/lib/access.ts.hbs",
       outputPath: "lib/access.ts",
     });
   }
@@ -86,41 +85,43 @@ export class StripeProcessor implements ShadrizProcessor {
   }
 
   appendStripeSecretsToEnvLocal() {
-    const text = compileTemplate({ inputPath: "stripe/.env.local.hbs" });
+    const text = compileTemplate({
+      inputPath: "stripe-processor/.env.local.hbs",
+    });
     appendToFileIfTextNotExists(".env.local", text);
   }
 
   addCheckOutSessionsApiRoute() {
     renderTemplate({
-      inputPath: "stripe/app/api/checkout_sessions/route.ts.hbs",
+      inputPath: "stripe-processor/app/api/checkout_sessions/route.ts.hbs",
       outputPath: "app/api/checkout_sessions/route.ts",
     });
   }
 
   addCustomerPortalApiRoute() {
     renderTemplate({
-      inputPath: "stripe/app/api/customer_portal/route.ts.hbs",
+      inputPath: "stripe-processor/app/api/customer_portal/route.ts.hbs",
       outputPath: "app/api/customer_portal/route.ts",
     });
   }
 
   addWebhookApiRoute() {
     renderTemplate({
-      inputPath: "stripe/app/api/webhook/route.ts.hbs",
+      inputPath: "stripe-processor/app/api/webhook/route.ts.hbs",
       outputPath: "app/api/webhook/route.ts",
     });
   }
 
   addConfirmationPage() {
     renderTemplate({
-      inputPath: "stripe/app/(public)/confirmation/page.tsx.hbs",
+      inputPath: "stripe-processor/app/(public)/confirmation/page.tsx.hbs",
       outputPath: "app/(public)/confirmation/page.tsx",
     });
   }
 
   addCreatePriceScript() {
     renderTemplate({
-      inputPath: "stripe/scripts/create-price.ts.hbs",
+      inputPath: "stripe-processor/scripts/create-price.ts.hbs",
       outputPath: "scripts/create-price.ts",
     });
   }

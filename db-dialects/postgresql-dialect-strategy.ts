@@ -10,8 +10,9 @@ import { renderTemplate } from "../lib/utils";
 const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   integer: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: integer(\"${opts.columnName}\")`;
     },
@@ -21,8 +22,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   smallint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: smallint(\"${opts.columnName}\")`;
     },
@@ -32,8 +34,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   bigint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: bigint(\"${opts.columnName}\", { mode: "number" })`;
     },
@@ -43,8 +46,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   serial: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: serial(\"${opts.columnName}\")`;
     },
@@ -54,8 +58,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   smallserial: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: smallserial(\"${opts.columnName}\")`;
     },
@@ -65,8 +70,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   bigserial: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: bigserial(\"${opts.columnName}\", { mode: "number" })`;
     },
@@ -76,8 +82,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   boolean: {
     jsType: "boolean",
-    formTemplate: "components/table/create-checkbox.tsx.hbs",
-    updateFormTemplate: "components/table/update-checkbox.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-checkbox.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: boolean(\"${opts.columnName}\")`;
     },
@@ -87,8 +94,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   text: {
     jsType: "string",
-    formTemplate: "components/table/create-textarea.tsx.hbs",
-    updateFormTemplate: "components/table/update-textarea.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-textarea.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-textarea.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -98,8 +106,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   varchar: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -109,8 +118,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   char: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: char(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -120,8 +130,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   numeric: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: numeric(\"${opts.columnName}\")`;
     },
@@ -131,8 +142,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   decimal: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: decimal(\"${opts.columnName}\")`;
     },
@@ -142,8 +154,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   real: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: real(\"${opts.columnName}\")`;
     },
@@ -153,8 +166,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   doublePrecision: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: doublePrecision(\"${opts.columnName}\")`;
     },
@@ -164,8 +178,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   json: {
     jsType: "object",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input-json.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: json(\"${opts.columnName}\")`;
     },
@@ -175,8 +190,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   jsonb: {
     jsType: "object",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input-json.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: jsonb(\"${opts.columnName}\")`;
     },
@@ -186,8 +202,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   time: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: time(\"${opts.columnName}\")`;
     },
@@ -197,8 +214,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   timestamp: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input-timestamp.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: timestamp(\"${opts.columnName}\")`;
     },
@@ -208,8 +226,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   date: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: date(\"${opts.columnName}\")`;
     },
@@ -219,8 +238,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   uuid: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: uuid(\"${opts.columnName}\")`;
     },
@@ -230,8 +250,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   file: {
     jsType: "string",
-    formTemplate: "components/table/create-file.tsx.hbs",
-    updateFormTemplate: "components/table/update-file.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-file.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -241,8 +262,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   image: {
     jsType: "string",
-    formTemplate: "components/table/create-image.tsx.hbs",
-    updateFormTemplate: "components/table/update-image.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-image.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -253,13 +275,15 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
-  stripeSchemaTemplatePath: string = "stripe/schema/stripe.ts.postgresql.hbs";
+  stripeSchemaTemplatePath: string =
+    "stripe-processor/schema/stripe.ts.postgresql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/pg-core";
   tableConstructor: string = "pgTable";
   dialectArgsMap = {
     "default-now": ".defaultNow()",
   };
-  schemaTableTemplatePath: string = "schema/table.ts.postgresql.hbs";
+  schemaTableTemplatePath: string =
+    "scaffold-processor/schema/table.ts.postgresql.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
 
@@ -270,7 +294,7 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
 
   copyDrizzleConfig(): void {
     renderTemplate({
-      inputPath: "drizzle.config.ts.hbs",
+      inputPath: "db-dialects/drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
       data: { dialect: "postgresql" },
     });
@@ -278,7 +302,7 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
 
   copySchema(): void {
     renderTemplate({
-      inputPath: "lib/schema.ts.postgresql.hbs",
+      inputPath: "db-dialects/lib/schema.ts.postgresql.hbs",
       outputPath: "lib/schema.ts",
       data: {},
     });
@@ -286,15 +310,8 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
 
   addAuthSchema() {
     renderTemplate({
-      inputPath: "schema/user.ts.postgresql.hbs",
+      inputPath: "db-dialects/schema/user.ts.postgresql.hbs",
       outputPath: "schema/user.ts",
-    });
-  }
-
-  copyCreateUserScript(): void {
-    renderTemplate({
-      inputPath: "scripts/create-user.ts.pg.hbs",
-      outputPath: "scripts/create-user.ts",
     });
   }
 }

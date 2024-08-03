@@ -10,8 +10,9 @@ import { renderTemplate } from "../lib/utils";
 const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   integer: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
       return `${opts.columnName}: integer("${opts.columnName}")`;
     },
@@ -21,8 +22,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
   real: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: real("${opts.columnName}")`;
     },
@@ -32,8 +34,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
   text: {
     jsType: "string",
-    formTemplate: "components/table/create-textarea.tsx.hbs",
-    updateFormTemplate: "components/table/update-textarea.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-textarea.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-textarea.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -43,8 +46,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
   boolean: {
     jsType: "boolean",
-    formTemplate: "components/table/create-checkbox.tsx.hbs",
-    updateFormTemplate: "components/table/update-checkbox.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-checkbox.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: integer("${opts.columnName}", { mode: "boolean" } )`;
     },
@@ -54,8 +58,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
   bigint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: blob("${opts.columnName}", { mode: "bigint" })`;
     },
@@ -65,8 +70,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
   file: {
     jsType: "string",
-    formTemplate: "components/table/create-file.tsx.hbs",
-    updateFormTemplate: "components/table/update-file.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-file.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -76,8 +82,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
   image: {
     jsType: "string",
-    formTemplate: "components/table/create-image.tsx.hbs",
-    updateFormTemplate: "components/table/update-image.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-image.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -88,13 +95,15 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
-  stripeSchemaTemplatePath: string = "stripe/schema/stripe.ts.sqlite.hbs";
+  stripeSchemaTemplatePath: string =
+    "stripe-processor/schema/stripe.ts.sqlite.hbs";
   tableConstructor: string = "sqliteTable";
   dialectArgsMap = {
     "pk-auto": ".primaryKey({ autoIncrement: true })",
     "default-now": ".default(sql`(CURRENT_DATE)`)",
   };
-  schemaTableTemplatePath: string = "schema/table.ts.sqlite.hbs";
+  schemaTableTemplatePath: string =
+    "scaffold-processor/schema/table.ts.sqlite.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/sqlite-core";
   dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";
@@ -106,7 +115,7 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
 
   copyDrizzleConfig(): void {
     renderTemplate({
-      inputPath: "drizzle.config.ts.hbs",
+      inputPath: "db-dialects/drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
       data: { dialect: "sqlite" },
     });
@@ -114,22 +123,15 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
 
   copySchema(): void {
     renderTemplate({
-      inputPath: "lib/schema.ts.sqlite.hbs",
+      inputPath: "db-dialects/lib/schema.ts.sqlite.hbs",
       outputPath: "lib/schema.ts",
     });
   }
 
   addAuthSchema() {
     renderTemplate({
-      inputPath: "schema/user.ts.sqlite.hbs",
+      inputPath: "db-dialects/schema/user.ts.sqlite.hbs",
       outputPath: "schema/user.ts",
-    });
-  }
-
-  copyCreateUserScript(): void {
-    renderTemplate({
-      inputPath: "scripts/create-user.ts.better-sqlite3.hbs",
-      outputPath: "scripts/create-user.ts",
     });
   }
 }

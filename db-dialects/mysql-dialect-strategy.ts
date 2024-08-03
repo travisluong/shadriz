@@ -10,8 +10,9 @@ import { renderTemplate } from "../lib/utils";
 const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   int: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: int(\"${opts.columnName}\")`;
     },
@@ -21,8 +22,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   tinyint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: tinyint(\"${opts.columnName}\")`;
     },
@@ -32,8 +34,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   smallint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: smallint(\"${opts.columnName}\")`;
     },
@@ -43,8 +46,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   mediumint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: mediumint(\"${opts.columnName}\")`;
     },
@@ -54,8 +58,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   bigint: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: bigint(\"${opts.columnName}\", { mode: "number" })`;
     },
@@ -65,8 +70,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   real: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: real(\"${opts.columnName}\")`;
     },
@@ -76,8 +82,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   decimal: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: decimal(\"${opts.columnName}\")`;
     },
@@ -87,8 +94,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   double: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: double(\"${opts.columnName}\")`;
     },
@@ -98,8 +106,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   float: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: float(\"${opts.columnName}\")`;
     },
@@ -109,8 +118,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   serial: {
     jsType: "number",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: serial(\"${opts.columnName}\")`;
     },
@@ -142,8 +152,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   char: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: char(\"${opts.columnName}\")`;
     },
@@ -153,8 +164,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   varchar: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -164,8 +176,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   text: {
     jsType: "string",
-    formTemplate: "components/table/create-textarea.tsx.hbs",
-    updateFormTemplate: "components/table/update-textarea.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-textarea.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-textarea.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -175,8 +188,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   boolean: {
     jsType: "boolean",
-    formTemplate: "components/table/create-checkbox.tsx.hbs",
-    updateFormTemplate: "components/table/update-checkbox.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-checkbox.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: boolean(\"${opts.columnName}\")`;
     },
@@ -186,8 +200,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   date: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: date(\"${opts.columnName}\")`;
     },
@@ -197,8 +212,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   datetime: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input-timestamp.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: datetime(\"${opts.columnName}\")`;
     },
@@ -208,8 +224,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   time: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: time(\"${opts.columnName}\")`;
     },
@@ -230,8 +247,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   timestamp: {
     jsType: "string",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input-timestamp.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: timestamp(\"${opts.columnName}\")`;
     },
@@ -241,8 +259,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   json: {
     jsType: "object",
-    formTemplate: "components/table/create-input.tsx.hbs",
-    updateFormTemplate: "components/table/update-input-json.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: json(\"${opts.columnName}\")`;
     },
@@ -252,8 +271,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   file: {
     jsType: "string",
-    formTemplate: "components/table/create-file.tsx.hbs",
-    updateFormTemplate: "components/table/update-file.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-file.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -263,8 +283,9 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   image: {
     jsType: "string",
-    formTemplate: "components/table/create-image.tsx.hbs",
-    updateFormTemplate: "components/table/update-image.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-image.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -275,7 +296,8 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
-  stripeSchemaTemplatePath: string = "stripe/schema/stripe.ts.mysql.hbs";
+  stripeSchemaTemplatePath: string =
+    "stripe-processor/schema/stripe.ts.mysql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
   tableConstructor: string = "mysqlTable";
   dialectArgsMap = {
@@ -283,7 +305,8 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     "default-now": ".defaultNow()",
   };
   dialect: DbDialect = "mysql";
-  schemaTableTemplatePath: string = "schema/table.ts.mysql.hbs";
+  schemaTableTemplatePath: string =
+    "scaffold-processor/schema/table.ts.mysql.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
 
   init(): void {
@@ -293,7 +316,7 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
 
   copyDrizzleConfig(): void {
     renderTemplate({
-      inputPath: "drizzle.config.ts.hbs",
+      inputPath: "db-dialects/drizzle.config.ts.hbs",
       outputPath: "drizzle.config.ts",
       data: { dialect: "mysql" },
     });
@@ -301,7 +324,7 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
 
   copySchema(): void {
     renderTemplate({
-      inputPath: "lib/schema.ts.mysql.hbs",
+      inputPath: "db-dialects/lib/schema.ts.mysql.hbs",
       outputPath: "lib/schema.ts",
       data: {},
     });
@@ -309,15 +332,8 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
 
   addAuthSchema() {
     renderTemplate({
-      inputPath: "schema/user.ts.mysql.hbs",
+      inputPath: "db-dialects/schema/user.ts.mysql.hbs",
       outputPath: "schema/user.ts",
-    });
-  }
-
-  copyCreateUserScript(): void {
-    renderTemplate({
-      inputPath: "scripts/create-user.ts.mysql2.hbs",
-      outputPath: "scripts/create-user.ts",
     });
   }
 }

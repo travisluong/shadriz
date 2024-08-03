@@ -109,6 +109,7 @@ program
         pnpm: options.pnpm,
         install: options.install,
         latest: options.latest,
+        darkMode: darkModeEnabled,
       });
       const dbPackageStrategy = packageStrategyFactory(dbPackage, {
         pnpm: options.pnpm,
@@ -140,7 +141,6 @@ program
       if (authProcessor) {
         await authProcessor.init();
         dbDialectStrategy.addAuthSchema();
-        dbDialectStrategy.copyCreateUserScript();
 
         if (stripeProcessor) {
           await stripeProcessor.init();

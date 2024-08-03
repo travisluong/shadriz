@@ -4,7 +4,6 @@ import {
   installDependencies,
   installDevDependencies,
   renderTemplate,
-  spawnCommand,
 } from "../lib/utils";
 
 export class DarkModeProcessor implements ShadrizProcessor {
@@ -48,35 +47,26 @@ export class DarkModeProcessor implements ShadrizProcessor {
     await this.addThemeProvider();
     await this.addRootLayout();
     await this.addModeToggle();
-    await this.addHeader();
   }
 
   async addThemeProvider() {
     renderTemplate({
-      inputPath: "components/theme-provider.tsx.hbs",
+      inputPath: "dark-mode-processor/components/theme-provider.tsx.hbs",
       outputPath: "components/theme-provider.tsx",
     });
   }
 
   async addRootLayout() {
     renderTemplate({
-      inputPath: "app/layout.tsx.hbs",
+      inputPath: "dark-mode-processor/app/layout.tsx.hbs",
       outputPath: "app/layout.tsx",
     });
   }
 
   async addModeToggle() {
     renderTemplate({
-      inputPath: "components/mode-toggle.tsx.hbs",
+      inputPath: "dark-mode-processor/components/mode-toggle.tsx.hbs",
       outputPath: "components/mode-toggle.tsx",
-    });
-  }
-
-  async addHeader() {
-    renderTemplate({
-      inputPath: "components/header.tsx.hbs",
-      outputPath: "components/header.tsx",
-      data: { darkMode: true },
     });
   }
 }
