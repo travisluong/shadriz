@@ -87,15 +87,11 @@ export class NewProjectProcessor implements ShadrizProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/app/signin/page.tsx.hbs",
-      outputPath: "app/signin/page.tsx",
-    });
-
-    renderTemplate({
       inputPath: "new-project-processor/components/header.tsx.hbs",
       outputPath: "components/header.tsx",
       data: {
         darkMode: this.opts.darkMode,
+        authEnabled: this.opts.authEnabled,
       },
     });
 

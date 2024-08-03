@@ -110,6 +110,7 @@ program
         install: options.install,
         latest: options.latest,
         darkMode: darkModeEnabled,
+        authEnabled: authEnabled,
       });
       const dbPackageStrategy = packageStrategyFactory(dbPackage, {
         pnpm: options.pnpm,

@@ -13,18 +13,20 @@ export default function Header() {
           </a>
         </div>
         <div>
+          <a href="/docs" className="text-gray-700 dark:text-gray-200 hover:text-blue-500 mr-4">
+            Docs
+          </a>
+          {{#if authEnabled}}
           <a
             href="/dashboard"
             className="text-gray-700 dark:text-gray-200 hover:text-blue-500 mr-4"
           >
             Dashboard
           </a>
-          <a href="/docs" className="text-gray-700 dark:text-gray-200 hover:text-blue-500 mr-4">
-            Docs
-          </a>
           <a href="/signin" className="text-gray-700 dark:text-gray-200 hover:text-blue-500">
             Sign In
           </a>
+          {{/if}}
           {{#if darkMode}}
           <div className="ml-5 inline-block">
             <ModeToggle />
