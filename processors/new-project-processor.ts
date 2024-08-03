@@ -1,12 +1,12 @@
-import { NewProjectProcessorOpts, ShadrizProcessor } from "./types";
+import { NewProjectProcessorOpts, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
   installDependencies,
   installDevDependencies,
   renderTemplate,
   spawnCommand,
-} from "./utils";
-import { getReadme, getTableOfContents } from "./markdown";
+} from "../lib/utils";
+import { getReadme, getTableOfContents } from "../lib/markdown";
 
 export class NewProjectProcessor implements ShadrizProcessor {
   opts: NewProjectProcessorOpts;

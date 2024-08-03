@@ -1,11 +1,11 @@
-import { DarkModeProcessorOpts, ShadrizProcessor } from "./types";
+import { DarkModeProcessorOpts, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
   installDependencies,
   installDevDependencies,
   renderTemplate,
   spawnCommand,
-} from "./utils";
+} from "../lib/utils";
 
 export class DarkModeProcessor implements ShadrizProcessor {
   constructor(public opts: DarkModeProcessorOpts) {}

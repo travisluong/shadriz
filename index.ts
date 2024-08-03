@@ -3,17 +3,17 @@
 import { Command } from "commander";
 import { log } from "./lib/log";
 import { AuthProvider, SessionStrategy } from "./lib/types";
-import { ScaffoldProcessor } from "./lib/scaffold-processor";
+import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
 import {
   dialectStrategyFactory,
   packageStrategyFactory,
 } from "./lib/strategy-factory";
-import { AuthProcessor } from "./lib/auth-processor";
-import { NewProjectProcessor } from "./lib/new-project-processor";
-import { DarkModeProcessor } from "./lib/dark-mode-processor";
-import { StripeProcessor } from "./lib/stripe-processor";
+import { AuthProcessor } from "./processors/auth-processor";
+import { NewProjectProcessor } from "./processors/new-project-processor";
+import { DarkModeProcessor } from "./processors/dark-mode-processor";
+import { StripeProcessor } from "./processors/stripe-processor";
 
 const program = new Command();
 

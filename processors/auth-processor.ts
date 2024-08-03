@@ -6,9 +6,9 @@ import {
   installDevDependencies,
   renderTemplate,
   spawnCommand,
-} from "./utils";
-import { log } from "./log";
-import { AuthProvider, SessionStrategy, ShadrizProcessor } from "./types";
+} from "../lib/utils";
+import { log } from "../lib/log";
+import { AuthProvider, SessionStrategy, ShadrizProcessor } from "../lib/types";
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];

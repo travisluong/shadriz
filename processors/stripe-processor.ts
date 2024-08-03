@@ -1,5 +1,5 @@
-import { log } from "./log";
-import { ShadrizProcessor, StripeProcessorOpts } from "./types";
+import { log } from "../lib/log";
+import { ShadrizProcessor, StripeProcessorOpts } from "../lib/types";
 import {
   addShadcnComponents,
   appendToFileIfTextNotExists,
@@ -7,7 +7,7 @@ import {
   installDependencies,
   renderTemplate,
   spawnCommand,
-} from "./utils";
+} from "../lib/utils";
 
 export class StripeProcessor implements ShadrizProcessor {
   opts: StripeProcessorOpts;

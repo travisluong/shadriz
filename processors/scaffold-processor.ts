@@ -2,15 +2,15 @@ import {
   GetColumnDefObjsOpts,
   GetKeyValueStrForSchemaOpts,
   ScaffoldProcessorOpts,
-} from "./types";
+} from "../lib/types";
 import {
   appendToFile,
   capitalize,
   compileTemplate,
   renderTemplate,
   regenerateSchemaIndex,
-} from "./utils";
-import { log } from "./log";
+} from "../lib/utils";
+import { log } from "../lib/log";
 
 // lib/schema.ts
 // app/post/page.tsx
