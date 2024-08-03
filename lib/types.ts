@@ -7,6 +7,7 @@ export interface ShadrizProcessorOpts {
 export interface NewProjectProcessorOpts extends ShadrizProcessorOpts {
   darkMode: boolean;
   authEnabled: boolean;
+  stripeEnabled: boolean;
 }
 
 export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}

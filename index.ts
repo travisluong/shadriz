@@ -67,7 +67,7 @@ program
       });
       let authProcessor;
       let stripeProcessor;
-      let stripeEnabled;
+      let stripeEnabled = false;
       if (authEnabled) {
         const authProviders = await checkbox({
           message: "Which auth providers would you like to use?",
@@ -86,6 +86,9 @@ program
             { name: "database", value: "database" },
           ],
         });
+        stripeEnabled = await confirm({
+          message: "Do you want to enable Stripe for payments?",
+        });
         if (authProviders.includes("credentials") && authStrategy !== "jwt") {
           log.bgRed("jwt is required if credentials is selected");
           process.exit(1);
@@ -96,9 +99,7 @@ program
           sessionStrategy: authStrategy as SessionStrategy,
           install: options.install,
           latest: options.latest,
-        });
-        stripeEnabled = await confirm({
-          message: "Do you want to enable Stripe for payments?",
+          stripeEnabled: stripeEnabled,
         });
       }
       const darkModeEnabled = await confirm({
@@ -111,6 +112,7 @@ program
         latest: options.latest,
         darkMode: darkModeEnabled,
         authEnabled: authEnabled,
+        stripeEnabled: stripeEnabled,
       });
       const dbPackageStrategy = packageStrategyFactory(dbPackage, {
         pnpm: options.pnpm,

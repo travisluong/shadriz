@@ -16,6 +16,7 @@ interface AuthProcessorOpts {
   sessionStrategy: SessionStrategy;
   install: boolean;
   latest: boolean;
+  stripeEnabled: boolean;
 }
 
 interface AuthStrategy {
@@ -254,6 +255,9 @@ export class AuthProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "auth-processor/app/(private)/layout.tsx.hbs",
       outputPath: "app/(private)/layout.tsx",
+      data: {
+        stripeEnabled: this.opts.stripeEnabled,
+      },
     });
   }
 

@@ -4,6 +4,7 @@ import {
   installDependencies,
   installDevDependencies,
   renderTemplate,
+  renderTemplateIfNotExists,
   spawnCommand,
 } from "../lib/utils";
 import { getReadme, getTableOfContents } from "../lib/markdown";
@@ -92,6 +93,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
       data: {
         darkMode: this.opts.darkMode,
         authEnabled: this.opts.authEnabled,
+        stripeEnabled: this.opts.stripeEnabled,
       },
     });
 
@@ -115,7 +117,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
       outputPath: "styles/docs.css",
     });
 
-    renderTemplate({
+    renderTemplateIfNotExists({
       inputPath: "new-project-processor/.env.local.hbs",
       outputPath: ".env.local",
     });
