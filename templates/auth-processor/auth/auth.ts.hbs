@@ -2,14 +2,37 @@ import { db } from "./lib/db";
 import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { Provider } from "next-auth/providers";
+{{#if isUuidv7}}
+import { uuidv7 } from "uuidv7";
+{{/if}}
 {{importsCode}}
 
 const providers: Provider[] = [
 {{providersCode}}
 ]
 
+const adapter = {
+  ...DrizzleAdapter(db),
+  createUser: async (data: any) => {
+    const newUser = {
+      {{#if isUuidv7}}
+      id: uuidv7(),
+      {{else}}
+      id: crypto.randomUUID(),
+      {{/if}}
+      email: data.email,
+      name: data.name,
+      image: data.image,
+      emailVerified: data.emailVerified,
+    };
+
+    await db.insert(user).values(newUser);
+    return newUser;
+  },
+};
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db),
+  adapter: adapter,
   session: {
     strategy: "{{sessionStrategy}}",
   },

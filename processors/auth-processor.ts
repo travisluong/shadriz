@@ -235,6 +235,7 @@ export class AuthProcessor implements ShadrizProcessor {
         providersCode: providersCode,
         sessionStrategy: this.opts.sessionStrategy,
         isJwt: this.opts.sessionStrategy === "jwt",
+        isUuidv7: this.opts.pkStrategy === "uuidv7",
       },
     });
   }
