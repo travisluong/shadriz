@@ -298,8 +298,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
   authSchemaTemplate: string = "db-dialects/schema/user.ts.mysql.hbs";
-  fkTextTemplatePath = "stripe-processor/schema/mysql-fk-text.hbs";
-  fkNumberTemplatePath = "stripe-processor/schema/mysql-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,

@@ -78,8 +78,6 @@ export interface DbDialectStrategy {
   dialectArgsMap: { [key: string]: string };
   stripeSchemaTemplatePath: string;
   pkStrategyTemplates: Record<PkStrategy, string>;
-  fkTextTemplatePath: string;
-  fkNumberTemplatePath: string;
   authSchemaTemplate: string;
   init(): void;
   copyDrizzleConfig(): void;

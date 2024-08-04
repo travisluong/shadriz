@@ -97,8 +97,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
   authSchemaTemplate: string = "db-dialects/schema/user.ts.sqlite.hbs";
-  fkTextTemplatePath = "stripe-processor/schema/sqlite-fk-text.hbs";
-  fkNumberTemplatePath = "stripe-processor/schema/sqlite-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,

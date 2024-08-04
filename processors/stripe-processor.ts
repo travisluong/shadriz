@@ -81,35 +81,12 @@ export class StripeProcessor implements ShadrizProcessor {
     const pkText =
       this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
 
-    let fkTemplatePath;
-    if (this.opts.pkStrategy === "auto-increment") {
-      fkTemplatePath = this.opts.dbDialectStrategy.fkNumberTemplatePath;
-    } else {
-      fkTemplatePath = this.opts.dbDialectStrategy.fkTextTemplatePath;
-    }
-
-    const userFkText = compileTemplate({
-      inputPath: fkTemplatePath,
-      data: {
-        table: "user",
-      },
-    });
-
-    const productFkText = compileTemplate({
-      inputPath: fkTemplatePath,
-      data: {
-        table: "product",
-      },
-    });
-
     renderTemplate({
       inputPath: this.opts.dbDialectStrategy.stripeSchemaTemplatePath,
       outputPath: "schema/stripe.ts",
       data: {
         pkText: pkText,
         isUuidv7: this.opts.pkStrategy === "uuidv7",
-        userFkText: userFkText,
-        productFkText: productFkText,
       },
     });
   }

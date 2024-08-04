@@ -277,8 +277,6 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
   authSchemaTemplate: string = "db-dialects/schema/user.ts.postgresql.hbs";
-  fkTextTemplatePath = "stripe-processor/schema/postgresql-fk-text.hbs";
-  fkNumberTemplatePath = "stripe-processor/schema/postgresql-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,

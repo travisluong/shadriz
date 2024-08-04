@@ -27,9 +27,9 @@ export const stripe_webhook = pgTable("stripe_webhook", {
 
 export const product = pgTable("product", {
   {{pkText}}
-  shortid: text("shortid").unique(),
+  slug: text("slug").notNull().unique(),
   stripe_product_id: text("stripe_product_id").notNull().unique(),
-  stripe_price_id: text("stripe_price_id").notNull(),
+  stripe_price_id: text("stripe_price_id"),
   name: text("name").notNull(),
   price: integer("price").notNull(),
   description: text("description"),
@@ -40,17 +40,18 @@ export const product = pgTable("product", {
 
 export const order = pgTable("order", {
   {{pkText}}
-  {{userFkText}}
-  {{productFkText}}
-  stripe_product_id: text("stripe_product_id"),
-  stripe_price_id: text("stripe_price_id"),
-  amount_total: integer("amount_total"),
+  user_id: uuid("user_id").notNull().references(() => user.id),
+  product_id: uuid("product_id").notNull().references(() => product.id),
+  stripe_product_id: text("stripe_product_id").notNull(),
+  stripe_price_id: text("stripe_price_id").notNull(),
+  amount_total: integer("amount_total").notNull(),
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const subscription = pgTable("subscription", {
   {{pkText}}
-  {{userFkText}}
+  user_id: uuid("user_id").notNull().references(() => user.id),
+  product_id: uuid("product_id").notNull().references(() => product.id),
   start_date: date("start_date", { mode: "date" }).notNull(),
   end_date: date("end_date", { mode: "date" }).notNull(),
   created_at: timestamp("created_at").notNull().defaultNow(),

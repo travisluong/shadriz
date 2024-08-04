@@ -28,9 +28,7 @@ export const stripe_webhook = mysqlTable("stripe_webhook", {
 export const product = mysqlTable("product", {
   {{pkText}}
   slug: varchar("slug", { length: 255 }).unique(),
-  stripe_product_id: varchar("stripe_product_id", { length: 255 })
-    .notNull()
-    .unique(),
+  stripe_product_id: varchar("stripe_product_id", { length: 255 }).notNull().unique(),
   stripe_price_id: varchar("stripe_price_id", { length: 255 }).notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   price: int("price").notNull(),
@@ -42,17 +40,17 @@ export const product = mysqlTable("product", {
 
 export const order = mysqlTable("order", {
   {{pkText}}
-  {{userFkText}}
-  {{productFkText}}
-  stripe_product_id: varchar("stripe_product_id", { length: 255 }),
-  stripe_price_id: varchar("stripe_price_id", { length: 255 }),
-  amount_total: int("amount_total"),
+  user_id: varchar("user_id", { length: 255 }).notNull().references(() => user.id),
+  product_id: varchar("product_id", { length: 255 }).notNull().references(() => product.id),
+  stripe_product_id: varchar("stripe_product_id", { length: 255 }).notNull(),
+  stripe_price_id: varchar("stripe_price_id", { length: 255 }).notNull(),
+  amount_total: int("amount_total").notNull(),
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const subscription = mysqlTable("subscription", {
   {{pkText}}
-  {{userFkText}}
+  user_id: varchar("user_id", { length: 255 }).notNull().references(() => user.id),
   start_date: date("start_date", { mode: "date" }).notNull(),
   end_date: date("end_date", { mode: "date" }).notNull(),
   created_at: timestamp("created_at").notNull().defaultNow(),

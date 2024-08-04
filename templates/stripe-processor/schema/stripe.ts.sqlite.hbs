@@ -8,49 +8,37 @@ import { uuidv7 } from "uuidv7";
 export const stripe_webhook = sqliteTable("stripe_webhook", {
   {{pkText}}
   payload: text("payload"),
-  created_at: text("created_at")
-    .notNull()
-    .default(sql`(current_timestamp)`),
+  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
 });
 
 export const product = sqliteTable("product", {
   {{pkText}}
-  slug: text("slug").unique(),
+  slug: text("slug").notNull().unique(),
   stripe_product_id: text("stripe_product_id").notNull().unique(),
   stripe_price_id: text("stripe_price_id").notNull(),
   name: text("name").notNull(),
   price: integer("price").notNull(),
   description: text("description"),
   mode: text("mode").notNull(),
-  created_at: text("created_at")
-    .notNull()
-    .default(sql`(current_timestamp)`),
-  updated_at: text("updated_at")
-    .notNull()
-    .default(sql`(current_timestamp)`),
+  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
+  updated_at: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
 
 export const order = sqliteTable("order", {
   {{pkText}}
-  {{userFkText}}
-  {{productFkText}}
-  stripe_product_id: text("stripe_product_id"),
-  stripe_price_id: text("stripe_price_id"),
-  amount_total: integer("amount_total"),
-  created_at: text("created_at")
-    .notNull()
-    .default(sql`(current_timestamp)`),
+  user_id: text("user_id").notNull().references(() => user.id),
+  product_id: text("product_id").notNull().references(() => product.id),
+  stripe_product_id: text("stripe_product_id").notNull(),
+  stripe_price_id: text("stripe_price_id").notNull(),
+  amount_total: integer("amount_total").notNull(),
+  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
 });
 
 export const subscription = sqliteTable("subscription", {
   {{pkText}}
-  {{userFkText}}
+  user_id: text("user_id").notNull().references(() => user.id),
   start_date: text("start_date").notNull(),
   end_date: text("end_date").notNull(),
-  created_at: text("created_at")
-    .notNull()
-    .default(sql`(current_timestamp)`),
-  updated_at: text("updated_at")
-    .notNull()
-    .default(sql`(current_timestamp)`),
+  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
+  updated_at: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
