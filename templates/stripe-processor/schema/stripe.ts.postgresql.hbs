@@ -12,6 +12,9 @@ import {
   unique,
   doublePrecision,
 } from "drizzle-orm/pg-core";
+{{#if isUuidv7}}
+import { uuidv7 } from "uuidv7";
+{{/if}}
 
 export const stripeWebhooks = pgTable("stripe_webhook", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),

@@ -4,6 +4,7 @@ import {
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
+  PkStrategy,
 } from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
@@ -275,6 +276,11 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  pkStrategyTemplates: Record<PkStrategy, string> = {
+    uuidv7: `text("id").notNull().primaryKey().$defaultFn(() => uuidv7())`,
+    uuidv4: `text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID())`,
+    "auto-increment": `bigserial("id").notNull().primaryKey()`,
+  };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.postgresql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/pg-core";

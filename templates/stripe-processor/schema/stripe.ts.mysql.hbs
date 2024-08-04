@@ -12,7 +12,9 @@ import {
   date,
   float,
 } from "drizzle-orm/mysql-core";
+{{#if isUuidv7}}
 import { uuidv7 } from "uuidv7";
+{{/if}}
 
 export const stripeWebhooks = mysqlTable("stripe_webhook", {
   id: varchar("id", { length: 255 })

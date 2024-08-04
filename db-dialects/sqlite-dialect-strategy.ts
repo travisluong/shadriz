@@ -4,6 +4,7 @@ import {
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
+  PkStrategy,
 } from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
@@ -95,6 +96,11 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  pkStrategyTemplates: Record<PkStrategy, string> = {
+    uuidv7: `text("id").notNull().primaryKey().$defaultFn(() => uuidv7())`,
+    uuidv4: `text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID())`,
+    "auto-increment": `integer("id", { mode: "number" }).notNull().primaryKey({ autoIncrement: true })`,
+  };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.sqlite.hbs";
   tableConstructor: string = "sqliteTable";

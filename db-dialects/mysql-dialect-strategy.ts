@@ -4,6 +4,7 @@ import {
   DataTypeStrategyOpts,
   DbDialect,
   DbDialectStrategy,
+  PkStrategy,
 } from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
@@ -296,6 +297,11 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  pkStrategyTemplates: Record<PkStrategy, string> = {
+    uuidv7: `varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7())`,
+    uuidv4: `varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7())`,
+    "auto-increment": `bigint("id").notNull().primaryKey().autoincrement()`,
+  };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.mysql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/mysql-core";

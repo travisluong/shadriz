@@ -1,12 +1,12 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./user";
 import { sql } from "drizzle-orm";
+{{#if isUuidv7}}
+import { uuidv7 } from "uuidv7";
+{{/if}}
 
 export const stripe_webhook = sqliteTable("stripe_webhook", {
-  id: text("id")
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: {{pkText}},
   payload: text("payload"),
   created_at: text("created_at")
     .notNull()
@@ -14,10 +14,7 @@ export const stripe_webhook = sqliteTable("stripe_webhook", {
 });
 
 export const product = sqliteTable("product", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: {{pkText}},
   slug: text("slug").unique(),
   stripe_product_id: text("stripe_product_id").notNull().unique(),
   stripe_price_id: text("stripe_price_id").notNull(),
@@ -34,10 +31,7 @@ export const product = sqliteTable("product", {
 });
 
 export const order = sqliteTable("order", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: {{pkText}},
   user_id: text("user_id").references(() => user.id),
   product_id: text("product_id").references(() => product.id),
   stripe_product_id: text("stripe_product_id").references(
@@ -51,10 +45,7 @@ export const order = sqliteTable("order", {
 });
 
 export const subscription = sqliteTable("subscription", {
-  id: text("id")
-    .primaryKey()
-    .notNull()
-    .$defaultFn(() => crypto.randomUUID()),
+  id: {{pkText}},
   user_id: text("user_id")
     .notNull()
     .references(() => user.id),

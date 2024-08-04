@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import { log } from "./lib/log";
-import { AuthProvider, SessionStrategy } from "./lib/types";
+import { AuthProvider, PkStrategy, SessionStrategy } from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
@@ -53,6 +53,9 @@ program
   .option("--latest", "install latest version for every dependency")
   .action(async (options) => {
     try {
+      let authProcessor;
+      let stripeProcessor;
+      let stripeEnabled = false;
       const dbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
@@ -61,13 +64,18 @@ program
           { name: "better-sqlite3", value: "better-sqlite3" },
         ],
       });
+      const pkStrategy = await select({
+        message: "Which primary key generation strategy would you like to use?",
+        choices: [
+          { name: "uuidv7", value: "uuidv7" },
+          { name: "uuidv4", value: "uuidv4" },
+          { name: "auto-increment", value: "auto-increment" },
+        ],
+      });
       const authEnabled = await confirm({
         message: "Do you want to use Auth.js for authentication?",
         default: true,
       });
-      let authProcessor;
-      let stripeProcessor;
-      let stripeEnabled = false;
       if (authEnabled) {
         const authProviders = await checkbox({
           message: "Which auth providers would you like to use?",
@@ -128,6 +136,7 @@ program
           pnpm: options.pnpm,
           install: options.install,
           latest: options.latest,
+          pkStrategy: pkStrategy as PkStrategy,
         });
       }
       await newProjectProcessor.init();

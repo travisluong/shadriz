@@ -78,9 +78,15 @@ export class StripeProcessor implements ShadrizProcessor {
   }
 
   addStripeSchema() {
+    const pkText =
+      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     renderTemplate({
       inputPath: this.opts.dbDialectStrategy.stripeSchemaTemplatePath,
       outputPath: "schema/stripe.ts",
+      data: {
+        pkText: pkText,
+        isUuidv7: this.opts.pkStrategy === "uuidv7",
+      },
     });
   }
 
