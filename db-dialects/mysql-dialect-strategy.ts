@@ -297,6 +297,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  authSchemaTemplate: string = "db-dialects/schema/user.ts.mysql.hbs";
   fkTextTemplatePath = "stripe-processor/schema/mysql-fk-text.hbs";
   fkNumberTemplatePath = "stripe-processor/schema/mysql-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
@@ -336,13 +337,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
       inputPath: "db-dialects/lib/schema.ts.mysql.hbs",
       outputPath: "lib/schema.ts",
       data: {},
-    });
-  }
-
-  addAuthSchema() {
-    renderTemplate({
-      inputPath: "db-dialects/schema/user.ts.mysql.hbs",
-      outputPath: "schema/user.ts",
     });
   }
 }

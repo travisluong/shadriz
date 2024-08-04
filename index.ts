@@ -56,6 +56,9 @@ program
       let authProcessor;
       let stripeProcessor;
       let stripeEnabled = false;
+      let authProviders;
+      let authStrategy;
+      let pkStrategy;
       const dbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
@@ -64,21 +67,20 @@ program
           { name: "better-sqlite3", value: "better-sqlite3" },
         ],
       });
-      const pkStrategy = await select({
-        message: "Which primary key generation strategy would you like to use?",
-        choices: [
-          { name: "uuidv7", value: "uuidv7" },
-          { name: "uuidv4", value: "uuidv4" },
-          { name: "uuid", value: "uuid" },
-          { name: "auto-increment", value: "auto-increment" },
-        ],
-      });
       const authEnabled = await confirm({
         message: "Do you want to use Auth.js for authentication?",
         default: true,
       });
       if (authEnabled) {
-        const authProviders = await checkbox({
+        pkStrategy = await select({
+          message:
+            "Which primary key generation strategy would you like to use?",
+          choices: [
+            { name: "uuidv7", value: "uuidv7" },
+            { name: "uuidv4", value: "uuidv4" },
+          ],
+        });
+        authProviders = await checkbox({
           message: "Which auth providers would you like to use?",
           choices: [
             { name: "github", value: "github" },
@@ -88,7 +90,7 @@ program
             { name: "nodemailer", value: "nodemailer" },
           ],
         });
-        const authStrategy = await select({
+        authStrategy = await select({
           message: "Which session strategy would you like to use?",
           choices: [
             { name: "jwt", value: "jwt" },
@@ -102,14 +104,6 @@ program
           log.bgRed("jwt is required if credentials is selected");
           process.exit(1);
         }
-        authProcessor = new AuthProcessor({
-          pnpm: options.pnpm,
-          providers: authProviders as AuthProvider[],
-          sessionStrategy: authStrategy as SessionStrategy,
-          install: options.install,
-          latest: options.latest,
-          stripeEnabled: stripeEnabled,
-        });
       }
       const darkModeEnabled = await confirm({
         message: "Do you want to add a dark mode toggle?",
@@ -131,6 +125,18 @@ program
       const dbDialectStrategy = dialectStrategyFactory(
         dbPackageStrategy.dialect
       );
+      if (authEnabled) {
+        authProcessor = new AuthProcessor({
+          pnpm: options.pnpm,
+          providers: authProviders as AuthProvider[],
+          sessionStrategy: authStrategy as SessionStrategy,
+          install: options.install,
+          latest: options.latest,
+          stripeEnabled: stripeEnabled,
+          pkStrategy: pkStrategy as PkStrategy,
+          dbDialectStrategy: dbDialectStrategy,
+        });
+      }
       if (stripeEnabled) {
         stripeProcessor = new StripeProcessor({
           dbDialectStrategy: dbDialectStrategy,
@@ -153,7 +159,6 @@ program
       }
       if (authProcessor) {
         await authProcessor.init();
-        dbDialectStrategy.addAuthSchema();
 
         if (stripeProcessor) {
           await stripeProcessor.init();

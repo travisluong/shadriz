@@ -8,7 +8,13 @@ import {
   spawnCommand,
 } from "../lib/utils";
 import { log } from "../lib/log";
-import { AuthProvider, SessionStrategy, ShadrizProcessor } from "../lib/types";
+import {
+  AuthProvider,
+  DbDialectStrategy,
+  PkStrategy,
+  SessionStrategy,
+  ShadrizProcessor,
+} from "../lib/types";
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];
@@ -17,6 +23,8 @@ interface AuthProcessorOpts {
   install: boolean;
   latest: boolean;
   stripeEnabled: boolean;
+  pkStrategy: PkStrategy;
+  dbDialectStrategy: DbDialectStrategy;
 }
 
 interface AuthStrategy {
@@ -147,6 +155,7 @@ export class AuthProcessor implements ShadrizProcessor {
     this.addCustomSignInPage();
     this.addProfilePage();
     this.addSettingsPage();
+    this.addAuthSchema();
   }
 
   validateOptions() {
@@ -295,6 +304,19 @@ export class AuthProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "auth-processor/app/(private)/settings/page.tsx.hbs",
       outputPath: "app/(private)/settings/page.tsx",
+    });
+  }
+
+  addAuthSchema() {
+    const pkText =
+      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+    renderTemplate({
+      inputPath: this.opts.dbDialectStrategy.authSchemaTemplate,
+      outputPath: "schema/user.ts",
+      data: {
+        pkText: pkText,
+        isUuidv7: this.opts.pkStrategy === "uuidv7",
+      },
     });
   }
 

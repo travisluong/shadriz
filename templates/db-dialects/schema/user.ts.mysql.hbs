@@ -7,11 +7,12 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core"
 import type { AdapterAccountType } from "next-auth/adapters"
+{{#if isUuidv7}}
+import { uuidv7 } from "uuidv7";
+{{/if}}
 
 export const user = mysqlTable("user", {
-  id: varchar("id", { length: 255 })
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  {{pkText}}
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", {

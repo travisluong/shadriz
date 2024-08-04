@@ -80,8 +80,8 @@ export interface DbDialectStrategy {
   pkStrategyTemplates: Record<PkStrategy, string>;
   fkTextTemplatePath: string;
   fkNumberTemplatePath: string;
+  authSchemaTemplate: string;
   init(): void;
-  addAuthSchema(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;
 }

@@ -96,6 +96,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  authSchemaTemplate: string = "db-dialects/schema/user.ts.sqlite.hbs";
   fkTextTemplatePath = "stripe-processor/schema/sqlite-fk-text.hbs";
   fkNumberTemplatePath = "stripe-processor/schema/sqlite-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
@@ -134,13 +135,6 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     renderTemplate({
       inputPath: "db-dialects/lib/schema.ts.sqlite.hbs",
       outputPath: "lib/schema.ts",
-    });
-  }
-
-  addAuthSchema() {
-    renderTemplate({
-      inputPath: "db-dialects/schema/user.ts.sqlite.hbs",
-      outputPath: "schema/user.ts",
     });
   }
 }

@@ -276,6 +276,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  authSchemaTemplate: string = "db-dialects/schema/user.ts.postgresql.hbs";
   fkTextTemplatePath = "stripe-processor/schema/postgresql-fk-text.hbs";
   fkNumberTemplatePath = "stripe-processor/schema/postgresql-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
@@ -314,13 +315,6 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
       inputPath: "db-dialects/lib/schema.ts.postgresql.hbs",
       outputPath: "lib/schema.ts",
       data: {},
-    });
-  }
-
-  addAuthSchema() {
-    renderTemplate({
-      inputPath: "db-dialects/schema/user.ts.postgresql.hbs",
-      outputPath: "schema/user.ts",
     });
   }
 }
