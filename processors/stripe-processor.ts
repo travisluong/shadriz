@@ -95,7 +95,7 @@ export class StripeProcessor implements ShadrizProcessor {
     const text = compileTemplate({
       inputPath: "stripe-processor/.env.local.hbs",
     });
-    appendToFileIfTextNotExists(".env.local", text);
+    appendToFileIfTextNotExists(".env.local", text, "STRIPE_SECRET_KEY");
   }
 
   addCheckOutSessionsApiRoute() {

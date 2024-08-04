@@ -33,6 +33,7 @@ interface AuthStrategy {
   envTemplatePath: string;
   dependencies?: string[];
   devDependencies?: string[];
+  textToSearchInEnv: string;
   printCompletionMessage(): void;
 }
 
@@ -58,6 +59,7 @@ const authStrategyMap: AuthStrategyMap = {
       log.dash("update AUTH_GITHUB_ID in .env.local");
       log.dash("update AUTH_GITHUB_SECRET in .env.local");
     },
+    textToSearchInEnv: "AUTH_GITHUB_ID",
   },
   google: {
     importTemplatePath: "auth-processor/auth/auth.ts.google.imports.hbs",
@@ -72,6 +74,7 @@ const authStrategyMap: AuthStrategyMap = {
       log.dash("update AUTH_GOOGLE_ID in .env.local");
       log.dash("update AUTH_GOOGLE_SECRET in .env.local");
     },
+    textToSearchInEnv: "AUTH_GOOGLE_ID",
   },
   credentials: {
     importTemplatePath: "auth-processor/auth/auth.ts.credentials.imports.hbs",
@@ -83,6 +86,7 @@ const authStrategyMap: AuthStrategyMap = {
       log.white("\ncreate test user for credentials provider:");
       log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
     },
+    textToSearchInEnv: "",
   },
   postmark: {
     importTemplatePath: "auth-processor/auth/auth.ts.postmark.imports.hbs",
@@ -95,6 +99,7 @@ const authStrategyMap: AuthStrategyMap = {
       log.dash("change the from email in auth.ts");
       log.dash("update AUTH_POSTMARK_KEY in .env.local");
     },
+    textToSearchInEnv: "AUTH_POSTMARK_KEY",
   },
   nodemailer: {
     importTemplatePath: "auth-processor/auth/auth.ts.nodemailer.imports.hbs",
@@ -106,6 +111,7 @@ const authStrategyMap: AuthStrategyMap = {
       log.dash("update EMAIL_SERVER in .env.local");
       log.dash("update EMAIL_FROM in .env.local");
     },
+    textToSearchInEnv: "EMAIL_SERVER",
   },
 };
 
@@ -256,7 +262,11 @@ export class AuthProcessor implements ShadrizProcessor {
         data: {},
       });
       envVars = "\n" + envVars;
-      appendToFileIfTextNotExists(".env.local", envVars);
+      appendToFileIfTextNotExists(
+        ".env.local",
+        envVars,
+        strategy.textToSearchInEnv
+      );
     }
   }
 

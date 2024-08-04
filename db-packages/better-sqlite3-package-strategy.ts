@@ -82,6 +82,6 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   }
 
   appendSqliteToGitignore() {
-    appendToFileIfTextNotExists(".gitignore", "\nsqlite.db");
+    appendToFileIfTextNotExists(".gitignore", "\nsqlite.db", "sqlite.db");
   }
 }

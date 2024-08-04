@@ -90,15 +90,18 @@ export async function spawnCommand(command: string) {
 export function appendDbUrl(url: string) {
   const filePath = ".env.local";
   const textToAppend = "DB_URL=" + url;
-  appendToFileIfTextNotExists(filePath, textToAppend);
+  appendToFileIfTextNotExists(filePath, textToAppend, "DB_URL");
 }
 
 export function appendToFileIfTextNotExists(
   filePath: string,
-  textToAppend: string
+  textToAppend: string,
+  textToSearch: string
 ) {
   const fileContent = fs.readFileSync(filePath, "utf-8");
-  if (!fileContent.includes(textToAppend)) {
+  if (fileContent.includes(textToSearch)) {
+    log.bgRed(`${textToSearch} detected in ${filePath}. skipping append.`);
+  } else {
     appendToFile(filePath, textToAppend);
   }
 }
