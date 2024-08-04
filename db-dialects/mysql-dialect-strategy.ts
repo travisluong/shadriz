@@ -297,10 +297,13 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  fkTextTemplatePath = "stripe-processor/schema/mysql-fk-text.hbs";
+  fkNumberTemplatePath = "stripe-processor/schema/mysql-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
-    uuidv7: `varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7())`,
-    uuidv4: `varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7())`,
-    "auto-increment": `bigint("id").notNull().primaryKey().autoincrement()`,
+    uuidv7: `id: varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuid: 'id: varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => sql`(uuid())`),',
+    "auto-increment": `id: serial("id").notNull().primaryKey(),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.mysql.hbs";

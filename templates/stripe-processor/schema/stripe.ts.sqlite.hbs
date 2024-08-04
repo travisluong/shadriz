@@ -6,7 +6,7 @@ import { uuidv7 } from "uuidv7";
 {{/if}}
 
 export const stripe_webhook = sqliteTable("stripe_webhook", {
-  id: {{pkText}},
+  {{pkText}}
   payload: text("payload"),
   created_at: text("created_at")
     .notNull()
@@ -14,7 +14,7 @@ export const stripe_webhook = sqliteTable("stripe_webhook", {
 });
 
 export const product = sqliteTable("product", {
-  id: {{pkText}},
+  {{pkText}}
   slug: text("slug").unique(),
   stripe_product_id: text("stripe_product_id").notNull().unique(),
   stripe_price_id: text("stripe_price_id").notNull(),
@@ -31,12 +31,10 @@ export const product = sqliteTable("product", {
 });
 
 export const order = sqliteTable("order", {
-  id: {{pkText}},
-  user_id: text("user_id").references(() => user.id),
-  product_id: text("product_id").references(() => product.id),
-  stripe_product_id: text("stripe_product_id").references(
-    () => product.stripe_product_id
-  ),
+  {{pkText}}
+  {{userFkText}}
+  {{productFkText}}
+  stripe_product_id: text("stripe_product_id"),
   stripe_price_id: text("stripe_price_id"),
   amount_total: integer("amount_total"),
   created_at: text("created_at")
@@ -45,13 +43,8 @@ export const order = sqliteTable("order", {
 });
 
 export const subscription = sqliteTable("subscription", {
-  id: {{pkText}},
-  user_id: text("user_id")
-    .notNull()
-    .references(() => user.id),
-  product_id: text("product_id")
-    .notNull()
-    .references(() => product.id),
+  {{pkText}}
+  {{userFkText}}
   start_date: text("start_date").notNull(),
   end_date: text("end_date").notNull(),
   created_at: text("created_at")

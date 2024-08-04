@@ -69,6 +69,7 @@ program
         choices: [
           { name: "uuidv7", value: "uuidv7" },
           { name: "uuidv4", value: "uuidv4" },
+          { name: "uuid", value: "uuid" },
           { name: "auto-increment", value: "auto-increment" },
         ],
       });

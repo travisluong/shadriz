@@ -96,10 +96,13 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  fkTextTemplatePath = "stripe-processor/schema/sqlite-fk-text.hbs";
+  fkNumberTemplatePath = "stripe-processor/schema/sqlite-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
-    uuidv7: `text("id").notNull().primaryKey().$defaultFn(() => uuidv7())`,
-    uuidv4: `text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID())`,
-    "auto-increment": `integer("id", { mode: "number" }).notNull().primaryKey({ autoIncrement: true })`,
+    uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuid: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    "auto-increment": `id: integer("id", { mode: "number" }).notNull().primaryKey({ autoIncrement: true }),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.sqlite.hbs";

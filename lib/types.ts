@@ -14,7 +14,7 @@ export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
 
 export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
 
-export type PkStrategy = "uuidv7" | "uuidv4" | "auto-increment";
+export type PkStrategy = "uuidv7" | "uuidv4" | "uuid" | "auto-increment";
 
 export interface StripeProcessorOpts extends ShadrizProcessorOpts {
   dbDialectStrategy: DbDialectStrategy;
@@ -78,6 +78,8 @@ export interface DbDialectStrategy {
   dialectArgsMap: { [key: string]: string };
   stripeSchemaTemplatePath: string;
   pkStrategyTemplates: Record<PkStrategy, string>;
+  fkTextTemplatePath: string;
+  fkNumberTemplatePath: string;
   init(): void;
   addAuthSchema(): void;
   copyDrizzleConfig(): void;

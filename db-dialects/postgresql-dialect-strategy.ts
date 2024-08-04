@@ -276,10 +276,13 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  fkTextTemplatePath = "stripe-processor/schema/postgresql-fk-text.hbs";
+  fkNumberTemplatePath = "stripe-processor/schema/postgresql-fk-number.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
-    uuidv7: `text("id").notNull().primaryKey().$defaultFn(() => uuidv7())`,
-    uuidv4: `text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID())`,
-    "auto-increment": `bigserial("id").notNull().primaryKey()`,
+    uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuid: `id: uuid("id").notNull().primaryKey().defaultRandom(),`,
+    "auto-increment": `id: bigserial("id", { mode: "number" }).notNull().primaryKey(),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.postgresql.hbs";
