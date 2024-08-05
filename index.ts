@@ -14,6 +14,7 @@ import { AuthProcessor } from "./processors/auth-processor";
 import { NewProjectProcessor } from "./processors/new-project-processor";
 import { DarkModeProcessor } from "./processors/dark-mode-processor";
 import { StripeProcessor } from "./processors/stripe-processor";
+import { AdminProcessor } from "./processors/admin-processor";
 
 const program = new Command();
 
@@ -59,6 +60,8 @@ program
       let authProviders;
       let authStrategy;
       let pkStrategy;
+      let adminEnabled;
+      let adminProcessor;
       const dbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
@@ -97,13 +100,22 @@ program
             { name: "database", value: "database" },
           ],
         });
-        stripeEnabled = await confirm({
-          message: "Do you want to enable Stripe for payments?",
-        });
         if (authProviders.includes("credentials") && authStrategy !== "jwt") {
           log.bgRed("jwt is required if credentials is selected");
           process.exit(1);
         }
+        adminEnabled = await confirm({
+          message:
+            "Do you want to add an Admin dashboard with role-based authorization?",
+          default: true,
+        });
+        if (adminEnabled && !authProviders.includes("credentials")) {
+          log.bgRed("credentials provider is required for admin dashboard");
+          process.exit(1);
+        }
+        stripeEnabled = await confirm({
+          message: "Do you want to enable Stripe for payments?",
+        });
       }
       const darkModeEnabled = await confirm({
         message: "Do you want to add a dark mode toggle?",
@@ -137,6 +149,13 @@ program
           dbDialectStrategy: dbDialectStrategy,
         });
       }
+      if (adminEnabled) {
+        adminProcessor = new AdminProcessor({
+          pnpm: options.pnpm,
+          install: options.install,
+          latest: options.latest,
+        });
+      }
       if (stripeEnabled) {
         stripeProcessor = new StripeProcessor({
           dbDialectStrategy: dbDialectStrategy,
@@ -160,12 +179,19 @@ program
       if (authProcessor) {
         await authProcessor.init();
 
+        if (adminProcessor) {
+          await adminProcessor.init();
+        }
+
         if (stripeProcessor) {
           await stripeProcessor.init();
         }
 
         regenerateSchemaIndex();
         authProcessor.printCompletionMessage();
+        if (adminProcessor) {
+          adminProcessor.printCompletionMessage();
+        }
         if (stripeProcessor) {
           stripeProcessor.printCompletionMessage();
         }

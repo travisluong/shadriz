@@ -1,0 +1,25 @@
+import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
+import { user } from "./user";
+
+export const role = sqliteTable("role", {
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull().unique(),
+});
+
+export const user_role = sqliteTable(
+  "user_role",
+  {
+    user_id: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    role_id: text("role_id")
+      .notNull()
+      .references(() => role.id),
+  },
+  (table) => ({
+    compoundKey: primaryKey({ columns: [table.user_id, table.role_id] }),
+  })
+);
