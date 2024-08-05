@@ -175,6 +175,21 @@ export function regenerateSchemaIndex(): void {
   writeToFile(`lib/schema.ts`, code);
 }
 
+export function regenerateSchemaList(): void {
+  const filenames = getFilenamesFromFolder("schema");
+  const tablenames = filenames
+    .map((filename) => filename.split(".")[0])
+    .filter((table) => table !== "user")
+    .filter((table) => table !== "stripe");
+  renderTemplate({
+    inputPath: "scaffold-processor/components/schema-list.tsx.hbs",
+    outputPath: "components/schema-list.tsx",
+    data: {
+      tablenames: tablenames,
+    },
+  });
+}
+
 export async function installDependencies(opts: {
   dependencies: string[];
   pnpm: boolean;

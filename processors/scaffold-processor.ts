@@ -9,6 +9,7 @@ import {
   compileTemplate,
   renderTemplate,
   regenerateSchemaIndex,
+  regenerateSchemaList,
 } from "../lib/utils";
 import { log } from "../lib/log";
 
@@ -41,7 +42,6 @@ export class ScaffoldProcessor {
   process(): void {
     // this.appendCodeToSchema(); // single file schema
     this.addSchema(); // multiple files schema
-    regenerateSchemaIndex();
     this.addListView();
     this.addDetailView();
     this.addNewView();
@@ -54,6 +54,8 @@ export class ScaffoldProcessor {
     this.addCreateForm();
     this.addUpdateForm();
     this.addDeleteForm();
+    regenerateSchemaIndex();
+    regenerateSchemaList();
     this.printCompletionMessage();
   }
   appendCodeToSchema(): void {
