@@ -36,10 +36,22 @@ let headings: string[] = [];
 function walkTokens(token: any) {
   if (token.type === "heading") {
     const escapedText = token.text.toLowerCase().replace(/[^\w]+/g, "-");
+    let className;
+    switch (token.depth) {
+      case 1:
+        className = "font-bold hover:underline";
+        break;
+      case 2:
+        className = "hover:underline mt-5";
+        break;
+      case 3:
+        className = "text-muted-foreground hover:underline";
+        break;
+      default:
+        break;
+    }
     headings.push(
-      `<li className="ml-${token.depth * 3}"><a href="#${escapedText}">${
-        token.text
-      }</a></li>`
+      `<li className="${className}"><a href="#${escapedText}">${token.text}</a></li>`
     );
   }
 }

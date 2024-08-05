@@ -2,50 +2,43 @@
   margin: 0;
   padding: 0;
 }
-.container {
-  padding: 20px;
-}
-h1 {
+.shadriz-docs h1 {
   font-weight: bold;
   font-size: 48px;
   margin-bottom: 20px;
 }
-h2 {
+.shadriz-docs h2 {
   font-weight: bold;
   font-size: 36px;
   margin-bottom: 20px;
 }
-h3 {
+.shadriz-docs h3 {
   font-weight: bold;
   font-size: 24px;
   margin-bottom: 20px;
 }
-p {
+.shadriz-docs p {
   margin-bottom: 20px;
 }
-pre {
+.shadriz-docs pre {
   background-color: lightgray;
   padding: 20px;
   margin-bottom: 20px;
   overflow: scroll;
 }
-code {
+.shadriz-docs code {
   background-color: lightgray;
 }
-ul {
+.shadriz-docs ul {
   margin-bottom: 20px;
 }
-li {
-  margin-left: 20px;
-  list-style-type: square;
+.dark .shadriz-docs pre {
+  background-color: #111827;
+}
+.dark .shadriz-docs code {
+  background-color: #111827;
 }
 .shadriz-docs a {
   text-decoration: underline;
-  color: lightseagreen;
-}
-.dark pre {
-  background-color: #111827;
-}
-.dark code {
-  background-color: #111827;
+  font-weight: bold;
 }

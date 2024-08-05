@@ -1,4 +1,4 @@
-# 🍱 shadriz
+# shadriz
 
 shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
 
@@ -6,7 +6,7 @@ shadriz is not a dependency that is added to your project. Instead, it is a comm
 
 Spend more time creating, less time on boilerplate. Ship in minutes instead of days. Free. Open Source.
 
-## ⌨️ Tech Stack
+## Tech Stack
 
 - [Next.js](https://nextjs.org/) - React Framework
 - [shadcn/ui](https://ui.shadcn.com/) - UI Components
@@ -15,7 +15,7 @@ Spend more time creating, less time on boilerplate. Ship in minutes instead of d
 - [Auth.js](https://authjs.dev/) - Authentication
 - [zod](https://zod.dev/) - Validation
 
-## 🚀 Getting started
+## Getting started
 
 ### Step 1: Create new project
 
@@ -38,11 +38,14 @@ npx shadriz@latest init
 You will be asked a few questions to configure database and Auth.js. Note: You must choose `jwt` if credentials is selected.
 
 ```
-Which database library would you like to use? pg
-Do you want to use Auth.js for authentication? yes
-Which auth providers would you like to use? github, credentials
-Which session strategy would you like to use? jwt
-Do you want to add a dark mode toggle? yes
+? Which database library would you like to use? pg
+? Do you want to use Auth.js for authentication? yes
+? Which primary key generation strategy would you like to use? uuidv7
+? Which auth providers would you like to use? github, google, credentials, postmark, nodemailer
+? Which session strategy would you like to use? jwt
+? Do you want to add an Admin dashboard with role-based authorization? yes
+? Do you want to enable Stripe for payments? yes
+? Do you want to add a dark mode toggle? yes
 ```
 
 ### Step 4: Complete project configuration
@@ -64,15 +67,21 @@ Shadriz supports a variety of primary key configurations, foreign key configurat
 
 The views are placed into the `(public)` route group by default. To make the views and actions require authentication, add a `-p` or `--private` flag to place everything into the `(private)` route group. Note: the private flag can only be used if Auth.js has already been configured.
 
-#### postgresql examples
+## Scaffold examples
+
+### postgresql examples
 
 ```bash
-# postgresql uuid primary key examples:
+# postgresql uuidv7 primary key examples:
 scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 title:text created_at:timestamp:default-now
+
+# postgresql uuidv4 primary key examples:
 scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 title:text created_at:timestamp:default-now
 
-# postgresql auto increment primary key examples:
+# postgresql bigserial auto increment primary key examples:
 scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
+
+# postgresql serial auto increment primary key examples:
 scaffold post -d postgresql -c id:serial:pk title:text created_at:timestamp:default-now
 
 # postgresql foreign key examples:
@@ -80,15 +89,19 @@ scaffold post -d postgresql -c id:bigserial:pk title:text
 scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id content:text
 ```
 
-#### mysql examples
+### mysql examples
 
 ```bash
-# mysql uuid primary key examples:
+# mysql uuidv7 primary key examples:
 scaffold post -d mysql -c id:varchar:pk:default-uuidv7 title:varchar created_at:timestamp:default-now
+
+# mysql uuidv4 primary key examples:
 scaffold post -d mysql -c id:varchar:pk:default-uuidv4 title:varchar created_at:timestamp:default-now
 
-# mysql auto increment primary key examples:
+# mysql serial auto increment primary key examples:
 scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
+
+# mysql integer auto increment primary key examples:
 scaffold post -d mysql -c id:integer:pk-auto title:varchar created_at:timestamp:default-now
 
 # mysql foreign key examples:
@@ -96,14 +109,16 @@ scaffold post -d mysql -c id:serial:pk title:varchar
 scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
 ```
 
-#### sqlite examples
+### sqlite examples
 
 ```bash
-# sqlite uuid primary key examples:
+# sqlite uuidv7 primary key examples:
 scaffold post -d sqlite -c id:text:pk:default-uuidv7 title:text created_at:text:default-now
+
+# sqlite uuidv4 primary key examples:
 scaffold post -d sqlite -c id:text:pk:default-uuidv4 title:text created_at:text:default-now
 
-# sqlite auto increment primary key examples:
+# sqlite integer auto increment primary key examples:
 scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now
 
 # sqlite foreign key examples:
@@ -111,19 +126,13 @@ scaffold post -d sqlite -c id:integer:pk-auto title:text
 scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
 ```
 
-### Step 6: Run migrations
-
-After scaffolding, you'll have to run `npx drizzle-kit generate`.
-
-Then you will have to run `npx drizzle-kit migrate` to apply the migrations.
-
-## 💡 Inspirations
+## Inspirations
 
 ### Ruby on Rails
 
 shadriz is inspired by the **convention over configuration** philosophy of Ruby on Rails, which allows anyone to rapidly prototype applications in minutes.
 
-🍣 shadriz is an [omakase](https://dhh.dk/2012/rails-is-omakase.html) of the author's preferred TypeScript ingredients.
+shadriz is an [omakase](https://dhh.dk/2012/rails-is-omakase.html) of the author's preferred TypeScript ingredients.
 
 Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz.
 
