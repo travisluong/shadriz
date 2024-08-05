@@ -135,7 +135,7 @@ program
         }
         adminEnabled = await confirm({
           message:
-            "Do you want to add an Admin dashboard with role-based authorization?",
+            "Do you want to add an admin dashboard with role-based authorization?",
           default: true,
         });
         if (adminEnabled && !authProviders.includes("credentials")) {

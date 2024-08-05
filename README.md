@@ -10,13 +10,13 @@ Rather, it is a command line interface code generation tool.
 
 You do not install it as a dependency.
 
-Initialize common full stack requirements such as authentication, authorization, and payments.
+Initialize common full stack features such as authentication, authorization, and payments.
 
 Scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
 The code is yours.
 
-## The shadriz tech stack
+## Tech stack
 
 - [Next.js](https://nextjs.org/) - React Framework
 - [shadcn/ui](https://ui.shadcn.com/) - UI Components
@@ -54,7 +54,7 @@ You will be asked a few questions to configure the app.
 ? Which primary key generation strategy would you like to use? uuidv7
 ? Which auth providers would you like to use? github, google, credentials, postmark, nodemailer
 ? Which session strategy would you like to use? jwt
-? Do you want to add an Admin dashboard with role-based authorization? yes
+? Do you want to add an admin dashboard with role-based authorization? yes
 ? Do you want to enable Stripe for payments? yes
 ? Do you want to add a dark mode toggle? yes
 ```
@@ -71,11 +71,11 @@ After initialization, you may be prompted to complete a few additional tasks dep
 - Add secrets to `.env.local`.
 - Set up Stripe.
 
-## Scaffold a full stack component
+## Scaffold
 
-After the initial configuration is completed, you can scaffold full stack components with the `scaffold` command.
+After the initial configuration is completed, you can scaffold full stack features with the `scaffold` command.
 
-This command will generate the user interface, database migrations, server actions, and server components of a full stack component.
+This command will generate the user interface, database migration and schema, server actions, server components, and client components of a full stack feature.
 
 The `-c` option takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
 
@@ -83,7 +83,7 @@ Shadriz supports a variety of primary key configurations, foreign key configurat
 
 See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
 
-## Scaffold examples
+## Examples
 
 ### postgresql examples
 
@@ -160,29 +160,37 @@ Any of the code and content can be changed to fit your business model. The goal 
 
 ## FAQ
 
+**What is a scaffold?**
+
+In short, a scaffold is all of the starter code, including the UI and data layer, that is required to have a fully functional CRUD (Create Read Update Delete) application. Scaffolding was popular in MVC (Model View Controller) frameworks such as Ruby on Rails.
+
+This was helpful as it saved time setting up the initial boilerplate of an application. It also served as a starting reference point for building out the actual web app. This is particularly useful for people or organizations who start many projects.
+
+With scaffolding, you spend less time looking things up because there is a point of reference to build upon. This frees up time and energy to focus on the service layer, which usually requires more custom business logic beyond basic CRUD.
+
 **Why not a web framework?**
 
-Next.js is the underlying web framework. However, despite all of the conveniences it offers, you still have to write a significant amount of boilerplate code when you start a project.
+Next.js is the underlying web framework. However, despite all of the conveniences it offers, you still have to write a significant amount of boilerplate code when you start a project from a fresh Next.js installation.
 
-Things like setting up the database and the UI library. For some projects, you may need authentication, role-based authorization, and payment processing. These things take time to do.
+shadriz differs in that it provides an opinionated abstraction for creating a solid starting point for app development. shadriz works by writing code to a new Next.js project.
 
-shadriz differs in that it provides a higher level abstraction for building apps. It's like a low-code solution where you own the concrete implementation so you can customize it according to your project requirements. The code is written to your Next.js repo and you can review it before committing to anything.
+You own the code so you can customize it according to your project requirements. The code is written to your Next.js repo and you can review it before committing to anything.
 
 **Why not a boilerplate?**
 
-Boilerplates have one problem. They go obsolete fast. Within a few months, many of your dependencies may already be behind the latest version.
+Boilerplates go obsolete fast. Within a few months, many of your dependencies may already be behind the latest version.
 
 That is why shadriz offers a `--latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more.
 
 If you prefer a more stable version, leave out the `--latest` flag and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
+
+The other problem with boilerplates is that it is a static repo. It can't generate unique database schemas specific to your project.
 
 ## Inspirations
 
 ### Ruby on Rails
 
 shadriz is inspired by the **convention over configuration** philosophy of Ruby on Rails, which allows anyone to rapidly prototype applications in minutes.
-
-shadriz is an [omakase](https://dhh.dk/2012/rails-is-omakase.html) of the author's preferred TypeScript ingredients.
 
 Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz.
 
@@ -194,23 +202,19 @@ Next.js provides many conveniences out of the box, such file system routing, ser
 
 ### shadcn/ui
 
-shadriz is inspired by the **non-dependency and transparency** of shadcn/ui, the tool that allows anyone to automatically copy and paste beautifully styled radix ui components into their projects.
+shadriz is inspired by the **non-dependency and customizability** of shadcn/ui, the tool that copies and paste beautifully styled components into your projects.
 
-shadriz essentially generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
-
-Like shadcn/ui, shadriz is not a dependency that you add to your node project. Instead, it is a CLI tool that installs third party packages and generates code.
+Similarly, shadriz essentially generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
 
 ### Drizzle ORM
 
-shadriz uses Drizzle ORM for the best-of-both world of **sql-like** and **relational queres**, as well as automatic **schema generation** and **database migrations**.
+shadriz uses Drizzle ORM for the best-of-both worlds of **sql-like and relational queres**, as well as automatic **schema generation and database migrations**.
 
-shadriz takes the automations one step further by generating the configuration files required to start using Drizzle ORM.
-
-Like Drizzle ORM, shadriz supports 3 database dialects: postgresql, mysql, and sqlite.
+shadriz takes the automations one step further by generating the configuration files required to start using Drizzle ORM, as well as the database schemas and migrations for the full stack scaffolds.
 
 ### TailwindCSS
 
-shadriz is based on shadcn/ui which has it's **styling based on TailwindCSS**, a CSS framework which provides reusable utility classes. TailwindCSS is chosen for it's benefits on **development speed** and **composability**.
+shadriz is based on shadcn/ui which has it's styling based on TailwindCSS, a CSS framework which provides reusable utility classes. TailwindCSS is chosen for it's benefits on **development speed and composability**.
 
 TailwindCSS simplifies and improves scalability of styling by coupling markup with style.
 
@@ -220,7 +224,7 @@ shadriz uses Auth.js for it's authentication solution. However, running the Auth
 
 With one command, you can have authentication mostly setup and configured. Just add the client ids and secrets to the `.env.local` file and you're good to go.
 
-shadriz also provides a `script/create-user.ts` script to create users. This is also provided as an example on how to leverage Drizzle ORM in backend scripting using TypeScript. Note: this script is only generated if `credentials` is chosen as a provider.
+shadriz also provides a `script/create-user.ts` script to create test users. This script is only generated if `credentials` is chosen as a provider.
 
 ### Zod
 
