@@ -1,21 +1,32 @@
 # shadriz
 
+## Introduction
+
 shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
 
-shadriz is not a dependency that is added to your project. Instead, it is a command line code generation tool.
+This is **NOT** a web framework.
 
-Spend more time creating, less time on boilerplate. Ship in minutes instead of days. Free. Open Source.
+Rather, it is a command line interface code generation tool.
 
-## Tech Stack
+You do not install it as a dependency.
+
+Initialize common full stack requirements such as authentication, authorization, and payments.
+
+Scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
+
+The code is yours.
+
+## The shadriz tech stack
 
 - [Next.js](https://nextjs.org/) - React Framework
 - [shadcn/ui](https://ui.shadcn.com/) - UI Components
 - [Drizzle ORM](https://orm.drizzle.team/) - Object Relational Mapper
 - [TailwindCSS](https://tailwindcss.com/) - CSS Framework
 - [Auth.js](https://authjs.dev/) - Authentication
+- [Stripe](https://www.stripe.com) - Payments
 - [zod](https://zod.dev/) - Validation
 
-## Getting started
+## Installation
 
 ### Step 1: Create new project
 
@@ -35,7 +46,7 @@ npx shadriz@latest init
 
 ### Step 3: Configure project
 
-You will be asked a few questions to configure database and Auth.js. Note: You must choose `jwt` if credentials is selected.
+You will be asked a few questions to configure the app.
 
 ```
 ? Which database library would you like to use? pg
@@ -50,41 +61,46 @@ You will be asked a few questions to configure database and Auth.js. Note: You m
 
 ### Step 4: Complete project configuration
 
-After initialization, you will be prompted to complete a few additional tasks:
+After initialization, you may be prompted to complete a few additional tasks depending on the options you chose. For example:
 
-- Update the database url in `.env.local` to point to your database.
-- Run migrations.
-- Set up the providers.
-- Create a test user if `credentials` was selected.
+- Update the database url in `.env.local`.
+- Run database migrations.
+- Set up the auth providers.
+- Create a test user.
+- Create an admin user.
+- Add secrets to `.env.local`.
+- Set up Stripe.
 
-### Step 5: Scaffold a full stack component
+## Scaffold a full stack component
 
-You can now scaffold full stack components.
+After the initial configuration is completed, you can scaffold full stack components with the `scaffold` command.
 
-This command will generate the CRUD UI, database migrations, server actions, and server components of a full stack component. The columns option `-c` or `--columns` takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
+This command will generate the user interface, database migrations, server actions, and server components of a full stack component.
 
-Shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below. See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
+The `-c` option takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
 
-The views are placed into the `(public)` route group by default. To make the views and actions require authentication, add a `-p` or `--private` flag to place everything into the `(private)` route group. Note: the private flag can only be used if Auth.js has already been configured.
+Shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
+
+See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
 
 ## Scaffold examples
 
 ### postgresql examples
 
 ```bash
-# postgresql uuidv7 primary key examples:
+# postgresql uuidv7 primary key example:
 scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 title:text created_at:timestamp:default-now
 
-# postgresql uuidv4 primary key examples:
+# postgresql uuidv4 primary key example:
 scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 title:text created_at:timestamp:default-now
 
-# postgresql bigserial auto increment primary key examples:
+# postgresql bigserial auto increment primary key example:
 scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
 
-# postgresql serial auto increment primary key examples:
+# postgresql serial auto increment primary key example:
 scaffold post -d postgresql -c id:serial:pk title:text created_at:timestamp:default-now
 
-# postgresql foreign key examples:
+# postgresql foreign key example:
 scaffold post -d postgresql -c id:bigserial:pk title:text
 scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id content:text
 ```
@@ -92,19 +108,19 @@ scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id cont
 ### mysql examples
 
 ```bash
-# mysql uuidv7 primary key examples:
+# mysql uuidv7 primary key example:
 scaffold post -d mysql -c id:varchar:pk:default-uuidv7 title:varchar created_at:timestamp:default-now
 
-# mysql uuidv4 primary key examples:
+# mysql uuidv4 primary key example:
 scaffold post -d mysql -c id:varchar:pk:default-uuidv4 title:varchar created_at:timestamp:default-now
 
-# mysql serial auto increment primary key examples:
+# mysql serial auto increment primary key example:
 scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
 
-# mysql integer auto increment primary key examples:
+# mysql integer auto increment primary key example:
 scaffold post -d mysql -c id:integer:pk-auto title:varchar created_at:timestamp:default-now
 
-# mysql foreign key examples:
+# mysql foreign key example:
 scaffold post -d mysql -c id:serial:pk title:varchar
 scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
 ```
@@ -112,19 +128,53 @@ scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
 ### sqlite examples
 
 ```bash
-# sqlite uuidv7 primary key examples:
+# sqlite uuidv7 primary key example:
 scaffold post -d sqlite -c id:text:pk:default-uuidv7 title:text created_at:text:default-now
 
-# sqlite uuidv4 primary key examples:
+# sqlite uuidv4 primary key example:
 scaffold post -d sqlite -c id:text:pk:default-uuidv4 title:text created_at:text:default-now
 
-# sqlite integer auto increment primary key examples:
+# sqlite integer auto increment primary key example:
 scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now
 
-# sqlite foreign key examples:
+# sqlite foreign key example:
 scaffold post -d sqlite -c id:integer:pk-auto title:text
 scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
 ```
+
+## Auth
+
+If Auth.js was enabled during initialization, you will be able to scaffold using a `private` authorization level. The pages will be put into the `(private)` route group. These pages along with the server actions will require a user to be authenticated to access.
+
+If the Admin dashboard was enabled during initialization, you will be able to scaffold using an `admin` authorization level. The pages will be put into the `(admin)` route group. These pages along with the server actions will require a user with the `admin` role to access.
+
+Additional roles can be added to the `user_role` table according to project needs. Additional access control functions can be added to `lib/authorization.ts` and used throughout the application.
+
+## Stripe
+
+If Stripe was enabled during initialization, all the code needed for a simple one-time purchase and monthly subscription model will be generated. This includes the webhook, checkout session, and customer portal api endpoints.
+
+Also, a basic pricing page with the one-time purchase and subscription is included. A `scripts/create-price.ts` script is provided to create the initial products on Stripe and on the local database.
+
+Any of the code and content can be changed to fit your business model. The goal of this Stripe automation is to provide a fully functional example to use as a starting point. If the payment requirements are simple, then it may be sufficient to start using right away to start accepting payments.
+
+## FAQ
+
+**Why not a web framework?**
+
+Next.js is the underlying web framework. However, despite all of the conveniences it offers, you still have to write a significant amount of boilerplate code when you start a project.
+
+Things like setting up the database and the UI library. For some projects, you may need authentication, role-based authorization, and payment processing. These things take time to do.
+
+shadriz differs in that it provides a higher level abstraction for building apps. It's like a low-code solution where you own the concrete implementation so you can customize it according to your project requirements. The code is written to your Next.js repo and you can review it before committing to anything.
+
+**Why not a boilerplate?**
+
+Boilerplates have one problem. They go obsolete fast. Within a few months, many of your dependencies may already be behind the latest version.
+
+That is why shadriz offers a `--latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more.
+
+If you prefer a more stable version, leave out the `--latest` flag and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
 
 ## Inspirations
 
