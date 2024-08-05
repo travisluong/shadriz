@@ -1,42 +1,35 @@
-{{#if darkMode}}
+import { BlendingModeIcon } from "@radix-ui/react-icons";
 import { ModeToggle } from "@/components/mode-toggle";
-{{/if}}
 
 export default function Header() {
   return (
-    <header className="bg-white dark:bg-black">
+    <header>
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div>
-          🍱{" "}
+        <div className="flex items-center">
+          <BlendingModeIcon className="mr-2" />
           <a href="/" className="font-bold">
             shadriz
           </a>
         </div>
         <div>
-          <a href="/docs" className="text-gray-700 dark:text-gray-200 hover:text-blue-500 mr-4">
+          <a href="/docs" className="mr-4">
             Docs
           </a>
-          {{#if stripeEnabled}}
-          <a href="/pricing" className="text-gray-700 dark:text-gray-200 hover:text-blue-500 mr-4">
+          <a href="/pricing" className="mr-4">
             Pricing
           </a>
-          {{/if}}
-          {{#if authEnabled}}
           <a
             href="/dashboard"
-            className="text-gray-700 dark:text-gray-200 hover:text-blue-500 mr-4"
+            className="mr-4"
           >
             Dashboard
           </a>
-          <a href="/signin" className="text-gray-700 dark:text-gray-200 hover:text-blue-500">
+          <a href="/signin">
             Sign In
           </a>
-          {{/if}}
-          {{#if darkMode}}
           <div className="ml-5 inline-block">
             <ModeToggle />
           </div>
-          {{/if}}
         </div>
       </div>
     </header>

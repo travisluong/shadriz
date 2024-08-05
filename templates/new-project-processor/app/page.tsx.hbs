@@ -1,86 +1,80 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
     <div>
       <Header />
-      <section className="bg-white dark:bg-black">
+      <section>
         <div className="container mx-auto px-6 py-16 text-center">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight">
             Full Stack TypeScript Automation
           </h1>
-          <p className="mt-4 text-gray-600 dark:text-gray-400 dark:text-gray-200">
+          <p className="mt-4">
             Ship in minutes instead of days. Spend more time creating. Less time
             on boilerplate. Free. Open Source.
           </p>
-          <a
-            href="/docs"
-            className="mt-6 inline-block bg-black text-white dark:bg-white dark:text-black py-2 px-6 rounded-full shadow-md hover:bg-black/90 transition duration-300"
-          >
-            Get Started
+          <a href="/docs" className="mt-5 block">
+            <Button className="rounded-full">Get Started</Button>
           </a>
         </div>
       </section>
 
-      <section className="container bg-gray-100 dark:bg-gray-900 mx-auto px-6 py-16">
+      <section className="container mx-auto px-6 py-16">
         <h2 className="text-3xl md:text-4xl font-bold text-center">
           Technologies
         </h2>
         <div className="mt-12 flex flex-wrap">
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">TypeScript</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               JavaScript with syntax for types.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">Next.js</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               React framework. Server components. Server actions.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">shadcn/ui</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               Pre-styled Radix UI components.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">Drizzle ORM</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               SQL-like and Relational queries. Database migrations.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">TailwindCSS</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               Utility-first CSS framework.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">Auth.js</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Authentication. OAuth.
-            </p>
+            <p className="mt-2 text-muted-foreground">Authentication. OAuth.</p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">Stripe</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               Accept one time and recurring payments.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">TanStack Table</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-muted-foreground">
               Powerful tables and datagrids.
             </p>
           </div>
           <div className="w-full md:w-1/3 px-4 py-6">
             <h3 className="text-2xl font-bold">Zod</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Data validations.
-            </p>
+            <p className="mt-2 text-muted-foreground">Data validations.</p>
           </div>
         </div>
       </section>

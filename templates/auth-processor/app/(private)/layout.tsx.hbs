@@ -1,7 +1,9 @@
 import { auth, signOut } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  AvatarIcon,
   BackpackIcon,
+  BlendingModeIcon,
   DashboardIcon,
   ExitIcon,
   GearIcon,
@@ -20,16 +22,16 @@ export default async function Layout({
   }
   return (
     <div>
-      <header className="bg-gray-300 dark:bg-gray-900">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="font-bold">
-            🍱 <a href="/">shadriz</a>
+      <header className="bg-muted">
+        <div className="mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="font-bold flex items-center">
+            <BlendingModeIcon className="mr-2" /> <a href="/">shadriz</a>
           </div>
           <div>
             <Avatar>
               <AvatarImage src={session.user?.image ?? undefined} />
               <AvatarFallback>
-                {session.user?.email?.charAt(0).toUpperCase()}
+                <AvatarIcon className="w-8 h-8" />
               </AvatarFallback>
             </Avatar>
           </div>
@@ -37,43 +39,41 @@ export default async function Layout({
       </header>
 
       <div className="flex">
-        <aside className="w-1/4 bg-gray-100 dark:bg-gray-950 shadow-md min-h-screen">
-          <nav className="px-6 py-8">
+        <aside className="min-w-40 max-w-sm px-5 bg-muted min-h-screen">
+          <nav className="py-8">
             <ul>
               <li className="mb-4">
                 <a
                   href="/dashboard"
-                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 font-semibold"
                 >
-                  <DashboardIcon /> Dashboard
+                  <DashboardIcon className="flex-shrink-0" /> Dashboard
                 </a>
               </li>
               <li className="mb-4">
                 <a
                   href="/profile"
-                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 font-semibold"
                 >
-                  <PersonIcon /> Profile
+                  <PersonIcon className="flex-shrink-0" /> Profile
                 </a>
               </li>
               <li className="mb-4">
                 <a
                   href="/settings"
-                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 font-semibold"
                 >
-                  <GearIcon /> Settings
+                  <GearIcon className="flex-shrink-0" /> Settings
                 </a>
               </li>
-              {{#if stripeEnabled}}
               <li className="mb-4">
                 <a
                   href="/account"
-                  className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
+                  className="flex items-center gap-2 font-semibold"
                 >
-                  <BackpackIcon /> Account
+                  <BackpackIcon className="flex-shrink-0" /> Account
                 </a>
               </li>
-              {{/if}}
               <li className="mb-4">
                 <form
                   action={async () => {
@@ -83,22 +83,17 @@ export default async function Layout({
                 >
                   <button
                     type="submit"
-                    className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-500 font-semibold"
+                    className="flex items-center gap-2 font-semibold"
                   >
-                    <ExitIcon /> Sign Out
+                    <ExitIcon className="flex-shrink-0" /> Sign Out
                   </button>
                 </form>
               </li>
             </ul>
           </nav>
         </aside>
-        <main className="w-3/4 p-6 bg-white dark:bg-black">{children}</main>
+        <main className="p-5 w-full">{children}</main>
       </div>
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-6 text-center">
-          <p>&copy; 2024 shadriz</p>
-        </div>
-      </footer>
     </div>
   );
 }
