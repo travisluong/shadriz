@@ -157,14 +157,19 @@ export class ScaffoldProcessor {
   addListView(): void {
     renderTemplate({
       inputPath: "scaffold-processor/app/table/page.tsx.hbs",
-      outputPath: `app/${this.privateRouteGroup()}${this.opts.table}/page.tsx`,
-      data: { table: this.opts.table },
+      outputPath: `app/${this.authorizationRouteGroup()}${
+        this.opts.table
+      }/page.tsx`,
+      data: {
+        table: this.opts.table,
+        isAdmin: this.opts.authorizationLevel === "admin",
+      },
     });
   }
   addDetailView(): void {
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
-      outputPath: `app/${this.privateRouteGroup()}${
+      outputPath: `app/${this.authorizationRouteGroup()}${
         this.opts.table
       }/[id]/page.tsx`,
       data: { table: this.opts.table },
@@ -173,7 +178,7 @@ export class ScaffoldProcessor {
   addEditView(): void {
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/edit/page.tsx.hbs",
-      outputPath: `app/${this.privateRouteGroup()}${
+      outputPath: `app/${this.authorizationRouteGroup()}${
         this.opts.table
       }/[id]/edit/page.tsx`,
       data: {
@@ -185,7 +190,7 @@ export class ScaffoldProcessor {
   addNewView(): void {
     renderTemplate({
       inputPath: "scaffold-processor/app/table/new/page.tsx.hbs",
-      outputPath: `app/${this.privateRouteGroup()}${
+      outputPath: `app/${this.authorizationRouteGroup()}${
         this.opts.table
       }/new/page.tsx`,
       data: {
@@ -197,7 +202,7 @@ export class ScaffoldProcessor {
   addDeleteView(): void {
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/delete/page.tsx.hbs",
-      outputPath: `app/${this.privateRouteGroup()}${
+      outputPath: `app/${this.authorizationRouteGroup()}${
         this.opts.table
       }/[id]/delete/page.tsx`,
       data: {
@@ -243,7 +248,9 @@ export class ScaffoldProcessor {
         capitalizedTable: capitalize(this.opts.table),
         columns: columns,
         formDataKeyVal: formDataKeyVal,
-        private: this.opts.private,
+        isNotPublic: this.opts.authorizationLevel !== "public",
+        isPrivate: this.opts.authorizationLevel === "private",
+        isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
       },
@@ -284,7 +291,9 @@ export class ScaffoldProcessor {
         capitalizedTable: capitalize(this.opts.table),
         columns: columns,
         formDataKeyVal: formDataKeyVal,
-        private: this.opts.private,
+        isNotPublic: this.opts.authorizationLevel !== "public",
+        isPrivate: this.opts.authorizationLevel === "private",
+        isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
       },
@@ -308,7 +317,9 @@ export class ScaffoldProcessor {
       data: {
         table: this.opts.table,
         capitalizedTable: capitalize(this.opts.table),
-        private: this.opts.private,
+        isNotPublic: this.opts.authorizationLevel !== "public",
+        isPrivate: this.opts.authorizationLevel === "private",
+        isAdmin: this.opts.authorizationLevel === "admin",
         formDataKeyVal: formDataKeyVal,
       },
     });
@@ -332,6 +343,7 @@ export class ScaffoldProcessor {
         columnDefs: columnDefs,
         drizzleInferredType: capitalizedTableName,
         table: this.opts.table,
+        isAdmin: this.opts.authorizationLevel === "admin",
       },
     });
   }
@@ -477,11 +489,18 @@ export class ScaffoldProcessor {
       }
     }
   }
-  privateRouteGroup() {
-    if (this.opts.private) {
-      return "(private)/";
-    } else {
-      return "(public)/";
+  authorizationRouteGroup() {
+    switch (this.opts.authorizationLevel) {
+      case "admin":
+        return "(admin)/admin/";
+      case "private":
+        return "(private)/";
+      case "public":
+        return "(public)/";
+      default:
+        throw new Error(
+          "invalid authorization level " + this.opts.authorizationLevel
+        );
     }
   }
 }

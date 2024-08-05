@@ -9,7 +9,7 @@ export default async function Page() {
     <div>
       <h1 className="text-3xl font-bold mb-6">{{table}}</h1>
       <div className="text-right mr-2">
-        <a href="{{table}}/new" className="text-blue-500">
+        <a href="{{#if isAdmin}}admin/{{/if}}{{table}}/new" className="text-blue-500">
           new
         </a>
       </div>

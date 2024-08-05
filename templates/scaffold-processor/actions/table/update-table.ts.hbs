@@ -4,11 +4,14 @@ import { db } from "@/lib/db";
 import { insert{{capitalizedTable}}Schema, {{table}}, {{capitalizedTable}} } from "@/schema/{{table}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-{{#if private}}
-import { auth } from "@/auth";
-{{/if}}
 {{#if importFileUtils}}
 import { getUploadPath, uploadFile } from "@/lib/file-utils";
+{{/if}}
+{{#if isNotPublic}}
+import { auth } from "@/auth";
+{{/if}}
+{{#if isAdmin}}
+import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
 
 export interface Update{{capitalizedTable}}State {
@@ -24,10 +27,16 @@ export async function update{{capitalizedTable}}(
   prevState: Update{{capitalizedTable}}State,
   formData: FormData
 ): Promise<Update{{capitalizedTable}}State> {
-{{#if private}}
+{{#if isNotPublic}}
   const session = await auth();
-  if (!session) {
-    throw new Error("access denied")
+  if (!session?.user?.id) {
+    throw new Error("access denied");
+  }
+{{/if}}
+{{#if isAdmin}}
+  const isAdmin = await hasAdminRole(session.user.id);
+  if (!isAdmin) {
+    throw new Error("unauthorized");
   }
 {{/if}}
 
@@ -74,9 +83,9 @@ export async function update{{capitalizedTable}}(
     .set(data)
     .where(eq({{table}}.id, validatedFields.data.id));
 
-  revalidatePath("/{{table}}");
-  revalidatePath("/{{table}}/" + validatedFields.data.id);
-  revalidatePath("/{{table}}/" + validatedFields.data.id + "/edit");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}/" + validatedFields.data.id);
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}/" + validatedFields.data.id + "/edit");
 
   return {
     message: "success",

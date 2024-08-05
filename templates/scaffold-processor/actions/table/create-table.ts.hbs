@@ -4,11 +4,14 @@ import { db } from "@/lib/db";
 import { insert{{capitalizedTable}}Schema, {{table}}, {{capitalizedTable}} } from "@/schema/{{table}}";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-{{#if private}}
-import { auth } from "@/auth";
-{{/if}}
 {{#if importFileUtils}}
 import { getUploadPath, uploadFile } from "@/lib/file-utils";
+{{/if}}
+{{#if isNotPublic}}
+import { auth } from "@/auth";
+{{/if}}
+{{#if isAdmin}}
+import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
 
 export interface Create{{capitalizedTable}}State {
@@ -24,10 +27,16 @@ export async function create{{capitalizedTable}}(
   prevState: Create{{capitalizedTable}}State,
   formData: FormData
 ): Promise<Create{{capitalizedTable}}State> {
-{{#if private}}
+{{#if isNotPublic}}
   const session = await auth();
-  if (!session) {
-    throw new Error("access denied")
+  if (!session?.user?.id) {
+    throw new Error("access denied");
+  }
+{{/if}}
+{{#if isAdmin}}
+  const isAdmin = await hasAdminRole(session.user.id);
+  if (!isAdmin) {
+    throw new Error("unauthorized");
   }
 {{/if}}
 
@@ -64,6 +73,6 @@ export async function create{{capitalizedTable}}(
 {{/each}}
 
   await db.insert({{table}}).values(data);
-  revalidatePath("/{{table}}");
-  redirect("/{{table}}");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}");
+  redirect("{{#if isAdmin}}/admin{{/if}}/{{table}}");
 }

@@ -42,9 +42,11 @@ export interface DataTypeStrategyMap {
   [key: string]: DataTypeStrategy;
 }
 
+export type AuthorizationLevel = "admin" | "private" | "public";
+
 export interface ScaffoldProcessorOpts extends ScaffoldOpts {
   dbDialectStrategy: DbDialectStrategy;
-  private: boolean;
+  authorizationLevel: AuthorizationLevel;
 }
 
 export interface GetColumnDefObjsOpts {

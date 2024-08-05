@@ -2,7 +2,12 @@
 
 import { Command } from "commander";
 import { log } from "./lib/log";
-import { AuthProvider, PkStrategy, SessionStrategy } from "./lib/types";
+import {
+  AuthorizationLevel,
+  AuthProvider,
+  PkStrategy,
+  SessionStrategy,
+} from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
@@ -15,6 +20,7 @@ import { NewProjectProcessor } from "./processors/new-project-processor";
 import { DarkModeProcessor } from "./processors/dark-mode-processor";
 import { StripeProcessor } from "./processors/stripe-processor";
 import { AdminProcessor } from "./processors/admin-processor";
+import fs from "fs";
 
 const program = new Command();
 
@@ -62,6 +68,29 @@ program
       let pkStrategy;
       let adminEnabled;
       let adminProcessor;
+      let latest = false;
+      if (options.install) {
+        latest =
+          options.latest ||
+          (await select({
+            message:
+              "Do you want to install latest dependencies or pinned dependencies?",
+            choices: [
+              {
+                name: "pinned",
+                value: false,
+                description:
+                  "Installs pinned shadriz dependencies. More stable.",
+              },
+              {
+                name: "latest",
+                value: true,
+                description:
+                  "Installs latest dependencies. Cutting edge. Less stable.",
+              },
+            ],
+          }));
+      }
       const dbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
@@ -124,7 +153,7 @@ program
       const newProjectProcessor = new NewProjectProcessor({
         pnpm: options.pnpm,
         install: options.install,
-        latest: options.latest,
+        latest: latest,
         darkMode: darkModeEnabled,
         authEnabled: authEnabled,
         stripeEnabled: stripeEnabled,
@@ -132,7 +161,7 @@ program
       const dbPackageStrategy = packageStrategyFactory(dbPackage, {
         pnpm: options.pnpm,
         install: options.install,
-        latest: options.latest,
+        latest: latest,
       });
       const dbDialectStrategy = dialectStrategyFactory(
         dbPackageStrategy.dialect
@@ -143,7 +172,7 @@ program
           providers: authProviders as AuthProvider[],
           sessionStrategy: authStrategy as SessionStrategy,
           install: options.install,
-          latest: options.latest,
+          latest: latest,
           stripeEnabled: stripeEnabled,
           pkStrategy: pkStrategy as PkStrategy,
           dbDialectStrategy: dbDialectStrategy,
@@ -153,7 +182,7 @@ program
         adminProcessor = new AdminProcessor({
           pnpm: options.pnpm,
           install: options.install,
-          latest: options.latest,
+          latest: latest,
         });
       }
       if (stripeEnabled) {
@@ -161,7 +190,7 @@ program
           dbDialectStrategy: dbDialectStrategy,
           pnpm: options.pnpm,
           install: options.install,
-          latest: options.latest,
+          latest: latest,
           pkStrategy: pkStrategy as PkStrategy,
         });
       }
@@ -172,7 +201,7 @@ program
         const darkModeProcessor = new DarkModeProcessor({
           pnpm: options.pnpm,
           install: options.install,
-          latest: options.latest,
+          latest: latest,
         });
         await darkModeProcessor.init();
       }
@@ -251,18 +280,43 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
     "-c, --columns <columns...>",
     "column_name:data_type:column-arg1:column-arg2"
   )
-  .option(
-    "-p, --private",
-    "scaffold into app/(private) route group. requires auth to access",
-    false
-  )
   .action(async (table, options) => {
+    const authorizationLevel: AuthorizationLevel = await select({
+      message:
+        "Which authorization level would you like to use for this scaffold?",
+      choices: [
+        {
+          value: "admin",
+          description:
+            "Requires authentication and specific administrative privileges.",
+        },
+        {
+          value: "private",
+          description:
+            "Requires user authentication but may not require specific roles.",
+        },
+        {
+          value: "public",
+          description: "Accessible by anyone without authentication.",
+        },
+      ],
+    });
+    if (authorizationLevel === "admin" && !fs.existsSync("app/(admin)")) {
+      log.bgRed(
+        "(admin) route group is missing. authorization must be enabled."
+      );
+      process.exit(1);
+    }
+    if (authorizationLevel === "private" && !fs.existsSync("app/(private)")) {
+      log.bgRed("(private) route group is missing. auth must be enabled.");
+      process.exit(1);
+    }
     const dialectStrategy = dialectStrategyFactory(options.dialect);
     const scaffoldProcessor = new ScaffoldProcessor({
       table: table,
       columns: options.columns,
       dbDialectStrategy: dialectStrategy,
-      private: options.private,
+      authorizationLevel: authorizationLevel,
     });
     scaffoldProcessor.process();
   });

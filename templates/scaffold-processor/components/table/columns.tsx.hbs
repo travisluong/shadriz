@@ -11,7 +11,7 @@ export const columns: ColumnDef<{{drizzleInferredType}}>[] = [
         const id = row.getValue("id");
         return (
           <div className="text-blue-500">
-              <a href={`/{{table}}/${id}`}>view</a> | <a href={`/{{table}}/${id}/edit`}>edit</a> | <a href={`/{{table}}/${id}/delete`}>delete</a>
+              <a href={`{{#if isAdmin}}/admin/{{/if}}/{{table}}/${id}`}>view</a> | <a href={`{{#if isAdmin}}/admin/{{/if}}/{{table}}/${id}/edit`}>edit</a> | <a href={`{{#if isAdmin}}/admin/{{/if}}/{{table}}/${id}/delete`}>delete</a>
           </div>
         )
     })
