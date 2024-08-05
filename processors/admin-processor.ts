@@ -43,8 +43,8 @@ export class AdminProcessor implements ShadrizProcessor {
     });
 
     renderTemplate({
-      inputPath: "admin-processor/lib/admin.ts.hbs",
-      outputPath: "lib/admin.ts",
+      inputPath: "admin-processor/lib/authorization.ts.hbs",
+      outputPath: "lib/authorization.ts",
     });
 
     renderTemplate({
