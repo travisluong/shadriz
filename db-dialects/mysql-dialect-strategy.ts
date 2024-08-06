@@ -297,6 +297,14 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  pkStrategyColumnStr: Record<PkStrategy, string> = {
+    uuidv7: "id:varchar:pk,default-uuidv7",
+    uuidv4: "id:varchar:pk,default-uuidv4",
+    uuid: "id:varchar:pk,default-uuid",
+    "auto-increment": "",
+  };
+  createdAtColumnStr: string = "created_at:timestamp:default-now";
+  updatedAtColumnStr: string = "updated_at:timestamp:default-now";
   authSchemaTemplate: string = "db-dialects/schema/user.ts.mysql.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: varchar("id", { length: 255 }).notNull().primaryKey().$defaultFn(() => uuidv7()),`,
@@ -308,9 +316,10 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     "stripe-processor/schema/stripe.ts.mysql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
   tableConstructor: string = "mysqlTable";
-  dialectArgsMap = {
+  dialectConstraintsMap = {
     "pk-auto": ".primaryKey().autoincrement()",
     "default-now": ".defaultNow()",
+    "default-uuid": ".$defaultFn(() => sql`(uuid())`)",
   };
   dialect: DbDialect = "mysql";
   schemaTableTemplatePath: string =

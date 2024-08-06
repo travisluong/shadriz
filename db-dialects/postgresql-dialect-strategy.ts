@@ -276,10 +276,18 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  pkStrategyColumnStr: Record<PkStrategy, string> = {
+    uuidv7: "id:uuid:pk,default-uuidv7",
+    uuidv4: "id:uuid:pk,default-uuidv4",
+    uuid: "id:uuid:pk,default-random",
+    "auto-increment": "id:bigserial:pk",
+  };
+  createdAtColumnStr: string = "created_at:timestamp:default-now";
+  updatedAtColumnStr: string = "updated_at:timestamp:default-now";
   authSchemaTemplate: string = "db-dialects/schema/user.ts.postgresql.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
-    uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuidv7: `id: uuid("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: uuid("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     uuid: `id: uuid("id").notNull().primaryKey().defaultRandom(),`,
     "auto-increment": `id: bigserial("id", { mode: "number" }).notNull().primaryKey(),`,
   };
@@ -287,8 +295,9 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
     "stripe-processor/schema/stripe.ts.postgresql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/pg-core";
   tableConstructor: string = "pgTable";
-  dialectArgsMap = {
+  dialectConstraintsMap = {
     "default-now": ".defaultNow()",
+    "default-random": ".defaultRandom()",
   };
   schemaTableTemplatePath: string =
     "scaffold-processor/schema/table.ts.postgresql.hbs";

@@ -4,7 +4,6 @@ import {
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import {
-  appendToFile,
   capitalize,
   compileTemplate,
   renderTemplate,
@@ -29,7 +28,7 @@ import { log } from "../lib/log";
 export class ScaffoldProcessor {
   opts: ScaffoldProcessorOpts;
 
-  commonArgMap: { [key: string]: string } = {
+  commonConstraintMap: { [key: string]: string } = {
     pk: ".primaryKey()",
     "default-uuidv7": ".$defaultFn(() => uuidv7())",
     "default-uuidv4": ".$defaultFn(() => crypto.randomUUID())",
@@ -40,8 +39,9 @@ export class ScaffoldProcessor {
   }
 
   process(): void {
-    // this.appendCodeToSchema(); // single file schema
-    this.addSchema(); // multiple files schema
+    this.addPrimaryKeyColumnIfNotExists();
+    this.addTimestampsIfNotExists();
+    this.addSchema();
     this.addListView();
     this.addDetailView();
     this.addNewView();
@@ -57,24 +57,6 @@ export class ScaffoldProcessor {
     regenerateSchemaIndex();
     regenerateSchemaList();
     this.printCompletionMessage();
-  }
-  appendCodeToSchema(): void {
-    const { table, columns } = this.opts;
-    // compile columns
-    let columnsCode = "";
-    for (const [index, column] of columns.entries()) {
-      columnsCode += this.getKeyValueStrForSchema({ ...this.opts, column });
-      if (index !== columns.length - 1) {
-        columnsCode += "\n";
-      }
-    }
-    // compile str
-    const str = compileTemplate({
-      inputPath: this.opts.dbDialectStrategy.schemaTableTemplatePath,
-      data: { table, columns: columnsCode, typeName: capitalize(table) },
-    });
-
-    appendToFile("lib/schema.ts", str);
   }
   addSchema(): void {
     const { table, columns } = this.opts;
@@ -99,6 +81,32 @@ export class ScaffoldProcessor {
         imports: importsCode,
       },
     });
+  }
+  addPrimaryKeyColumnIfNotExists() {
+    let pkFound = false;
+    for (const [index, column] of this.opts.columns.entries()) {
+      const [columnName, dataType, constraints] = column.split(":");
+      if (columnName === "id") pkFound = true;
+    }
+    if (!pkFound) {
+      this.opts.columns.unshift(
+        this.opts.dbDialectStrategy.pkStrategyColumnStr[this.opts.pkStrategy]
+      );
+    }
+  }
+  addTimestampsIfNotExists() {
+    if (!this.opts.timestampsEnabled) return;
+    let createdAtFound = false;
+    let updatedAtFound = false;
+    for (const [index, column] of this.opts.columns.entries()) {
+      const [columnName, dataType, constraints] = column.split(":");
+      if (columnName === "created_at") createdAtFound = true;
+      if (columnName === "updated_at") updatedAtFound = true;
+    }
+    if (!createdAtFound)
+      this.opts.columns.push(this.opts.dbDialectStrategy.createdAtColumnStr);
+    if (!updatedAtFound)
+      this.opts.columns.push(this.opts.dbDialectStrategy.updatedAtColumnStr);
   }
   generateImportsCodeFromColumns(columns: string[]) {
     const dataTypeSet = new Set<string>();
@@ -133,24 +141,27 @@ export class ScaffoldProcessor {
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column } = opts;
     const { dataTypeStrategyMap } = this.opts.dbDialectStrategy;
-    const [columnName, dataType, arg1, arg2] = column.split(":");
-    const args = [arg1, arg2];
+    const [columnName, dataType, constraints] = column.split(":");
+    let constraintsArr: string[] = [];
+    if (constraints) {
+      constraintsArr = constraints.split(",");
+    }
     if (!(dataType in dataTypeStrategyMap)) {
       throw new Error("data type strategy not found: " + dataType);
     }
-    this.validateArgs(args);
+    this.validateConstraints(constraintsArr);
     const strategy = dataTypeStrategyMap[dataType];
     let str =
       "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
-    for (const arg of args) {
-      if (arg in this.commonArgMap) {
-        str += this.commonArgMap[arg];
+    for (const arg of constraintsArr) {
+      if (arg in this.commonConstraintMap) {
+        str += this.commonConstraintMap[arg];
       }
-      if (arg in this.opts.dbDialectStrategy.dialectArgsMap) {
-        str += this.opts.dbDialectStrategy.dialectArgsMap[arg];
+      if (arg in this.opts.dbDialectStrategy.dialectConstraintsMap) {
+        str += this.opts.dbDialectStrategy.dialectConstraintsMap[arg];
       }
     }
-    str += this.commonFkArgHandler(args);
+    str += this.commonFkArgHandler(constraintsArr);
     str += ",";
     return str;
   }
@@ -467,25 +478,25 @@ export class ScaffoldProcessor {
   isImageType(arr: string[]) {
     return arr[1] === "image";
   }
-  validateArg(arg: string): boolean {
-    if (arg === undefined) {
+  validateConstraint(constraint: string): boolean {
+    if (constraint === undefined) {
       return true;
     }
-    if (arg in this.commonArgMap) {
+    if (constraint in this.commonConstraintMap) {
       return true;
     }
-    if (arg in this.opts.dbDialectStrategy.dialectArgsMap) {
+    if (constraint in this.opts.dbDialectStrategy.dialectConstraintsMap) {
       return true;
     }
-    if (arg.startsWith("fk-")) {
+    if (constraint.startsWith("fk-")) {
       return true;
     }
     return false;
   }
-  validateArgs(args: string[]) {
-    for (const arg of args) {
-      if (!this.validateArg(arg)) {
-        throw new Error("invalid arg " + arg);
+  validateConstraints(constraints: string[]) {
+    for (const constraint of constraints) {
+      if (!this.validateConstraint(constraint)) {
+        throw new Error("invalid constraint " + constraint);
       }
     }
   }

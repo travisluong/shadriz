@@ -3,13 +3,14 @@ export interface ShadrizConfigFile {
   latest: boolean;
   authEnabled: boolean;
   stripeEnabled: boolean;
-  authProviders: string[];
-  sessionStrategy?: string;
-  pkStrategy: string;
+  authProviders: AuthProvider[];
+  sessionStrategy?: SessionStrategy;
+  pkStrategy: PkStrategy;
   adminEnabled: boolean;
-  dbPackage: string;
+  dbPackage: DbPackage;
   dbDialect: DbDialect;
   darkModeEnabled: boolean;
+  timestampsEnabled: boolean;
 }
 
 export interface ShadrizProcessorOpts {
@@ -47,20 +48,19 @@ export interface ShadrizProcessor {
 
 export type DbDialect = "postgresql" | "mysql" | "sqlite";
 
-export interface ScaffoldOpts {
-  table: string;
-  columns: string[];
-}
-
 export interface DataTypeStrategyMap {
   [key: string]: DataTypeStrategy;
 }
 
 export type AuthorizationLevel = "admin" | "private" | "public";
 
-export interface ScaffoldProcessorOpts extends ScaffoldOpts {
+export interface ScaffoldProcessorOpts {
+  table: string;
+  columns: string[];
   dbDialectStrategy: DbDialectStrategy;
   authorizationLevel: AuthorizationLevel;
+  pkStrategy: PkStrategy;
+  timestampsEnabled: boolean;
 }
 
 export interface GetColumnDefObjsOpts {
@@ -91,10 +91,13 @@ export interface DbDialectStrategy {
   drizzleDbCorePackage: string;
   tableConstructor: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
-  dialectArgsMap: { [key: string]: string };
+  dialectConstraintsMap: { [key: string]: string };
   stripeSchemaTemplatePath: string;
   pkStrategyTemplates: Record<PkStrategy, string>;
   authSchemaTemplate: string;
+  createdAtColumnStr: string;
+  updatedAtColumnStr: string;
+  pkStrategyColumnStr: Record<PkStrategy, string>;
   init(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;

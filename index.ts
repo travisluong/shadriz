@@ -5,6 +5,7 @@ import { log } from "./lib/log";
 import {
   AuthorizationLevel,
   AuthProvider,
+  DbPackage,
   PkStrategy,
   SessionStrategy,
   ShadrizConfigFile,
@@ -72,8 +73,8 @@ program
       let stripeProcessor;
       let stripeEnabled = false;
       let authProviders: AuthProvider[] = [];
-      let sessionStrategy;
-      let pkStrategy;
+      let sessionStrategy: SessionStrategy;
+      let pkStrategy: PkStrategy;
       let adminEnabled;
       let adminProcessor;
       let latest = false;
@@ -99,7 +100,7 @@ program
             ],
           }));
       }
-      const dbPackage = await select({
+      const dbPackage: DbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
           { name: "better-sqlite3", value: "better-sqlite3" },
@@ -116,8 +117,22 @@ program
           message:
             "Which primary key generation strategy would you like to use?",
           choices: [
-            { name: "uuidv7", value: "uuidv7" },
-            { name: "uuidv4", value: "uuidv4" },
+            {
+              name: "uuidv7",
+              value: "uuidv7",
+              description: "Uses uuidv7 package",
+            },
+            {
+              name: "uuidv4",
+              value: "uuidv4",
+              description: "Uses crypto.randomUUID",
+            },
+            {
+              name: "uuid",
+              value: "uuid",
+              description:
+                "Uses the database's built-in uuid function for mysql and postgresql. sqlite will fallback to uuidv4.",
+            },
           ],
         });
         authProviders = await checkbox({
@@ -161,6 +176,10 @@ program
         message: "Do you want to add a dark mode toggle?",
         default: true,
       });
+      const timestampsEnabled = await confirm({
+        message: "Do you want to add created_at and updated_at timestamps?",
+        default: true,
+      });
       const newProjectProcessor = new NewProjectProcessor({
         pnpm: options.pnpm,
         install: options.install,
@@ -180,12 +199,12 @@ program
       if (authEnabled) {
         authProcessor = new AuthProcessor({
           pnpm: options.pnpm,
-          providers: authProviders as AuthProvider[],
-          sessionStrategy: sessionStrategy as SessionStrategy,
+          providers: authProviders,
+          sessionStrategy: sessionStrategy!,
           install: options.install,
           latest: latest,
           stripeEnabled: stripeEnabled,
-          pkStrategy: pkStrategy as PkStrategy,
+          pkStrategy: pkStrategy!,
           dbDialectStrategy: dbDialectStrategy,
         });
       }
@@ -202,7 +221,7 @@ program
           pnpm: options.pnpm,
           install: options.install,
           latest: latest,
-          pkStrategy: pkStrategy as PkStrategy,
+          pkStrategy: pkStrategy!,
         });
       }
       await newProjectProcessor.init();
@@ -222,12 +241,13 @@ program
         authEnabled: authEnabled,
         stripeEnabled: stripeEnabled,
         authProviders: authProviders,
-        sessionStrategy: sessionStrategy,
+        sessionStrategy: sessionStrategy!,
         pkStrategy: pkStrategy!,
         adminEnabled: adminEnabled || false,
         dbPackage: dbPackage,
         dbDialect: dbDialectStrategy.dialect,
         darkModeEnabled: darkModeEnabled,
+        timestampsEnabled: timestampsEnabled,
       };
       writeToFile(
         "shadriz.config.json",
@@ -303,13 +323,12 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
 `
   )
   .argument("<table>", "table: post, product, order, etc")
-  .requiredOption("-d, --dialect <dialect>", "postgresql, mysql, sqlite")
   .requiredOption(
     "-c, --columns <columns...>",
-    "column_name:data_type:column-arg1:column-arg2"
+    "column_name:data_type:constraint1,constraint2"
   )
   .action(async (table, options) => {
-    const shadrizConfig = loadShadrizConfig();
+    const shadrizConfig: ShadrizConfigFile = loadShadrizConfig();
     let authorizationLevel: AuthorizationLevel = "public";
     if (shadrizConfig.authEnabled && shadrizConfig.adminEnabled) {
       authorizationLevel = await select({
@@ -365,6 +384,8 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
       columns: options.columns,
       dbDialectStrategy: dialectStrategy,
       authorizationLevel: authorizationLevel,
+      pkStrategy: shadrizConfig.pkStrategy || "uuidv7",
+      timestampsEnabled: shadrizConfig.timestampsEnabled ?? true,
     });
     scaffoldProcessor.process();
   });

@@ -6,7 +6,7 @@ shadriz is a full stack automation tool for building TypeScript web applications
 
 This is **NOT** a web framework.
 
-Rather, it is a command line interface code generation tool.
+It is a command line interface code generation tool.
 
 You do not install it as a dependency.
 
@@ -38,7 +38,7 @@ npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-sr
 
 ### Step 2: Run the CLI
 
-Run the `shadriz` init command to setup your project.
+Run the `shadriz init` command to setup your project.
 
 ```bash
 npx shadriz@latest init
@@ -77,11 +77,40 @@ After the initial configuration is completed, you can scaffold full stack featur
 
 This command will generate the user interface, database migration and schema, server actions, server components, and client components of a full stack feature.
 
-The `-c` option takes a space-separated string of column configurations in the following format: `column_name:datatype:constraint,constraint,constraint`.
+The `-c` option takes a space-separated string of column configurations in the following format: `column_name:data-type:constraint1,constraint2`. The column name, data type, and constraints are separated by a colon `:`. Each constraint is separated by a comma `,`.
 
 shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
 
 See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
+
+## Data Types
+
+**postgresql data types**
+
+integer, smallint, bigint, serial, smallserial, bigserial, boolean, text, varchar, char, numeric, decimal, real, doublePrecision, json, jsonb, time, timestamp, date, uuid
+
+**mysql data types**
+
+int, tinyint, smallint, mediumint, bigint, real, decimal, double, float, serial, binary, varbinary, char, varchar, text, boolean, date, datetime, time, year, timestamp, json
+
+**sqlite data types**
+
+integer, real, text, boolean, bigint
+
+## Constraints
+
+pk, default-now, default-uuidv7, default-uuidv4
+
+## Auto Increment
+
+mysql and sqlite also has a `pk-auto` constraint.
+
+For postgresql, use `id:bigserial:pk` or `id:serial:pk`.
+
+## Special Data Types
+
+- file - creates a db column along with a basic ui for file uploads
+- image - creates a db column along with a basic ui for image uploads
 
 ## Examples
 
@@ -89,10 +118,10 @@ See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comp
 
 ```bash
 # postgresql uuidv7 primary key example:
-scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 title:text created_at:timestamp:default-now
+scaffold post -d postgresql -c id:uuid:pk,default-uuidv7 title:text created_at:timestamp:default-now
 
 # postgresql uuidv4 primary key example:
-scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 title:text created_at:timestamp:default-now
+scaffold post -d postgresql -c id:uuid:pk,default-uuidv4 title:text created_at:timestamp:default-now
 
 # postgresql bigserial auto increment primary key example:
 scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
@@ -109,10 +138,10 @@ scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id cont
 
 ```bash
 # mysql uuidv7 primary key example:
-scaffold post -d mysql -c id:varchar:pk:default-uuidv7 title:varchar created_at:timestamp:default-now
+scaffold post -d mysql -c id:varchar:pk,default-uuidv7 title:varchar created_at:timestamp:default-now
 
 # mysql uuidv4 primary key example:
-scaffold post -d mysql -c id:varchar:pk:default-uuidv4 title:varchar created_at:timestamp:default-now
+scaffold post -d mysql -c id:varchar:pk,default-uuidv4 title:varchar created_at:timestamp:default-now
 
 # mysql serial auto increment primary key example:
 scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
@@ -129,10 +158,10 @@ scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
 
 ```bash
 # sqlite uuidv7 primary key example:
-scaffold post -d sqlite -c id:text:pk:default-uuidv7 title:text created_at:text:default-now
+scaffold post -d sqlite -c id:text:pk,default-uuidv7 title:text created_at:text:default-now
 
 # sqlite uuidv4 primary key example:
-scaffold post -d sqlite -c id:text:pk:default-uuidv4 title:text created_at:text:default-now
+scaffold post -d sqlite -c id:text:pk,default-uuidv4 title:text created_at:text:default-now
 
 # sqlite integer auto increment primary key example:
 scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now

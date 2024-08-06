@@ -96,6 +96,14 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  pkStrategyColumnStr: Record<PkStrategy, string> = {
+    uuidv7: "id:text:pk,default-uuidv7",
+    uuidv4: "id:text:pk,default-uuidv4",
+    uuid: "id:text:pk,default-uuidv4",
+    "auto-increment": "id:integer:pk-auto",
+  };
+  createdAtColumnStr: string = "created_at:text:default-now";
+  updatedAtColumnStr: string = "updated_at:text:default-now";
   authSchemaTemplate: string = "db-dialects/schema/user.ts.sqlite.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
@@ -106,7 +114,7 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.sqlite.hbs";
   tableConstructor: string = "sqliteTable";
-  dialectArgsMap = {
+  dialectConstraintsMap = {
     "pk-auto": ".primaryKey({ autoIncrement: true })",
     "default-now": ".default(sql`(CURRENT_DATE)`)",
   };
