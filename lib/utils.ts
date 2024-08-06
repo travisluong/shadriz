@@ -4,6 +4,7 @@ import * as path from "path";
 import Handlebars from "handlebars";
 import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
+import { ShadrizConfigFile } from "./types";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -265,4 +266,12 @@ export async function addShadcnComponents(opts: {
       await spawnCommand(`npx shadcn-ui@latest add -y -o ${component}`);
     }
   }
+}
+
+export function loadShadrizConfig(): Promise<ShadrizConfigFile> {
+  const json = fs.readFileSync(
+    path.join(process.cwd(), "shadriz.config.json"),
+    "utf-8"
+  );
+  return JSON.parse(json);
 }

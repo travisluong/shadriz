@@ -7,10 +7,16 @@ import {
   AuthProvider,
   PkStrategy,
   SessionStrategy,
+  ShadrizConfigFile,
 } from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
-import { regenerateSchemaIndex, spawnCommand } from "./lib/utils";
+import {
+  loadShadrizConfig,
+  regenerateSchemaIndex,
+  spawnCommand,
+  writeToFile,
+} from "./lib/utils";
 import {
   dialectStrategyFactory,
   packageStrategyFactory,
@@ -64,7 +70,7 @@ program
       let stripeProcessor;
       let stripeEnabled = false;
       let authProviders;
-      let authStrategy;
+      let sessionStrategy;
       let pkStrategy;
       let adminEnabled;
       let adminProcessor;
@@ -94,9 +100,9 @@ program
       const dbPackage = await select({
         message: "Which database library would you like to use?",
         choices: [
+          { name: "better-sqlite3", value: "better-sqlite3" },
           { name: "pg", value: "pg" },
           { name: "mysql2", value: "mysql2" },
-          { name: "better-sqlite3", value: "better-sqlite3" },
         ],
       });
       const authEnabled = await confirm({
@@ -122,14 +128,17 @@ program
             { name: "nodemailer", value: "nodemailer" },
           ],
         });
-        authStrategy = await select({
+        sessionStrategy = await select({
           message: "Which session strategy would you like to use?",
           choices: [
             { name: "jwt", value: "jwt" },
             { name: "database", value: "database" },
           ],
         });
-        if (authProviders.includes("credentials") && authStrategy !== "jwt") {
+        if (
+          authProviders.includes("credentials") &&
+          sessionStrategy !== "jwt"
+        ) {
           log.bgRed("jwt is required if credentials is selected");
           process.exit(1);
         }
@@ -170,7 +179,7 @@ program
         authProcessor = new AuthProcessor({
           pnpm: options.pnpm,
           providers: authProviders as AuthProvider[],
-          sessionStrategy: authStrategy as SessionStrategy,
+          sessionStrategy: sessionStrategy as SessionStrategy,
           install: options.install,
           latest: latest,
           stripeEnabled: stripeEnabled,
@@ -205,6 +214,21 @@ program
         });
         await darkModeProcessor.init();
       }
+      const shadrizConfig: ShadrizConfigFile = {
+        latest: latest,
+        stripeEnabled: stripeEnabled,
+        authProviders: authProviders,
+        sessionStrategy: sessionStrategy,
+        pkStrategy: pkStrategy!,
+        adminEnabled: adminEnabled || false,
+        dbPackage: dbPackage,
+        dbDialect: dbDialectStrategy.dialect,
+        darkModeEnabled: darkModeEnabled,
+      };
+      writeToFile(
+        "shadriz.config.json",
+        JSON.stringify(shadrizConfig, null, 2)
+      );
       if (authProcessor) {
         await authProcessor.init();
 
@@ -281,6 +305,7 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
     "column_name:data_type:column-arg1:column-arg2"
   )
   .action(async (table, options) => {
+    const shadrizConfig = loadShadrizConfig();
     const authorizationLevel: AuthorizationLevel = await select({
       message:
         "Which authorization level would you like to use for this scaffold?",

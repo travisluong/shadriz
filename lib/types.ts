@@ -1,3 +1,15 @@
+export interface ShadrizConfigFile {
+  latest: boolean;
+  stripeEnabled: boolean;
+  authProviders?: string[];
+  sessionStrategy?: string;
+  pkStrategy: string;
+  adminEnabled: boolean;
+  dbPackage: string;
+  dbDialect: string;
+  darkModeEnabled: boolean;
+}
+
 export interface ShadrizProcessorOpts {
   pnpm: boolean;
   install: boolean;

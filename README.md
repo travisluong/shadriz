@@ -77,7 +77,7 @@ After the initial configuration is completed, you can scaffold full stack featur
 
 This command will generate the user interface, database migration and schema, server actions, server components, and client components of a full stack feature.
 
-The `-c` option takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
+The `-c` option takes a space-separated string of column configurations in the following format: `column_name:datatype:constraint,constraint,constraint`.
 
 shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
 
