@@ -79,7 +79,7 @@ This command will generate the user interface, database migration and schema, se
 
 The `-c` option takes a space-separated string of column configurations in the following format: `column_name:data_type:column_arg1:column_arg2`.
 
-Shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
+shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
 
 See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
 
@@ -160,9 +160,17 @@ Any of the code and content can be changed to fit your business model. The goal 
 
 ## FAQ
 
+**What can I build with shadriz?**
+
+shadriz is ideal for full stack monolithic server side rendered web applications.
+
+Here are a few example use cases: blog, productivity saas app, course platform, content website, ecommerce shop, social media app, the front end of an artificial intelligence app.
+
+It is a full stack tool kit that automates away the time consuming things you need to do at the start of a new full stack Next.js project.
+
 **What is a scaffold?**
 
-In short, a scaffold is all of the starter code, including the UI and data layer, that is required to have a fully functional CRUD (Create Read Update Delete) application. Scaffolding was popular in MVC (Model View Controller) frameworks such as Ruby on Rails.
+A scaffold is all of the starter code, including the UI and data layer, that is required to have a fully functional CRUD (Create Read Update Delete) application. Scaffolding was popular in MVC (Model View Controller) frameworks such as Ruby on Rails.
 
 This was helpful as it saved time setting up the initial boilerplate of an application. It also served as a starting reference point for building out the actual web app. This is particularly useful for people or organizations who start many projects.
 
@@ -184,7 +192,7 @@ That is why shadriz offers a `--latest` option to install latest dependencies. T
 
 If you prefer a more stable version, leave out the `--latest` flag and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
 
-The other problem with boilerplates is that it is a static repo. It can't generate unique database schemas specific to your project.
+The other problem with boilerplates is that it is usually a static hard-coded repo. It can't generate unique database schemas and user interfaces specific to your project.
 
 ## Inspirations
 
@@ -192,7 +200,7 @@ The other problem with boilerplates is that it is a static repo. It can't genera
 
 shadriz is inspired by the **convention over configuration** philosophy of Ruby on Rails, which allows anyone to rapidly prototype applications in minutes.
 
-Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz.
+Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. Specially, the `shadriz scaffold` command was modeled after the `rails scaffold` command.
 
 ### Next.js
 
