@@ -28,6 +28,8 @@ import { StripeProcessor } from "./processors/stripe-processor";
 import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
 
+const VERSION = "1.2.0";
+
 const program = new Command();
 
 program
@@ -35,7 +37,7 @@ program
   .description(
     "shadriz - full stack framework next.js shadcn/ui and drizzle orm"
   )
-  .version("1.2.0");
+  .version(VERSION);
 
 program
   .command("new")
@@ -69,7 +71,7 @@ program
       let authProcessor;
       let stripeProcessor;
       let stripeEnabled = false;
-      let authProviders;
+      let authProviders: AuthProvider[] = [];
       let sessionStrategy;
       let pkStrategy;
       let adminEnabled;
@@ -215,7 +217,9 @@ program
         await darkModeProcessor.init();
       }
       const shadrizConfig: ShadrizConfigFile = {
+        version: VERSION,
         latest: latest,
+        authEnabled: authEnabled,
         stripeEnabled: stripeEnabled,
         authProviders: authProviders,
         sessionStrategy: sessionStrategy,
@@ -306,37 +310,56 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
   )
   .action(async (table, options) => {
     const shadrizConfig = loadShadrizConfig();
-    const authorizationLevel: AuthorizationLevel = await select({
-      message:
-        "Which authorization level would you like to use for this scaffold?",
-      choices: [
-        {
-          value: "admin",
-          description:
-            "Requires authentication and specific administrative privileges.",
-        },
-        {
-          value: "private",
-          description:
-            "Requires user authentication but may not require specific roles.",
-        },
-        {
-          value: "public",
-          description: "Accessible by anyone without authentication.",
-        },
-      ],
-    });
+    let authorizationLevel: AuthorizationLevel = "public";
+    if (shadrizConfig.authEnabled && shadrizConfig.adminEnabled) {
+      authorizationLevel = await select({
+        message:
+          "Which authorization level would you like to use for this scaffold?",
+        choices: [
+          {
+            value: "admin",
+            description:
+              "Requires authentication and administrative privileges.",
+          },
+          {
+            value: "private",
+            description: "Requires user authentication.",
+          },
+          {
+            value: "public",
+            description: "Accessible by anyone without authentication.",
+          },
+        ],
+      });
+    } else if (shadrizConfig.authEnabled) {
+      authorizationLevel = await select({
+        message:
+          "Which authorization level would you like to use for this scaffold?",
+        choices: [
+          {
+            value: "private",
+            description: "Requires user authentication.",
+          },
+          {
+            value: "public",
+            description: "Accessible by anyone without authentication.",
+          },
+        ],
+      });
+    }
+
     if (authorizationLevel === "admin" && !fs.existsSync("app/(admin)")) {
       log.bgRed(
-        "(admin) route group is missing. authorization must be enabled."
+        "(admin) route group not found. authorization must be enabled."
       );
       process.exit(1);
     }
     if (authorizationLevel === "private" && !fs.existsSync("app/(private)")) {
-      log.bgRed("(private) route group is missing. auth must be enabled.");
+      log.bgRed("(private) route group not found. auth must be enabled.");
       process.exit(1);
     }
-    const dialectStrategy = dialectStrategyFactory(options.dialect);
+
+    const dialectStrategy = dialectStrategyFactory(shadrizConfig.dbDialect);
     const scaffoldProcessor = new ScaffoldProcessor({
       table: table,
       columns: options.columns,

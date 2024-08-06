@@ -268,7 +268,7 @@ export async function addShadcnComponents(opts: {
   }
 }
 
-export function loadShadrizConfig(): Promise<ShadrizConfigFile> {
+export function loadShadrizConfig(): ShadrizConfigFile {
   const json = fs.readFileSync(
     path.join(process.cwd(), "shadriz.config.json"),
     "utf-8"

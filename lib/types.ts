@@ -1,12 +1,14 @@
 export interface ShadrizConfigFile {
+  version: string;
   latest: boolean;
+  authEnabled: boolean;
   stripeEnabled: boolean;
-  authProviders?: string[];
+  authProviders: string[];
   sessionStrategy?: string;
   pkStrategy: string;
   adminEnabled: boolean;
   dbPackage: string;
-  dbDialect: string;
+  dbDialect: DbDialect;
   darkModeEnabled: boolean;
 }
 
