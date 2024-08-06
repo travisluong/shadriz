@@ -83,7 +83,7 @@ shadriz supports a variety of primary key configurations, foreign key configurat
 
 See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
 
-## Data Types
+## Data types
 
 **postgresql data types**
 
@@ -99,18 +99,44 @@ integer, real, text, boolean, bigint
 
 ## Constraints
 
+Each database dialect has the following common constraints. They will each add the correct function to the Drizzle column function chain:
+
 pk, default-now, default-uuidv7, default-uuidv4
 
-## Auto Increment
+## Auto increment
 
 mysql and sqlite also has a `pk-auto` constraint.
 
 For postgresql, use `id:bigserial:pk` or `id:serial:pk`.
 
-## Special Data Types
+## Special data types
 
 - file - creates a db column along with a basic ui for file uploads
 - image - creates a db column along with a basic ui for image uploads
+
+## Primary key generation strategy
+
+shadriz supports 3 primary key generation strategies for the `init` command:
+
+- `uuidv7` - uses the uuidv7 package
+- `uuidv4` - uses crypto.randomUUID
+- `uuid` - uses the built-in uuid database function
+
+The `user` and `stripe` schemas currently do not support `auto-increment`.
+
+The `scaffold` command additionally supports `auto-increment`.
+
+When scaffolding, the `id` column can be omitted. It will be automatically added using the default `pkStrategy` that is saved in `shadriz.config.json`.
+
+If no `pkStrategy` is specified, then it will default to `uuidv7`.
+
+If an `id` column is specified, it will override the default.
+
+## Timestamps
+
+shadriz by default automatically adds `created_at` and `updated_at` timestamps. This can be configured by the `timestampsEnabled` setting in `shadriz.config.json`.
+
+If either are specified during scaffolding, each will override the default setting.
 
 ## Examples
 
@@ -222,6 +248,17 @@ That is why shadriz offers a `--latest` option to install latest dependencies. T
 If you prefer a more stable version, leave out the `--latest` flag and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
 
 The other problem with boilerplates is that it is usually a static hard-coded repo. It can't generate unique database schemas and user interfaces specific to your project.
+
+**Why can't I use database session strategy with credentials provider?**
+
+Currently there are a few restrictions.
+
+- If you choose `credentials` as an Auth provider, you must choose `jwt` as the session strategy.
+- If you want to add an admin dashboard, you have to choose `credentials` as one of the Auth providers.
+
+This is due to limited support of the `credentials` provider in Auth.js.
+
+It would take a non-trivial amount of work to create a workaround for this.
 
 ## Inspirations
 
