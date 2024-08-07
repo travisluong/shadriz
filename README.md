@@ -77,11 +77,9 @@ After the initial configuration is completed, you can scaffold full stack featur
 
 This command will generate the user interface, database migration and schema, server actions, server components, and client components of a full stack feature.
 
-The `-c` option takes a space-separated string of column configurations in the following format: `column_name:data-type:constraint1,constraint2`. The column name, data type, and constraints are separated by a colon `:`. Each constraint is separated by a comma `,`.
+The `-c` option takes a space-separated string of column configurations in the following format: `column_name:datatype:constraint`. The column name, data type, and constraints are separated by a colon.
 
 shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
-
-See [Drizzle ORM docs](https://orm.drizzle.team/docs/column-types/pg) for a comprehensive list of data types and more advanced configurations.
 
 ## Data types
 
@@ -99,20 +97,18 @@ integer, real, text, boolean, bigint
 
 ## Constraints
 
-Each database dialect has the following common constraints. They will each add the correct function to the Drizzle column function chain:
+Each database dialect includes the following commonly used constraints. They will each add the correct function chain to the generated Drizzle schema:
 
-pk, default-now, default-uuidv7, default-uuidv4
-
-## Auto increment
-
-mysql and sqlite also has a `pk-auto` constraint.
-
-For postgresql, use `id:bigserial:pk` or `id:serial:pk`.
-
-## Special data types
-
-- file - creates a db column along with a basic ui for file uploads
-- image - creates a db column along with a basic ui for image uploads
+- `pk` - Add primary key constraint
+- `pk-default-uuidv7` - Add primary key constraint and default to uuidv7
+- `pk-default-uuidv4` - Add primary key constraint and default to uuidv4
+- `pk-default-uuid` - Add primary key constraint and default to the built-in database uuid function
+- `pk-auto-increment` - Add primary key and auto increment constraint
+- `default-uuidv7` - Default to uuidv7
+- `default-uuidv4` - Default to uuidv4
+- `default-uuid` - Default to the built-in database uuid function
+- `default-now` - Default to now
+- `fk-table_name-column_name` - Add a foreign key constraint
 
 ## Primary key generation strategy
 
@@ -140,61 +136,120 @@ If either are specified during scaffolding, each will override the default setti
 
 ## Examples
 
+In most cases, when you run the `scaffold` command, you do not need to specify the `id`, `created_at`, or `updated_at` timestamps. However, you can specify it if you want to override the default settings in `shadriz.config.json`. Use these examples as reference.
+
+Note: In the examples, `npx shadriz@latest` was omitted for brevity, so don't forget to add that at the beginning of the command.
+
 ### postgresql examples
 
 ```bash
+# postgresql example with auto id and timestamps:
+scaffold post -c title:text content:text
+
 # postgresql uuidv7 primary key example:
-scaffold post -d postgresql -c id:uuid:pk,default-uuidv7 title:text created_at:timestamp:default-now
+scaffold post -c id:uuid:pk-default-uuidv7 title:text created_at:timestamp:default-now
 
 # postgresql uuidv4 primary key example:
-scaffold post -d postgresql -c id:uuid:pk,default-uuidv4 title:text created_at:timestamp:default-now
+scaffold post -c id:uuid:pk-default-uuidv4 title:text created_at:timestamp:default-now
 
 # postgresql bigserial auto increment primary key example:
-scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
+scaffold post -c id:bigserial:pk title:text created_at:timestamp:default-now
 
 # postgresql serial auto increment primary key example:
-scaffold post -d postgresql -c id:serial:pk title:text created_at:timestamp:default-now
-
-# postgresql foreign key example:
-scaffold post -d postgresql -c id:bigserial:pk title:text
-scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id content:text
+scaffold post -c id:serial:pk title:text created_at:timestamp:default-now
 ```
 
 ### mysql examples
 
 ```bash
+# mysql example with auto id and timestamps:
+scaffold post -c title:varchar content:text
+
 # mysql uuidv7 primary key example:
-scaffold post -d mysql -c id:varchar:pk,default-uuidv7 title:varchar created_at:timestamp:default-now
+scaffold post -c id:varchar:pk-default-uuidv7 title:varchar created_at:timestamp:default-now
 
 # mysql uuidv4 primary key example:
-scaffold post -d mysql -c id:varchar:pk,default-uuidv4 title:varchar created_at:timestamp:default-now
+scaffold post -c id:varchar:pk-default-uuidv4 title:varchar created_at:timestamp:default-now
 
 # mysql serial auto increment primary key example:
-scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
+scaffold post -c id:serial:pk title:varchar created_at:timestamp:default-now
 
 # mysql integer auto increment primary key example:
-scaffold post -d mysql -c id:integer:pk-auto title:varchar created_at:timestamp:default-now
-
-# mysql foreign key example:
-scaffold post -d mysql -c id:serial:pk title:varchar
-scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
+scaffold post -c id:integer:pk-auto-increment title:varchar created_at:timestamp:default-now
 ```
 
 ### sqlite examples
 
 ```bash
+# sqlite example with auto id and timestamps:
+scaffold post -c title:text content:text
+
 # sqlite uuidv7 primary key example:
-scaffold post -d sqlite -c id:text:pk,default-uuidv7 title:text created_at:text:default-now
+scaffold post -c id:text:pk-default-uuidv7 title:text created_at:text:default-now
 
 # sqlite uuidv4 primary key example:
-scaffold post -d sqlite -c id:text:pk,default-uuidv4 title:text created_at:text:default-now
+scaffold post -c id:text:pk-default-uuidv4 title:text created_at:text:default-now
 
 # sqlite integer auto increment primary key example:
-scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now
+scaffold post -c id:integer:pk-auto-increment title:text created_at:text:default-now
+```
 
-# sqlite foreign key example:
+## Foreign key constraints
+
+shadriz supports adding foreign key constraints using the following constraint format: `fk-table_name-column_name`.
+
+**postgresql example**
+
+```bash
+# postgresql uuidv7 foreign key example:
+scaffold post -d postgresql -c id:uuid:pk-default-uuidv7 title:text
+scaffold comment -d postgresql -c id:uuid:pk-default-uuidv7 post_id:uuid:fk-post-id content:text
+
+# postgresql bigserial foreign key example:
+scaffold post -d postgresql -c id:bigserial:pk title:text
+scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post-id content:text
+```
+
+**mysql example**
+
+```bash
+# mysql uuidv7 foreign key example:
+scaffold post -d mysql -c id:varchar:pk-default-uuidv7 title:varchar
+scaffold comment -d mysql -c id:varchar:pk-default-uuidv7 post_id:varchar:fk-post-id content:text
+
+# mysql serial foreign key example:
+scaffold post -d mysql -c id:serial:pk title:varchar
+scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post-id content:text
+```
+
+**sqlite example**
+
+```bash
+# sqlite uuidv7 foreign key example:
+scaffold post -d sqlite -c id:text:pk-default-uuidv7 title:text
+scaffold comment -d sqlite -c id:text:pk-default-uuidv7 post_id:text:fk-post-id content:text
+
+# sqlite integer foreign key example:
 scaffold post -d sqlite -c id:integer:pk-auto title:text
-scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
+scaffold comment -d sqlite -c id:integer:pk-auto post_id:integer:fk-post-id content:text
+```
+
+## File and image uploads
+
+shadriz supports the following special data types:
+
+- `file` - creates a db column along with a basic ui for file uploads to the file system
+- `image` - creates a db column along with a basic ui for image uploads to the file system
+
+Example:
+
+```bash
+# file upload
+scaffold user_upload -c pdf:file description:text
+
+# image upload
+scaffold user_profile -c image:avatar description:text
+
 ```
 
 ## Auth
