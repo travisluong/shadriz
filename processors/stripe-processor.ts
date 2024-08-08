@@ -146,7 +146,7 @@ export class StripeProcessor implements ShadrizProcessor {
     log.white("\nstart local stripe listener:");
     log.cmd("stripe login");
     log.cmd("stripe listen --forward-to localhost:3000/api/webhook");
-    log.cmd("strip trigger payment_intent.succeeded");
+    log.cmd("stripe trigger payment_intent.succeeded");
 
     log.white("\nsee all supported events:");
     log.cmd("stripe trigger --help");

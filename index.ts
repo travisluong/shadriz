@@ -88,8 +88,7 @@ program
               {
                 name: "pinned",
                 value: false,
-                description:
-                  "Installs pinned shadriz dependencies. More stable.",
+                description: "Installs pinned dependencies. More stable.",
               },
               {
                 name: "latest",

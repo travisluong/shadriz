@@ -79,7 +79,7 @@ This command will generate the user interface, database migration and schema, se
 
 The `-c` option takes a space-separated string of column configurations in the following format: `column_name:datatype:constraint`. The column name, data type, and constraints are separated by a colon.
 
-shadriz supports a variety of primary key configurations, foreign key configuration, and default functions as shown in the "blog" examples below.
+shadriz supports a variety of primary key configurations, foreign key configuration, and default functions.
 
 ## Data types
 
@@ -97,7 +97,7 @@ integer, real, text, boolean, bigint
 
 ## Constraints
 
-Each database dialect includes the following commonly used constraints. They will each add the correct function chain to the generated Drizzle schema:
+Each database dialect includes the following constraint configurations. They will each add the correct function chain to the generated Drizzle schema:
 
 - `pk` - Add primary key constraint
 - `pk-default-uuidv7` - Add primary key constraint and default to uuidv7

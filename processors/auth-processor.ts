@@ -47,9 +47,9 @@ interface AuthStrategyMap {
 
 const authStrategyMap: AuthStrategyMap = {
   github: {
-    importTemplatePath: "auth-processor/auth/auth.ts.github.imports.hbs",
-    authTemplatePath: "auth-processor/auth/auth.ts.github.hbs",
-    envTemplatePath: "auth-processor/auth/auth.ts.github.env.hbs",
+    importTemplatePath: "auth-processor/lib/auth.ts.github.imports.hbs",
+    authTemplatePath: "auth-processor/lib/auth.ts.github.hbs",
+    envTemplatePath: "auth-processor/lib/auth.ts.github.env.hbs",
     printCompletionMessage: function (): void {
       log.white("\nsetup github provider:");
       log.dash(
@@ -62,9 +62,9 @@ const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "AUTH_GITHUB_ID",
   },
   google: {
-    importTemplatePath: "auth-processor/auth/auth.ts.google.imports.hbs",
-    authTemplatePath: "auth-processor/auth/auth.ts.google.hbs",
-    envTemplatePath: "auth-processor/auth/auth.ts.google.env.hbs",
+    importTemplatePath: "auth-processor/lib/auth.ts.google.imports.hbs",
+    authTemplatePath: "auth-processor/lib/auth.ts.google.hbs",
+    envTemplatePath: "auth-processor/lib/auth.ts.google.env.hbs",
     printCompletionMessage: function (): void {
       log.white("\nsetup google provider:");
       log.dash(
@@ -77,9 +77,9 @@ const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "AUTH_GOOGLE_ID",
   },
   credentials: {
-    importTemplatePath: "auth-processor/auth/auth.ts.credentials.imports.hbs",
-    authTemplatePath: "auth-processor/auth/auth.ts.credentials.hbs",
-    envTemplatePath: "auth-processor/auth/auth.ts.credentials.env.hbs",
+    importTemplatePath: "auth-processor/lib/auth.ts.credentials.imports.hbs",
+    authTemplatePath: "auth-processor/lib/auth.ts.credentials.hbs",
+    envTemplatePath: "auth-processor/lib/auth.ts.credentials.env.hbs",
     dependencies: ["bcrypt"],
     devDependencies: ["@types/bcrypt"],
     printCompletionMessage: function (): void {
@@ -89,9 +89,9 @@ const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "",
   },
   postmark: {
-    importTemplatePath: "auth-processor/auth/auth.ts.postmark.imports.hbs",
-    authTemplatePath: "auth-processor/auth/auth.ts.postmark.hbs",
-    envTemplatePath: "auth-processor/auth/auth.ts.postmark.env.hbs",
+    importTemplatePath: "auth-processor/lib/auth.ts.postmark.imports.hbs",
+    authTemplatePath: "auth-processor/lib/auth.ts.postmark.hbs",
+    envTemplatePath: "auth-processor/lib/auth.ts.postmark.env.hbs",
     printCompletionMessage: function (): void {
       log.white("\nsetup postmark provider");
       log.dash("go to postmark > server > api tokens");
@@ -102,9 +102,9 @@ const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "AUTH_POSTMARK_KEY",
   },
   nodemailer: {
-    importTemplatePath: "auth-processor/auth/auth.ts.nodemailer.imports.hbs",
-    authTemplatePath: "auth-processor/auth/auth.ts.nodemailer.hbs",
-    envTemplatePath: "auth-processor/auth/auth.ts.nodemailer.env.hbs",
+    importTemplatePath: "auth-processor/lib/auth.ts.nodemailer.imports.hbs",
+    authTemplatePath: "auth-processor/lib/auth.ts.nodemailer.hbs",
+    envTemplatePath: "auth-processor/lib/auth.ts.nodemailer.env.hbs",
     dependencies: ["nodemailer"],
     printCompletionMessage: function (): void {
       log.white("\nsetup nodemailer provider");
@@ -228,8 +228,8 @@ export class AuthProcessor implements ShadrizProcessor {
       providersCode += "\n";
     }
     renderTemplate({
-      inputPath: "auth-processor/auth/auth.ts.hbs",
-      outputPath: "auth.ts",
+      inputPath: "auth-processor/lib/auth.ts.hbs",
+      outputPath: "lib/auth.ts",
       data: {
         importsCode: importsCode,
         providersCode: providersCode,

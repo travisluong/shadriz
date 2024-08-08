@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import { getUploadPath, uploadFile } from "@/lib/file-utils";
 {{/if}}
 {{#if isNotPublic}}
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 {{/if}}
 {{#if isAdmin}}
 import { hasAdminRole } from "@/lib/authorization";

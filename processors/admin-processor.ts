@@ -29,7 +29,7 @@ export class AdminProcessor implements ShadrizProcessor {
   async render(): Promise<void> {
     renderTemplate({
       inputPath: "admin-processor/app/(admin)/layout.tsx.hbs",
-      outputPath: "app/(admin)/layout.tsx.hbs",
+      outputPath: "app/(admin)/layout.tsx",
     });
 
     renderTemplate({
@@ -39,7 +39,7 @@ export class AdminProcessor implements ShadrizProcessor {
 
     renderTemplate({
       inputPath: "admin-processor/app/admin-login/page.tsx.hbs",
-      outputPath: "app/(admin)/admin-login/page.tsx",
+      outputPath: "app/admin-login/page.tsx",
     });
 
     renderTemplate({

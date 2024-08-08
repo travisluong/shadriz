@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 {{#if isNotPublic}}
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 {{/if}}
 {{#if isAdmin}}
 import { hasAdminRole } from "@/lib/authorization";
