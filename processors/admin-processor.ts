@@ -23,7 +23,7 @@ export class AdminProcessor implements ShadrizProcessor {
 
     await addShadcnComponents({
       shadcnComponents: this.shadcnComponents,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
     });
   }
   async render(): Promise<void> {

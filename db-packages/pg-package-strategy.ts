@@ -39,13 +39,13 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
     await installDependencies({
       dependencies: this.dependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
 
     await installDevDependencies({
       devDependencies: this.devDependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
   }

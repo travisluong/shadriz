@@ -35,7 +35,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
     await installDependencies({
       dependencies: this.dependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
   }

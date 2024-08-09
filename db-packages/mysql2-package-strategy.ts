@@ -30,7 +30,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
     await installDependencies({
       dependencies: this.dependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
   }

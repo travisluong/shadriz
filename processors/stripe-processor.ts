@@ -33,13 +33,13 @@ export class StripeProcessor implements ShadrizProcessor {
 
     await installDependencies({
       dependencies: this.dependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
 
     await addShadcnComponents({
       shadcnComponents: this.shadcnComponents,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
     });
   }
 

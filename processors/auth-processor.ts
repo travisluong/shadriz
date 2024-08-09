@@ -11,6 +11,7 @@ import { log } from "../lib/log";
 import {
   AuthProvider,
   DbDialectStrategy,
+  PackageManager,
   PkStrategy,
   SessionStrategy,
   ShadrizProcessor,
@@ -18,7 +19,7 @@ import {
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];
-  pnpm: boolean;
+  packageManager: PackageManager;
   sessionStrategy: SessionStrategy;
   install: boolean;
   latest: boolean;
@@ -137,7 +138,7 @@ export class AuthProcessor implements ShadrizProcessor {
 
     await installDependencies({
       dependencies: this.dependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
 
@@ -145,7 +146,7 @@ export class AuthProcessor implements ShadrizProcessor {
 
     await addShadcnComponents({
       shadcnComponents: this.shadcnComponents,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
     });
 
     await this.appendAuthSecretToEnv();
@@ -189,14 +190,14 @@ export class AuthProcessor implements ShadrizProcessor {
       if (authStrategy.dependencies) {
         await installDependencies({
           dependencies: authStrategy.dependencies,
-          pnpm: this.opts.pnpm,
+          packageManager: this.opts.packageManager,
           latest: this.opts.latest,
         });
       }
       if (authStrategy.devDependencies) {
         await installDevDependencies({
           devDependencies: authStrategy.devDependencies,
-          pnpm: this.opts.pnpm,
+          packageManager: this.opts.packageManager,
           latest: this.opts.latest,
         });
       }
@@ -204,9 +205,9 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   async appendAuthSecretToEnv() {
-    if (this.opts.pnpm) {
+    if (this.opts.packageManager === "pnpm") {
       await spawnCommand("pnpm dlx auth secret");
-    } else {
+    } else if (this.opts.packageManager === "npm") {
       await spawnCommand("npx auth secret");
     }
   }

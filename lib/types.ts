@@ -13,8 +13,10 @@ export interface ShadrizConfigFile {
   timestampsEnabled: boolean;
 }
 
+export type PackageManager = "npm" | "pnpm";
+
 export interface ShadrizProcessorOpts {
-  pnpm: boolean;
+  packageManager: PackageManager;
   install: boolean;
   latest: boolean;
 }

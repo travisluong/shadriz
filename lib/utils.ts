@@ -4,7 +4,7 @@ import * as path from "path";
 import Handlebars from "handlebars";
 import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
-import { ShadrizConfigFile } from "./types";
+import { PackageManager, ShadrizConfigFile } from "./types";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -193,7 +193,7 @@ export function regenerateSchemaList(): void {
 
 export async function installDependencies(opts: {
   dependencies: string[];
-  pnpm: boolean;
+  packageManager: PackageManager;
   latest: boolean;
 }) {
   for (const str of opts.dependencies) {
@@ -215,7 +215,7 @@ export async function installDependencies(opts: {
       // priority 3
       version = pinnedVersion;
     }
-    if (opts.pnpm) {
+    if (opts.packageManager === "pnpm") {
       await spawnCommand(`pnpm add ${str}@${version}`);
     } else {
       await spawnCommand(`npm install ${str}@${version}`);
@@ -225,7 +225,7 @@ export async function installDependencies(opts: {
 
 export async function installDevDependencies(opts: {
   devDependencies: string[];
-  pnpm: boolean;
+  packageManager: PackageManager;
   latest: boolean;
 }) {
   for (const str of opts.devDependencies) {
@@ -247,9 +247,9 @@ export async function installDevDependencies(opts: {
       // priority 3
       version = pinnedVersion;
     }
-    if (opts.pnpm) {
+    if (opts.packageManager === "pnpm") {
       await spawnCommand(`pnpm add -D ${str}@${version}`);
-    } else {
+    } else if (opts.packageManager === "npm") {
       await spawnCommand(`npm install -D ${str}@${version}`);
     }
   }
@@ -257,12 +257,12 @@ export async function installDevDependencies(opts: {
 
 export async function addShadcnComponents(opts: {
   shadcnComponents: string[];
-  pnpm: boolean;
+  packageManager: PackageManager;
 }) {
   for (const component of opts.shadcnComponents) {
-    if (opts.pnpm) {
+    if (opts.packageManager === "pnpm") {
       await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o ${component}`);
-    } else {
+    } else if (opts.packageManager === "npm") {
       await spawnCommand(`npx shadcn-ui@latest add -y -o ${component}`);
     }
   }

@@ -6,6 +6,7 @@ import {
   AuthorizationLevel,
   AuthProvider,
   DbPackage,
+  PackageManager,
   PkStrategy,
   SessionStrategy,
   ShadrizConfigFile,
@@ -64,9 +65,7 @@ program
 program
   .command("init")
   .description("initialize project")
-  .option("--pnpm", "run with pnpm", false)
   .option("--no-install", "skip installation of dependencies")
-  .option("--latest", "install latest version for every dependency")
   .action(async (options) => {
     try {
       let authProcessor;
@@ -78,26 +77,29 @@ program
       let adminEnabled;
       let adminProcessor;
       let latest = false;
+      let packageManager: PackageManager = await select({
+        message: "Which package manager do you want to use?",
+        choices: [{ value: "npm" }, { value: "pnpm" }],
+      });
+
       if (options.install) {
-        latest =
-          options.latest ||
-          (await select({
-            message:
-              "Do you want to install latest dependencies or pinned dependencies?",
-            choices: [
-              {
-                name: "pinned",
-                value: false,
-                description: "Installs pinned dependencies. More stable.",
-              },
-              {
-                name: "latest",
-                value: true,
-                description:
-                  "Installs latest dependencies. Cutting edge. Less stable.",
-              },
-            ],
-          }));
+        latest = await select({
+          message:
+            "Do you want to install latest dependencies or pinned dependencies?",
+          choices: [
+            {
+              name: "pinned",
+              value: false,
+              description: "Installs pinned dependencies. More stable.",
+            },
+            {
+              name: "latest",
+              value: true,
+              description:
+                "Installs latest dependencies. Cutting edge. Less stable.",
+            },
+          ],
+        });
       }
       const dbPackage: DbPackage = await select({
         message: "Which database library would you like to use?",
@@ -180,7 +182,7 @@ program
         default: true,
       });
       const newProjectProcessor = new NewProjectProcessor({
-        pnpm: options.pnpm,
+        packageManager: packageManager,
         install: options.install,
         latest: latest,
         darkMode: darkModeEnabled,
@@ -188,7 +190,7 @@ program
         stripeEnabled: stripeEnabled,
       });
       const dbPackageStrategy = packageStrategyFactory(dbPackage, {
-        pnpm: options.pnpm,
+        packageManager: packageManager,
         install: options.install,
         latest: latest,
       });
@@ -197,7 +199,7 @@ program
       );
       if (authEnabled) {
         authProcessor = new AuthProcessor({
-          pnpm: options.pnpm,
+          packageManager: packageManager,
           providers: authProviders,
           sessionStrategy: sessionStrategy!,
           install: options.install,
@@ -209,7 +211,7 @@ program
       }
       if (adminEnabled) {
         adminProcessor = new AdminProcessor({
-          pnpm: options.pnpm,
+          packageManager: packageManager,
           install: options.install,
           latest: latest,
         });
@@ -217,7 +219,7 @@ program
       if (stripeEnabled) {
         stripeProcessor = new StripeProcessor({
           dbDialectStrategy: dbDialectStrategy,
-          pnpm: options.pnpm,
+          packageManager: packageManager,
           install: options.install,
           latest: latest,
           pkStrategy: pkStrategy!,
@@ -228,7 +230,7 @@ program
       dbDialectStrategy.init();
       if (darkModeEnabled) {
         const darkModeProcessor = new DarkModeProcessor({
-          pnpm: options.pnpm,
+          packageManager: packageManager,
           install: options.install,
           latest: latest,
         });

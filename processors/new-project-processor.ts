@@ -49,26 +49,26 @@ export class NewProjectProcessor implements ShadrizProcessor {
       return;
     }
 
-    if (this.opts.pnpm) {
+    if (this.opts.packageManager === "pnpm") {
       await spawnCommand("pnpm dlx shadcn-ui@latest init -y -d");
-    } else {
+    } else if (this.opts.packageManager === "npm") {
       await spawnCommand("npx shadcn-ui@latest init -y -d");
     }
 
     await installDependencies({
       dependencies: this.dependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
 
     await installDevDependencies({
       devDependencies: this.devDependencies,
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
 
     await addShadcnComponents({
-      pnpm: this.opts.pnpm,
+      packageManager: this.opts.packageManager,
       shadcnComponents: this.shadcnComponents,
     });
   }
