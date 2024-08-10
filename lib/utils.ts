@@ -4,7 +4,7 @@ import * as path from "path";
 import Handlebars from "handlebars";
 import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
-import { PackageManager, ShadrizConfigFile } from "./types";
+import { PackageManager, ShadrizConfig } from "./types";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -268,10 +268,25 @@ export async function addShadcnComponents(opts: {
   }
 }
 
-export function loadShadrizConfig(): ShadrizConfigFile {
+export function loadShadrizConfig(): ShadrizConfig {
   const json = fs.readFileSync(
     path.join(process.cwd(), "shadriz.config.json"),
     "utf-8"
   );
   return JSON.parse(json);
+}
+
+export function completeShadrizConfig(
+  partialConfig: Partial<ShadrizConfig>
+): ShadrizConfig {
+  for (const key in partialConfig) {
+    if (partialConfig[key as keyof ShadrizConfig] === undefined) {
+      throw new Error("shadriz config key not found " + key);
+    }
+  }
+  // @ts-ignore
+  const completeConfig: ShadrizConfig = {
+    ...partialConfig,
+  };
+  return completeConfig;
 }

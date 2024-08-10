@@ -1,17 +1,20 @@
-export interface ShadrizConfigFile {
+export interface ShadrizConfig {
   version: string;
+  packageManager: PackageManager;
   latest: boolean;
-  authEnabled: boolean;
-  stripeEnabled: boolean;
-  authProviders: AuthProvider[];
-  sessionStrategy?: SessionStrategy;
-  pkStrategy: PkStrategy;
-  adminEnabled: boolean;
-  dbPackage: DbPackage;
   dbDialect: DbDialect;
-  darkModeEnabled: boolean;
+  dbPackage: DbPackage;
+  pkStrategy: PkStrategy;
   timestampsEnabled: boolean;
+  authSolution: AuthSolution;
+  authProviders: AuthProvider[];
+  adminEnabled: boolean;
+  stripeEnabled: boolean;
+  sessionStrategy: SessionStrategy;
+  darkModeEnabled: boolean;
 }
+
+export type AuthSolution = "authjs" | "shadriz" | "none";
 
 export type PackageManager = "npm" | "pnpm";
 
@@ -31,7 +34,12 @@ export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
 
 export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
 
-export type PkStrategy = "uuidv7" | "uuidv4" | "uuid" | "auto-increment";
+export type PkStrategy =
+  | "uuidv7"
+  | "uuidv4"
+  | "uuid"
+  | "nanoid"
+  | "auto-increment";
 
 export interface StripeProcessorOpts extends ShadrizProcessorOpts {
   dbDialectStrategy: DbDialectStrategy;

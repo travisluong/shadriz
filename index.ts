@@ -2,18 +2,11 @@
 
 import { Command } from "commander";
 import { log } from "./lib/log";
-import {
-  AuthorizationLevel,
-  AuthProvider,
-  DbPackage,
-  PackageManager,
-  PkStrategy,
-  SessionStrategy,
-  ShadrizConfigFile,
-} from "./lib/types";
+import { AuthorizationLevel, ShadrizConfig } from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import {
+  completeShadrizConfig,
   loadShadrizConfig,
   regenerateSchemaIndex,
   spawnCommand,
@@ -68,75 +61,94 @@ program
   .option("--no-install", "skip installation of dependencies")
   .action(async (options) => {
     try {
-      let authProcessor;
-      let stripeProcessor;
-      let stripeEnabled = false;
-      let authProviders: AuthProvider[] = [];
-      let sessionStrategy: SessionStrategy;
-      let pkStrategy: PkStrategy;
-      let adminEnabled;
-      let adminProcessor;
-      let latest = false;
-      let packageManager: PackageManager = await select({
+      // inquire
+
+      const partialConfig: Partial<ShadrizConfig> = {};
+      partialConfig.version = VERSION;
+      partialConfig.packageManager = await select({
         message: "Which package manager do you want to use?",
         choices: [{ value: "npm" }, { value: "pnpm" }],
       });
 
       if (options.install) {
-        latest = await select({
-          message:
-            "Do you want to install latest dependencies or pinned dependencies?",
+        partialConfig.latest = await select({
+          message: "Do you want to install latest packages or pinned packages?",
           choices: [
             {
               name: "pinned",
               value: false,
-              description: "Installs pinned dependencies. More stable.",
+              description: "Installs pinned packages. More stable.",
             },
             {
               name: "latest",
               value: true,
               description:
-                "Installs latest dependencies. Cutting edge. Less stable.",
+                "Installs latest packages. Cutting edge. Less stable.",
             },
           ],
         });
       }
-      const dbPackage: DbPackage = await select({
-        message: "Which database library would you like to use?",
+      partialConfig.dbDialect = await select({
+        message: "Which database dialect would you like to use?",
         choices: [
-          { name: "better-sqlite3", value: "better-sqlite3" },
-          { name: "pg", value: "pg" },
-          { name: "mysql2", value: "mysql2" },
+          {
+            value: "sqlite",
+          },
+          { value: "postgresql" },
+          { value: "mysql" },
         ],
       });
-      const authEnabled = await confirm({
-        message: "Do you want to use Auth.js for authentication?",
-        default: true,
+      switch (partialConfig.dbDialect) {
+        case "sqlite":
+          partialConfig.dbPackage = "better-sqlite3";
+          break;
+        case "postgresql":
+          partialConfig.dbPackage = "pg";
+          break;
+        case "mysql":
+          partialConfig.dbPackage = "mysql2";
+          break;
+        default:
+          break;
+      }
+      partialConfig.pkStrategy = await select({
+        message: "Which primary key generation strategy would you like to use?",
+        choices: [
+          {
+            name: "uuidv7",
+            value: "uuidv7",
+            description: "Uses uuidv7 package",
+          },
+          {
+            name: "uuidv4",
+            value: "uuidv4",
+            description: "Uses crypto.randomUUID",
+          },
+          {
+            name: "uuid",
+            value: "uuid",
+            description:
+              "Uses the database's built-in uuid function for mysql and postgresql. sqlite will fallback to uuidv4.",
+          },
+          {
+            name: "nanoid",
+            value: "nanoid",
+            description: "Uses the nanoid package",
+          },
+          {
+            name: "auto-increment",
+            value: "auto-increment",
+            description:
+              "Uses the auto increment constraint for selected database. (Not compatible with Auth.js)",
+          },
+        ],
       });
-      if (authEnabled) {
-        pkStrategy = await select({
-          message:
-            "Which primary key generation strategy would you like to use?",
-          choices: [
-            {
-              name: "uuidv7",
-              value: "uuidv7",
-              description: "Uses uuidv7 package",
-            },
-            {
-              name: "uuidv4",
-              value: "uuidv4",
-              description: "Uses crypto.randomUUID",
-            },
-            {
-              name: "uuid",
-              value: "uuid",
-              description:
-                "Uses the database's built-in uuid function for mysql and postgresql. sqlite will fallback to uuidv4.",
-            },
-          ],
-        });
-        authProviders = await checkbox({
+      partialConfig.authSolution = await select({
+        message: "Which authentication solution do you want to use?",
+        choices: [{ value: "authjs" }, { value: "shadriz" }, { value: "none" }],
+      });
+      if (partialConfig.authSolution === "authjs") {
+        partialConfig.authProviders = await checkbox({
           message: "Which auth providers would you like to use?",
           choices: [
             { name: "github", value: "github" },
@@ -146,7 +158,7 @@ program
             { name: "nodemailer", value: "nodemailer" },
           ],
         });
-        sessionStrategy = await select({
+        partialConfig.sessionStrategy = await select({
           message: "Which session strategy would you like to use?",
           choices: [
             { name: "jwt", value: "jwt" },
@@ -154,105 +166,109 @@ program
           ],
         });
         if (
-          authProviders.includes("credentials") &&
-          sessionStrategy !== "jwt"
+          partialConfig.authProviders.includes("credentials") &&
+          partialConfig.sessionStrategy !== "jwt"
         ) {
           log.bgRed("jwt is required if credentials is selected");
           process.exit(1);
         }
-        adminEnabled = await confirm({
+      }
+      if (partialConfig.authSolution !== "none") {
+        partialConfig.adminEnabled = await confirm({
           message:
             "Do you want to add an admin dashboard with role-based authorization?",
           default: true,
         });
-        if (adminEnabled && !authProviders.includes("credentials")) {
-          log.bgRed("credentials provider is required for admin dashboard");
-          process.exit(1);
-        }
-        stripeEnabled = await confirm({
+      }
+      if (
+        partialConfig.adminEnabled &&
+        !partialConfig.authProviders?.includes("credentials")
+      ) {
+        log.bgRed("credentials provider is required for admin dashboard");
+        process.exit(1);
+      }
+      if (partialConfig.authSolution !== "none") {
+        partialConfig.stripeEnabled = await confirm({
           message: "Do you want to enable Stripe for payments?",
         });
       }
-      const darkModeEnabled = await confirm({
+      partialConfig.darkModeEnabled = await confirm({
         message: "Do you want to add a dark mode toggle?",
         default: true,
       });
-      const timestampsEnabled = await confirm({
+      partialConfig.timestampsEnabled = await confirm({
         message: "Do you want to add created_at and updated_at timestamps?",
         default: true,
       });
+
+      // process
+
+      const completeConfig = completeShadrizConfig(partialConfig);
+
       const newProjectProcessor = new NewProjectProcessor({
-        packageManager: packageManager,
+        packageManager: completeConfig.packageManager,
         install: options.install,
-        latest: latest,
-        darkMode: darkModeEnabled,
-        authEnabled: authEnabled,
-        stripeEnabled: stripeEnabled,
+        latest: completeConfig.latest,
+        darkMode: completeConfig.darkModeEnabled,
+        authEnabled: completeConfig.authSolution !== "none",
+        stripeEnabled: !!completeConfig.stripeEnabled,
       });
-      const dbPackageStrategy = packageStrategyFactory(dbPackage, {
-        packageManager: packageManager,
-        install: options.install,
-        latest: latest,
-      });
-      const dbDialectStrategy = dialectStrategyFactory(
-        dbPackageStrategy.dialect
-      );
-      if (authEnabled) {
-        authProcessor = new AuthProcessor({
-          packageManager: packageManager,
-          providers: authProviders,
-          sessionStrategy: sessionStrategy!,
+      const dbPackageStrategy = packageStrategyFactory(
+        completeConfig.dbPackage,
+        {
+          packageManager: completeConfig.packageManager,
           install: options.install,
-          latest: latest,
-          stripeEnabled: stripeEnabled,
-          pkStrategy: pkStrategy!,
+          latest: completeConfig.latest,
+        }
+      );
+      const dbDialectStrategy = dialectStrategyFactory(partialConfig.dbDialect);
+
+      let authProcessor;
+      let adminProcessor;
+      let stripeProcessor;
+
+      if (completeConfig.authSolution !== "none") {
+        authProcessor = new AuthProcessor({
+          packageManager: completeConfig.packageManager,
+          providers: completeConfig.authProviders,
+          sessionStrategy: completeConfig.sessionStrategy!,
+          install: options.install,
+          latest: completeConfig.latest,
+          stripeEnabled: completeConfig.stripeEnabled,
+          pkStrategy: completeConfig.pkStrategy!,
           dbDialectStrategy: dbDialectStrategy,
         });
       }
-      if (adminEnabled) {
+      if (completeConfig.authSolution !== "none") {
         adminProcessor = new AdminProcessor({
-          packageManager: packageManager,
+          packageManager: partialConfig.packageManager,
           install: options.install,
-          latest: latest,
+          latest: completeConfig.latest,
         });
       }
-      if (stripeEnabled) {
+      if (completeConfig.stripeEnabled) {
         stripeProcessor = new StripeProcessor({
           dbDialectStrategy: dbDialectStrategy,
-          packageManager: packageManager,
+          packageManager: completeConfig.packageManager,
           install: options.install,
-          latest: latest,
-          pkStrategy: pkStrategy!,
+          latest: completeConfig.latest,
+          pkStrategy: completeConfig.pkStrategy!,
         });
       }
       await newProjectProcessor.init();
       await dbPackageStrategy.init();
       dbDialectStrategy.init();
-      if (darkModeEnabled) {
+      if (completeConfig.darkModeEnabled) {
         const darkModeProcessor = new DarkModeProcessor({
-          packageManager: packageManager,
+          packageManager: completeConfig.packageManager,
           install: options.install,
-          latest: latest,
+          latest: completeConfig.latest,
         });
         await darkModeProcessor.init();
       }
-      const shadrizConfig: ShadrizConfigFile = {
-        version: VERSION,
-        latest: latest,
-        authEnabled: authEnabled,
-        stripeEnabled: stripeEnabled,
-        authProviders: authProviders,
-        sessionStrategy: sessionStrategy!,
-        pkStrategy: pkStrategy!,
-        adminEnabled: adminEnabled || false,
-        dbPackage: dbPackage,
-        dbDialect: dbDialectStrategy.dialect,
-        darkModeEnabled: darkModeEnabled,
-        timestampsEnabled: timestampsEnabled,
-      };
       writeToFile(
         "shadriz.config.json",
-        JSON.stringify(shadrizConfig, null, 2)
+        JSON.stringify(completeConfig, null, 2)
       );
       if (authProcessor) {
         await authProcessor.init();
@@ -329,9 +345,9 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
     "column_name:data_type:constraint1,constraint2"
   )
   .action(async (table, options) => {
-    const shadrizConfig: ShadrizConfigFile = loadShadrizConfig();
+    const shadrizConfig: ShadrizConfig = loadShadrizConfig();
     let authorizationLevel: AuthorizationLevel = "public";
-    if (shadrizConfig.authEnabled && shadrizConfig.adminEnabled) {
+    if (shadrizConfig.authSolution !== "none" && shadrizConfig.adminEnabled) {
       authorizationLevel = await select({
         message:
           "Which authorization level would you like to use for this scaffold?",
@@ -351,7 +367,7 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
           },
         ],
       });
-    } else if (shadrizConfig.authEnabled) {
+    } else if (shadrizConfig.authSolution !== "none") {
       authorizationLevel = await select({
         message:
           "Which authorization level would you like to use for this scaffold?",
