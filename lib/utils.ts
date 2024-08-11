@@ -279,11 +279,6 @@ export function loadShadrizConfig(): ShadrizConfig {
 export function completeShadrizConfig(
   partialConfig: Partial<ShadrizConfig>
 ): ShadrizConfig {
-  for (const key in partialConfig) {
-    if (partialConfig[key as keyof ShadrizConfig] === undefined) {
-      throw new Error("shadriz config key not found " + key);
-    }
-  }
   const completeConfig: ShadrizConfig = {
     version: partialConfig.version ?? "",
     packageManager: partialConfig.packageManager ?? "npm",
