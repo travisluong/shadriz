@@ -11,6 +11,7 @@ import {
   regenerateSchemaList,
 } from "../lib/utils";
 import { log } from "../lib/log";
+import { pkStrategyImportTemplates } from "./pk-strategy-processor";
 
 // lib/schema.ts
 // app/post/page.tsx
@@ -39,8 +40,6 @@ export class ScaffoldProcessor {
   }
 
   process(): void {
-    this.addPrimaryKeyColumnIfNotExists();
-    this.addTimestampsIfNotExists();
     this.addSchema();
     this.addListView();
     this.addDetailView();
@@ -62,12 +61,25 @@ export class ScaffoldProcessor {
     const { table, columns } = this.opts;
     // compile columns
     let columnsCode = "";
+
+    // add primary key id
+    const pkCode =
+      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+    columnsCode += "    " + pkCode + "\n";
+
+    // add other columns
     for (const [index, column] of columns.entries()) {
       columnsCode += this.getKeyValueStrForSchema({ ...this.opts, column });
       if (index !== columns.length - 1) {
         columnsCode += "\n";
       }
     }
+
+    // add timestamps
+    columnsCode +=
+      "\n    " + this.opts.dbDialectStrategy.createdAtTemplate + "\n";
+    columnsCode += "    " + this.opts.dbDialectStrategy.updatedAtTemplate;
+
     // generate imports code
     const importsCode = this.generateImportsCodeFromColumns(columns);
 
@@ -81,32 +93,6 @@ export class ScaffoldProcessor {
         imports: importsCode,
       },
     });
-  }
-  addPrimaryKeyColumnIfNotExists() {
-    let pkFound = false;
-    for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType, constraints] = column.split(":");
-      if (columnName === "id") pkFound = true;
-    }
-    if (!pkFound) {
-      this.opts.columns.unshift(
-        this.opts.dbDialectStrategy.pkStrategyColumnStr[this.opts.pkStrategy]
-      );
-    }
-  }
-  addTimestampsIfNotExists() {
-    if (!this.opts.timestampsEnabled) return;
-    let createdAtFound = false;
-    let updatedAtFound = false;
-    for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType, constraints] = column.split(":");
-      if (columnName === "created_at") createdAtFound = true;
-      if (columnName === "updated_at") updatedAtFound = true;
-    }
-    if (!createdAtFound)
-      this.opts.columns.push(this.opts.dbDialectStrategy.createdAtColumnStr);
-    if (!updatedAtFound)
-      this.opts.columns.push(this.opts.dbDialectStrategy.updatedAtColumnStr);
   }
   generateImportsCodeFromColumns(columns: string[]) {
     const dataTypeSet = new Set<string>();
@@ -124,12 +110,7 @@ export class ScaffoldProcessor {
     }
     code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
     code += `import { createInsertSchema } from "drizzle-zod";\n`;
-    const dependsOnUuidv7 = columns.filter((column) =>
-      column.indexOf("default-uuidv7")
-    ).length;
-    if (dependsOnUuidv7) {
-      code += `import { uuidv7 } from "uuidv7";\n`;
-    }
+    code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
     const dependsOnSql = columns.filter((column) =>
       column.indexOf("sql")
     ).length;

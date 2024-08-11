@@ -22,6 +22,7 @@ import { DarkModeProcessor } from "./processors/dark-mode-processor";
 import { StripeProcessor } from "./processors/stripe-processor";
 import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
+import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 
 const VERSION = "1.2.0";
 
@@ -114,6 +115,11 @@ program
       partialConfig.pkStrategy = await select({
         message: "Which primary key generation strategy would you like to use?",
         choices: [
+          {
+            name: "cuid2",
+            value: "cuid2",
+            description: "Uses @paralleldrive/cuid2 package",
+          },
           {
             name: "uuidv7",
             value: "uuidv7",
@@ -223,6 +229,13 @@ program
       );
       const dbDialectStrategy = dialectStrategyFactory(partialConfig.dbDialect);
 
+      const pkStrategyProcessor = new PkStrategyProcessor({
+        packageManager: completeConfig.packageManager,
+        install: options.install,
+        latest: completeConfig.latest,
+        pkStrategy: completeConfig.pkStrategy,
+      });
+
       let authProcessor;
       let adminProcessor;
       let stripeProcessor;
@@ -258,6 +271,7 @@ program
       await newProjectProcessor.init();
       await dbPackageStrategy.init();
       dbDialectStrategy.init();
+      await pkStrategyProcessor.init();
       if (completeConfig.darkModeEnabled) {
         const darkModeProcessor = new DarkModeProcessor({
           packageManager: completeConfig.packageManager,

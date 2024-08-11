@@ -96,20 +96,18 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
-  pkStrategyColumnStr: Record<PkStrategy, string> = {
-    uuidv7: "id:text:pk,default-uuidv7",
-    uuidv4: "id:text:pk,default-uuidv4",
-    uuid: "id:text:pk,default-uuidv4",
-    "auto-increment": "id:integer:pk-auto",
-  };
-  createdAtColumnStr: string = "created_at:text:default-now";
-  updatedAtColumnStr: string = "updated_at:text:default-now";
+  createdAtTemplate: string =
+    'created_at: text("created_at").default(sql`(CURRENT_DATE)`),';
+  updatedAtTemplate: string =
+    'updated_at: text("updated_at").default(sql`(CURRENT_DATE)`),';
   authSchemaTemplate: string = "db-dialects/schema/user.ts.sqlite.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
-    uuidv7: `id: text("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    uuid: `id: text("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    "auto-increment": `id: integer("id", { mode: "number" }).notNull().primaryKey({ autoIncrement: true }),`,
+    uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuid: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
+    nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
+    "auto-increment": `id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.sqlite.hbs";

@@ -276,20 +276,16 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
-  pkStrategyColumnStr: Record<PkStrategy, string> = {
-    uuidv7: "id:uuid:pk,default-uuidv7",
-    uuidv4: "id:uuid:pk,default-uuidv4",
-    uuid: "id:uuid:pk,default-random",
-    "auto-increment": "id:bigserial:pk",
-  };
-  createdAtColumnStr: string = "created_at:timestamp:default-now";
-  updatedAtColumnStr: string = "updated_at:timestamp:default-now";
+  createdAtTemplate: string = `created_at: timestamp("created_at").defaultNow(),`;
+  updatedAtTemplate: string = `updated_at: timestamp("updated_at").defaultNow(),`;
   authSchemaTemplate: string = "db-dialects/schema/user.ts.postgresql.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
-    uuidv7: `id: uuid("id").notNull().primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: uuid("id").notNull().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    uuid: `id: uuid("id").notNull().primaryKey().defaultRandom(),`,
-    "auto-increment": `id: bigserial("id", { mode: "number" }).notNull().primaryKey(),`,
+    uuidv7: `id: uuid("id").primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: uuid("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuid: `id: uuid("id").primaryKey().defaultRandom(),`,
+    cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
+    nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
+    "auto-increment": `id: bigserial("id", { mode: "number" }).primaryKey(),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.postgresql.hbs";

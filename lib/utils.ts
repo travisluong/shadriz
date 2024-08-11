@@ -284,9 +284,20 @@ export function completeShadrizConfig(
       throw new Error("shadriz config key not found " + key);
     }
   }
-  // @ts-ignore
   const completeConfig: ShadrizConfig = {
-    ...partialConfig,
+    version: partialConfig.version ?? "",
+    packageManager: partialConfig.packageManager ?? "npm",
+    latest: partialConfig.latest ?? false,
+    dbDialect: partialConfig.dbDialect ?? "sqlite",
+    dbPackage: partialConfig.dbPackage ?? "better-sqlite3",
+    pkStrategy: partialConfig.pkStrategy ?? "uuidv4",
+    timestampsEnabled: partialConfig.timestampsEnabled ?? false,
+    authSolution: partialConfig.authSolution ?? "none",
+    authProviders: partialConfig.authProviders ?? [],
+    adminEnabled: partialConfig.adminEnabled ?? false,
+    stripeEnabled: partialConfig.stripeEnabled ?? false,
+    sessionStrategy: partialConfig.sessionStrategy ?? "jwt",
+    darkModeEnabled: partialConfig.darkModeEnabled ?? false,
   };
   return completeConfig;
 }

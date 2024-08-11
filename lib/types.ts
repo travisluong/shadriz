@@ -24,6 +24,10 @@ export interface ShadrizProcessorOpts {
   latest: boolean;
 }
 
+export interface PkStrategyProcessorOpts extends ShadrizProcessorOpts {
+  pkStrategy: PkStrategy;
+}
+
 export interface NewProjectProcessorOpts extends ShadrizProcessorOpts {
   darkMode: boolean;
   authEnabled: boolean;
@@ -35,6 +39,7 @@ export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
 export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
 
 export type PkStrategy =
+  | "cuid2"
   | "uuidv7"
   | "uuidv4"
   | "uuid"
@@ -105,9 +110,8 @@ export interface DbDialectStrategy {
   stripeSchemaTemplatePath: string;
   pkStrategyTemplates: Record<PkStrategy, string>;
   authSchemaTemplate: string;
-  createdAtColumnStr: string;
-  updatedAtColumnStr: string;
-  pkStrategyColumnStr: Record<PkStrategy, string>;
+  createdAtTemplate: string;
+  updatedAtTemplate: string;
   init(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;
