@@ -113,6 +113,8 @@ During the `init` process, you will choose one strategy. This will be saved in `
 
 shadriz by default automatically adds `created_at` and `updated_at` timestamps. This can be enabled or disabled by the `timestampsEnabled` setting in `shadriz.config.json`.
 
+## Scaffold command
+
 ### postgresql example
 
 ```bash
@@ -218,8 +220,6 @@ Currently there are a few restrictions.
 - If you want to add an admin dashboard, you have to choose `credentials` as one of the Auth providers.
 
 This is due to limited support of the `credentials` provider in Auth.js.
-
-It would take a non-trivial amount of work to create a workaround for this.
 
 ## Inspirations
 
