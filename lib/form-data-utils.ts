@@ -26,4 +26,8 @@ export const formDataUtils = {
   bigint(col: string): string {
     return `    ${col}: BigInt(formData.get("${col}") as string),\n`;
   },
+
+  references(col: string): string {
+    return `    ${col}_id: formData.get("${col}_id") as string,\n`;
+  },
 };

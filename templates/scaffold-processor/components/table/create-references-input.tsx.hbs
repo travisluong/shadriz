@@ -1,0 +1,7 @@
+        <div>
+          <Label>{{column}}_id</Label>
+          <Input name="{{column}}_id" />
+          {state.errors?.{{column}}_id?.map((error) => (
+            <p className="text-red-500" key={error}>{error}</p>
+          ))}
+        </div>

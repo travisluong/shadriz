@@ -270,6 +270,19 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.columnName);
     },
   },
+  references: {
+    jsType: "string",
+    formTemplate:
+      "scaffold-processor/components/table/create-references-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-references-input.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: { columnName: string }): string {
+      return `${opts.columnName}_id: varchar(\"${opts.columnName}_id\", { length: 255 }).references(() => ${opts.columnName}.id)`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.references(opts.columnName);
+    },
+  },
   file: {
     jsType: "string",
     formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",

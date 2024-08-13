@@ -96,13 +96,20 @@ export class ScaffoldProcessor {
   }
   generateImportsCodeFromColumns(columns: string[]) {
     const dataTypeSet = new Set<string>();
+    let referenceImportsCode = "";
     for (const column of columns) {
-      const arr = column.split(":");
-      if (arr[1] !== "file" && arr[1] !== "image") {
-        dataTypeSet.add(arr[1]);
+      const [columnName, dataType] = column.split(":");
+      if (
+        dataType !== "file" &&
+        dataType !== "image" &&
+        dataType !== "references"
+      ) {
+        dataTypeSet.add(dataType);
+      }
+      if (dataType === "references") {
+        referenceImportsCode += `import { ${columnName} } from "./${columnName}";\n`;
       }
     }
-    console.log(dataTypeSet);
     let code = "import {\n";
     code += `  ${this.opts.dbDialectStrategy.tableConstructor},\n`;
     for (const dataType of dataTypeSet) {
@@ -116,6 +123,9 @@ export class ScaffoldProcessor {
     ).length;
     if (dependsOnSql) {
       code += `import { sql } from "drizzle-orm";`;
+    }
+    if (referenceImportsCode !== "") {
+      code += "\n" + referenceImportsCode;
     }
     return code;
   }
@@ -142,7 +152,7 @@ export class ScaffoldProcessor {
         str += this.opts.dbDialectStrategy.dialectConstraintsMap[arg];
       }
     }
-    str += this.commonFkArgHandler(constraintsArr);
+    // add handler for fk
     str += ",";
     return str;
   }
@@ -204,18 +214,24 @@ export class ScaffoldProcessor {
     });
   }
   addCreateAction(): void {
-    const columns = this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
-      .filter((arr) => !this.includesItemThatStartsWithDefault(arr))
-      .filter((arr) => !this.isFileType(arr))
-      .filter((arr) => !this.isImageType(arr))
-      .map((arr) => arr[0]);
+    const columns = ["id"];
+    for (const col of this.opts.columns.values()) {
+      const [columnName, dataType] = col.split(":");
+      if (
+        dataType !== "file" &&
+        dataType !== "image" &&
+        dataType !== "references"
+      ) {
+        columns.push(columnName);
+        continue;
+      }
+      if (dataType === "references") {
+        columns.push(columnName + "_id");
+      }
+    }
 
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
-      .filter((arr) => !this.includesItemThatStartsWithDefault(arr))
       .filter((arr) => !this.isFileType(arr))
       .filter((arr) => !this.isImageType(arr))
       .map((arr) => {
@@ -249,11 +265,21 @@ export class ScaffoldProcessor {
     });
   }
   addUpdateAction(): void {
-    const columns = this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => !this.isFileType(arr))
-      .filter((arr) => !this.isImageType(arr))
-      .map((arr) => arr[0]);
+    const columns = ["id"];
+    for (const col of this.opts.columns.values()) {
+      const [columnName, dataType] = col.split(":");
+      if (
+        dataType !== "file" &&
+        dataType !== "image" &&
+        dataType !== "references"
+      ) {
+        columns.push(columnName);
+        continue;
+      }
+      if (dataType === "references") {
+        columns.push(columnName + "_id");
+      }
+    }
 
     const dataTypeStrategyForPk =
       this.opts.dbDialectStrategy.dataTypeStrategyMap[
@@ -336,9 +362,15 @@ export class ScaffoldProcessor {
     let columnDefs = "";
     for (const [index, str] of this.opts.columns.entries()) {
       const [columnName, dataType] = str.split(":");
-      columnDefs += this.getColumnDefObjs({
-        columnName: columnName,
-      });
+      if (dataType === "references") {
+        columnDefs += this.getColumnDefObjs({
+          columnName: columnName + "_id",
+        });
+      } else {
+        columnDefs += this.getColumnDefObjs({
+          columnName: columnName,
+        });
+      }
       if (index !== this.opts.columns.length - 1) {
         columnDefs += "\n";
       }
@@ -377,13 +409,10 @@ export class ScaffoldProcessor {
   getFormControlsHtml(): string {
     let html = "";
     for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
+      const [columnName, dataType] = column.split(":");
       // TODO: validation should go earlier in process
       if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
-      const args = [arg1, arg2, arg3];
-      if (this.includesItemThatStartsWithPk(args)) continue;
-      if (this.includesItemThatStartsWithDefault(args)) continue;
       const dataTypeStrategy =
         this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
       html += compileTemplate({
@@ -452,29 +481,6 @@ export class ScaffoldProcessor {
     log.cmd("npx drizzle-kit generate");
     log.cmd("npx drizzle-kit migrate");
   }
-  commonFkArgHandler(args: string[]): string {
-    return args
-      .filter((arg) => !!arg)
-      .filter((arg) => arg.startsWith("fk-"))
-      .map((arg) => arg.split("-"))
-      .map((arr) => arr[1])
-      .map((str) => `.references(() => ${str})`)
-      .join("");
-  }
-  includesItemThatStartsWithPk(arr: string[]) {
-    for (const str of arr) {
-      if (str === undefined) continue;
-      if (str.startsWith("pk")) return true;
-    }
-    return false;
-  }
-  includesItemThatStartsWithDefault(arr: string[]) {
-    for (const str of arr) {
-      if (str === undefined) continue;
-      if (str.startsWith("default-")) return true;
-    }
-    return false;
-  }
   isFileType(arr: string[]) {
     return arr[1] === "file";
   }
@@ -489,9 +495,6 @@ export class ScaffoldProcessor {
       return true;
     }
     if (constraint in this.opts.dbDialectStrategy.dialectConstraintsMap) {
-      return true;
-    }
-    if (constraint.startsWith("fk-")) {
       return true;
     }
     return false;
