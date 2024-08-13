@@ -116,19 +116,14 @@ program
         message: "Which primary key generation strategy would you like to use?",
         choices: [
           {
-            name: "cuid2",
-            value: "cuid2",
-            description: "Uses @paralleldrive/cuid2 package",
+            name: "uuidv4",
+            value: "uuidv4",
+            description: "Uses crypto.randomUUID",
           },
           {
             name: "uuidv7",
             value: "uuidv7",
             description: "Uses uuidv7 package",
-          },
-          {
-            name: "uuidv4",
-            value: "uuidv4",
-            description: "Uses crypto.randomUUID",
           },
           {
             name: "uuid",
@@ -137,15 +132,14 @@ program
               "Uses the database's built-in uuid function for mysql and postgresql. sqlite will fallback to uuidv4.",
           },
           {
+            name: "cuid2",
+            value: "cuid2",
+            description: "Uses @paralleldrive/cuid2 package",
+          },
+          {
             name: "nanoid",
             value: "nanoid",
             description: "Uses the nanoid package",
-          },
-          {
-            name: "auto-increment",
-            value: "auto-increment",
-            description:
-              "Uses the auto increment constraint for selected database. (Not compatible with Auth.js)",
           },
         ],
       });

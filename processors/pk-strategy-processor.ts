@@ -11,7 +11,6 @@ export const pkStrategyImportTemplates: Record<PkStrategy, string> = {
   uuidv4: ``,
   uuid: ``,
   nanoid: `import { nanoid } from "nanoid";`,
-  "auto-increment": ``,
 };
 
 export class PkStrategyProcessor implements ShadrizProcessor {

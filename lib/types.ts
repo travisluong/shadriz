@@ -38,13 +38,7 @@ export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
 
 export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
 
-export type PkStrategy =
-  | "cuid2"
-  | "uuidv7"
-  | "uuidv4"
-  | "uuid"
-  | "nanoid"
-  | "auto-increment";
+export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "uuid" | "nanoid";
 
 export interface StripeProcessorOpts extends ShadrizProcessorOpts {
   dbDialectStrategy: DbDialectStrategy;

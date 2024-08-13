@@ -286,7 +286,6 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
     uuid: `id: uuid("id").primaryKey().defaultRandom(),`,
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
-    "auto-increment": `id: bigserial("id", { mode: "number" }).primaryKey(),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.postgresql.hbs";

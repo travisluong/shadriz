@@ -305,7 +305,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     uuid: 'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => sql`(uuid())`),',
-    "auto-increment": `id: serial("id").primaryKey(),`,
     cuid2:
       'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => createId()),',
     nanoid: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,

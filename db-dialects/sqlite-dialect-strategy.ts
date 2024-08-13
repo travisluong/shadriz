@@ -108,7 +108,6 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     uuid: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
-    "auto-increment": `id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),`,
   };
   stripeSchemaTemplatePath: string =
     "stripe-processor/schema/stripe.ts.sqlite.hbs";
