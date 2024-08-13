@@ -105,6 +105,8 @@ export class ScaffoldProcessor {
         dataType !== "references"
       ) {
         dataTypeSet.add(dataType);
+      } else {
+        dataTypeSet.add(this.opts.dbDialectStrategy.pkDataType);
       }
       if (dataType === "references") {
         referenceImportsCode += `import { ${columnName} } from "./${columnName}";\n`;

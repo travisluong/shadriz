@@ -105,7 +105,7 @@ shadriz supports the following primary key generation strategies:
 - `uuidv7` - Uses the uuidv7 package
 - `uuid` - Uses the database's built-in uuid function
 - `cuid2` - Uses @paralleldrive/cuid2 package
-- `nanoid` = Uses the nanoid package
+- `nanoid` - Uses the nanoid package
 
 During the `init` process, you will choose one strategy. This will be saved in `shadriz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
 
