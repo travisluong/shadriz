@@ -251,13 +251,20 @@ export class ScaffoldProcessor {
   addUpdateAction(): void {
     const columns = this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !this.includesItemThatStartsWithPk(arr))
       .filter((arr) => !this.isFileType(arr))
       .filter((arr) => !this.isImageType(arr))
       .map((arr) => arr[0]);
-    console.log(columns);
 
-    const formDataKeyVal = this.opts.columns
+    const dataTypeStrategyForPk =
+      this.opts.dbDialectStrategy.dataTypeStrategyMap[
+        this.opts.dbDialectStrategy.pkDataType
+      ];
+
+    let formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
+      columnName: "id",
+    });
+
+    formDataKeyVal += this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => !this.isFileType(arr))
       .filter((arr) => !this.isImageType(arr))
@@ -292,7 +299,16 @@ export class ScaffoldProcessor {
     });
   }
   addDeleteAction(): void {
-    const formDataKeyVal = this.opts.columns
+    const dataTypeStrategyForPk =
+      this.opts.dbDialectStrategy.dataTypeStrategyMap[
+        this.opts.dbDialectStrategy.pkDataType
+      ];
+
+    let formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
+      columnName: "id",
+    });
+
+    formDataKeyVal += this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => arr[0] === "id")
       .map((arr) => {
@@ -402,24 +418,30 @@ export class ScaffoldProcessor {
   }
   getUpdateFormControlsHtml(): string {
     let html = "";
+
+    html += compileTemplate({
+      inputPath:
+        "scaffold-processor/components/table/update-input-hidden.tsx.hbs",
+      data: { column: "id" },
+    });
+
+    html += "\n";
+
     for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType, arg1, arg2, arg3] = column.split(":");
+      const [columnName, dataType] = column.split(":");
       if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
-      const args = [arg1, arg2, arg3];
-      let updateFormTemplate = "";
-      if (this.includesItemThatStartsWithPk(args)) {
-        updateFormTemplate =
-          "scaffold-processor/components/table/update-input-hidden.tsx.hbs";
-      } else {
-        const dataTypeStrategy =
-          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-        updateFormTemplate = dataTypeStrategy.updateFormTemplate;
-      }
+
+      const dataTypeStrategy =
+        this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+
+      const updateFormTemplate = dataTypeStrategy.updateFormTemplate;
+
       html += compileTemplate({
         inputPath: updateFormTemplate,
         data: { column: columnName },
       });
+
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
     return html;

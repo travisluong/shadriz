@@ -297,6 +297,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
+  pkDataType: string = "varchar";
   createdAtTemplate: string = `created_at: timestamp("created_at").defaultNow(),`;
   updatedAtTemplate: string = `updated_at: timestamp("updated_at").defaultNow(),`;
   authSchemaTemplate: string = "db-dialects/schema/user.ts.mysql.hbs";

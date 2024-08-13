@@ -112,6 +112,7 @@ export interface DbDialectStrategy {
   authSchemaTemplate: string;
   createdAtTemplate: string;
   updatedAtTemplate: string;
+  pkDataType: string;
   init(): void;
   copyDrizzleConfig(): void;
   copySchema(): void;

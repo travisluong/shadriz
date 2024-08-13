@@ -96,6 +96,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class SqliteDialectStrategy implements DbDialectStrategy {
+  pkDataType: string = "text";
   createdAtTemplate: string =
     'created_at: text("created_at").default(sql`(CURRENT_DATE)`),';
   updatedAtTemplate: string =

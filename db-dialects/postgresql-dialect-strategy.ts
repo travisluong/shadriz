@@ -276,6 +276,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 };
 
 export class PostgresqlDialectStrategy implements DbDialectStrategy {
+  pkDataType: string = "uuid";
   createdAtTemplate: string = `created_at: timestamp("created_at").defaultNow(),`;
   updatedAtTemplate: string = `updated_at: timestamp("updated_at").defaultNow(),`;
   authSchemaTemplate: string = "db-dialects/schema/user.ts.postgresql.hbs";
