@@ -1,4 +1,4 @@
-import { user } from "@/schema/user";
+import { users } from "@/schema/users";
 import bcrypt from "bcrypt";
 import { betterSqlite, sdb } from "./sdb";
 import { role, user_role } from "@/schema/role";
@@ -8,18 +8,25 @@ async function main() {
   const email = process.argv[2];
   const password = process.argv[3];
   const hash = bcrypt.hashSync(password, 10);
-  await sdb.insert(user).values({ email: email, password: hash });
+  await sdb.insert(users).values({ email: email, password: hash });
 
   await sdb.insert(role).values({ name: "admin" }).onConflictDoNothing();
 
-  const userRes = await sdb.select().from(user).where(eq(user.email, email));
-  const roleRes = await sdb.select().from(role).where(eq(role.name, "admin"));
+  const userRecords = await sdb
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
+  const roleRecords = await sdb
+    .select()
+    .from(role)
+    .where(eq(role.name, "admin"));
 
   await sdb
     .insert(user_role)
-    .values({ user_id: userRes[0].id, role_id: roleRes[0].id });
+    .values({ user_id: userRecords[0].id, role_id: roleRecords[0].id });
 
   await betterSqlite.close();
 }
 
 main();
+  

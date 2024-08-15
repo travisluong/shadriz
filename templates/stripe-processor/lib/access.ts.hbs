@@ -1,28 +1,28 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "./db";
-import { order, subscription } from "@/schema/stripe";
+import { orders, subscriptions } from "@/schema/stripe";
 
 export async function hasProduct(userId: string, productId: string) {
-  const orderRes = await db.query.order.findFirst({
-    where: and(eq(order.user_id, userId), eq(order.product_id, productId)),
+  const orderRecord = await db.query.orders.findFirst({
+    where: and(eq(orders.user_id, userId), eq(orders.product_id, productId)),
   });
-  if (!orderRes) {
+  if (!orderRecord) {
     return false;
   }
   return true;
 }
 
 export async function hasActiveSubscription(userId: string) {
-  const subscriptionRes = await db.query.subscription.findFirst({
-    where: eq(subscription.user_id, userId),
-    orderBy: desc(subscription.created_at),
+  const subscriptionRecord = await db.query.subscriptions.findFirst({
+    where: eq(subscriptions.user_id, userId),
+    orderBy: desc(subscriptions.created_at),
   });
 
-  if (!subscriptionRes) {
+  if (!subscriptionRecord) {
     return false;
   }
 
-  const expireDate = new Date(subscriptionRes.end_date);
+  const expireDate = new Date(subscriptionRecord.end_date);
   expireDate.setDate(expireDate.getDate() + 2);
   const now = new Date();
 

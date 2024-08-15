@@ -1,17 +1,17 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { user } from "./user";
+import { users } from "./users";
 import { sql } from "drizzle-orm";
 {{#if isUuidv7}}
 import { uuidv7 } from "uuidv7";
 {{/if}}
 
-export const stripe_webhook = sqliteTable("stripe_webhook", {
+export const stripe_webhooks = sqliteTable("stripe_webhook", {
   {{pkText}}
   payload: text("payload"),
   created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
 });
 
-export const product = sqliteTable("product", {
+export const products = sqliteTable("product", {
   {{pkText}}
   slug: text("slug").notNull().unique(),
   stripe_product_id: text("stripe_product_id").notNull().unique(),
@@ -24,19 +24,19 @@ export const product = sqliteTable("product", {
   updated_at: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
 
-export const order = sqliteTable("order", {
+export const orders = sqliteTable("order", {
   {{pkText}}
-  user_id: text("user_id").notNull().references(() => user.id),
-  product_id: text("product_id").notNull().references(() => product.id),
+  user_id: text("user_id").notNull().references(() => users.id),
+  product_id: text("product_id").notNull().references(() => products.id),
   stripe_product_id: text("stripe_product_id").notNull(),
   stripe_price_id: text("stripe_price_id").notNull(),
   amount_total: integer("amount_total").notNull(),
   created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
 });
 
-export const subscription = sqliteTable("subscription", {
+export const subscriptions = sqliteTable("subscription", {
   {{pkText}}
-  user_id: text("user_id").notNull().references(() => user.id),
+  user_id: text("user_id").notNull().references(() => users.id),
   start_date: text("start_date").notNull(),
   end_date: text("end_date").notNull(),
   created_at: text("created_at").notNull().default(sql`(current_timestamp)`),

@@ -1,7 +1,12 @@
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
-import { order, product, stripe_webhook, subscription } from "@/schema/stripe";
-import { user } from "@/schema/user";
+import {
+  orders,
+  products,
+  stripe_webhooks,
+  subscriptions,
+} from "@/schema/stripe";
+import { users } from "@/schema/users";
 import { and, eq } from "drizzle-orm";
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
@@ -11,7 +16,7 @@ const endpointSecret = config.STRIPE_WEBHOOK_SECRET;
 export async function POST(req: Request) {
   const payload = await req.text();
 
-  await db.insert(stripe_webhook).values({
+  await db.insert(stripe_webhooks).values({
     payload: payload,
   });
 
@@ -60,11 +65,11 @@ async function handleCheckoutSessionCompleted(event: any) {
   console.log(event.data.object);
   const email = event.data.object.customer_email;
 
-  const userRes = await db.query.user.findFirst({
-    where: eq(user.email, email),
+  const userRecord = await db.query.users.findFirst({
+    where: eq(users.email, email),
   });
 
-  if (!userRes) {
+  if (!userRecord) {
     throw new Error(
       "user not found during handle checkout session completed: " + email
     );
@@ -85,28 +90,28 @@ async function handleCheckoutSessionCompleted(event: any) {
     const stripePriceId = item.price.id;
     const amountTotal = item.amount_total;
 
-    const productRes = await db.query.product.findFirst({
-      where: eq(product.stripe_product_id, stripeProductId),
+    const productRecord = await db.query.products.findFirst({
+      where: eq(products.stripe_product_id, stripeProductId),
     });
 
-    if (!productRes) {
+    if (!productRecord) {
       throw new Error("stripe product id not found in db: " + stripeProductId);
     }
 
-    const productId = productRes.id;
+    const productId = productRecord.id;
 
     await db
-      .update(user)
+      .update(users)
       .set({ stripe_customer_id: event.data.object.customer })
-      .where(eq(user.id, userRes.id));
+      .where(eq(users.id, userRecord.id));
 
-    if (productRes.slug === "one-time") {
+    if (productRecord.slug === "one-time") {
       // only create an order here if it is the one-time purchase product
       // for subscriptions, the order is created during the invoice paid event
-      await db.insert(order).values({
+      await db.insert(orders).values({
         product_id: productId,
         amount_total: amountTotal,
-        user_id: userRes.id,
+        user_id: userRecord.id,
         stripe_product_id: stripeProductId,
         stripe_price_id: stripePriceId,
       });
@@ -117,11 +122,11 @@ async function handleCheckoutSessionCompleted(event: any) {
 async function handleInvoicePaid(event: any) {
   const email = event.data.object.customer_email;
 
-  const userRes = await db.query.user.findFirst({
-    where: eq(user.email, email),
+  const userRecord = await db.query.users.findFirst({
+    where: eq(users.email, email),
   });
 
-  if (!userRes) {
+  if (!userRecord) {
     throw new Error("user not found during invoice paid: " + email);
   }
 
@@ -131,47 +136,50 @@ async function handleInvoicePaid(event: any) {
 
   for (let d of data) {
     const stripeProductId = d.price.product;
-    const productRes = await db.query.product.findFirst({
-      where: eq(product.stripe_product_id, stripeProductId),
+    const productRecord = await db.query.products.findFirst({
+      where: eq(products.stripe_product_id, stripeProductId),
     });
-    if (productRes?.slug === "monthly") {
+    if (productRecord?.slug === "monthly") {
       const startDate = new Date(d.period.start * 1000);
       const endDate = new Date(d.period.end * 1000);
       const newSubscription = {
-        user_id: userRes.id,
-        product_id: productRes.id,
+        user_id: userRecord.id,
+        product_id: productRecord.id,
         start_date: startDate.toISOString(),
         end_date: endDate.toISOString(),
       };
 
       await db
-        .update(user)
+        .update(users)
         .set({ stripe_customer_id: stripeCustomerId })
-        .where(eq(user.id, userRes.id));
+        .where(eq(users.id, userRecord.id));
 
-      const subscriptionRes = await db.query.subscription.findFirst({
-        where: and(eq(user.id, userRes.id), eq(product.id, productRes.id)),
+      const subscriptionRecord = await db.query.subscriptions.findFirst({
+        where: and(
+          eq(users.id, userRecord.id),
+          eq(products.id, productRecord.id)
+        ),
       });
 
-      if (subscriptionRes) {
+      if (subscriptionRecord) {
         await db
-          .update(subscription)
+          .update(subscriptions)
           .set({
             end_date: endDate.toISOString(),
             updated_at: new Date().toISOString(),
           })
-          .where(eq(subscription.id, subscriptionRes.id));
+          .where(eq(subscriptions.id, subscriptionRecord.id));
       } else {
-        await db.insert(subscription).values(newSubscription);
+        await db.insert(subscriptions).values(newSubscription);
       }
 
       // for subscriptions, orders should only be created after invoice.paid event
-      await db.insert(order).values({
-        product_id: productRes.id,
+      await db.insert(orders).values({
+        product_id: productRecord.id,
         amount_total: total,
         stripe_price_id: d.price.id,
         stripe_product_id: d.price.product,
-        user_id: userRes.id,
+        user_id: userRecord.id,
       });
     }
   }

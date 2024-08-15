@@ -114,7 +114,7 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     'created_at: text("created_at").default(sql`(CURRENT_DATE)`),';
   updatedAtTemplate: string =
     'updated_at: text("updated_at").default(sql`(CURRENT_DATE)`),';
-  authSchemaTemplate: string = "db-dialects/schema/user.ts.sqlite.hbs";
+  authSchemaTemplate: string = "db-dialects/schema/users.ts.sqlite.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,

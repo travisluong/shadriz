@@ -11,7 +11,7 @@ import type { AdapterAccountType } from "next-auth/adapters"
 import { uuidv7 } from "uuidv7";
 {{/if}}
 
-export const user = mysqlTable("user", {
+export const users = mysqlTable("user", {
   {{pkText}}
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
@@ -24,12 +24,12 @@ export const user = mysqlTable("user", {
   stripe_customer_id: varchar("stripe_customer_id", { length: 255 }),
 })
  
-export const account = mysqlTable(
+export const accounts = mysqlTable(
   "account",
   {
     userId: varchar("userId", { length: 255 })
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
     type: varchar("type", { length: 255 })
       .$type<AdapterAccountType>()
       .notNull(),
@@ -50,15 +50,15 @@ export const account = mysqlTable(
   })
 )
  
-export const session = mysqlTable("session", {
+export const sessions = mysqlTable("session", {
   sessionToken: varchar("sessionToken", { length: 255 }).primaryKey(),
   userId: varchar("userId", { length: 255 })
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
  
-export const verificationToken = mysqlTable(
+export const verificationTokens = mysqlTable(
   "verificationToken",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
@@ -72,13 +72,13 @@ export const verificationToken = mysqlTable(
   })
 )
  
-export const authenticator = mysqlTable(
+export const authenticators = mysqlTable(
   "authenticator",
   {
     credentialID: varchar("credentialID", { length: 255 }).notNull().unique(),
     userId: varchar("userId", { length: 255 })
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
     providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     credentialPublicKey: varchar("credentialPublicKey", {
       length: 255,

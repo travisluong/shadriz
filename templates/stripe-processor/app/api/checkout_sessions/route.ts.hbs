@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
-import { product } from "@/schema/stripe";
-import { user } from "@/schema/user";
+import { products } from "@/schema/stripe";
+import { users } from "@/schema/users";
 import { eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 
@@ -15,11 +15,11 @@ export async function POST(req: Request) {
     redirect("/signin");
   }
 
-  const userRes = await db.query.user.findFirst({
-    where: eq(user.id, session?.user.id!),
+  const userRecord = await db.query.users.findFirst({
+    where: eq(users.id, session?.user.id!),
   });
 
-  if (!userRes) {
+  if (!userRecord) {
     notFound();
   }
 
@@ -31,26 +31,26 @@ export async function POST(req: Request) {
     notFound();
   }
 
-  const productRes = await db.query.product.findFirst({
-    where: eq(product.slug, slug),
+  const productRecord = await db.query.products.findFirst({
+    where: eq(products.slug, slug),
   });
 
-  if (!productRes) {
+  if (!productRecord) {
     notFound();
   }
 
   try {
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
-      customer_email: userRes.email,
+      customer_email: userRecord.email,
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: productRes.stripe_price_id,
+          price: productRecord.stripe_price_id,
           quantity: 1,
         },
       ],
-      mode: productRes?.mode,
+      mode: productRecord?.mode,
       success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
       cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
       allow_promotion_codes: true,
