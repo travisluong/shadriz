@@ -324,7 +324,7 @@ export class AuthProcessor implements ShadrizProcessor {
       this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     renderTemplate({
       inputPath: this.opts.dbDialectStrategy.authSchemaTemplate,
-      outputPath: "schema/user.ts",
+      outputPath: "schema/users.ts",
       data: {
         pkText: pkText,
         isUuidv7: this.opts.pkStrategy === "uuidv7",
