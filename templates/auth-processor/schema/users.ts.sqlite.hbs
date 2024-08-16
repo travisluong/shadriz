@@ -1,8 +1,6 @@
 import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-{{#if isUuidv7}}
-import { uuidv7 } from "uuidv7";
-{{/if}}
+{{pkStrategyImport}}
 
 export const users = sqliteTable("user", {
   {{pkText}}

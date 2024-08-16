@@ -7,9 +7,7 @@ import {
   integer,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-{{#if isUuidv7}}
-import { uuidv7 } from "uuidv7";
-{{/if}}
+{{pkStrategyImport}}
 
 export const users = pgTable("user", {
   {{pkText}}

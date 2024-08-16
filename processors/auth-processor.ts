@@ -17,6 +17,7 @@ import {
   SessionStrategy,
   ShadrizProcessor,
 } from "../lib/types";
+import { pkStrategyImportTemplates } from "./pk-strategy-processor";
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];
@@ -344,12 +345,13 @@ export class AuthProcessor implements ShadrizProcessor {
   addAuthSchema() {
     const pkText =
       this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+    const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
     renderTemplate({
       inputPath: authDbDialectStrategy[this.opts.dbDialect].authSchemaTemplate,
       outputPath: "schema/users.ts",
       data: {
         pkText: pkText,
-        isUuidv7: this.opts.pkStrategy === "uuidv7",
+        pkStrategyImport: pkStrategyImport,
       },
     });
   }
