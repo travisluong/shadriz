@@ -313,7 +313,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
   pkDataType: string = "varchar";
   createdAtTemplate: string = `created_at: timestamp("created_at").defaultNow(),`;
   updatedAtTemplate: string = `updated_at: timestamp("updated_at").defaultNow(),`;
-  authSchemaTemplate: string = "db-dialects/schema/users.ts.mysql.hbs";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,

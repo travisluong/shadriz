@@ -103,7 +103,6 @@ export interface DbDialectStrategy {
   dialectConstraintsMap: { [key: string]: string };
   stripeSchemaTemplatePath: string;
   pkStrategyTemplates: Record<PkStrategy, string>;
-  authSchemaTemplate: string;
   createdAtTemplate: string;
   updatedAtTemplate: string;
   pkDataType: string;

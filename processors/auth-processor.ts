@@ -10,6 +10,7 @@ import {
 import { log } from "../lib/log";
 import {
   AuthProvider,
+  DbDialect,
   DbDialectStrategy,
   PackageManager,
   PkStrategy,
@@ -26,6 +27,7 @@ interface AuthProcessorOpts {
   stripeEnabled: boolean;
   pkStrategy: PkStrategy;
   dbDialectStrategy: DbDialectStrategy;
+  dbDialect: DbDialect;
 }
 
 interface AuthStrategy {
@@ -113,6 +115,26 @@ const authStrategyMap: AuthStrategyMap = {
       log.dash("update EMAIL_FROM in .env.local");
     },
     textToSearchInEnv: "EMAIL_SERVER",
+  },
+};
+
+interface AuthDbDialect {
+  authSchemaTemplate: string;
+  pkDataType: string;
+}
+
+const authDbDialectStrategy: Record<DbDialect, AuthDbDialect> = {
+  postgresql: {
+    authSchemaTemplate: "auth-processor/schema/users.ts.postgresql.hbs",
+    pkDataType: "text",
+  },
+  mysql: {
+    authSchemaTemplate: "auth-processor/schema/users.ts.mysql.hbs",
+    pkDataType: "varchar",
+  },
+  sqlite: {
+    authSchemaTemplate: "auth-processor/schema/users.ts.sqlite.hbs",
+    pkDataType: "text",
   },
 };
 
@@ -323,7 +345,7 @@ export class AuthProcessor implements ShadrizProcessor {
     const pkText =
       this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     renderTemplate({
-      inputPath: this.opts.dbDialectStrategy.authSchemaTemplate,
+      inputPath: authDbDialectStrategy[this.opts.dbDialect].authSchemaTemplate,
       outputPath: "schema/users.ts",
       data: {
         pkText: pkText,

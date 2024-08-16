@@ -244,6 +244,7 @@ program
           stripeEnabled: completeConfig.stripeEnabled,
           pkStrategy: completeConfig.pkStrategy!,
           dbDialectStrategy: dbDialectStrategy,
+          dbDialect: completeConfig.dbDialect,
         });
       }
       if (completeConfig.authSolution !== "none") {
