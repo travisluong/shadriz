@@ -15,9 +15,7 @@ import {
   bigint,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
-{{#if isUuidv7}}
-import { uuidv7 } from "uuidv7";
-{{/if}}
+{{pkStrategyImport}}
 
 export const stripeWebhooks = pgTable("stripe_webhooks", {
   {{pkText}}

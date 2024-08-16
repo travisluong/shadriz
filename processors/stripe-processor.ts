@@ -1,5 +1,5 @@
 import { log } from "../lib/log";
-import { ShadrizProcessor, StripeProcessorOpts } from "../lib/types";
+import { DbDialect, ShadrizProcessor, StripeProcessorOpts } from "../lib/types";
 import {
   addShadcnComponents,
   appendToFileIfTextNotExists,
@@ -7,6 +7,24 @@ import {
   installDependencies,
   renderTemplate,
 } from "../lib/utils";
+import { pkStrategyImportTemplates } from "./pk-strategy-processor";
+
+interface StripeDbDialectStrategy {
+  stripeSchemaTemplatePath: string;
+}
+
+const stripeDbDialectStrategy: Record<DbDialect, StripeDbDialectStrategy> = {
+  postgresql: {
+    stripeSchemaTemplatePath:
+      "stripe-processor/schema/stripe.ts.postgresql.hbs",
+  },
+  mysql: {
+    stripeSchemaTemplatePath: "stripe-processor/schema/stripe.ts.mysql.hbs",
+  },
+  sqlite: {
+    stripeSchemaTemplatePath: "stripe-processor/schema/stripe.ts.sqlite.hbs",
+  },
+};
 
 export class StripeProcessor implements ShadrizProcessor {
   opts: StripeProcessorOpts;
@@ -80,13 +98,14 @@ export class StripeProcessor implements ShadrizProcessor {
   addStripeSchema() {
     const pkText =
       this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
-
+    const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
     renderTemplate({
-      inputPath: this.opts.dbDialectStrategy.stripeSchemaTemplatePath,
+      inputPath:
+        stripeDbDialectStrategy[this.opts.dbDialect].stripeSchemaTemplatePath,
       outputPath: "schema/stripe.ts",
       data: {
         pkText: pkText,
-        isUuidv7: this.opts.pkStrategy === "uuidv7",
+        pkStrategyImport: pkStrategyImport,
       },
     });
   }

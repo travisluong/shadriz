@@ -1,4 +1,5 @@
 import {
+  DbDialect,
   GetColumnDefObjsOpts,
   GetKeyValueStrForSchemaOpts,
   ScaffoldProcessorOpts,
@@ -26,6 +27,27 @@ import { pkStrategyImportTemplates } from "./pk-strategy-processor";
 // components/post/post-create-form.tsx
 // components/post/post-update-form.tsx
 // components/post/post-delete-form.tsx
+
+interface ScaffoldDbDialectStrategy {
+  schemaTableTemplatePath: string;
+}
+
+const scaffoldDbDialectStrategies: Record<
+  DbDialect,
+  ScaffoldDbDialectStrategy
+> = {
+  postgresql: {
+    schemaTableTemplatePath:
+      "scaffold-processor/schema/table.ts.postgresql.hbs",
+  },
+  mysql: {
+    schemaTableTemplatePath: "scaffold-processor/schema/table.ts.mysql.hbs",
+  },
+  sqlite: {
+    schemaTableTemplatePath: "scaffold-processor/schema/table.ts.sqlite.hbs",
+  },
+};
+
 export class ScaffoldProcessor {
   opts: ScaffoldProcessorOpts;
 
@@ -84,7 +106,9 @@ export class ScaffoldProcessor {
     const importsCode = this.generateImportsCodeFromColumns(columns);
 
     renderTemplate({
-      inputPath: this.opts.dbDialectStrategy.schemaTableTemplatePath,
+      inputPath:
+        scaffoldDbDialectStrategies[this.opts.dbDialect]
+          .schemaTableTemplatePath,
       outputPath: `schema/${table}.ts`,
       data: {
         table,

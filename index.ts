@@ -261,6 +261,7 @@ program
           install: options.install,
           latest: completeConfig.latest,
           pkStrategy: completeConfig.pkStrategy!,
+          dbDialect: completeConfig.dbDialect,
         });
       }
       await newProjectProcessor.init();
@@ -412,6 +413,7 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
       authorizationLevel: authorizationLevel,
       pkStrategy: shadrizConfig.pkStrategy || "uuidv7",
       timestampsEnabled: shadrizConfig.timestampsEnabled ?? true,
+      dbDialect: shadrizConfig.dbDialect,
     });
     scaffoldProcessor.process();
   });

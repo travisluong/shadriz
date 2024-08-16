@@ -121,15 +121,11 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
   };
-  stripeSchemaTemplatePath: string =
-    "stripe-processor/schema/stripe.ts.sqlite.hbs";
   tableConstructor: string = "sqliteTable";
   dialectConstraintsMap = {
     "pk-auto": ".primaryKey({ autoIncrement: true })",
     "default-now": ".default(sql`(CURRENT_DATE)`)",
   };
-  schemaTableTemplatePath: string =
-    "scaffold-processor/schema/table.ts.sqlite.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/sqlite-core";
   dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";

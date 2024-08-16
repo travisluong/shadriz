@@ -321,8 +321,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
       'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => createId()),',
     nanoid: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,
   };
-  stripeSchemaTemplatePath: string =
-    "stripe-processor/schema/stripe.ts.mysql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
   tableConstructor: string = "mysqlTable";
   dialectConstraintsMap = {
@@ -331,8 +329,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
     "default-uuid": ".$defaultFn(() => sql`(uuid())`)",
   };
   dialect: DbDialect = "mysql";
-  schemaTableTemplatePath: string =
-    "scaffold-processor/schema/table.ts.mysql.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
 
   init(): void {

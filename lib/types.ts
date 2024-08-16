@@ -43,6 +43,7 @@ export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "uuid" | "nanoid";
 export interface StripeProcessorOpts extends ShadrizProcessorOpts {
   dbDialectStrategy: DbDialectStrategy;
   pkStrategy: PkStrategy;
+  dbDialect: DbDialect;
 }
 
 export interface ShadrizProcessor {
@@ -70,6 +71,7 @@ export interface ScaffoldProcessorOpts {
   authorizationLevel: AuthorizationLevel;
   pkStrategy: PkStrategy;
   timestampsEnabled: boolean;
+  dbDialect: DbDialect;
 }
 
 export interface GetColumnDefObjsOpts {
@@ -96,12 +98,10 @@ export interface DataTypeStrategy {
 
 export interface DbDialectStrategy {
   dialect: DbDialect;
-  schemaTableTemplatePath: string;
   drizzleDbCorePackage: string;
   tableConstructor: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
   dialectConstraintsMap: { [key: string]: string };
-  stripeSchemaTemplatePath: string;
   pkStrategyTemplates: Record<PkStrategy, string>;
   createdAtTemplate: string;
   updatedAtTemplate: string;

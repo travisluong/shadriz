@@ -299,16 +299,12 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
   };
-  stripeSchemaTemplatePath: string =
-    "stripe-processor/schema/stripe.ts.postgresql.hbs";
   drizzleDbCorePackage: string = "drizzle-orm/pg-core";
   tableConstructor: string = "pgTable";
   dialectConstraintsMap = {
     "default-now": ".defaultNow()",
     "default-random": ".defaultRandom()",
   };
-  schemaTableTemplatePath: string =
-    "scaffold-processor/schema/table.ts.postgresql.hbs";
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
 

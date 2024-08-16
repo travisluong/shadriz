@@ -6,7 +6,7 @@ import {
 import { installDependencies } from "../lib/utils";
 
 export const pkStrategyImportTemplates: Record<PkStrategy, string> = {
-  cuid2: `import { createId } from "@paralleldrive/cuid2;"`,
+  cuid2: `import { createId } from "@paralleldrive/cuid2";`,
   uuidv7: `import { uuidv7 } from "uuidv7";`,
   uuidv4: ``,
   uuid: ``,
