@@ -1,9 +1,9 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { {{drizzleInferredType}} } from "@/schema/{{table}}";
+import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
-export const columns: ColumnDef<{{drizzleInferredType}}>[] = [
+export const columns: ColumnDef<{{tableObj.singularPascalCase}}>[] = [
 {{columnDefs}}
   {
     id: "actions",
@@ -11,7 +11,7 @@ export const columns: ColumnDef<{{drizzleInferredType}}>[] = [
         const id = row.original.id;
         return (
           <div className="text-blue-500">
-              <a href={`{{#if isAdmin}}/admin/{{/if}}/{{table}}/${id}`}>view</a> | <a href={`{{#if isAdmin}}/admin/{{/if}}/{{table}}/${id}/edit`}>edit</a> | <a href={`{{#if isAdmin}}/admin/{{/if}}/{{table}}/${id}/delete`}>delete</a>
+              <a href={`{{#if isAdmin}}/admin/{{/if}}/{{tableObj.pluralKebabCase}}/${id}`}>view</a> | <a href={`{{#if isAdmin}}/admin/{{/if}}/{{tableObj.pluralKebabCase}}/${id}/edit`}>edit</a> | <a href={`{{#if isAdmin}}/admin/{{/if}}/{{tableObj.pluralKebabCase}}/${id}/delete`}>delete</a>
           </div>
         )
     })

@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{capitalizedTable}}Schema, {{table}}, {{capitalizedTable}} } from "@/schema/{{table}}";
+import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 {{#if importFileUtils}}
@@ -14,7 +14,7 @@ import { auth } from "@/lib/auth";
 import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
 
-export interface Update{{capitalizedTable}}State {
+export interface Update{{tableObj.singularPascalCase}}State {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
@@ -23,10 +23,10 @@ export interface Update{{capitalizedTable}}State {
   message?: string;
 }
 
-export async function update{{capitalizedTable}}(
-  prevState: Update{{capitalizedTable}}State,
+export async function update{{tableObj.singularPascalCase}}(
+  prevState: Update{{tableObj.singularPascalCase}}State,
   formData: FormData
-): Promise<Update{{capitalizedTable}}State> {
+): Promise<Update{{tableObj.singularPascalCase}}State> {
 {{#if isNotPublic}}
   const session = await auth();
   if (!session?.user?.id) {
@@ -40,7 +40,7 @@ export async function update{{capitalizedTable}}(
   }
 {{/if}}
 
-  const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
+  const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
   if (!validatedFields.success) {
@@ -57,7 +57,7 @@ export async function update{{capitalizedTable}}(
     };
   }
 
-  let data: Partial<{{capitalizedTable}}> = {
+  let data: Partial<{{tableObj.singularPascalCase}}> = {
     {{#each columns}}
     {{this}}: validatedFields.data.{{this}},
     {{/each}}
@@ -79,13 +79,13 @@ export async function update{{capitalizedTable}}(
 {{/each}}
 
   await db
-    .update({{table}})
+    .update({{tableObj.pluralCamelCase}})
     .set(data)
-    .where(eq({{table}}.id, validatedFields.data.id));
+    .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
 
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}");
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}/" + validatedFields.data.id);
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}/" + validatedFields.data.id + "/edit");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
 
   return {
     message: "success",

@@ -5,6 +5,7 @@ import Handlebars from "handlebars";
 import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
 import { PackageManager, ShadrizConfig } from "./types";
+import { caseFactory } from "./case-utils";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -165,12 +166,14 @@ export function regenerateSchemaIndex(): void {
   const tablenames = filenames.map((filename) => filename.split(".")[0]);
   let code = "";
   for (const table of tablenames) {
-    code += `import * as ${table} from "@/schema/${table}";\n`;
+    const tableObj = caseFactory(table);
+    code += `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.original}";\n`;
   }
   code += "\n";
   code += "export const schema = {\n";
   for (const table of tablenames) {
-    code += `  ...${table},\n`;
+    const tableObj = caseFactory(table);
+    code += `  ...${tableObj.pluralCamelCase},\n`;
   }
   code += "};\n";
   writeToFile(`lib/schema.ts`, code);

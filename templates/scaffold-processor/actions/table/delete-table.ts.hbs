@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{capitalizedTable}}Schema, {{table}} } from "@/schema/{{table}}";
+import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -12,17 +12,17 @@ import { auth } from "@/lib/auth";
 import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
 
-export interface Delete{{capitalizedTable}}State {
+export interface Delete{{tableObj.singularPascalCase}}State {
   errors?: {
     id?: string[];
   };
   message?: string;
 }
 
-export async function delete{{capitalizedTable}}(
-  prevState: Delete{{capitalizedTable}}State,
+export async function delete{{tableObj.singularPascalCase}}(
+  prevState: Delete{{tableObj.singularPascalCase}}State,
   formData: FormData
-): Promise<Delete{{capitalizedTable}}State> {
+): Promise<Delete{{tableObj.singularPascalCase}}State> {
 {{#if isNotPublic}}
   const session = await auth();
   if (!session?.user?.id) {
@@ -36,7 +36,7 @@ export async function delete{{capitalizedTable}}(
   }
 {{/if}}
 
-  const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
+  const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
   if (!validatedFields.success) {
@@ -50,7 +50,7 @@ export async function delete{{capitalizedTable}}(
       message: "error",
     };
   }
-  await db.delete({{table}}).where(eq({{table}}.id, validatedFields.data.id));
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}");
-  redirect("{{#if isAdmin}}/admin{{/if}}/{{table}}");
+  await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
+  redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }

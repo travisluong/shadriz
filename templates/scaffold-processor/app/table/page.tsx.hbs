@@ -1,15 +1,15 @@
-import { columns } from "@/components/{{table}}/{{table}}-columns";
+import { columns } from "@/components/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-columns";
 import { DataTable } from "@/components/ui/data-table";
 import { db } from "@/lib/db";
 
 export default async function Page() {
-  const data = await db.query.{{table}}.findMany();
+  const data = await db.query.{{tableObj.pluralCamelCase}}.findMany();
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">{{table}}</h1>
+      <h1 className="text-3xl font-bold mb-6">{{tableObj.pluralCapitalCase}}</h1>
       <div className="text-right mr-2">
-        <a href="/{{#if isAdmin}}admin/{{/if}}{{table}}/new" className="text-blue-500">
+        <a href="/{{#if isAdmin}}admin/{{/if}}{{tableObj.pluralKebabCase}}/new" className="text-blue-500">
           new
         </a>
       </div>

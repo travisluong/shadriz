@@ -13,6 +13,7 @@ import {
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
+import { caseFactory } from "../lib/case-utils";
 
 // lib/schema.ts
 // app/post/page.tsx
@@ -104,17 +105,16 @@ export class ScaffoldProcessor {
 
     // generate imports code
     const importsCode = this.generateImportsCodeFromColumns(columns);
-
+    const tableObj = caseFactory(table);
     renderTemplate({
       inputPath:
         scaffoldDbDialectStrategies[this.opts.dbDialect]
           .schemaTableTemplatePath,
-      outputPath: `schema/${table}.ts`,
+      outputPath: `schema/${tableObj.pluralKebabCase}.ts`,
       data: {
-        table,
         columns: columnsCode,
-        typeName: capitalize(table),
         imports: importsCode,
+        tableObj: tableObj,
       },
     });
   }
@@ -183,59 +183,61 @@ export class ScaffoldProcessor {
     return str;
   }
   addListView(): void {
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/app/table/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
-        this.opts.table
+        tableObj.pluralKebabCase
       }/page.tsx`,
       data: {
-        table: this.opts.table,
+        tableObj: tableObj,
         isAdmin: this.opts.authorizationLevel === "admin",
       },
     });
   }
   addDetailView(): void {
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
-        this.opts.table
+        tableObj.pluralKebabCase
       }/[id]/page.tsx`,
-      data: { table: this.opts.table },
+      data: { tableObj: tableObj },
     });
   }
   addEditView(): void {
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/edit/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
-        this.opts.table
+        tableObj.pluralKebabCase
       }/[id]/edit/page.tsx`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
       },
     });
   }
   addNewView(): void {
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/app/table/new/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
-        this.opts.table
+        tableObj.pluralKebabCase
       }/new/page.tsx`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
       },
     });
   }
   addDeleteView(): void {
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/delete/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
-        this.opts.table
+        tableObj.pluralKebabCase
       }/[id]/delete/page.tsx`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
       },
     });
   }
@@ -274,12 +276,13 @@ export class ScaffoldProcessor {
       .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
       .map((arr) => arr[0]);
 
+    const tableObj = caseFactory(this.opts.table);
+
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/create-table.ts.hbs",
-      outputPath: `actions/${this.opts.table}/create-${this.opts.table}.ts`,
+      outputPath: `actions/${tableObj.pluralKebabCase}/create-${tableObj.singularKebabCase}.ts`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
         columns: columns,
         formDataKeyVal: formDataKeyVal,
         isNotPublic: this.opts.authorizationLevel !== "public",
@@ -334,12 +337,13 @@ export class ScaffoldProcessor {
       .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
       .map((arr) => arr[0]);
 
+    const tableObj = caseFactory(this.opts.table);
+
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/update-table.ts.hbs",
-      outputPath: `actions/${this.opts.table}/update-${this.opts.table}.ts`,
+      outputPath: `actions/${tableObj.pluralKebabCase}/update-${tableObj.singularKebabCase}.ts`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
         columns: columns,
         formDataKeyVal: formDataKeyVal,
         isNotPublic: this.opts.authorizationLevel !== "public",
@@ -371,12 +375,14 @@ export class ScaffoldProcessor {
         return strategy.getKeyValStrForFormData({ columnName: col });
       })
       .join("");
+
+    const tableObj = caseFactory(this.opts.table);
+
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/delete-table.ts.hbs",
-      outputPath: `actions/${this.opts.table}/delete-${this.opts.table}.ts`,
+      outputPath: `actions/${tableObj.pluralKebabCase}/delete-${tableObj.singularKebabCase}.ts`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
         isNotPublic: this.opts.authorizationLevel !== "public",
         isPrivate: this.opts.authorizationLevel === "private",
         isAdmin: this.opts.authorizationLevel === "admin",
@@ -401,14 +407,13 @@ export class ScaffoldProcessor {
         columnDefs += "\n";
       }
     }
-    const capitalizedTableName = capitalize(this.opts.table);
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/components/table/columns.tsx.hbs",
-      outputPath: `components/${this.opts.table}/${this.opts.table}-columns.tsx`,
+      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-columns.tsx`,
       data: {
         columnDefs: columnDefs,
-        drizzleInferredType: capitalizedTableName,
-        table: this.opts.table,
+        tableObj: tableObj,
         isAdmin: this.opts.authorizationLevel === "admin",
       },
     });
@@ -422,12 +427,12 @@ export class ScaffoldProcessor {
   }
   addCreateForm(): void {
     const formControlsHtml = this.getFormControlsHtml();
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/components/table/create-form.tsx.hbs",
-      outputPath: `components/${this.opts.table}/${this.opts.table}-create-form.tsx`,
+      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-create-form.tsx`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
         formControls: formControlsHtml,
       },
     });
@@ -450,24 +455,24 @@ export class ScaffoldProcessor {
     return html;
   }
   addUpdateForm(): void {
+    const tableObj = caseFactory(this.opts.table);
     const formControlsHtml = this.getUpdateFormControlsHtml();
     renderTemplate({
       inputPath: "scaffold-processor/components/table/update-form.tsx.hbs",
-      outputPath: `components/${this.opts.table}/${this.opts.table}-update-form.tsx`,
+      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
         formControls: formControlsHtml,
       },
     });
   }
   addDeleteForm(): void {
+    const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/components/table/delete-form.tsx.hbs",
-      outputPath: `components/${this.opts.table}/${this.opts.table}-delete-form.tsx`,
+      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-delete-form.tsx`,
       data: {
-        table: this.opts.table,
-        capitalizedTable: capitalize(this.opts.table),
+        tableObj: tableObj,
       },
     });
   }

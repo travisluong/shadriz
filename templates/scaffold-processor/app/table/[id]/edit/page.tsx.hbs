@@ -1,12 +1,12 @@
-import {{capitalizedTable}}UpdateForm from "@/components/{{table}}/{{table}}-update-form";
+import {{tableObj.singularPascalCase}}UpdateForm from "@/components/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-update-form";
 import { db } from "@/lib/db";
-import { {{table}} } from "@/schema/{{table}}";
+import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  const data = await db.query.{{table}}.findFirst({ where: eq({{table}}.id, id) });
+  const data = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
 
   if (!data) {
     notFound();
@@ -14,8 +14,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Update {{table}}</h1>
-      <{{capitalizedTable}}UpdateForm data={data} />
+      <h1 className="text-3xl font-bold mb-6">Update {{tableObj.singularCapitalCase}}</h1>
+      <{{tableObj.singularPascalCase}}UpdateForm data={data} />
     </div>
   );
 }

@@ -1,19 +1,19 @@
 "use client";
 
-import { update{{capitalizedTable}}, Update{{capitalizedTable}}State } from "@/actions/{{table}}/update-{{table}}";
+import { update{{tableObj.singularPascalCase}}, Update{{tableObj.singularPascalCase}}State } from "@/actions/{{tableObj.pluralKebabCase}}/update-{{tableObj.singularKebabCase}}";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { useFormState } from "react-dom";
-import { {{capitalizedTable}} } from "@/schema/{{table}}";
+import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function {{capitalizedTable}}UpdateForm({ data }: { data: {{capitalizedTable}} }) {
-  const initialState: Update{{capitalizedTable}}State = {};
-  const [state, dispatch] = useFormState(update{{capitalizedTable}}, initialState);
+export default function {{tableObj.singularPascalCase}}UpdateForm({ data }: { data: {{tableObj.singularPascalCase}} }) {
+  const initialState: Update{{tableObj.singularPascalCase}}State = {};
+  const [state, dispatch] = useFormState(update{{tableObj.singularPascalCase}}, initialState);
 
   return (
     <div>

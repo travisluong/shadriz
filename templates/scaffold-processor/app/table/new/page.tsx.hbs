@@ -1,10 +1,10 @@
-import {{capitalizedTable}}CreateForm from "@/components/{{table}}/{{table}}-create-form";
+import {{tableObj.singularPascalCase}}CreateForm from "@/components/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-create-form";
 
 export default function Page() {
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Create {{table}}</h1>
-      <{{capitalizedTable}}CreateForm />
+      <h1 className="text-3xl font-bold mb-6">Create {{tableObj.singularCapitalCase}}</h1>
+      <{{tableObj.singularPascalCase}}CreateForm />
     </div>
   );
 }

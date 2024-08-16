@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{capitalizedTable}}Schema, {{table}}, {{capitalizedTable}} } from "@/schema/{{table}}";
+import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 {{#if importFileUtils}}
@@ -14,7 +14,7 @@ import { auth } from "@/lib/auth";
 import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
 
-export interface Create{{capitalizedTable}}State {
+export interface Create{{tableObj.singularPascalCase}}State {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
@@ -23,10 +23,10 @@ export interface Create{{capitalizedTable}}State {
   message?: string;
 }
 
-export async function create{{capitalizedTable}}(
-  prevState: Create{{capitalizedTable}}State,
+export async function create{{tableObj.singularPascalCase}}(
+  prevState: Create{{tableObj.singularPascalCase}}State,
   formData: FormData
-): Promise<Create{{capitalizedTable}}State> {
+): Promise<Create{{tableObj.singularPascalCase}}State> {
 {{#if isNotPublic}}
   const session = await auth();
   if (!session?.user?.id) {
@@ -40,7 +40,7 @@ export async function create{{capitalizedTable}}(
   }
 {{/if}}
 
-  const validatedFields = insert{{capitalizedTable}}Schema.safeParse({
+  const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
   if (!validatedFields.success) {
@@ -50,7 +50,7 @@ export async function create{{capitalizedTable}}(
     };
   }
 
-  let data: Partial<{{capitalizedTable}}> = {
+  let data: Partial<{{tableObj.singularPascalCase}}> = {
     {{#each columns}}
     {{this}}: validatedFields.data.{{this}},
     {{/each}}
@@ -72,7 +72,7 @@ export async function create{{capitalizedTable}}(
   }
 {{/each}}
 
-  await db.insert({{table}}).values(data);
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{table}}");
-  redirect("{{#if isAdmin}}/admin{{/if}}/{{table}}");
+  await db.insert({{tableObj.pluralCamelCase}}).values(data);
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
+  redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }
