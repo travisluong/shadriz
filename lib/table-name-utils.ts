@@ -1,4 +1,4 @@
-import pluralize, { plural } from "pluralize";
+import pluralize from "pluralize";
 import * as changeCase from "change-case";
 
 export function tableNameFactory(table: string) {
