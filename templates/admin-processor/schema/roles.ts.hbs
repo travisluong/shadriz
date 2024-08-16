@@ -1,7 +1,7 @@
 import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
 import { users } from "./users";
 
-export const role = sqliteTable("roles", {
+export const roles = sqliteTable("roles", {
   id: text("id")
     .notNull()
     .primaryKey()
@@ -9,7 +9,7 @@ export const role = sqliteTable("roles", {
   name: text("name").notNull().unique(),
 });
 
-export const user_role = sqliteTable(
+export const users_roles = sqliteTable(
   "users_roles",
   {
     user_id: text("user_id")
@@ -17,7 +17,7 @@ export const user_role = sqliteTable(
       .references(() => users.id),
     role_id: text("role_id")
       .notNull()
-      .references(() => role.id),
+      .references(() => roles.id),
   },
   (table) => ({
     compoundKey: primaryKey({ columns: [table.user_id, table.role_id] }),

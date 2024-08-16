@@ -5,7 +5,7 @@ import { sql } from "drizzle-orm";
 import { uuidv7 } from "uuidv7";
 {{/if}}
 
-export const stripe_webhooks = sqliteTable("stripe_webhooks", {
+export const stripeWebhooks = sqliteTable("stripeWebhooks", {
   {{pkText}}
   payload: text("payload"),
   created_at: text("created_at").notNull().default(sql`(current_timestamp)`),

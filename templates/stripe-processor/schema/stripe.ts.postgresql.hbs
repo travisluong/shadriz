@@ -19,13 +19,13 @@ import { users } from "./users";
 import { uuidv7 } from "uuidv7";
 {{/if}}
 
-export const stripe_webhooks = pgTable("stripe_webhook", {
+export const stripeWebhooks = pgTable("stripe_webhooks", {
   {{pkText}}
   payload: json("payload"),
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const products = pgTable("product", {
+export const products = pgTable("products", {
   {{pkText}}
   slug: text("slug").notNull().unique(),
   stripe_product_id: text("stripe_product_id").notNull().unique(),
@@ -38,7 +38,7 @@ export const products = pgTable("product", {
   updated_at: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const orders = pgTable("order", {
+export const orders = pgTable("orders", {
   {{pkText}}
   user_id: uuid("user_id").notNull().references(() => users.id),
   product_id: uuid("product_id").notNull().references(() => products.id),
@@ -48,7 +48,7 @@ export const orders = pgTable("order", {
   created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const subscriptions = pgTable("subscription", {
+export const subscriptions = pgTable("subscriptions", {
   {{pkText}}
   user_id: uuid("user_id").notNull().references(() => users.id),
   product_id: uuid("product_id").notNull().references(() => products.id),

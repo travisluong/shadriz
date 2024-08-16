@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import {
   orders,
   products,
-  stripe_webhooks,
+  stripeWebhooks,
   subscriptions,
 } from "@/schema/stripe";
 import { users } from "@/schema/users";
@@ -16,7 +16,7 @@ const endpointSecret = config.STRIPE_WEBHOOK_SECRET;
 export async function POST(req: Request) {
   const payload = await req.text();
 
-  await db.insert(stripe_webhooks).values({
+  await db.insert(stripeWebhooks).values({
     payload: payload,
   });
 
