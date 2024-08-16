@@ -160,6 +160,13 @@ scaffold user_profile -c image:avatar description:text
 
 ```
 
+## Naming conventions
+
+- Class names are singular pascal case. `FooBar`
+- Schema variable names are plural camel case. `fooBars`.
+- Table names are plural snake case. `foo_bars`
+- File names are kebab case. `foo-bar` and `foo-bars`.
+
 ## Auth
 
 If Auth.js was enabled during initialization, you will be able to scaffold using a `private` authorization level. The pages will be put into the `(private)` route group. These pages along with the server actions will require a user to be authenticated to access.
