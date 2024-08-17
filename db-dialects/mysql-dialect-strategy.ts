@@ -276,6 +276,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/create-references-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
+    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: { columnName: string }): string {
       return `${opts.columnName}_id: varchar(\"${opts.columnName}_id\", { length: 255 }).references(() => ${opts.columnName}.id)`;
     },
@@ -288,6 +289,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-file.tsx.hbs",
+    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -300,6 +302,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-image.tsx.hbs",
+    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },

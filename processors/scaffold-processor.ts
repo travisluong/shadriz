@@ -123,14 +123,12 @@ export class ScaffoldProcessor {
     let referenceImportsCode = "";
     for (const column of columns) {
       const [columnName, dataType] = column.split(":");
-      if (
-        dataType !== "file" &&
-        dataType !== "image" &&
-        dataType !== "references"
-      ) {
-        dataTypeSet.add(dataType);
+      const dataTypeStrategy =
+        this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+      if (dataTypeStrategy.dataTypeOverride) {
+        dataTypeSet.add(dataTypeStrategy.dataTypeOverride);
       } else {
-        dataTypeSet.add(this.opts.dbDialectStrategy.pkDataType);
+        dataTypeSet.add(dataType);
       }
       if (dataType === "references") {
         referenceImportsCode += `import { ${columnName} } from "./${columnName}";\n`;

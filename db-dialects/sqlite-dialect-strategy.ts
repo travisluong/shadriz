@@ -50,6 +50,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     formTemplate: "scaffold-processor/components/table/create-checkbox.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
+    dataTypeOverride: "integer",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: integer("${opts.columnName}", { mode: "boolean" } )`;
     },
@@ -75,6 +76,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/create-references-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
+    dataTypeOverride: "text",
     getKeyValueStrForSchema: function (opts: { columnName: string }): string {
       return `${opts.columnName}_id: text(\"${opts.columnName}_id\").references(() => ${opts.columnName}.id)`;
     },
@@ -87,6 +89,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-file.tsx.hbs",
+    dataTypeOverride: "text",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
@@ -99,6 +102,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-image.tsx.hbs",
+    dataTypeOverride: "text",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },

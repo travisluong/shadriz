@@ -8,9 +8,9 @@ This is **NOT** a web framework.
 
 It is a command line interface code generation tool.
 
-You do not install it as a dependency.
+You do not install it into your project as a dependency.
 
-Generate fully functional features including authentication, authorization, and payments.
+Instead, generate fully functional features including authentication, authorization, and payments.
 
 Scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
@@ -118,19 +118,19 @@ shadriz by default automatically adds `created_at` and `updated_at` timestamps. 
 ### postgresql example
 
 ```bash
-scaffold post -c title:text content:text published_at:timestamp
+scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
 ```
 
 ### mysql example
 
 ```bash
-scaffold post -c title:varchar content:text published_at:timestamp
+scaffold post -c title:varchar content:text is_draft:boolean published_at:timestamp
 ```
 
 ### sqlite example
 
 ```bash
-scaffold post -c title:text content:text published_at:text
+scaffold post -c title:text content:text is_draft:boolean published_at:text
 ```
 
 ## Foreign key constraints

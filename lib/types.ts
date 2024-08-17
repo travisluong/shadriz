@@ -98,6 +98,7 @@ export interface DataTypeStrategy {
   jsType: JSType;
   formTemplate: string;
   updateFormTemplate: string;
+  dataTypeOverride?: string;
   getKeyValueStrForSchema(opts: DataTypeStrategyOpts): string;
   getKeyValStrForFormData(opts: DataTypeStrategyOpts): string;
 }
