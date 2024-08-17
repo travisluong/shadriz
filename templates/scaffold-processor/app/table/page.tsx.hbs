@@ -3,7 +3,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { db } from "@/lib/db";
 
 export default async function Page() {
-  const data = await db.query.{{tableObj.pluralCamelCase}}.findMany();
+  const {{tableObj.singularCamelCase}}Records = await db.query.{{tableObj.pluralCamelCase}}.findMany();
 
   return (
     <div>
@@ -13,7 +13,7 @@ export default async function Page() {
           new
         </a>
       </div>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={ {{tableObj.singularCamelCase}}Records } />
     </div>
   );
 }
