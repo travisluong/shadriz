@@ -269,7 +269,7 @@ export class ScaffoldProcessor {
           this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
         return strategy.getKeyValStrForFormData({ columnName: col });
       })
-      .join("");
+      .join("\n");
 
     const uploadColumnNames = this.opts.columns
       .map((c) => c.split(":"))
@@ -315,22 +315,29 @@ export class ScaffoldProcessor {
         this.opts.dbDialectStrategy.pkDataType
       ];
 
-    let formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
-      columnName: "id",
-    });
+    const formDataKeyValArr = [];
 
-    formDataKeyVal += this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => !this.isFileType(arr))
-      .filter((arr) => !this.isImageType(arr))
-      .map((arr) => {
-        const col = arr[0];
-        const dataType = arr[1];
-        const strategy =
-          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-        return strategy.getKeyValStrForFormData({ columnName: col });
+    formDataKeyValArr.push(
+      dataTypeStrategyForPk.getKeyValStrForFormData({
+        columnName: "id",
       })
-      .join("");
+    );
+
+    formDataKeyValArr.concat(
+      this.opts.columns
+        .map((c) => c.split(":"))
+        .filter((arr) => !this.isFileType(arr))
+        .filter((arr) => !this.isImageType(arr))
+        .map((arr) => {
+          const col = arr[0];
+          const dataType = arr[1];
+          const strategy =
+            this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+          return strategy.getKeyValStrForFormData({ columnName: col });
+        })
+    );
+
+    const formDataKeyVal = formDataKeyValArr.join("\n");
 
     const uploadColumnNames = this.opts.columns
       .map((c) => c.split(":"))
@@ -360,21 +367,9 @@ export class ScaffoldProcessor {
         this.opts.dbDialectStrategy.pkDataType
       ];
 
-    let formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
+    const formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
       columnName: "id",
     });
-
-    formDataKeyVal += this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => arr[0] === "id")
-      .map((arr) => {
-        const col = arr[0];
-        const dataType = arr[1];
-        const strategy =
-          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-        return strategy.getKeyValStrForFormData({ columnName: col });
-      })
-      .join("");
 
     const tableObj = caseFactory(this.opts.table);
 

@@ -29,12 +29,15 @@ export async function create{{tableObj.singularPascalCase}}(
 ): Promise<Create{{tableObj.singularPascalCase}}State> {
 {{#if isNotPublic}}
   const session = await auth();
+
   if (!session?.user?.id) {
     throw new Error("access denied");
   }
 {{/if}}
+
 {{#if isAdmin}}
   const isAdmin = await hasAdminRole(session.user.id);
+
   if (!isAdmin) {
     throw new Error("unauthorized");
   }
@@ -43,6 +46,7 @@ export async function create{{tableObj.singularPascalCase}}(
   const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -73,6 +77,7 @@ export async function create{{tableObj.singularPascalCase}}(
 {{/each}}
 
   await db.insert({{tableObj.pluralCamelCase}}).values(data);
+
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }

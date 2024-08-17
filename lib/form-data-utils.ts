@@ -1,33 +1,33 @@
 export const formDataUtils = {
   integer(col: string): string {
-    return `    ${col}: parseInt(formData.get("${col}") as string),\n`;
+    return `    ${col}: parseInt(formData.get("${col}") as string),`;
   },
 
   boolean(col: string): string {
-    return `    ${col}: !!formData.get("${col}"),\n`;
+    return `    ${col}: !!formData.get("${col}"),`;
   },
 
   string(col: string): string {
-    return `    ${col}: formData.get("${col}") as string,\n`;
+    return `    ${col}: formData.get("${col}") as string,`;
   },
 
   json(col: string): string {
-    return `    ${col}: formData.get("${col}") ? JSON.parse(formData.get("${col}") as string) : "",\n`;
+    return `    ${col}: formData.get("${col}") ? JSON.parse(formData.get("${col}") as string) : "",`;
   },
 
   date(col: string): string {
-    return `    ${col}: new Date(formData.get("${col}") as string),\n`;
+    return `    ${col}: new Date(formData.get("${col}") as string),`;
   },
 
   float(col: string): string {
-    return `    ${col}: parseFloat(formData.get("${col}") as string),\n`;
+    return `    ${col}: parseFloat(formData.get("${col}") as string),`;
   },
 
   bigint(col: string): string {
-    return `    ${col}: BigInt(formData.get("${col}") as string),\n`;
+    return `    ${col}: BigInt(formData.get("${col}") as string),`;
   },
 
   references(col: string): string {
-    return `    ${col}_id: formData.get("${col}_id") as string,\n`;
+    return `    ${col}_id: formData.get("${col}_id") as string,`;
   },
 };

@@ -25,12 +25,15 @@ export async function delete{{tableObj.singularPascalCase}}(
 ): Promise<Delete{{tableObj.singularPascalCase}}State> {
 {{#if isNotPublic}}
   const session = await auth();
+
   if (!session?.user?.id) {
     throw new Error("access denied");
   }
 {{/if}}
+
 {{#if isAdmin}}
   const isAdmin = await hasAdminRole(session.user.id);
+
   if (!isAdmin) {
     throw new Error("unauthorized");
   }
@@ -39,18 +42,22 @@ export async function delete{{tableObj.singularPascalCase}}(
   const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "error",
     };
   }
+
   if (!validatedFields.data.id) {
     return {
       message: "error",
     };
   }
+
   await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }
