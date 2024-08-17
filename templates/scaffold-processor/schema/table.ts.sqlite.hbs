@@ -9,4 +9,4 @@ export const {{tableObj.pluralCamelCase}} = sqliteTable(
 
 export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
 
-export const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}})
+export const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}});
