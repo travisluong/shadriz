@@ -1,7 +1,7 @@
 import { users } from "@/schema/users";
 import bcrypt from "bcrypt";
 import { betterSqlite, sdb } from "./sdb";
-import { roles, users_roles } from "@/schema/roles";
+import { roles, usersRoles } from "@/schema/roles";
 import { eq } from "drizzle-orm";
 
 async function main() {
@@ -22,7 +22,7 @@ async function main() {
     .where(eq(roles.name, "admin"));
 
   await sdb
-    .insert(users_roles)
+    .insert(usersRoles)
     .values({ user_id: userRecords[0].id, role_id: roleRecords[0].id });
 
   await betterSqlite.close();

@@ -9,7 +9,7 @@ export const roles = sqliteTable("roles", {
   name: text("name").notNull().unique(),
 });
 
-export const users_roles = sqliteTable(
+export const usersRoles = sqliteTable(
   "users_roles",
   {
     user_id: text("user_id")

@@ -1,12 +1,12 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "./db";
-import { roles, users_roles } from "@/schema/roles";
+import { roles, usersRoles } from "@/schema/roles";
 
 export async function hasAdminRole(userId: string) {
   const userRole = await db
     .select()
-    .from(users_roles)
-    .innerJoin(roles, eq(users_roles.role_id, roles.id))
-    .where(and(eq(users_roles.user_id, userId), eq(roles.name, "admin")));
+    .from(usersRoles)
+    .innerJoin(roles, eq(usersRoles.role_id, roles.id))
+    .where(and(eq(usersRoles.user_id, userId), eq(roles.name, "admin")));
   return userRole.length > 0;
 }
