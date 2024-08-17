@@ -3,6 +3,7 @@ import * as changeCase from "change-case";
 
 interface Cases {
   original: string;
+  originalCamelCase: string;
   capitalCase: string;
   singularCapitalCase: string;
   pluralCapitalCase: string;
@@ -25,6 +26,7 @@ export function caseFactory(str: string) {
 
   const obj = {
     original: str,
+    originalCamelCase: changeCase.camelCase(str),
     capitalCase: changeCase.capitalCase(str),
     singularCapitalCase: changeCase.capitalCase(pluralize.singular(str)),
     pluralCapitalCase: changeCase.capitalCase(pluralize.plural(str)),

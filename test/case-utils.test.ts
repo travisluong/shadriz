@@ -4,6 +4,7 @@ import { caseFactory } from "../lib/case-utils";
 test("case utils", () => {
   const caseObj = caseFactory("foo_bar");
   expect(caseObj.original).toBe("foo_bar");
+  expect(caseObj.originalCamelCase).toBe("fooBar");
   expect(caseObj.capitalCase).toBe("Foo Bar");
   expect(caseObj.pluralCapitalCase).toBe("Foo Bars");
   expect(caseObj.singularCapitalCase).toBe("Foo Bar");

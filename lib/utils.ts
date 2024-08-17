@@ -167,13 +167,13 @@ export function regenerateSchemaIndex(): void {
   let code = "";
   for (const table of tablenames) {
     const tableObj = caseFactory(table);
-    code += `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.original}";\n`;
+    code += `import * as ${tableObj.originalCamelCase} from "@/schema/${tableObj.original}";\n`;
   }
   code += "\n";
   code += "export const schema = {\n";
   for (const table of tablenames) {
     const tableObj = caseFactory(table);
-    code += `  ...${tableObj.pluralCamelCase},\n`;
+    code += `  ...${tableObj.originalCamelCase},\n`;
   }
   code += "};\n";
   writeToFile(`lib/schema.ts`, code);
