@@ -44,7 +44,6 @@ export async function update{{tableObj.singularPascalCase}}(
 {{formDataKeyVal}}
   });
   if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
 
     return {
       errors: validatedFields.error.flatten().fieldErrors,
