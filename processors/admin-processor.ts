@@ -1,14 +1,15 @@
 import { log } from "../lib/log";
-import { ShadrizProcessor, ShadrizProcessorOpts } from "../lib/types";
+import { AdminProcessorOpts, ShadrizProcessor } from "../lib/types";
 import { addShadcnComponents, renderTemplate } from "../lib/utils";
+import { pkStrategyImportTemplates } from "./pk-strategy-processor";
 
 export class AdminProcessor implements ShadrizProcessor {
-  opts: ShadrizProcessorOpts;
+  opts: AdminProcessorOpts;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = ["card"];
 
-  constructor(opts: ShadrizProcessorOpts) {
+  constructor(opts: AdminProcessorOpts) {
     this.opts = opts;
   }
 
@@ -47,9 +48,18 @@ export class AdminProcessor implements ShadrizProcessor {
       outputPath: "lib/authorization.ts",
     });
 
+    const pkText =
+      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+
+    const pkImport = pkStrategyImportTemplates[this.opts.pkStrategy];
+
     renderTemplate({
       inputPath: "admin-processor/schema/roles.ts.hbs",
       outputPath: "schema/roles.ts",
+      data: {
+        pkText: pkText,
+        pkImport: pkImport,
+      },
     });
 
     renderTemplate({

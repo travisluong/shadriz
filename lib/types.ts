@@ -24,6 +24,12 @@ export interface ShadrizProcessorOpts {
   latest: boolean;
 }
 
+export interface AdminProcessorOpts extends ShadrizProcessorOpts {
+  dbDialect: DbDialect;
+  dbDialectStrategy: DbDialectStrategy;
+  pkStrategy: PkStrategy;
+}
+
 export interface PkStrategyProcessorOpts extends ShadrizProcessorOpts {
   pkStrategy: PkStrategy;
 }

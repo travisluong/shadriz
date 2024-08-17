@@ -1,11 +1,9 @@
 import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
 import { users } from "./users";
+{{pkImport}}
 
 export const roles = sqliteTable("roles", {
-  id: text("id")
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+  {{pkText}}
   name: text("name").notNull().unique(),
 });
 

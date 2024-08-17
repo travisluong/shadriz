@@ -252,6 +252,9 @@ program
           packageManager: partialConfig.packageManager,
           install: options.install,
           latest: completeConfig.latest,
+          dbDialect: completeConfig.dbDialect,
+          dbDialectStrategy: dbDialectStrategy,
+          pkStrategy: completeConfig.pkStrategy,
         });
       }
       if (completeConfig.stripeEnabled) {
