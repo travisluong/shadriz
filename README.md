@@ -67,7 +67,7 @@ After initialization, you will be prompted to complete a few additional tasks de
 - Run database migrations.
 - Set up the auth providers.
 - Create a test user.
-- Create an admin user.
+- Grant admin privilege.
 - Add secrets to `.env.local`.
 - Set up Stripe.
 

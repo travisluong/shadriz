@@ -1,0 +1,23 @@
+import { mysqlTable, varchar, primaryKey } from "drizzle-orm/mysql-core";
+import { users } from "./users";
+{{pkImport}}
+
+export const roles = mysqlTable("roles", {
+  {{pkText}}
+  name: varchar("name", { length: 255 }).notNull().unique(),
+});
+
+export const usersRoles = mysqlTable(
+  "users_roles",
+  {
+    user_id: varchar("user_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    role_id: varchar("role_id", { length: 255 })
+      .notNull()
+      .references(() => roles.id),
+  },
+  (table) => ({
+    compoundKey: primaryKey({ columns: [table.user_id, table.role_id] }),
+  })
+);

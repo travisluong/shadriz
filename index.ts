@@ -255,6 +255,7 @@ program
           dbDialect: completeConfig.dbDialect,
           dbDialectStrategy: dbDialectStrategy,
           pkStrategy: completeConfig.pkStrategy,
+          dbPackage: completeConfig.dbPackage,
         });
       }
       if (completeConfig.stripeEnabled) {

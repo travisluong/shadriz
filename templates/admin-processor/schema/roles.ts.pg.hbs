@@ -1,0 +1,23 @@
+import { pgTable, text, primaryKey } from "drizzle-orm/pg-core";
+import { users } from "./users";
+{{pkImport}}
+
+export const roles = pgTable("roles", {
+  {{pkText}}
+  name: text("name").notNull().unique(),
+});
+
+export const usersRoles = pgTable(
+  "users_roles",
+  {
+    user_id: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    role_id: text("role_id")
+      .notNull()
+      .references(() => roles.id),
+  },
+  (table) => ({
+    compoundKey: primaryKey({ columns: [table.user_id, table.role_id] }),
+  })
+);

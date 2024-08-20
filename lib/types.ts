@@ -28,6 +28,7 @@ export interface AdminProcessorOpts extends ShadrizProcessorOpts {
   dbDialect: DbDialect;
   dbDialectStrategy: DbDialectStrategy;
   pkStrategy: PkStrategy;
+  dbPackage: DbPackage;
 }
 
 export interface PkStrategyProcessorOpts extends ShadrizProcessorOpts {

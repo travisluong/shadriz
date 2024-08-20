@@ -54,7 +54,7 @@ export class AdminProcessor implements ShadrizProcessor {
     const pkImport = pkStrategyImportTemplates[this.opts.pkStrategy];
 
     renderTemplate({
-      inputPath: "admin-processor/schema/roles.ts.hbs",
+      inputPath: `admin-processor/schema/roles.ts.${this.opts.dbPackage}.hbs`,
       outputPath: "schema/roles.ts",
       data: {
         pkText: pkText,
@@ -63,13 +63,13 @@ export class AdminProcessor implements ShadrizProcessor {
     });
 
     renderTemplate({
-      inputPath: "admin-processor/scripts/create-admin.ts.hbs",
-      outputPath: "scripts/create-admin.ts",
+      inputPath: `admin-processor/scripts/grant-admin.ts.${this.opts.dbPackage}.hbs`,
+      outputPath: "scripts/grant-admin.ts",
     });
   }
 
   printCompletionMessage() {
-    log.white("\ncreate admin user:");
-    log.cmd("npx tsx scripts/create-admin.ts admin@example.com password123");
+    log.white("\ngrant admin privilege:");
+    log.cmd("npx tsx scripts/grant-admin.ts shadriz@example.com");
   }
 }
