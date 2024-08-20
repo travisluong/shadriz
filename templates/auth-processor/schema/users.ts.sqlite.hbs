@@ -9,7 +9,9 @@ export const users = sqliteTable("user", {
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   image: text("image"),
   password: text("password"),
+  {{#if stripeEnabled}}
   stripe_customer_id: text("stripe_customer_id"),
+  {{/if}}
 })
 
 export const accounts = sqliteTable(

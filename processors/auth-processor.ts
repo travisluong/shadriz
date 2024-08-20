@@ -352,6 +352,7 @@ export class AuthProcessor implements ShadrizProcessor {
       data: {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
+        stripeEnabled: this.opts.stripeEnabled,
       },
     });
   }

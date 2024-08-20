@@ -16,7 +16,9 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   password: text("password"),
+  {{#if stripeEnabled}}
   stripe_customer_id: text("stripe_customer_id"),
+  {{/if}}
 })
  
 export const accounts = pgTable(
