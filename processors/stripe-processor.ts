@@ -153,6 +153,8 @@ export class StripeProcessor implements ShadrizProcessor {
   }
 
   printCompletionMessage() {
+    log.checklist("stripe checklist");
+
     log.white("\nstripe setup:");
     log.dash("go to stripe > developers > api keys");
     log.dash("update NEXT_STRIPE_PUBLISHABLE_KEY in .env.local");
@@ -165,9 +167,9 @@ export class StripeProcessor implements ShadrizProcessor {
     log.white("\nstart local stripe listener:");
     log.cmd("stripe login");
     log.cmd("stripe listen --forward-to localhost:3000/api/webhook");
-    log.cmd("stripe trigger payment_intent.succeeded");
 
-    log.white("\nsee all supported events:");
+    log.white("\ntest stripe webhook:");
+    log.cmd("stripe trigger payment_intent.succeeded");
     log.cmd("stripe trigger --help");
 
     log.white("\ncreate products in stripe and db:");

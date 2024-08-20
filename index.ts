@@ -296,6 +296,7 @@ program
         }
 
         regenerateSchemaIndex();
+        dbPackageStrategy.printCompletionMessage();
         authProcessor.printCompletionMessage();
         if (adminProcessor) {
           adminProcessor.printCompletionMessage();

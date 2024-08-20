@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import {
   DbDialect,
   DbPackageStrategy,
@@ -84,5 +85,14 @@ export class PgPackageStrategy implements DbPackageStrategy {
       inputPath: "db-packages/scripts/create-user.ts.pg.hbs",
       outputPath: "scripts/create-user.ts",
     });
+  }
+
+  printCompletionMessage(): void {
+    log.checklist("pg checklist");
+    log.white("\nconfigure database:");
+    log.dash("update DB_URL in .env.local");
+    log.white("\nrun migrations:");
+    log.cmd("npx drizzle-kit generate");
+    log.cmd("npx drizzle-kit migrate");
   }
 }

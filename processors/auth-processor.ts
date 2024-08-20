@@ -357,13 +357,7 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   printCompletionMessage() {
-    log.success("auth setup success: " + this.opts.providers.join(", "));
-    log.reminder();
-    log.white("\nconfigure database:");
-    log.dash("update DB_URL in .env.local");
-    log.white("\nrun migrations:");
-    log.cmd("npx drizzle-kit generate");
-    log.cmd("npx drizzle-kit migrate");
+    log.checklist("auth checklist");
     for (const provider of this.opts.providers) {
       const authStrategy = authStrategyMap[provider];
       authStrategy.printCompletionMessage();

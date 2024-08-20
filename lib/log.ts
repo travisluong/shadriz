@@ -40,4 +40,8 @@ export const log = {
   success(str: string) {
     console.log("\n✅ " + chalk.greenBright(str));
   },
+
+  checklist(str: string) {
+    console.log("\n📋 " + chalk.yellowBright(str));
+  },
 };

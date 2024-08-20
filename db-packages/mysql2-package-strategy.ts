@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import {
   DbDialect,
   DbPackageStrategy,
@@ -73,5 +74,14 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
       inputPath: "db-packages/scripts/create-user.ts.mysql2.hbs",
       outputPath: "scripts/create-user.ts",
     });
+  }
+
+  printCompletionMessage(): void {
+    log.checklist("mysql2 checklist");
+    log.white("\nconfigure database:");
+    log.dash("update DB_URL in .env.local");
+    log.white("\nrun migrations:");
+    log.cmd("npx drizzle-kit generate");
+    log.cmd("npx drizzle-kit migrate");
   }
 }

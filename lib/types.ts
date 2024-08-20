@@ -132,6 +132,7 @@ export interface DbPackageStrategy {
   appendDbUrl(): void;
   copyDbInstance(): void;
   copyDbInstanceForScripts(): void;
+  printCompletionMessage(): void;
 }
 
 export type AuthProvider =

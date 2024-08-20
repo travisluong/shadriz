@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import {
   DbDialect,
   DbPackageStrategy,
@@ -83,5 +84,14 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   appendSqliteToGitignore() {
     appendToFileIfTextNotExists(".gitignore", "\nsqlite.db", "sqlite.db");
+  }
+
+  printCompletionMessage(): void {
+    log.checklist("better-sqlite3 checklist");
+    log.white("\nconfigure database:");
+    log.dash("update DB_URL in .env.local");
+    log.white("\nrun migrations:");
+    log.cmd("npx drizzle-kit generate");
+    log.cmd("npx drizzle-kit migrate");
   }
 }

@@ -102,7 +102,9 @@ export function appendToFileIfTextNotExists(
 ) {
   const fileContent = fs.readFileSync(filePath, "utf-8");
   if (fileContent.includes(textToSearch)) {
-    log.bgRed(`${textToSearch} detected in ${filePath}. skipping append.`);
+    log.bgYellow(
+      `exists: ${textToSearch} detected in ${filePath}. skipping append.`
+    );
   } else {
     appendToFile(filePath, textToAppend);
   }
