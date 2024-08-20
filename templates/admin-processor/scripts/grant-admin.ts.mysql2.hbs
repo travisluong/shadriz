@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { connection, sdb } from "./sdb";
 import { users } from "@/schema/users";
 import { roles, usersRoles } from "@/schema/roles";
@@ -14,7 +14,10 @@ async function main() {
     throw new Error("user not found " + email);
   }
 
-  await sdb.insert(roles).values({ name: "admin" }).onConflictDoNothing();
+  await sdb
+    .insert(roles)
+    .values({ name: "admin" })
+    .onDuplicateKeyUpdate({ set: { id: sql`id` } });
 
   const roleRecord = await sdb.query.roles.findFirst({
     where: eq(roles.name, "admin"),
