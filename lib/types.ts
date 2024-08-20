@@ -24,6 +24,10 @@ export interface ShadrizProcessorOpts {
   latest: boolean;
 }
 
+export interface DbDialectProcessorOpts extends ShadrizProcessorOpts {
+  dbDialect: DbDialect;
+}
+
 export interface AdminProcessorOpts extends ShadrizProcessorOpts {
   dbDialect: DbDialect;
   dbDialectStrategy: DbDialectStrategy;
@@ -114,9 +118,6 @@ export interface DbDialectStrategy {
   createdAtTemplate: string;
   updatedAtTemplate: string;
   pkDataType: string;
-  init(): void;
-  copyDrizzleConfig(): void;
-  copySchema(): void;
 }
 
 export interface DbPackageStrategy {

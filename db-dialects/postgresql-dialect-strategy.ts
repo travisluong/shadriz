@@ -310,25 +310,4 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
   };
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
-
-  init(): void {
-    this.copyDrizzleConfig();
-    this.copySchema();
-  }
-
-  copyDrizzleConfig(): void {
-    renderTemplate({
-      inputPath: "db-dialects/drizzle.config.ts.hbs",
-      outputPath: "drizzle.config.ts",
-      data: { dialect: "postgresql" },
-    });
-  }
-
-  copySchema(): void {
-    renderTemplate({
-      inputPath: "db-dialects/lib/schema.ts.postgresql.hbs",
-      outputPath: "lib/schema.ts",
-      data: {},
-    });
-  }
 }

@@ -23,6 +23,7 @@ import { StripeProcessor } from "./processors/stripe-processor";
 import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
 import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
+import { DbDialectProcessor } from "./processors/db-dialect-processor";
 
 const VERSION = "1.2.0";
 
@@ -222,7 +223,12 @@ program
         }
       );
       const dbDialectStrategy = dialectStrategyFactory(partialConfig.dbDialect);
-
+      const dbDialectProcessor = new DbDialectProcessor({
+        dbDialect: completeConfig.dbDialect,
+        install: options.install,
+        latest: completeConfig.latest,
+        packageManager: completeConfig.packageManager,
+      });
       const pkStrategyProcessor = new PkStrategyProcessor({
         packageManager: completeConfig.packageManager,
         install: options.install,
@@ -270,7 +276,7 @@ program
       }
       await newProjectProcessor.init();
       await dbPackageStrategy.init();
-      dbDialectStrategy.init();
+      dbDialectProcessor.init();
       await pkStrategyProcessor.init();
       if (completeConfig.darkModeEnabled) {
         const darkModeProcessor = new DarkModeProcessor({

@@ -333,25 +333,4 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
   };
   dialect: DbDialect = "mysql";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
-
-  init(): void {
-    this.copyDrizzleConfig();
-    this.copySchema();
-  }
-
-  copyDrizzleConfig(): void {
-    renderTemplate({
-      inputPath: "db-dialects/drizzle.config.ts.hbs",
-      outputPath: "drizzle.config.ts",
-      data: { dialect: "mysql" },
-    });
-  }
-
-  copySchema(): void {
-    renderTemplate({
-      inputPath: "db-dialects/lib/schema.ts.mysql.hbs",
-      outputPath: "lib/schema.ts",
-      data: {},
-    });
-  }
 }

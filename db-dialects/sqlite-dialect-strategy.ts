@@ -133,24 +133,4 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
   drizzleDbCorePackage: string = "drizzle-orm/sqlite-core";
   dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";
-
-  init(): void {
-    this.copyDrizzleConfig();
-    this.copySchema();
-  }
-
-  copyDrizzleConfig(): void {
-    renderTemplate({
-      inputPath: "db-dialects/drizzle.config.ts.hbs",
-      outputPath: "drizzle.config.ts",
-      data: { dialect: "sqlite" },
-    });
-  }
-
-  copySchema(): void {
-    renderTemplate({
-      inputPath: "db-dialects/lib/schema.ts.sqlite.hbs",
-      outputPath: "lib/schema.ts",
-    });
-  }
 }
