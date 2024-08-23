@@ -117,10 +117,6 @@ shadriz supports the following primary key generation strategies:
 
 During the `init` process, you will choose one strategy. This will be saved in `shadriz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
 
-## Timestamps
-
-shadriz by default automatically adds `created_at` and `updated_at` timestamps. This can be enabled or disabled by the `timestampsEnabled` setting in `shadriz.config.json`.
-
 ## Scaffold command
 
 ### sqlite example
