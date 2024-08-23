@@ -5,7 +5,6 @@ export interface ShadrizConfig {
   dbDialect: DbDialect;
   dbPackage: DbPackage;
   pkStrategy: PkStrategy;
-  timestampsEnabled: boolean;
   authSolution: AuthSolution;
   authProviders: AuthProvider[];
   adminEnabled: boolean;
@@ -81,7 +80,6 @@ export interface ScaffoldProcessorOpts {
   dbDialectStrategy: DbDialectStrategy;
   authorizationLevel: AuthorizationLevel;
   pkStrategy: PkStrategy;
-  timestampsEnabled: boolean;
   dbDialect: DbDialect;
 }
 

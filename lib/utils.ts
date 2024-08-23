@@ -291,13 +291,12 @@ export function completeShadrizConfig(
     dbDialect: partialConfig.dbDialect ?? "sqlite",
     dbPackage: partialConfig.dbPackage ?? "better-sqlite3",
     pkStrategy: partialConfig.pkStrategy ?? "uuidv4",
-    timestampsEnabled: partialConfig.timestampsEnabled ?? false,
     authSolution: partialConfig.authSolution ?? "none",
-    authProviders: partialConfig.authProviders ?? [],
-    adminEnabled: partialConfig.adminEnabled ?? false,
-    stripeEnabled: partialConfig.stripeEnabled ?? false,
-    sessionStrategy: partialConfig.sessionStrategy ?? "jwt",
-    darkModeEnabled: partialConfig.darkModeEnabled ?? false,
+    authProviders: partialConfig.authProviders ?? ["credentials"],
+    adminEnabled: partialConfig.adminEnabled ?? true,
+    stripeEnabled: partialConfig.stripeEnabled ?? true,
+    sessionStrategy: partialConfig.sessionStrategy ?? "database",
+    darkModeEnabled: partialConfig.darkModeEnabled ?? true,
   };
   return completeConfig;
 }

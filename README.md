@@ -49,13 +49,14 @@ npx shadriz@latest init
 You will be asked a few questions to configure the app.
 
 ```
-? Which database library would you like to use? pg
-? Do you want to use Auth.js for authentication? yes
-? Which primary key generation strategy would you like to use? uuidv7
-? Which auth providers would you like to use? github, google, credentials, postmark, nodemailer
+? Which package manager do you want to use? npm
+? Which database dialect would you like to use? pg
+? Which primary key generation strategy would you like to use? uuidv4
+? Which authentication solution do you want to use? authjs
+? Which auth providers would you like to use? github, google, credentials
 ? Which session strategy would you like to use? jwt
 ? Do you want to add an admin dashboard with role-based authorization? yes
-? Do you want to enable Stripe for payments? yes
+? Do you want to add Stripe for payments? yes
 ? Do you want to add a dark mode toggle? yes
 ```
 

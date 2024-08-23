@@ -124,12 +124,12 @@ program
           {
             name: "uuidv7",
             value: "uuidv7",
-            description: "Uses uuidv7 package",
+            description: "Uses the uuidv7 package",
           },
           {
             name: "cuid2",
             value: "cuid2",
-            description: "Uses @paralleldrive/cuid2 package",
+            description: "Uses the @paralleldrive/cuid2 package",
           },
           {
             name: "nanoid",
@@ -156,17 +156,10 @@ program
         partialConfig.sessionStrategy = await select({
           message: "Which session strategy would you like to use?",
           choices: [
-            { name: "jwt", value: "jwt" },
             { name: "database", value: "database" },
+            { name: "jwt", value: "jwt" },
           ],
         });
-        // if (
-        //   partialConfig.authProviders.includes("credentials") &&
-        //   partialConfig.sessionStrategy !== "jwt"
-        // ) {
-        //   log.bgRed("jwt is required if credentials is selected");
-        //   process.exit(1);
-        // }
       }
       if (partialConfig.authSolution !== "none") {
         partialConfig.adminEnabled = await confirm({
@@ -175,24 +168,13 @@ program
           default: true,
         });
       }
-      // if (
-      //   partialConfig.adminEnabled &&
-      //   !partialConfig.authProviders?.includes("credentials")
-      // ) {
-      //   log.bgRed("credentials provider is required for admin dashboard");
-      //   process.exit(1);
-      // }
       if (partialConfig.authSolution !== "none") {
         partialConfig.stripeEnabled = await confirm({
-          message: "Do you want to enable Stripe for payments?",
+          message: "Do you want to add Stripe for payments?",
         });
       }
       partialConfig.darkModeEnabled = await confirm({
         message: "Do you want to add a dark mode toggle?",
-        default: true,
-      });
-      partialConfig.timestampsEnabled = await confirm({
-        message: "Do you want to add created_at and updated_at timestamps?",
         default: true,
       });
 
@@ -416,8 +398,7 @@ scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content
       columns: options.columns,
       dbDialectStrategy: dialectStrategy,
       authorizationLevel: authorizationLevel,
-      pkStrategy: shadrizConfig.pkStrategy || "uuidv7",
-      timestampsEnabled: shadrizConfig.timestampsEnabled ?? true,
+      pkStrategy: shadrizConfig.pkStrategy,
       dbDialect: shadrizConfig.dbDialect,
     });
     scaffoldProcessor.process();
