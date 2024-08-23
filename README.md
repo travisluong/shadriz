@@ -54,7 +54,7 @@ You will be asked a few questions to configure the app.
 ? Which primary key generation strategy would you like to use? uuidv4
 ? Which authentication solution do you want to use? authjs
 ? Which auth providers would you like to use? github, google, credentials
-? Which session strategy would you like to use? jwt
+? Which session strategy would you like to use? database
 ? Do you want to add an admin dashboard with role-based authorization? yes
 ? Do you want to add Stripe for payments? yes
 ? Do you want to add a dark mode toggle? yes
