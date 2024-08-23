@@ -121,7 +121,6 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    uuid: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
   };

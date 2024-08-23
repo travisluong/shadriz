@@ -319,7 +319,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    uuid: 'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => sql`(uuid())`),',
     cuid2:
       'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => createId()),',
     nanoid: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,

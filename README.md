@@ -112,7 +112,6 @@ shadriz supports the following primary key generation strategies:
 
 - `uuidv4` - Uses crypto.randomUUID
 - `uuidv7` - Uses the uuidv7 package
-- `uuid` - Uses the database's built-in uuid function
 - `cuid2` - Uses @paralleldrive/cuid2 package
 - `nanoid` - Uses the nanoid package
 
