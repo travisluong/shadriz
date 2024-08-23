@@ -117,7 +117,7 @@ shadriz supports the following primary key generation strategies:
 
 During the `init` process, you will choose one strategy. This will be saved in `shadriz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
 
-## Scaffold command
+## Scaffold command examples
 
 ### sqlite example
 
@@ -176,6 +176,8 @@ If Auth.js was enabled during initialization, you will be able to scaffold using
 
 If the Admin dashboard was enabled during initialization, you will be able to scaffold using an `admin` authorization level. The pages will be put into the `(admin)` route group. These pages along with the server actions will require a user with the `admin` role to access.
 
+A `scripts/grant-admin.ts` script is provided to grant users the admin role.
+
 Additional roles can be added to the `users_roles` table according to project needs. Additional access control functions can be added to `lib/authorization.ts` and used throughout the application.
 
 ## Stripe
@@ -224,15 +226,6 @@ If you prefer a more stable version, choose the `pinned` option during initializ
 
 The other problem with boilerplates is that it is usually a static hard-coded repo. It can't generate unique database schemas and user interfaces specific to your project.
 
-**Why can't I use database session strategy with credentials provider?**
-
-Currently there are a few restrictions.
-
-- If you choose `credentials` as an Auth provider, you must choose `jwt` as the session strategy.
-- If you want to add an admin dashboard, you have to choose `credentials` as one of the Auth providers.
-
-This is due to limited support of the `credentials` provider in Auth.js.
-
 ## Inspirations
 
 ### Ruby on Rails
@@ -241,7 +234,7 @@ This is due to limited support of the `credentials` provider in Auth.js.
 
 Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. Specially, the `shadriz scaffold` command was modeled after the `rails scaffold` command.
 
-Many of the naming conventions seen in shadriz follow common standards in TypeScript projects. Having standard conventions for code style will prevent wasted time bikeshedding over subjective preferences. Furthermore, having consistent naming conventions improves readability of code.
+Many of the naming conventions seen in shadriz follow common standards in TypeScript projects. Having standard conventions for code style will prevent wasted time deciding on subjective preferences. Furthermore, having consistent naming conventions improves readability of code.
 
 ### Next.js
 
@@ -280,6 +273,8 @@ shadriz uses Auth.js for it's authentication solution. However, running the Auth
 With one command, you can have authentication mostly setup and configured. Just add the client ids and secrets to the `.env.local` file and you're good to go.
 
 shadriz also provides a `script/create-user.ts` script to create test users. This script is only generated if `credentials` is chosen as a provider.
+
+In addition, shadriz provides code that allows you to use either the `jwt` or `database` session strategy with any auth provider, including `credentials`. You can easily switch with one line of code.
 
 ### Zod
 
