@@ -14,7 +14,7 @@ export interface ShadrizConfig {
   darkModeEnabled: boolean;
 }
 
-export type AuthSolution = "authjs" | "shadriz" | "none";
+export type AuthSolution = "authjs" | "none";
 
 export type PackageManager = "npm" | "pnpm";
 
@@ -49,7 +49,7 @@ export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
 
 export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
 
-export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "uuid" | "nanoid";
+export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "nanoid";
 
 export interface StripeProcessorOpts extends ShadrizProcessorOpts {
   dbDialectStrategy: DbDialectStrategy;

@@ -17,7 +17,10 @@ import {
   SessionStrategy,
   ShadrizProcessor,
 } from "../lib/types";
-import { pkStrategyImportTemplates } from "./pk-strategy-processor";
+import {
+  pkKeyValTemplates,
+  pkStrategyImportTemplates,
+} from "./pk-strategy-processor";
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];
@@ -199,12 +202,12 @@ export class AuthProcessor implements ShadrizProcessor {
       throw new Error("invalid session strategy: " + this.opts.sessionStrategy);
     }
 
-    if (
-      this.opts.providers.includes("credentials") &&
-      this.opts.sessionStrategy === "database"
-    ) {
-      throw new Error("credentials provider must use jwt");
-    }
+    // if (
+    //   this.opts.providers.includes("credentials") &&
+    //   this.opts.sessionStrategy === "database"
+    // ) {
+    //   throw new Error("credentials provider must use jwt");
+    // }
   }
 
   async installProviderDependencies() {
@@ -258,8 +261,8 @@ export class AuthProcessor implements ShadrizProcessor {
         importsCode: importsCode,
         providersCode: providersCode,
         sessionStrategy: this.opts.sessionStrategy,
-        isJwt: this.opts.sessionStrategy === "jwt",
-        isUuidv7: this.opts.pkStrategy === "uuidv7",
+        pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
+        pkKeyValTemplate: pkKeyValTemplates[this.opts.pkStrategy],
       },
     });
   }

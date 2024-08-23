@@ -127,12 +127,6 @@ program
             description: "Uses uuidv7 package",
           },
           {
-            name: "uuid",
-            value: "uuid",
-            description:
-              "Uses the database's built-in uuid function for mysql and postgresql. sqlite will fallback to uuidv4.",
-          },
-          {
             name: "cuid2",
             value: "cuid2",
             description: "Uses @paralleldrive/cuid2 package",
@@ -146,7 +140,7 @@ program
       });
       partialConfig.authSolution = await select({
         message: "Which authentication solution do you want to use?",
-        choices: [{ value: "authjs" }, { value: "shadriz" }, { value: "none" }],
+        choices: [{ value: "authjs" }, { value: "none" }],
       });
       if (partialConfig.authSolution === "authjs") {
         partialConfig.authProviders = await checkbox({
@@ -166,13 +160,13 @@ program
             { name: "database", value: "database" },
           ],
         });
-        if (
-          partialConfig.authProviders.includes("credentials") &&
-          partialConfig.sessionStrategy !== "jwt"
-        ) {
-          log.bgRed("jwt is required if credentials is selected");
-          process.exit(1);
-        }
+        // if (
+        //   partialConfig.authProviders.includes("credentials") &&
+        //   partialConfig.sessionStrategy !== "jwt"
+        // ) {
+        //   log.bgRed("jwt is required if credentials is selected");
+        //   process.exit(1);
+        // }
       }
       if (partialConfig.authSolution !== "none") {
         partialConfig.adminEnabled = await confirm({
@@ -181,13 +175,13 @@ program
           default: true,
         });
       }
-      if (
-        partialConfig.adminEnabled &&
-        !partialConfig.authProviders?.includes("credentials")
-      ) {
-        log.bgRed("credentials provider is required for admin dashboard");
-        process.exit(1);
-      }
+      // if (
+      //   partialConfig.adminEnabled &&
+      //   !partialConfig.authProviders?.includes("credentials")
+      // ) {
+      //   log.bgRed("credentials provider is required for admin dashboard");
+      //   process.exit(1);
+      // }
       if (partialConfig.authSolution !== "none") {
         partialConfig.stripeEnabled = await confirm({
           message: "Do you want to enable Stripe for payments?",
