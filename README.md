@@ -124,6 +124,12 @@ shadriz by default automatically adds `created_at` and `updated_at` timestamps. 
 
 ## Scaffold command
 
+### sqlite example
+
+```bash
+npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:text
+```
+
 ### postgresql example
 
 ```bash
@@ -134,12 +140,6 @@ npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean pub
 
 ```bash
 npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean published_at:timestamp
-```
-
-### sqlite example
-
-```bash
-npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:text
 ```
 
 ## Foreign key constraints

@@ -300,43 +300,18 @@ program
   .description(
     `Generate CRUD ui, db schema, db migration, and server actions for a table
 
-# postgresql uuid primary key examples:
-scaffold post -d postgresql -c id:uuid:pk:default-uuidv7 title:text created_at:timestamp:default-now
-scaffold post -d postgresql -c id:uuid:pk:default-uuidv4 title:text created_at:timestamp:default-now
+# sqlite example
+npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:text
 
-# postgresql auto increment primary key examples:
-scaffold post -d postgresql -c id:bigserial:pk title:text created_at:timestamp:default-now
-scaffold post -d postgresql -c id:serial:pk title:text created_at:timestamp:default-now
+# postgresql example
+npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
 
-# postgresql foreign key examples:
-scaffold post -d postgresql -c id:bigserial:pk title:text
-scaffold comment -d postgresql -c id:bigserial:pk post_id:bigint:fk-post.id content:text
+# mysql example
+npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean published_at:timestamp
 
-# mysql uuid primary key examples:
-scaffold post -d mysql -c id:varchar:pk:default-uuidv7 title:varchar created_at:timestamp:default-now
-scaffold post -d mysql -c id:varchar:pk:default-uuidv4 title:varchar created_at:timestamp:default-now
-
-# mysql auto increment primary key examples:
-scaffold post -d mysql -c id:serial:pk title:varchar created_at:timestamp:default-now
-scaffold post -d mysql -c id:integer:pk-auto title:varchar created_at:timestamp:default-now
-
-# mysql foreign key examples:
-scaffold post -d mysql -c id:serial:pk title:varchar
-scaffold comment -d mysql -c id:serial:pk post_id:bigint:fk-post.id content:text
-
-# sqlite uuid primary key examples:
-scaffold post -d sqlite -c id:text:pk:default-uuidv7 title:text created_at:text:default-now
-scaffold post -d sqlite -c id:text:pk:default-uuidv4 title:text created_at:text:default-now
-
-# sqlite auto increment primary key examples:
-scaffold post -d sqlite -c id:integer:pk-auto title:text created_at:text:default-now
-
-# sqlite foreign key examples:
-scaffold post -d sqlite -c id:integer:pk-auto title:text
-scaffold post -d sqlite -c id:integer:pk-auto post_id:integer:fk-post.id content:text
 `
   )
-  .argument("<table>", "table: post, product, order, etc")
+  .argument("<table>", "the database table")
   .requiredOption(
     "-c, --columns <columns...>",
     "column_name:data_type:constraint1,constraint2"
