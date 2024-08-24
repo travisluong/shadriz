@@ -15,7 +15,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
   dependencies = [
     "drizzle-orm",
     "dotenv",
-    "uuidv7",
     "zod",
     "drizzle-zod",
     "@tanstack/react-table",
