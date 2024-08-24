@@ -12,7 +12,7 @@ It is a command line interface code generation tool.
 
 You do not install it into your project as a dependency.
 
-Instead, you use it to generate full stack capabilities including authentication, authorization, and payments.
+Instead, you use it to generate full stack features including authentication, authorization, and payments.
 
 You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
@@ -20,9 +20,31 @@ The code is yours.
 
 ## Ideology
 
-Many decisions happen at the beginnings of projects. For example, a developer must decide on: a web framework, UI component library, object relational mapper (ORM), CSS framework, authentication library, validation library, payment solution, and others relevant to the project. These decisions can be time consuming.
+### Technology curation
 
-Second, the developer must then go through setup and configuration of each library.
+Many decisions happen at the beginnings of projects. For example, a developer must decide on: a web framework, UI component library, object relational mapper (ORM), CSS framework, authentication library, validation library, payment solution, and others relevant to the project. This can be time consuming and lead to decision fatigue.
+
+shadriz aims to provide relief by offering a preferred list of technologies integrated together to be used as a foundation for web app projects.
+
+### Configuration automation
+
+Typically, once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is integrated properly into the framework code, and that integrations with external services are working.
+
+Developers will often use libraries to handle common functionalities such as authentication, authorization, and payments. However, setting these up can be challenging even for a seasoned developer. shadriz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadriz will write all the code necessary for the selected features.
+
+By having a simple working example, you'll save time not having to build it entirely from scratch. You can customize the generated code to fit your project requirements.
+
+The `init` command is intended to be run once at the beginning of a new project.
+
+### Boilerplate automation
+
+Once the technologies are selected and configured, the next step is to begin building the actual app itself. Typically, this involves a number of tasks including creating the database tables, API endpoints or server actions, user interface, layouts, pages, and web forms. This process may involve referencing documentation and writing the boilerplate or "skeleton" code that the rest of the app will be built upon. This too is a time consuming process.
+
+shadriz provides a `scaffold` command to automate the entire process of setting up the initial "skeleton" code. You only have to provide the table name along with the columns and data types. shadriz will generate the database migration files, back end code, and front end code for the provided database schema.
+
+What is the purpose of the scaffolded code? It is to provide a fully working full stack Create Read Update Delete (CRUD) feature that you can use as a reference to build the rest of your app.
+
+The `scaffold` command is intended to be run as many times as you need to generate full stack features, typically at the beginning of a project.
 
 ## Tech stack
 
@@ -89,7 +111,7 @@ This command will generate the user interface, database migration and schema, se
 For example, this command generates a typical blog application:
 
 ```bash
-npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean published_at:timestamp
+npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean
 ```
 
 The `-c` option takes a space-separated string of column configurations in the following format: `column_name:datatype`.
@@ -204,7 +226,7 @@ Any of the code and content can be changed to fit your business model. The goal 
 
 shadriz is ideal for full stack monolithic server side rendered web applications.
 
-Here are a few example use cases: blog, software as a service (saas) app, course platform, content website, ecommerce shop, social media app.
+Here are a few example use cases: blog, software as a service app, course platform, content website, digital product shop, social media app.
 
 It is a full stack tool kit that automates away the time consuming things you need to do at the start of a new full stack Next.js project, saving you days worth of boilerplate coding.
 

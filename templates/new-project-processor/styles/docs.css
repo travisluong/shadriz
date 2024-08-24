@@ -32,6 +32,10 @@
 .shadriz-docs ul {
   margin-bottom: 20px;
 }
+.shadriz-docs ul li {
+  list-style-type: disc;
+  margin-left: 20px;
+}
 .dark .shadriz-docs pre {
   background-color: #111827;
 }
