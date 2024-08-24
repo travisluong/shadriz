@@ -38,8 +38,8 @@ export const products = pgTable("products", {
 
 export const orders = pgTable("orders", {
   {{pkText}}
-  user_id: uuid("user_id").notNull().references(() => users.id),
-  product_id: uuid("product_id").notNull().references(() => products.id),
+  user_id: text("user_id").notNull().references(() => users.id),
+  product_id: text("product_id").notNull().references(() => products.id),
   stripe_product_id: text("stripe_product_id").notNull(),
   stripe_price_id: text("stripe_price_id").notNull(),
   amount_total: integer("amount_total").notNull(),
@@ -48,8 +48,8 @@ export const orders = pgTable("orders", {
 
 export const subscriptions = pgTable("subscriptions", {
   {{pkText}}
-  user_id: uuid("user_id").notNull().references(() => users.id),
-  product_id: uuid("product_id").notNull().references(() => products.id),
+  user_id: text("user_id").notNull().references(() => users.id),
+  product_id: text("product_id").notNull().references(() => products.id),
   start_date: date("start_date", { mode: "date" }).notNull(),
   end_date: date("end_date", { mode: "date" }).notNull(),
   created_at: timestamp("created_at").notNull().defaultNow(),

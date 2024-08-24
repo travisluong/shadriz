@@ -1,12 +1,12 @@
 {{imports}}
 
-export const {{table}} = pgTable(
-  "{{table}}",
+export const {{tableObj.pluralCamelCase}} = pgTable(
+  "{{tableObj.pluralSnakeCase}}",
   {
 {{columns}}
   }
 )
 
-export type {{typeName}} = typeof {{table}}.$inferSelect;
+export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
 
-export const insert{{typeName}}Schema = createInsertSchema({{table}});
+export const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}});

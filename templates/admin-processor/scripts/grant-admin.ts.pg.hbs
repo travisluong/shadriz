@@ -4,6 +4,8 @@ import { users } from "@/schema/users";
 import { roles, usersRoles } from "@/schema/roles";
 
 async function main() {
+  await client.connect();
+
   const email = process.argv[2];
 
   const userRecord = await sdb.query.users.findFirst({

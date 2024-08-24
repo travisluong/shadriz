@@ -31,6 +31,7 @@ import { caseFactory } from "../lib/case-utils";
 
 interface ScaffoldDbDialectStrategy {
   schemaTableTemplatePath: string;
+  updatedAtKeyValTemplate: string;
 }
 
 const scaffoldDbDialectStrategies: Record<
@@ -40,12 +41,15 @@ const scaffoldDbDialectStrategies: Record<
   postgresql: {
     schemaTableTemplatePath:
       "scaffold-processor/schema/table.ts.postgresql.hbs",
+    updatedAtKeyValTemplate: "updated_at: new Date(),",
   },
   mysql: {
     schemaTableTemplatePath: "scaffold-processor/schema/table.ts.mysql.hbs",
+    updatedAtKeyValTemplate: "updated_at: new Date(),",
   },
   sqlite: {
     schemaTableTemplatePath: "scaffold-processor/schema/table.ts.sqlite.hbs",
+    updatedAtKeyValTemplate: "updated_at: new Date().toISOString(),",
   },
 };
 
@@ -356,6 +360,9 @@ export class ScaffoldProcessor {
         isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
+        updatedAtKeyValTemplate:
+          scaffoldDbDialectStrategies[this.opts.dbDialect]
+            .updatedAtKeyValTemplate,
       },
     });
   }
