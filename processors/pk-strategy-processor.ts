@@ -19,6 +19,13 @@ export const pkKeyValTemplates: Record<PkStrategy, string> = {
   nanoid: "id: nanoid(),",
 };
 
+const pkDependencies: Record<PkStrategy, string[]> = {
+  cuid2: ["@paralleldrive/cuid2"],
+  uuidv7: ["uuidv7"],
+  uuidv4: [],
+  nanoid: ["nanoid"],
+};
+
 export class PkStrategyProcessor implements ShadrizProcessor {
   opts: PkStrategyProcessorOpts;
   dependencies: string[] = [];
@@ -32,34 +39,19 @@ export class PkStrategyProcessor implements ShadrizProcessor {
   async init(): Promise<void> {
     await this.install();
   }
+
   async install(): Promise<void> {
     if (!this.opts.install) {
       return;
     }
 
-    switch (this.opts.pkStrategy) {
-      case "cuid2":
-        await installDependencies({
-          dependencies: ["@paralleldrive/cuid2"],
-          latest: this.opts.latest,
-          packageManager: this.opts.packageManager,
-        });
-        break;
-      case "uuidv7":
-        await installDependencies({
-          dependencies: ["uuidv7"],
-          latest: this.opts.latest,
-          packageManager: this.opts.packageManager,
-        });
-      case "nanoid":
-        await installDependencies({
-          dependencies: ["nanoid"],
-          latest: this.opts.latest,
-          packageManager: this.opts.packageManager,
-        });
-      default:
-        break;
-    }
+    const pkDeps = pkDependencies[this.opts.pkStrategy];
+
+    await installDependencies({
+      dependencies: pkDeps,
+      latest: this.opts.latest,
+      packageManager: this.opts.packageManager,
+    });
   }
   async render(): Promise<void> {
     throw new Error("Method not implemented.");
