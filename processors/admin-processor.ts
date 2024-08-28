@@ -63,7 +63,7 @@ export class AdminProcessor implements ShadrizProcessor {
     });
 
     renderTemplate({
-      inputPath: `admin-processor/scripts/grant-admin.ts.${this.opts.dbPackage}.hbs`,
+      inputPath: `admin-processor/scripts/grant-admin.ts.hbs`,
       outputPath: "scripts/grant-admin.ts",
     });
   }

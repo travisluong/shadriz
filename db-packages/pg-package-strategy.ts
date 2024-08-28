@@ -57,8 +57,11 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "db-packages/scripts/migrate.ts.pg.hbs",
+      inputPath: "db-packages/scripts/migrate.ts.hbs",
       outputPath: "scripts/migrate.ts",
+      data: {
+        migratorImport: `import { migrate } from "drizzle-orm/node-postgres/migrator";`,
+      },
     });
   }
 
@@ -82,7 +85,7 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "db-packages/scripts/create-user.ts.pg.hbs",
+      inputPath: "db-packages/scripts/create-user.ts.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }

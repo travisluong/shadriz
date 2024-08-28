@@ -5,5 +5,12 @@ import { schema } from "@/lib/schema";
 
 dotenv.config({ path: ".env.local" });
 
-export const connection = createConnection(process.env.DB_URL!);
-export const sdb = drizzle(connection, { schema, mode: "default" });
+export async function openConnection() {
+  const connection = createConnection(process.env.DB_URL!);
+  const sdb = drizzle(connection, { schema, mode: "default" });
+  const closeConnection = async () => await connection.end();
+  return {
+    sdb,
+    closeConnection,
+  }
+}

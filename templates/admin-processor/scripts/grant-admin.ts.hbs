@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
-import { client, sdb } from "./sdb";
+import { openConnection } from "./sdb";
 import { users } from "@/schema/users";
 import { roles, usersRoles } from "@/schema/roles";
 
 async function main() {
-  await client.connect();
+  const { sdb, closeConnection } = await openConnection();
 
   const email = process.argv[2];
 
@@ -16,21 +16,27 @@ async function main() {
     throw new Error("user not found " + email);
   }
 
-  await sdb.insert(roles).values({ name: "admin" }).onConflictDoNothing();
-
-  const roleRecord = await sdb.query.roles.findFirst({
+  let roleRecord = await sdb.query.roles.findFirst({
     where: eq(roles.name, "admin"),
   });
 
   if (!roleRecord) {
-    throw new Error("role not found " + "admin");
+    await sdb.insert(roles).values({ name: "admin" });
+  }
+
+  roleRecord = await sdb.query.roles.findFirst({
+    where: eq(roles.name, "admin"),
+  });
+
+  if (!roleRecord) {
+    throw new Error("role record not found");
   }
 
   await sdb
     .insert(usersRoles)
     .values({ user_id: userRecord.id, role_id: roleRecord.id });
 
-  await client.end();
+  await closeConnection();
 }
 
 main();

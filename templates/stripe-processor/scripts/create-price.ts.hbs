@@ -1,72 +1,73 @@
 import dotenv from "dotenv";
-import { sdb } from "./sdb";
+import { openConnection } from "./sdb";
 import { schema } from "@/lib/schema";
 
 dotenv.config({ path: ".env.local" });
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-stripe.products
-  .create({
+async function main() {
+  const { sdb, closeConnection } = await openConnection();
+
+  const productMonthly = await stripe.products.create({
     name: "Monthly Subscription",
     description: "Monthly subscription",
-  })
-  .then((product: any) => {
-    stripe.prices
-      .create({
-        unit_amount: 1000,
-        currency: "usd",
-        recurring: {
-          interval: "month",
-        },
-        product: product.id,
-      })
-      .then(async (price: any) => {
-        await sdb.insert(schema.products).values({
-          name: "Monthly Subscription",
-          mode: "subscription",
-          price: 1000,
-          stripe_price_id: price.id,
-          stripe_product_id: product.id,
-          description: "Monthly subscription",
-          slug: "monthly",
-        });
-        console.log(
-          "Success! Here is your monthly subscription product id: " + product.id
-        );
-        console.log(
-          "Success! Here is your monthly subscription price id: " + price.id
-        );
-      });
   });
 
-stripe.products
-  .create({
+  const priceMonthly = await stripe.prices.create({
+    unit_amount: 1000,
+    currency: "usd",
+    recurring: {
+      interval: "month",
+    },
+    product: productMonthly.id,
+  });
+
+  await sdb.insert(schema.products).values({
+    name: "Monthly Subscription",
+    mode: "subscription",
+    price: 1000,
+    stripe_price_id: priceMonthly.id,
+    stripe_product_id: productMonthly.id,
+    description: "Monthly subscription",
+    slug: "monthly",
+  });
+  console.log(
+    "Success! Here is your monthly subscription product id: " +
+      productMonthly.id
+  );
+  console.log(
+    "Success! Here is your monthly subscription price id: " + priceMonthly.id
+  );
+
+  const productOneTime = await stripe.products.create({
     name: "One Time Purchase",
     description: "One time purchase",
-  })
-  .then((product: any) => {
-    stripe.prices
-      .create({
-        unit_amount: 10000,
-        currency: "usd",
-        product: product.id,
-      })
-      .then(async (price: any) => {
-        await sdb.insert(schema.products).values({
-          name: "One Time Purchase",
-          mode: "payment",
-          price: 10000,
-          stripe_price_id: price.id,
-          stripe_product_id: product.id,
-          description: "One time purchase",
-          slug: "one-time",
-        });
-        console.log(
-          "Success! Here is your one time purchase product id: " + product.id
-        );
-        console.log(
-          "Success! Here is your one time purchase price id: " + price.id
-        );
-      });
   });
+
+  const priceOneTime = await stripe.prices.create({
+    unit_amount: 10000,
+    currency: "usd",
+    product: productOneTime.id,
+  });
+
+  await sdb.insert(schema.products).values({
+    name: "One Time Purchase",
+    mode: "payment",
+    price: 10000,
+    stripe_price_id: priceOneTime.id,
+    stripe_product_id: productOneTime.id,
+    description: "One time purchase",
+    slug: "one-time",
+  });
+  console.log(
+    "Success! Here is your one time purchase product id: " + productOneTime.id
+  );
+  console.log(
+    "Success! Here is your one time purchase price id: " + priceOneTime.id
+  );
+
+  closeConnection();
+}
+
+main();

@@ -46,8 +46,11 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "db-packages/scripts/migrate.ts.mysql2.hbs",
+      inputPath: "db-packages/scripts/migrate.ts.hbs",
       outputPath: "scripts/migrate.ts",
+      data: {
+        migratorImport: `import { migrate } from "drizzle-orm/mysql2/migrator";`,
+      },
     });
   }
 
@@ -71,7 +74,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "db-packages/scripts/create-user.ts.mysql2.hbs",
+      inputPath: "db-packages/scripts/create-user.ts.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }

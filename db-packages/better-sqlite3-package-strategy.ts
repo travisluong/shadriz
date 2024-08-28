@@ -52,8 +52,11 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   copyMigrateScript(): void {
     renderTemplate({
-      inputPath: "db-packages/scripts/migrate.ts.better-sqlite3.hbs",
+      inputPath: "db-packages/scripts/migrate.ts.hbs",
       outputPath: "scripts/migrate.ts",
+      data: {
+        migratorImport: `import { migrate } from "drizzle-orm/better-sqlite3/migrator";`,
+      },
     });
   }
 
@@ -77,7 +80,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   copyCreateUserScript() {
     renderTemplate({
-      inputPath: "db-packages/scripts/create-user.ts.better-sqlite3.hbs",
+      inputPath: "db-packages/scripts/create-user.ts.hbs",
       outputPath: "scripts/create-user.ts",
     });
   }
