@@ -9,7 +9,6 @@ import {
   compileTemplate,
   renderTemplate,
   regenerateSchemaIndex,
-  regenerateSchemaList,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
@@ -81,7 +80,6 @@ export class ScaffoldProcessor {
     this.addUpdateForm();
     this.addDeleteForm();
     regenerateSchemaIndex();
-    regenerateSchemaList();
     this.printCompletionMessage();
   }
   addSchema(): void {
