@@ -2,6 +2,9 @@
 
 Build full stack Next.js apps super fast.
 
+- [Docs](https://travisluong.github.io/shadriz)
+- [GitHub](https://github.com/travisluong/shadriz)
+
 ## Introduction
 
 shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
@@ -314,7 +317,7 @@ shadriz uses `zod` and `drizzle-zod` for data validations. Each server action th
 
 ## Author
 
-Built by [travisluong](https://www.travisluong.com). Source code available on [github](https://www.github.com/travisluong/shadriz).
+Built by [travisluong](https://www.travisluong.com).
 
 ## License
 
