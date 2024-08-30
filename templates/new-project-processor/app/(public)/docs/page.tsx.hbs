@@ -1,22 +1,19 @@
 "use client";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
 import "@/styles/docs.css";
 
 const readme = `{{readme}}`;
 
 export default function Page() {
-  return <div className="container flex flex-col sm:flex-row gap-5">
-    <aside className="sm:sticky sm:h-screen sm:top-0">
-      <ScrollArea className="sm:h-screen">
-        <ul className="flex-none w-80 h-full">
-          {{#each toc}}
-          {{this}}
-          {{/each}}
-        </ul>
-      </ScrollArea>
+  return <div className="shadriz-container">
+    <aside className="shadriz-sidebar">
+      <ul>
+        {{#each toc}}
+        {{this}}
+        {{/each}}
+      </ul>
     </aside>
-    <div className="min-w-0 shadriz-docs" dangerouslySetInnerHTML={ { __html: readme } }>
+    <div className="shadriz-docs" dangerouslySetInnerHTML={ { __html: readme } }>
     </div>
   </div>;
 }

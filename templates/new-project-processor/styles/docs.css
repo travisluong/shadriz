@@ -2,6 +2,52 @@
   margin: 0;
   padding: 0;
 }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+a {
+  text-decoration: none;
+}
+.shadriz-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.shadriz-sidebar {
+  min-width: 300px;
+  padding: 20px;
+  position: sticky;
+  height: 100vh;
+  overflow: auto;
+  top: 0;
+}
+.shadriz-sidebar ul li {
+  list-style-type: none;
+}
+.shadriz-sidebar ul li a {
+  color: black;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.shadriz-sidebar ul li.level-1 a {
+  font-weight: bold;
+  color: black;
+}
+.shadriz-sidebar ul li.level-2 {
+  margin-top: 20px;
+}
+.shadriz-sidebar ul li.level-2 a {
+  color: black;
+}
+.shadriz-sidebar ul li.level-3 a {
+  color: gray;
+}
+.shadriz-docs {
+  min-width: 0px;
+  padding: 20px;
+  height: 100%;
+}
 .shadriz-docs h1 {
   font-weight: bold;
   font-size: 48px;
@@ -24,7 +70,7 @@
   background-color: lightgray;
   padding: 20px;
   margin-bottom: 20px;
-  overflow: scroll;
+  overflow: auto;
 }
 .shadriz-docs code {
   background-color: lightgray;
@@ -36,11 +82,22 @@
   list-style-type: disc;
   margin-left: 20px;
 }
+.shadriz-docs ul li a {
+  &:hover {
+    text-decoration: underline;
+  }
+}
 .dark .shadriz-docs pre {
   background-color: #111827;
 }
 .dark .shadriz-docs code {
   background-color: #111827;
+}
+.dark .shadriz-sidebar ul li a {
+  color: white;
+}
+.dark .shadriz-sidebar ul li.level-3 a {
+  color: darkgray;
 }
 .shadriz-docs a {
   text-decoration: underline;

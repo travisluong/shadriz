@@ -39,19 +39,19 @@ function walkTokens(token: any) {
     let className;
     switch (token.depth) {
       case 1:
-        className = "font-bold hover:underline";
+        className = "level-1";
         break;
       case 2:
-        className = "hover:underline mt-5";
+        className = "level-2";
         break;
       case 3:
-        className = "text-muted-foreground hover:underline";
+        className = "level-3";
         break;
       default:
         break;
     }
     headings.push(
-      `<li className="${className}"><a href="#${escapedText}">${token.text}</a></li>`
+      `<li class="${className}"><a href="#${escapedText}">${token.text}</a></li>`
     );
   }
 }

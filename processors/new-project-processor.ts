@@ -31,7 +31,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
     "button",
     "textarea",
     "checkbox",
-    "scroll-area",
   ];
 
   constructor(opts: NewProjectProcessorOpts) {

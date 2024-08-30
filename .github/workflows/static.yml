@@ -35,10 +35,6 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Install Dependencies
         run: npm install
-      - name: List files
-        run: ls -la
-      - name: PWD
-        run: pwd
       - name: Build Docs
         run: npx tsx scripts/build-docs
       - name: Upload artifact
