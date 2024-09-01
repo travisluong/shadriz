@@ -1,6 +1,6 @@
 {
   "name": "shadriz",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "main": "dist/index.js",
   "bin": {
     "shadriz": "./dist/index.js"
@@ -16,14 +16,14 @@
   "description": "a full stack framework next.js shadcnui and drizzle orm",
   "dependencies": {
     "@inquirer/prompts": "^5.3.0",
+    "@types/pluralize": "^0.0.33",
     "chalk": "^4.1.2",
-    "change-case": "^5.4.4",
+    "change-case-all": "^2.1.0",
     "commander": "^12.1.0",
     "handlebars": "^4.7.8",
     "marked": "^13.0.2",
     "pluralize": "^8.0.0",
     "tsx": "^4.19.0",
-    "@types/pluralize": "^0.0.33",
     "typescript": "^5.5.2",
     "vitest": "^2.0.2"
   }

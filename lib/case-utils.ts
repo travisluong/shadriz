@@ -1,5 +1,5 @@
 import pluralize from "pluralize";
-import * as changeCase from "change-case";
+import { Case } from "change-case-all";
 
 interface Cases {
   original: string;
@@ -26,18 +26,18 @@ export function caseFactory(str: string) {
 
   const obj = {
     original: str,
-    originalCamelCase: changeCase.camelCase(str),
-    capitalCase: changeCase.capitalCase(str),
-    singularCapitalCase: changeCase.capitalCase(pluralize.singular(str)),
-    pluralCapitalCase: changeCase.capitalCase(pluralize.plural(str)),
-    singularSnakeCase: changeCase.snakeCase(pluralize.singular(str)),
-    singularCamelCase: changeCase.camelCase(pluralize.singular(str)),
-    singularPascalCase: changeCase.pascalCase(pluralize.singular(str)),
-    singularKebabCase: changeCase.kebabCase(pluralize.singular(str)),
-    pluralSnakeCase: changeCase.snakeCase(pluralize.plural(str)),
-    pluralCamelCase: changeCase.camelCase(pluralize.plural(str)),
-    pluralPascalCase: changeCase.pascalCase(pluralize.plural(str)),
-    pluralKebabCase: changeCase.kebabCase(pluralize.plural(str)),
+    originalCamelCase: Case.camel(str),
+    capitalCase: Case.capital(str),
+    singularCapitalCase: Case.capital(pluralize.singular(str)),
+    pluralCapitalCase: Case.capital(pluralize.plural(str)),
+    singularSnakeCase: Case.snake(pluralize.singular(str)),
+    singularCamelCase: Case.camel(pluralize.singular(str)),
+    singularPascalCase: Case.pascal(pluralize.singular(str)),
+    singularKebabCase: Case.kebab(pluralize.singular(str)),
+    pluralSnakeCase: Case.snake(pluralize.plural(str)),
+    pluralCamelCase: Case.camel(pluralize.plural(str)),
+    pluralPascalCase: Case.pascal(pluralize.plural(str)),
+    pluralKebabCase: Case.kebab(pluralize.plural(str)),
   };
 
   cache[str] = obj;

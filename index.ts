@@ -25,7 +25,7 @@ import fs from "fs";
 import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
 
-const VERSION = "2.0.0";
+const VERSION = "2.0.2";
 
 const program = new Command();
 
