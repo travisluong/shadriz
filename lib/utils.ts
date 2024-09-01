@@ -251,9 +251,9 @@ export async function addShadcnComponents(opts: {
 }) {
   for (const component of opts.shadcnComponents) {
     if (opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o ${component}`);
+      await spawnCommand(`pnpm dlx shadcn@latest add -y -o ${component}`);
     } else if (opts.packageManager === "npm") {
-      await spawnCommand(`npx shadcn-ui@latest add -y -o ${component}`);
+      await spawnCommand(`npx shadcn@latest add -y -o ${component}`);
     }
   }
 }
