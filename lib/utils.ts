@@ -146,6 +146,34 @@ export function writeToFile(filePath: string, text: string) {
   }
 }
 
+export function insertTextAfter(
+  filePath: string,
+  searchText: string,
+  newText: string
+) {
+  // Read the file content
+  const fileContent = fs.readFileSync(
+    path.join(process.cwd(), filePath),
+    "utf8"
+  );
+
+  // Find the position of the searchText
+  const index = fileContent.indexOf(searchText);
+
+  if (index === -1) {
+    throw new Error(`Text "${searchText}" not found in the file.`);
+  }
+
+  // Insert the new text after the searchText
+  const updatedContent =
+    fileContent.slice(0, index + searchText.length) +
+    newText +
+    fileContent.slice(index + searchText.length);
+
+  // Write the updated content back to the file
+  fs.writeFileSync(filePath, updatedContent, "utf8");
+}
+
 export function capitalize(str: string) {
   return str[0].toUpperCase() + str.slice(1);
 }
@@ -251,9 +279,9 @@ export async function addShadcnComponents(opts: {
 }) {
   for (const component of opts.shadcnComponents) {
     if (opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm dlx shadcn-ui@latest add -y -o ${component}`);
+      await spawnCommand(`pnpm dlx shadcn@latest add -y -o ${component}`);
     } else if (opts.packageManager === "npm") {
-      await spawnCommand(`npx shadcn-ui@latest add -y -o ${component}`);
+      await spawnCommand(`npx shadcn@latest add -y -o ${component}`);
     }
   }
 }

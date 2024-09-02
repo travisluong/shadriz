@@ -5,10 +5,10 @@ import {
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import {
-  capitalize,
   compileTemplate,
   renderTemplate,
-  regenerateSchemaIndex,
+  insertTextAfter,
+  prependToFile,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
@@ -79,7 +79,7 @@ export class ScaffoldProcessor {
     this.addCreateForm();
     this.addUpdateForm();
     this.addDeleteForm();
-    regenerateSchemaIndex();
+    this.insertSchemaToSchemaFile();
     this.printCompletionMessage();
   }
   addSchema(): void {
@@ -503,6 +503,18 @@ export class ScaffoldProcessor {
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
     return html;
+  }
+  insertSchemaToSchemaFile() {
+    const tableObj = caseFactory(this.opts.table);
+    prependToFile(
+      "lib/schema.ts",
+      `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.pluralKebabCase}";\n`
+    );
+    insertTextAfter(
+      "lib/schema.ts",
+      "export const schema = {",
+      `\n  ...${tableObj.pluralCamelCase},`
+    );
   }
   printCompletionMessage() {
     log.success("scaffolding success: " + this.opts.table);
