@@ -95,9 +95,9 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   text: {
     jsType: "string",
-    formTemplate: "scaffold-processor/components/table/create-textarea.tsx.hbs",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
-      "scaffold-processor/components/table/update-textarea.tsx.hbs",
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
