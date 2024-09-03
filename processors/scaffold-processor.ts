@@ -315,26 +315,22 @@ export class ScaffoldProcessor {
         this.opts.dbDialectStrategy.pkDataType
       ];
 
-    const formDataKeyValArr = [];
+    const formDataKeyValArr = this.opts.columns
+      .map((c) => c.split(":"))
+      .filter((arr) => !this.isFileType(arr))
+      .filter((arr) => !this.isImageType(arr))
+      .map((arr) => {
+        const col = arr[0];
+        const dataType = arr[1];
+        const strategy =
+          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        return strategy.getKeyValStrForFormData({ columnName: col });
+      });
 
-    formDataKeyValArr.push(
+    formDataKeyValArr.unshift(
       dataTypeStrategyForPk.getKeyValStrForFormData({
         columnName: "id",
       })
-    );
-
-    formDataKeyValArr.concat(
-      this.opts.columns
-        .map((c) => c.split(":"))
-        .filter((arr) => !this.isFileType(arr))
-        .filter((arr) => !this.isImageType(arr))
-        .map((arr) => {
-          const col = arr[0];
-          const dataType = arr[1];
-          const strategy =
-            this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-          return strategy.getKeyValStrForFormData({ columnName: col });
-        })
     );
 
     const formDataKeyVal = formDataKeyValArr.join("\n");
