@@ -1,12 +1,12 @@
 import { customAlphabet } from "nanoid";
 import path from "path";
 import fs from "fs";
-import { alphanumeric } from "nanoid-dictionary";
+import { init } from "@paralleldrive/cuid2";
 
-const nanoid = customAlphabet(alphanumeric, 10);
+const createId = init({ length: 10 });
 
 export function getUploadPath({ file, dir }: { file: File; dir: string }) {
-  const randomString = nanoid();
+  const randomString = createId();
   const originalName = path.parse(file.name).name;
   const fileExt = path.extname(file.name);
   const newFileName = `${originalName}_${randomString}${fileExt}`;

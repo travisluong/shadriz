@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 {{pkStrategyImport}}
@@ -12,6 +13,8 @@ export const users = sqliteTable("user", {
   {{#if stripeEnabled}}
   stripe_customer_id: text("stripe_customer_id"),
   {{/if}}
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 })
 
 export const accounts = sqliteTable(

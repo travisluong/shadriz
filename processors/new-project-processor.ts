@@ -12,14 +12,7 @@ import { getReadme, getTableOfContents } from "../lib/markdown";
 export class NewProjectProcessor implements ShadrizProcessor {
   opts: NewProjectProcessorOpts;
 
-  dependencies = [
-    "drizzle-orm",
-    "dotenv",
-    "zod",
-    "drizzle-zod",
-    "nanoid",
-    "nanoid-dictionary",
-  ];
+  dependencies = ["drizzle-orm", "dotenv", "zod", "drizzle-zod"];
 
   devDependencies = ["drizzle-kit"];
 
@@ -30,6 +23,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
     "button",
     "textarea",
     "checkbox",
+    "select",
   ];
 
   constructor(opts: NewProjectProcessorOpts) {

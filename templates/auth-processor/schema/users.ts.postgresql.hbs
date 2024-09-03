@@ -19,6 +19,8 @@ export const users = pgTable("user", {
   {{#if stripeEnabled}}
   stripe_customer_id: text("stripe_customer_id"),
   {{/if}}
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 })
  
 export const accounts = pgTable(

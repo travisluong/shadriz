@@ -356,6 +356,8 @@ export class AuthProcessor implements ShadrizProcessor {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
         stripeEnabled: this.opts.stripeEnabled,
+        createdAtTemplate: this.opts.dbDialectStrategy.createdAtTemplate,
+        updatedAtTemplate: this.opts.dbDialectStrategy.updatedAtTemplate,
       },
     });
   }

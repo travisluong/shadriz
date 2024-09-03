@@ -22,8 +22,10 @@ export const users = mysqlTable("user", {
   {{#if stripeEnabled}}
   stripe_customer_id: varchar("stripe_customer_id", { length: 255 }),
   {{/if}}
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 })
- 
+
 export const accounts = mysqlTable(
   "account",
   {

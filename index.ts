@@ -117,9 +117,9 @@ program
         message: "Which primary key generation strategy would you like to use?",
         choices: [
           {
-            name: "uuidv4",
-            value: "uuidv4",
-            description: "Uses crypto.randomUUID",
+            name: "cuid2",
+            value: "cuid2",
+            description: "Uses the @paralleldrive/cuid2 package",
           },
           {
             name: "uuidv7",
@@ -127,9 +127,9 @@ program
             description: "Uses the uuidv7 package",
           },
           {
-            name: "cuid2",
-            value: "cuid2",
-            description: "Uses the @paralleldrive/cuid2 package",
+            name: "uuidv4",
+            value: "uuidv4",
+            description: "Uses crypto.randomUUID",
           },
           {
             name: "nanoid",
