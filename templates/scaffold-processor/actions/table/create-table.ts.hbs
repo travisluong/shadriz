@@ -69,7 +69,7 @@ export async function create{{tableObj.singularPascalCase}}(
   if ({{this}}File.size) {
     {{this}}UploadPath = getUploadPath({
       file: {{this}}File,
-      dir: "/uploads/{{../table}}/",
+      dir: "/uploads/{{../tableObj.pluralKebabCase}}/",
     });
     data.{{this}} = {{this}}UploadPath;
     uploadFile({ file: {{this}}File, uploadPath: {{this}}UploadPath });
