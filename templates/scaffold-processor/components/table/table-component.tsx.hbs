@@ -1,0 +1,54 @@
+import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { EyeOpenIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Button } from "../ui/button";
+
+export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.pluralCamelCase}} }: { {{tableObj.pluralCamelCase}}: {{tableObj.singularPascalCase}}[] }) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>id</TableHead>
+          {{#each columnNames}}
+          <TableHead>{{this}}</TableHead>
+          {{/each}}
+          <TableHead>actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        { {{tableObj.pluralCamelCase}}.map(({{tableObj.singularCamelCase}}) => (
+          <TableRow>
+            <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
+            {{#each columnNames}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this}} }</TableCell>
+            {{/each}}
+            <TableCell className="justify-end flex gap-2">
+              <a href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
+                <Button size="icon" variant="outline">
+                  <EyeOpenIcon />
+                </Button>
+              </a>
+              <a href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/edit`}>
+                <Button size="icon" variant="outline">
+                  <Pencil1Icon />
+                </Button>
+              </a>
+              <a href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/delete`}>
+                <Button size="icon" variant="outline">
+                  <TrashIcon />
+                </Button>
+              </a>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}

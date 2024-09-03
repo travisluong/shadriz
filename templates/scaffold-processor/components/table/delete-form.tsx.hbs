@@ -4,6 +4,8 @@ import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalC
 import { Button } from "../ui/button";
 import { useFormState } from "react-dom";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 export default function {{tableObj.singularPascalCase}}DeleteForm({ data }: { data: {{tableObj.singularPascalCase}} }) {
   const initialState: Delete{{tableObj.singularPascalCase}}State = {};
@@ -13,9 +15,15 @@ export default function {{tableObj.singularPascalCase}}DeleteForm({ data }: { da
     <div>
       <form action={dispatch}>
         <input type="hidden" name="id" value={data.id} />
-        <Button type="submit" variant="destructive">
-          Delete
-        </Button>
+        <div>
+          <Label>id</Label>
+          <Input type="text" disabled value={data.id} />
+        </div>
+        <div>
+          <Button type="submit" variant="destructive">
+            Delete
+          </Button>
+        </div>
       </form>
     </div>
   );

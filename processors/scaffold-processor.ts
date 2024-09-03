@@ -79,6 +79,7 @@ export class ScaffoldProcessor {
     this.addCreateForm();
     this.addUpdateForm();
     this.addDeleteForm();
+    this.addTableComponent();
     this.insertSchemaToSchemaFile();
     this.printCompletionMessage();
   }
@@ -467,6 +468,24 @@ export class ScaffoldProcessor {
       outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-delete-form.tsx`,
       data: {
         tableObj: tableObj,
+      },
+    });
+  }
+  addTableComponent(): void {
+    const tableObj = caseFactory(this.opts.table);
+
+    const columnNames = [];
+    for (const [index, column] of this.opts.columns.entries()) {
+      const [columnName, dataType] = column.split(":");
+      columnNames.push(columnName);
+    }
+
+    renderTemplate({
+      inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",
+      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-table.tsx`,
+      data: {
+        tableObj: tableObj,
+        columnNames: columnNames,
       },
     });
   }
