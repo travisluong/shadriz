@@ -25,6 +25,7 @@ export class AdminProcessor implements ShadrizProcessor {
     await addShadcnComponents({
       shadcnComponents: this.shadcnComponents,
       packageManager: this.opts.packageManager,
+      latest: this.opts.latest,
     });
   }
   async render(): Promise<void> {

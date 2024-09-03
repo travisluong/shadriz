@@ -284,12 +284,23 @@ export async function installDevDependencies(opts: {
 export async function addShadcnComponents(opts: {
   shadcnComponents: string[];
   packageManager: PackageManager;
+  latest: boolean;
 }) {
+  const pinnedVersion = packageShadrizJson.dependencies["shadcn"];
+  if (!pinnedVersion) {
+    throw new Error("pinned version not found for shadcn");
+  }
+  let version;
+  if (opts.latest) {
+    version = "latest";
+  } else {
+    version = pinnedVersion;
+  }
   for (const component of opts.shadcnComponents) {
     if (opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm dlx shadcn@latest add -y -o ${component}`);
+      await spawnCommand(`pnpm dlx shadcn@${version} add -y -o ${component}`);
     } else if (opts.packageManager === "npm") {
-      await spawnCommand(`npx shadcn@latest add -y -o ${component}`);
+      await spawnCommand(`npx shadcn@${version} add -y -o ${component}`);
     }
   }
 }

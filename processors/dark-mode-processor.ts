@@ -40,6 +40,7 @@ export class DarkModeProcessor implements ShadrizProcessor {
     await addShadcnComponents({
       shadcnComponents: this.shadcnComponents,
       packageManager: this.opts.packageManager,
+      latest: this.opts.latest,
     });
   }
 

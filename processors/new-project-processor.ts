@@ -8,6 +8,7 @@ import {
   spawnCommand,
 } from "../lib/utils";
 import { getReadme, getTableOfContents } from "../lib/markdown";
+import packageShadrizJson from "../package-shadriz.json";
 
 export class NewProjectProcessor implements ShadrizProcessor {
   opts: NewProjectProcessorOpts;
@@ -40,10 +41,21 @@ export class NewProjectProcessor implements ShadrizProcessor {
       return;
     }
 
+    const pinnedVersion = packageShadrizJson.dependencies["shadcn"];
+    if (!pinnedVersion) {
+      throw new Error("pinned version not found for shadcn");
+    }
+    let version;
+    if (this.opts.latest) {
+      version = "latest";
+    } else {
+      version = pinnedVersion;
+    }
+
     if (this.opts.packageManager === "pnpm") {
-      await spawnCommand("pnpm dlx shadcn@latest init -y -d");
+      await spawnCommand(`pnpm dlx shadcn@${version} init -y -d`);
     } else if (this.opts.packageManager === "npm") {
-      await spawnCommand("npx shadcn@latest init -y -d");
+      await spawnCommand(`npx shadcn@${version} init -y -d`);
     }
 
     await installDependencies({
@@ -61,6 +73,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
     await addShadcnComponents({
       packageManager: this.opts.packageManager,
       shadcnComponents: this.shadcnComponents,
+      latest: this.opts.latest,
     });
   }
 

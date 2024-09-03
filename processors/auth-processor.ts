@@ -173,6 +173,7 @@ export class AuthProcessor implements ShadrizProcessor {
     await addShadcnComponents({
       shadcnComponents: this.shadcnComponents,
       packageManager: this.opts.packageManager,
+      latest: this.opts.latest,
     });
 
     await this.appendAuthSecretToEnv();
