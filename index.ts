@@ -26,7 +26,7 @@ import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
 import packageShadrizJson from "./package-shadriz.json";
 
-const VERSION = "2.0.3";
+const VERSION = "2.1.0";
 
 const program = new Command();
 
