@@ -24,6 +24,7 @@ import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
 import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
+import packageShadrizJson from "./package-shadriz.json";
 
 const VERSION = "2.0.3";
 
@@ -42,16 +43,46 @@ program
     "initialize a new next.js project using recommended settings for shadriz"
   )
   .argument("<name>", "name of project")
-  .option("--pnpm", "run with pnpm", false)
   .action(async (name, options) => {
+    const pinnedVersion = packageShadrizJson.dependencies["next"];
+    let version;
+
+    const packageManager = await select({
+      message: "Which package manager do you want to use?",
+      choices: [{ value: "npm" }, { value: "pnpm" }],
+    });
+
+    const latest = await select({
+      message: `Do you want to install the latest Next.js version or the pinned version ${pinnedVersion}?`,
+      choices: [
+        {
+          name: "pinned",
+          value: false,
+          description: `Installs the pinned Next.js version ${pinnedVersion}. More stable, but possibly obsolete.`,
+        },
+        {
+          name: "latest",
+          value: true,
+          description:
+            "Installs the latest Next.js version. Less stable, but cutting edge.",
+        },
+      ],
+    });
+
+    if (latest) {
+      version = "latest";
+    } else {
+      version = pinnedVersion;
+    }
+
     try {
-      if (options.pnpm) {
+      if (packageManager === "pnpm") {
         await spawnCommand(
-          `pnpm create next-app ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
+          `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
         );
       } else {
         await spawnCommand(
-          `npx create-next-app ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
+          `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
         );
       }
     } catch (error) {}
@@ -79,13 +110,14 @@ program
             {
               name: "pinned",
               value: false,
-              description: "Installs pinned packages. More stable.",
+              description:
+                "Installs pinned packages in package-shadriz.json. More stable, but possibly obsolete.",
             },
             {
               name: "latest",
               value: true,
               description:
-                "Installs latest packages. Cutting edge. Less stable.",
+                "Installs latest packages. Less stable, but cutting edge.",
             },
           ],
         });
