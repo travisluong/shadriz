@@ -1,6 +1,5 @@
 import {
   DbDialect,
-  GetColumnDefObjsOpts,
   GetKeyValueStrForSchemaOpts,
   ScaffoldProcessorOpts,
 } from "../lib/types";
@@ -126,6 +125,7 @@ export class ScaffoldProcessor {
     let referenceImportsCode = "";
     for (const column of columns) {
       const [columnName, dataType] = column.split(":");
+      const tableObj = caseFactory(columnName);
       const dataTypeStrategy =
         this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
       if (dataTypeStrategy.dataTypeOverride) {
@@ -134,7 +134,7 @@ export class ScaffoldProcessor {
         dataTypeSet.add(dataType);
       }
       if (dataType === "references") {
-        referenceImportsCode += `import { ${columnName} } from "./${columnName}";\n`;
+        referenceImportsCode += `import { ${tableObj.pluralCamelCase} } from "./${tableObj.pluralKebabCase}";\n`;
       }
     }
     let code = "import {\n";
@@ -159,27 +159,13 @@ export class ScaffoldProcessor {
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column } = opts;
     const { dataTypeStrategyMap } = this.opts.dbDialectStrategy;
-    const [columnName, dataType, constraints] = column.split(":");
-    let constraintsArr: string[] = [];
-    if (constraints) {
-      constraintsArr = constraints.split(",");
-    }
+    const [columnName, dataType] = column.split(":");
     if (!(dataType in dataTypeStrategyMap)) {
       throw new Error("data type strategy not found: " + dataType);
     }
-    this.validateConstraints(constraintsArr);
     const strategy = dataTypeStrategyMap[dataType];
     let str =
       "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
-    for (const arg of constraintsArr) {
-      if (arg in this.commonConstraintMap) {
-        str += this.commonConstraintMap[arg];
-      }
-      if (arg in this.opts.dbDialectStrategy.dialectConstraintsMap) {
-        str += this.opts.dbDialectStrategy.dialectConstraintsMap[arg];
-      }
-    }
-    // add handler for fk
     str += ",";
     return str;
   }
@@ -246,6 +232,7 @@ export class ScaffoldProcessor {
     const columns = ["id"];
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
+      const tableObj = caseFactory(columnName);
       if (
         dataType !== "file" &&
         dataType !== "image" &&
@@ -255,7 +242,7 @@ export class ScaffoldProcessor {
         continue;
       }
       if (dataType === "references") {
-        columns.push(columnName + "_id");
+        columns.push(tableObj.singularSnakeCase + "_id");
       }
     }
 
@@ -268,7 +255,16 @@ export class ScaffoldProcessor {
         const dataType = arr[1];
         const strategy =
           this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-        return strategy.getKeyValStrForFormData({ columnName: col });
+
+        const tableObj = caseFactory(col);
+        let columnName;
+        if (dataType === "references") {
+          columnName = tableObj.singularSnakeCase;
+        } else {
+          columnName = col;
+        }
+
+        return strategy.getKeyValStrForFormData({ columnName: columnName });
       })
       .join("\n");
 
@@ -298,6 +294,7 @@ export class ScaffoldProcessor {
     const columns = ["id"];
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
+      const tableObj = caseFactory(columnName);
       if (
         dataType !== "file" &&
         dataType !== "image" &&
@@ -307,7 +304,7 @@ export class ScaffoldProcessor {
         continue;
       }
       if (dataType === "references") {
-        columns.push(columnName + "_id");
+        columns.push(tableObj.singularSnakeCase + "_id");
       }
     }
 
@@ -325,7 +322,16 @@ export class ScaffoldProcessor {
         const dataType = arr[1];
         const strategy =
           this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-        return strategy.getKeyValStrForFormData({ columnName: col });
+
+        const tableObj = caseFactory(col);
+        let columnName;
+        if (dataType === "references") {
+          columnName = tableObj.singularSnakeCase;
+        } else {
+          columnName = col;
+        }
+
+        return strategy.getKeyValStrForFormData({ columnName: columnName });
       });
 
     formDataKeyValArr.unshift(
@@ -406,9 +412,10 @@ export class ScaffoldProcessor {
         throw new Error("invalid data type strategy: " + dataType);
       const dataTypeStrategy =
         this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+      const tableObj = caseFactory(columnName);
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
-        data: { column: columnName },
+        data: { column: columnName, tableObj: tableObj },
       });
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
@@ -442,7 +449,12 @@ export class ScaffoldProcessor {
     const columnNames = [];
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
-      columnNames.push(columnName);
+      const tableObj = caseFactory(columnName);
+      if (dataType === "references") {
+        columnNames.push(tableObj.singularSnakeCase + "_id");
+      } else {
+        columnNames.push(columnName);
+      }
     }
 
     renderTemplate({
@@ -476,9 +488,11 @@ export class ScaffoldProcessor {
 
       const updateFormTemplate = dataTypeStrategy.updateFormTemplate;
 
+      const tableObj = caseFactory(columnName);
+
       html += compileTemplate({
         inputPath: updateFormTemplate,
-        data: { column: columnName },
+        data: { column: columnName, tableObj: tableObj },
       });
 
       if (index !== this.opts.columns.length - 1) html += "\n";
