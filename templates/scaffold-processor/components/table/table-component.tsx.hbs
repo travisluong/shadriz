@@ -24,7 +24,7 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.plural
       </TableHeader>
       <TableBody>
         { {{tableObj.pluralCamelCase}}.map(({{tableObj.singularCamelCase}}) => (
-          <TableRow>
+          <TableRow key={ {{tableObj.singularCamelCase}}.id }>
             <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
             {{#each columnNames}}
             <TableCell>{ {{../tableObj.singularCamelCase}}.{{this}} }</TableCell>

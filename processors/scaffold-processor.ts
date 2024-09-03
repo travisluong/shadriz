@@ -9,6 +9,7 @@ import {
   renderTemplate,
   insertTextAfter,
   prependToFile,
+  checkIfTextExistsInFile,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
@@ -485,6 +486,15 @@ export class ScaffoldProcessor {
   }
   insertSchemaToSchemaFile() {
     const tableObj = caseFactory(this.opts.table);
+    if (
+      checkIfTextExistsInFile(
+        "lib/schema.ts",
+        `@/schema/${tableObj.pluralKebabCase}`
+      )
+    ) {
+      log.bgYellow(`${tableObj.pluralKebabCase} exists in schema.ts`);
+      return;
+    }
     prependToFile(
       "lib/schema.ts",
       `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.pluralKebabCase}";\n`

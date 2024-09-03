@@ -110,6 +110,14 @@ export function appendToFileIfTextNotExists(
   }
 }
 
+export function checkIfTextExistsInFile(
+  filePath: string,
+  textToSearch: string
+) {
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  return fileContent.includes(textToSearch);
+}
+
 export function appendToFile(filePath: string, textToAppend: string) {
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
