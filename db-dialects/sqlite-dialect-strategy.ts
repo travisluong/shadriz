@@ -6,7 +6,6 @@ import {
   DbDialectStrategy,
   PkStrategy,
 } from "../lib/types";
-import { renderTemplate } from "../lib/utils";
 
 const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   integer: {
