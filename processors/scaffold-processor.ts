@@ -75,7 +75,6 @@ export class ScaffoldProcessor {
     this.addCreateAction();
     this.addUpdateAction();
     this.addDeleteAction();
-    this.addColumnDef();
     this.addCreateForm();
     this.addUpdateForm();
     this.addDeleteForm();
@@ -384,41 +383,6 @@ export class ScaffoldProcessor {
         formDataKeyVal: formDataKeyVal,
       },
     });
-  }
-  addColumnDef(): void {
-    let columnDefs = "";
-    for (const [index, str] of this.opts.columns.entries()) {
-      const [columnName, dataType] = str.split(":");
-      if (dataType === "references") {
-        columnDefs += this.getColumnDefObjs({
-          columnName: columnName + "_id",
-        });
-      } else {
-        columnDefs += this.getColumnDefObjs({
-          columnName: columnName,
-        });
-      }
-      if (index !== this.opts.columns.length - 1) {
-        columnDefs += "\n";
-      }
-    }
-    const tableObj = caseFactory(this.opts.table);
-    renderTemplate({
-      inputPath: "scaffold-processor/components/table/columns.tsx.hbs",
-      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-columns.tsx`,
-      data: {
-        columnDefs: columnDefs,
-        tableObj: tableObj,
-        isAdmin: this.opts.authorizationLevel === "admin",
-      },
-    });
-  }
-  getColumnDefObjs({ columnName }: GetColumnDefObjsOpts) {
-    let code = "  {\n";
-    code += `    accessorKey: "${columnName}",\n`;
-    code += `    header: "${columnName}",\n`;
-    code += "  },";
-    return code;
   }
   addCreateForm(): void {
     const formControlsHtml = this.getFormControlsHtml();

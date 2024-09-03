@@ -3,7 +3,6 @@
     "@auth/drizzle-adapter": "^1.4.2",
     "@paralleldrive/cuid2": "^2.2.2",
     "@stripe/stripe-js": "^4.1.0",
-    "@tanstack/react-table": "^8.19.3",
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.1.2",
     "dotenv": "^16.4.5",

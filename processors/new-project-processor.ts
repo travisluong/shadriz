@@ -17,7 +17,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
     "dotenv",
     "zod",
     "drizzle-zod",
-    "@tanstack/react-table",
     "nanoid",
     "nanoid-dictionary",
   ];
@@ -124,11 +123,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "new-project-processor/lib/config.ts.hbs",
       outputPath: "lib/config.ts",
-    });
-
-    renderTemplate({
-      inputPath: "new-project-processor/components/ui/data-table.tsx.hbs",
-      outputPath: "components/ui/data-table.tsx",
     });
 
     renderTemplate({
