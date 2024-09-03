@@ -451,6 +451,7 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         columnNames: columnNames,
+        isAdmin: this.opts.authorizationLevel === "admin",
       },
     });
   }

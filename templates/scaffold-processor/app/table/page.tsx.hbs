@@ -26,7 +26,7 @@ export default async function Page({
     <div>
       <h1 className="text-3xl font-bold mb-6">{{tableObj.pluralCapitalCase}}</h1>
       <div className="text-right mr-2">
-        <a href="/admin/{{tableObj.pluralKebabCase}}/new">
+        <a href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
           <Button>
             <PlusIcon className="mr-2" /> New
           </Button>

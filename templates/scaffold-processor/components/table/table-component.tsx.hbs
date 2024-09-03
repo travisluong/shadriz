@@ -30,17 +30,17 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.plural
             <TableCell>{ {{../tableObj.singularCamelCase}}.{{this}} }</TableCell>
             {{/each}}
             <TableCell className="justify-end flex gap-2">
-              <a href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
+              <a href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
                 <Button size="icon" variant="outline">
                   <EyeOpenIcon />
                 </Button>
               </a>
-              <a href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/edit`}>
+              <a href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/edit`}>
                 <Button size="icon" variant="outline">
                   <Pencil1Icon />
                 </Button>
               </a>
-              <a href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/delete`}>
+              <a href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/delete`}>
                 <Button size="icon" variant="outline">
                   <TrashIcon />
                 </Button>
