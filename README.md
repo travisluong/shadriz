@@ -313,7 +313,7 @@ This approach strikes the perfect balance of good defaults combined with flexibi
 
 ### Drizzle ORM
 
-shadriz uses Drizzle ORM for the best-of-both worlds of **sql-like and relational queres**, as well as **schema generation and database migrations**.
+shadriz uses Drizzle ORM for the best-of-both worlds of **sql-like and relational queries**, as well as **schema generation and database migrations**.
 
 shadriz takes the automations one step further by generating the configuration files required to start using Drizzle ORM, as well as the database schemas and migrations for the full stack scaffolding.
 
