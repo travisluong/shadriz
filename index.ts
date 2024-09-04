@@ -47,10 +47,10 @@ program
   )
   .argument("<name>", "name of project")
   .addOption(
-    new Option("-p, --package-manager <packageManager>").choices([
-      "npm",
-      "pnpm",
-    ])
+    new Option(
+      "-p, --package-manager <packageManager>",
+      "the package manager to initialize next.js with"
+    ).choices(["npm", "pnpm"])
   )
   .addOption(new Option("-l, --latest", "install the latest next.js version"))
   .option(
@@ -107,19 +107,27 @@ program
 
 program
   .command("init")
-  .description("initialize project")
-  .option("--no-install", "skip installation of dependencies")
-  .addOption(
-    new Option("-p, --package-manager <packageManager>").choices([
-      "npm",
-      "pnpm",
-    ])
+  .description("initialize project, application boilerplate, and configuration")
+  .option(
+    "--no-install",
+    "skip installation of dependencies and shadcn components"
   )
-  .addOption(new Option("-l, --latest", "install latest dependencies"))
+  .addOption(
+    new Option(
+      "-p, --package-manager <packageManager>",
+      "the package manager for this project"
+    ).choices(["npm", "pnpm"])
+  )
+  .addOption(
+    new Option(
+      "-l, --latest",
+      "install latest dependencies and shadcn components"
+    )
+  )
   .addOption(
     new Option(
       "--no-latest",
-      "install pinned dependencies specified in package-shadriz.json"
+      "install pinned dependencies and shadcn components specified in package-shadriz.json"
     )
   )
   .addOption(
@@ -143,7 +151,7 @@ program
   )
   .option(
     "-ap, --auth-providers <authProviders>",
-    "authjs providers",
+    `comma separated list of authjs providers: github,google,credentials,postmark,nodemailer`,
     (value: string, dummyPrevious: any) => {
       const authProviders = value.split(",");
       const validProviders = new Set([
@@ -439,7 +447,7 @@ program
   .command("scaffold")
   .summary("scaffold crud ui, db schema, migration, and actions")
   .description(
-    `Generate CRUD ui, db schema, db migration, and server actions for a table
+    `generate crud ui, db schema, db migration, and server actions for a database table
 
 # sqlite example
 npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:text
@@ -452,10 +460,10 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
 
 `
   )
-  .argument("<table>", "the database table")
+  .argument("<table>", "the database table name")
   .requiredOption(
     "-c, --columns <columns...>",
-    "column_name:data_type:constraint1,constraint2"
+    "space separated list of columns in the following format: column_name:data_type"
   )
   .action(async (table, options) => {
     const shadrizConfig: ShadrizConfig = loadShadrizConfig();
