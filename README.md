@@ -156,9 +156,9 @@ integer, real, text, boolean, bigint
 
 shadriz supports the following primary key generation strategies:
 
-- `uuidv4` - Uses crypto.randomUUID
-- `uuidv7` - Uses the uuidv7 package
 - `cuid2` - Uses @paralleldrive/cuid2 package
+- `uuidv7` - Uses the uuidv7 package
+- `uuidv4` - Uses crypto.randomUUID
 - `nanoid` - Uses the nanoid package
 
 The strategy that you chose during the `init` process will be saved in `shadriz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
@@ -211,10 +211,11 @@ npx shadriz@latest scaffold user_profile -c image:avatar description:text
 
 ## Naming conventions
 
-- Class names are singular pascal case. `FooBar`
-- Schema variable names are plural camel case. `fooBars`.
-- Table names are plural snake case. `foo_bars`
-- File names are kebab case. `foo-bar` and `foo-bars`.
+- Class names are singular pascal case: `FooBar`
+- Schema variable names are plural camel case: `fooBars`
+- Table names are plural snake case: `foo_bars`
+- File names are kebab case: `foo-bar` and `foo-bars`
+- Foreign keys are singular snake case with `_id` appended: `foo_bar_id`
 
 ## Auth
 
