@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     where: eq(users.id, session?.user.id!),
   });
 
-  const returnUrl = `${req.headers.get("origin")}/subscription`;
+  const returnUrl = `${req.headers.get("origin")}/account`;
   const customerId = userRecord?.stripe_customer_id;
 
   const portalSession = await stripe.billingPortal.sessions.create({
