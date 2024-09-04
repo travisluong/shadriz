@@ -28,6 +28,6 @@ export const formDataUtils = {
   },
 
   references(col: string): string {
-    return `    ${col}_id: formData.get("${col}_id") as string,`;
+    return `    ${col}_id: (formData.get("${col}_id") as string) || null,`;
   },
 };
