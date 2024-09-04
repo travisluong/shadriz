@@ -464,11 +464,17 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
     "-c, --columns <columns...>",
     "space separated list of columns in the following format: column_name:data_type"
   )
+  .addOption(
+    new Option(
+      "-a, --authorization-level <authorizationLevel>",
+      "the authorization level of this scaffold"
+    ).choices(["admin", "private", "public"])
+  )
   .action(async (table, options) => {
     const shadrizConfig: ShadrizConfig = loadShadrizConfig();
-    let authorizationLevel: AuthorizationLevel = "public";
-    if (shadrizConfig.authSolution !== "none" && shadrizConfig.adminEnabled) {
-      authorizationLevel = await select({
+    const authorizationLevel: AuthorizationLevel =
+      options.authorizationLevel ||
+      (await select({
         message:
           "Which authorization level would you like to use for this scaffold?",
         choices: [
@@ -486,23 +492,7 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
             description: "Accessible by anyone without authentication.",
           },
         ],
-      });
-    } else if (shadrizConfig.authSolution !== "none") {
-      authorizationLevel = await select({
-        message:
-          "Which authorization level would you like to use for this scaffold?",
-        choices: [
-          {
-            value: "private",
-            description: "Requires user authentication.",
-          },
-          {
-            value: "public",
-            description: "Accessible by anyone without authentication.",
-          },
-        ],
-      });
-    }
+      }));
 
     if (authorizationLevel === "admin" && !fs.existsSync("app/(admin)")) {
       log.bgRed(
