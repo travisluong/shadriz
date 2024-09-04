@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import { log } from "./lib/log";
 import { AuthorizationLevel, ShadrizConfig } from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
@@ -37,37 +37,54 @@ program
   )
   .version(VERSION);
 
+function commaSeparatedList(value: string, dummyPrevious: any) {
+  const authProviders = value.split(",");
+  for (const p of authProviders) {
+  }
+}
+
 program
   .command("new")
   .description(
     "initialize a new next.js project using recommended settings for shadriz"
   )
   .argument("<name>", "name of project")
+  .addOption(
+    new Option("-p, --package-manager <packageManager>").choices([
+      "npm",
+      "pnpm",
+    ])
+  )
+  .addOption(new Option("-l, --latest"))
   .action(async (name, options) => {
     const pinnedVersion = packageShadrizJson.dependencies["next"];
     let version;
 
-    const packageManager = await select({
-      message: "Which package manager do you want to use?",
-      choices: [{ value: "npm" }, { value: "pnpm" }],
-    });
+    const packageManager =
+      options.packageManager ||
+      (await select({
+        message: "Which package manager do you want to use?",
+        choices: [{ value: "npm" }, { value: "pnpm" }],
+      }));
 
-    const latest = await select({
-      message: `Do you want to install the latest Next.js version or the pinned version ${pinnedVersion}?`,
-      choices: [
-        {
-          name: "pinned",
-          value: false,
-          description: `Installs the pinned Next.js version ${pinnedVersion}. More stable, but possibly obsolete.`,
-        },
-        {
-          name: "latest",
-          value: true,
-          description:
-            "Installs the latest Next.js version. Less stable, but cutting edge.",
-        },
-      ],
-    });
+    const latest =
+      options.latest ||
+      (await select({
+        message: `Do you want to install the latest Next.js version or the pinned version ${pinnedVersion}?`,
+        choices: [
+          {
+            name: "pinned",
+            value: false,
+            description: `Installs the pinned Next.js version ${pinnedVersion}. More stable, but possibly obsolete.`,
+          },
+          {
+            name: "latest",
+            value: true,
+            description:
+              "Installs the latest Next.js version. Less stable, but cutting edge.",
+          },
+        ],
+      }));
 
     if (latest) {
       version = "latest";
@@ -92,46 +109,118 @@ program
   .command("init")
   .description("initialize project")
   .option("--no-install", "skip installation of dependencies")
+  .addOption(
+    new Option("-p, --package-manager <packageManager>").choices([
+      "npm",
+      "pnpm",
+    ])
+  )
+  .addOption(new Option("-l, --latest", "install latest dependencies"))
+  .addOption(
+    new Option(
+      "--no-latest",
+      "install pinned dependencies specified in package-shadriz.json"
+    )
+  )
+  .addOption(
+    new Option("-d, --db-dialect <dbDialect>", "the database dialect").choices([
+      "sqlite",
+      "postgresql",
+      "mysql",
+    ])
+  )
+  .addOption(
+    new Option(
+      "-pk, --pk-strategy <pkStrategy>",
+      "primary key generation strategy"
+    ).choices(["cuid2", "uuidv7", "uuidv4", "nanoid"])
+  )
+  .addOption(
+    new Option(
+      "-a, --auth-solution <authSolution>",
+      "authentication solution"
+    ).choices(["authjs", "none"])
+  )
+  .option(
+    "-ap, --auth-providers <authProviders>",
+    "authjs providers",
+    (value: string, dummyPrevious: any) => {
+      const authProviders = value.split(",");
+      const validProviders = new Set([
+        "github",
+        "google",
+        "credentials",
+        "postmark",
+        "nodemailer",
+      ]);
+      for (const p of authProviders) {
+        if (!validProviders.has(p)) {
+          throw new Error("invalid auth provider: " + p);
+        }
+      }
+      return authProviders;
+    }
+  )
+  .addOption(
+    new Option(
+      "-s, --session-strategy <sessionStrategy>",
+      "session strategy"
+    ).choices(["database", "jwt"])
+  )
+  .option("-ad, --admin", "admin dashboard with role-based authorization")
+  .option("--no-admin", "no admin dashboard")
+  .option("-sp, --stripe", "stripe payment processing")
+  .option("--no-stripe", "no stripe")
+  .option("-dm, --dark-mode", "dark mode")
+  .option("--no-dark-mode", "no dark mode")
   .action(async (options) => {
     try {
       // inquire
 
       const partialConfig: Partial<ShadrizConfig> = {};
       partialConfig.version = VERSION;
-      partialConfig.packageManager = await select({
-        message: "Which package manager do you want to use?",
-        choices: [{ value: "npm" }, { value: "pnpm" }],
-      });
+      partialConfig.packageManager =
+        options.packageManager ||
+        (await select({
+          message: "Which package manager do you want to use?",
+          choices: [{ value: "npm" }, { value: "pnpm" }],
+        }));
 
       if (options.install) {
-        partialConfig.latest = await select({
-          message: "Do you want to install latest packages or pinned packages?",
+        partialConfig.latest =
+          options.latest ??
+          (await select({
+            message:
+              "Do you want to install latest packages or pinned packages?",
+            choices: [
+              {
+                name: "pinned",
+                value: false,
+                description:
+                  "Installs pinned packages in package-shadriz.json. More stable, but possibly obsolete.",
+              },
+              {
+                name: "latest",
+                value: true,
+                description:
+                  "Installs latest packages. Less stable, but cutting edge.",
+              },
+            ],
+          }));
+      }
+      partialConfig.dbDialect =
+        options.dbDialect ||
+        (await select({
+          message: "Which database dialect would you like to use?",
           choices: [
             {
-              name: "pinned",
-              value: false,
-              description:
-                "Installs pinned packages in package-shadriz.json. More stable, but possibly obsolete.",
+              value: "sqlite",
             },
-            {
-              name: "latest",
-              value: true,
-              description:
-                "Installs latest packages. Less stable, but cutting edge.",
-            },
+            { value: "postgresql" },
+            { value: "mysql" },
           ],
-        });
-      }
-      partialConfig.dbDialect = await select({
-        message: "Which database dialect would you like to use?",
-        choices: [
-          {
-            value: "sqlite",
-          },
-          { value: "postgresql" },
-          { value: "mysql" },
-        ],
-      });
+        }));
+
       switch (partialConfig.dbDialect) {
         case "sqlite":
           partialConfig.dbPackage = "better-sqlite3";
@@ -145,70 +234,88 @@ program
         default:
           break;
       }
-      partialConfig.pkStrategy = await select({
-        message: "Which primary key generation strategy would you like to use?",
-        choices: [
-          {
-            name: "cuid2",
-            value: "cuid2",
-            description: "Uses the @paralleldrive/cuid2 package",
-          },
-          {
-            name: "uuidv7",
-            value: "uuidv7",
-            description: "Uses the uuidv7 package",
-          },
-          {
-            name: "uuidv4",
-            value: "uuidv4",
-            description: "Uses crypto.randomUUID",
-          },
-          {
-            name: "nanoid",
-            value: "nanoid",
-            description: "Uses the nanoid package",
-          },
-        ],
-      });
-      partialConfig.authSolution = await select({
-        message: "Which authentication solution do you want to use?",
-        choices: [{ value: "authjs" }, { value: "none" }],
-      });
-      if (partialConfig.authSolution === "authjs") {
-        partialConfig.authProviders = await checkbox({
-          message: "Which auth providers would you like to use?",
-          choices: [
-            { name: "github", value: "github" },
-            { name: "google", value: "google" },
-            { name: "credentials", value: "credentials" },
-            { name: "postmark", value: "postmark" },
-            { name: "nodemailer", value: "nodemailer" },
-          ],
-        });
-        partialConfig.sessionStrategy = await select({
-          message: "Which session strategy would you like to use?",
-          choices: [
-            { name: "database", value: "database" },
-            { name: "jwt", value: "jwt" },
-          ],
-        });
-      }
-      if (partialConfig.authSolution !== "none") {
-        partialConfig.adminEnabled = await confirm({
+      partialConfig.pkStrategy =
+        options.pkStrategy ||
+        (await select({
           message:
-            "Do you want to add an admin dashboard with role-based authorization?",
-          default: true,
-        });
+            "Which primary key generation strategy would you like to use?",
+          choices: [
+            {
+              name: "cuid2",
+              value: "cuid2",
+              description: "Uses the @paralleldrive/cuid2 package",
+            },
+            {
+              name: "uuidv7",
+              value: "uuidv7",
+              description: "Uses the uuidv7 package",
+            },
+            {
+              name: "uuidv4",
+              value: "uuidv4",
+              description: "Uses crypto.randomUUID",
+            },
+            {
+              name: "nanoid",
+              value: "nanoid",
+              description: "Uses the nanoid package",
+            },
+          ],
+        }));
+      partialConfig.authSolution =
+        options.authSolution ||
+        (await select({
+          message: "Which authentication solution do you want to use?",
+          choices: [{ value: "authjs" }, { value: "none" }],
+        }));
+
+      console.log(options.authProviders);
+      if (partialConfig.authSolution === "authjs") {
+        partialConfig.authProviders =
+          options.authProviders ||
+          (await checkbox({
+            message: "Which auth providers would you like to use?",
+            choices: [
+              { name: "github", value: "github" },
+              { name: "google", value: "google" },
+              { name: "credentials", value: "credentials" },
+              { name: "postmark", value: "postmark" },
+              { name: "nodemailer", value: "nodemailer" },
+            ],
+          }));
+
+        partialConfig.sessionStrategy =
+          options.sessionStrategy ||
+          (await select({
+            message: "Which session strategy would you like to use?",
+            choices: [
+              { name: "database", value: "database" },
+              { name: "jwt", value: "jwt" },
+            ],
+          }));
       }
       if (partialConfig.authSolution !== "none") {
-        partialConfig.stripeEnabled = await confirm({
-          message: "Do you want to add Stripe for payments?",
-        });
+        partialConfig.adminEnabled =
+          options.admin ??
+          (await confirm({
+            message:
+              "Do you want to add an admin dashboard with role-based authorization?",
+            default: true,
+          }));
       }
-      partialConfig.darkModeEnabled = await confirm({
-        message: "Do you want to add a dark mode toggle?",
-        default: true,
-      });
+      if (partialConfig.authSolution !== "none") {
+        partialConfig.stripeEnabled =
+          options.stripe ??
+          (await confirm({
+            message: "Do you want to add Stripe for payments?",
+          }));
+      }
+      partialConfig.darkModeEnabled =
+        options.darkMode ??
+        (await confirm({
+          message: "Do you want to add a dark mode toggle?",
+          default: true,
+        }));
 
       // process
 
@@ -230,7 +337,9 @@ program
           latest: completeConfig.latest,
         }
       );
-      const dbDialectStrategy = dialectStrategyFactory(partialConfig.dbDialect);
+      const dbDialectStrategy = dialectStrategyFactory(
+        partialConfig.dbDialect!
+      );
       const dbDialectProcessor = new DbDialectProcessor({
         dbDialect: completeConfig.dbDialect,
         install: options.install,
@@ -263,7 +372,7 @@ program
       }
       if (completeConfig.authSolution !== "none") {
         adminProcessor = new AdminProcessor({
-          packageManager: partialConfig.packageManager,
+          packageManager: partialConfig.packageManager!,
           install: options.install,
           latest: completeConfig.latest,
           dbDialect: completeConfig.dbDialect,

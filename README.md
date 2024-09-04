@@ -69,6 +69,12 @@ Start by creating a new Next.js project using `create-next-app`.
 npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-src-dir --no-import-alias
 ```
 
+Alternatively, you can use shadriz to generate a new Next.js project using the recommended settings:
+
+```
+npx shadriz@latest new my-app
+```
+
 ### Step 2: Run the CLI
 
 Run the `shadriz init` command to setup your project.
@@ -83,14 +89,21 @@ You will be asked a few questions to configure the app.
 
 ```
 ? Which package manager do you want to use? npm
+? Do you want to install latest packages or pinned packages? pinned
 ? Which database dialect would you like to use? pg
-? Which primary key generation strategy would you like to use? uuidv4
+? Which primary key generation strategy would you like to use? cuid2
 ? Which authentication solution do you want to use? authjs
 ? Which auth providers would you like to use? github, google, credentials
 ? Which session strategy would you like to use? database
 ? Do you want to add an admin dashboard with role-based authorization? yes
 ? Do you want to add Stripe for payments? yes
 ? Do you want to add a dark mode toggle? yes
+```
+
+Alternatively, you can also run the commnd non-interactively:
+
+```
+npx shadriz@latest init -p npm --latest --db-dialect pg -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe --dark-mode
 ```
 
 ### Step 4: Complete project configuration
