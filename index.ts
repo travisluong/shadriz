@@ -26,6 +26,8 @@ import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
 import packageShadrizJson from "./package-shadriz.json";
 
+const PINNED_NEXTJS_VERSION = packageShadrizJson.dependencies["next"];
+
 const VERSION = "2.1.0";
 
 const program = new Command();
@@ -36,12 +38,6 @@ program
     "shadriz - full stack framework next.js shadcn/ui and drizzle orm"
   )
   .version(VERSION);
-
-function commaSeparatedList(value: string, dummyPrevious: any) {
-  const authProviders = value.split(",");
-  for (const p of authProviders) {
-  }
-}
 
 program
   .command("new")
@@ -55,9 +51,12 @@ program
       "pnpm",
     ])
   )
-  .addOption(new Option("-l, --latest"))
+  .addOption(new Option("-l, --latest", "install the latest next.js version"))
+  .option(
+    "--no-latest",
+    `install the pinned version of next.js (${PINNED_NEXTJS_VERSION})`
+  )
   .action(async (name, options) => {
-    const pinnedVersion = packageShadrizJson.dependencies["next"];
     let version;
 
     const packageManager =
@@ -70,12 +69,12 @@ program
     const latest =
       options.latest ||
       (await select({
-        message: `Do you want to install the latest Next.js version or the pinned version ${pinnedVersion}?`,
+        message: `Do you want to install the latest Next.js version or the pinned version ${PINNED_NEXTJS_VERSION}?`,
         choices: [
           {
             name: "pinned",
             value: false,
-            description: `Installs the pinned Next.js version ${pinnedVersion}. More stable, but possibly obsolete.`,
+            description: `Installs the pinned Next.js version ${PINNED_NEXTJS_VERSION}. More stable, but possibly obsolete.`,
           },
           {
             name: "latest",
@@ -89,7 +88,7 @@ program
     if (latest) {
       version = "latest";
     } else {
-      version = pinnedVersion;
+      version = PINNED_NEXTJS_VERSION;
     }
 
     try {
