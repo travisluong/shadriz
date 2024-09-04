@@ -277,7 +277,6 @@ program
           choices: [{ value: "authjs" }, { value: "none" }],
         }));
 
-      console.log(options.authProviders);
       if (partialConfig.authSolution === "authjs") {
         partialConfig.authProviders =
           options.authProviders ||
