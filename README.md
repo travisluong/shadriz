@@ -25,29 +25,31 @@ The code is yours.
 
 ### Technology curation
 
-Many decisions happen at the beginnings of projects. For example, a developer must decide on: a web framework, UI component library, object relational mapper (ORM), CSS framework, authentication library, validation library, payment solution, and others relevant to the project. This can be time consuming and lead to decision fatigue.
+Many decisions happen at the beginnings of projects. For example, a developer must decide on: a web framework, a database, UI component library, object relational mapper (ORM), CSS framework, authentication solution, validation library, payment solution, and other technologies relevant to the project.
 
-shadriz aims to provide relief by offering a preferred list of technologies integrated together to be used as a foundation for web app projects.
+This can be time consuming and lead to decision fatigue. This is also known as JavaScript fatigue, a phenomenon describing the overwhelming array of technology choices in the JavaScript ecosystem.
+
+shadriz offers a preferred list of technologies integrated together to be used as a foundation for web app projects.
 
 ### Configuration automation
 
 Typically, once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is integrated properly into the framework code, and that integrations with external services are working.
 
-Developers will often use libraries to handle common functionalities such as authentication, authorization, and payments. However, setting these up can be challenging even for a seasoned developer. shadriz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadriz will write all the code necessary for the selected features.
+Developers will often use libraries to handle common functionality such as authentication, data validations, and payments. However, setting these up can be challenging even for an experienced developer. shadriz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadriz will write all the code necessary for the selected features.
 
-By having a simple working example, you'll save time not having to build it entirely from scratch. You can customize the generated code to fit your project requirements.
+By having a simple working example, you'll save time not having to build it entirely from scratch. You can customize the generated code to fit your project requirements. Additionally, shadriz will display a checklist of tasks to complete the initial configuration.
 
 The `init` command is intended to be run once at the beginning of a new project.
 
-### Boilerplate automation
+### Scaffold automation
 
-Once the technologies are selected and configured, the next step is to begin building the actual app itself. Typically, this involves a number of tasks including creating the database tables, API endpoints or server actions, user interface, layouts, pages, and web forms. This process may involve referencing documentation and writing the boilerplate or "skeleton" code that the rest of the app will be built upon. This too is a time consuming process.
+Once the technologies are selected and configured, the next step is to begin building the actual app itself. Typically, this involves a number of tasks including creating the database tables, API endpoints or server actions, user interface, layouts, pages, and web forms. This process may involve referencing documentation and writing the "boilerplate" or "skeleton" code that the rest of the app will be built upon. This too is a time consuming process.
 
 shadriz provides a `scaffold` command to automate the entire process of setting up the initial "skeleton" code. You only have to provide the table name along with the columns and data types. shadriz will generate the database migration files, back end code, and front end code for the provided database schema.
 
 What is the purpose of the scaffolded code? It is to provide a fully working full stack Create Read Update Delete (CRUD) feature that you can use as a reference to build the rest of your app.
 
-The `scaffold` command is intended to be run as many times as you need to generate full stack features, typically at the beginning of a project.
+The `scaffold` command is intended to be run as many times as you need to generate full stack scaffolding, typically at the beginning of a project. This automation is heavily inspired by the Ruby on Rails scaffold command.
 
 ## Tech stack
 
@@ -108,7 +110,7 @@ npx shadriz@latest init -p npm --latest --db-dialect pg -pk cuid2 --auth-solutio
 
 ### Step 4: Complete project configuration
 
-After initialization, you will be prompted to complete a few additional tasks depending on the options you chose. For example:
+After initialization, you will be prompted to complete a few additional checklist items depending on the options you chose. For example:
 
 - Update the database url in `.env.local`.
 - Run database migrations.
@@ -156,12 +158,12 @@ integer, real, text, boolean, bigint
 
 shadriz supports the following primary key generation strategies:
 
-- `cuid2` - Uses @paralleldrive/cuid2 package
-- `uuidv7` - Uses the uuidv7 package
-- `uuidv4` - Uses crypto.randomUUID
-- `nanoid` - Uses the nanoid package
+- `cuid2` - Uses the `@paralleldrive/cuid2` package
+- `uuidv7` - Uses the `uuidv7` package
+- `uuidv4` - Uses `crypto.randomUUID`
+- `nanoid` - Uses the `nanoid` package
 
-The strategy that you chose during the `init` process will be saved in `shadriz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
+The strategy that you choose during the `init` process will be saved in `shadriz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
 
 ## Scaffold command examples
 
@@ -202,11 +204,7 @@ shadriz supports the following special data types:
 Example:
 
 ```bash
-# file upload
-npx shadriz@latest scaffold user_upload -c pdf:file description:text
-
-# image upload
-npx shadriz@latest scaffold user_profile -c image:avatar description:text
+npx shadriz@latest scaffold media -c pdf:file thumbnail:image description:text
 ```
 
 ## Naming conventions
@@ -223,7 +221,11 @@ If Auth.js was enabled during initialization, you will be able to scaffold using
 
 If the Admin dashboard was enabled during initialization, you will be able to scaffold using an `admin` authorization level. The pages will be put into the `(admin)` route group. These pages along with the server actions will require a user with the `admin` role to access.
 
-A script is provided to grant users the admin role. Example: `npx tsx scripts/grant-admin.ts shadriz@example.com`.
+shadriz provides a `script/create-user.ts` script to create test users. This script is only generated if `credentials` is chosen as a provider.
+
+In addition, shadriz provides a `SESSION_STRATEGY` variable in `auth.ts` that allows you to use either the `jwt` or `database` session strategy with any auth provider, including `credentials`. You can easily switch strategy with one line of code.
+
+A script is provided to grant users the admin role. Here is an example on how to execute the script: `npx tsx scripts/grant-admin.ts shadriz@example.com`.
 
 Additional roles can be added to the `users_roles` table according to project needs. Additional access control functions can be added to `lib/authorization.ts` and used throughout the application.
 
@@ -267,17 +269,23 @@ You own the code so you can customize it according to your project requirements.
 
 Boilerplates go obsolete fast. Within a few months, many of your dependencies may already be behind the latest version.
 
-That is why shadriz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more.
+That is why shadriz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn components, Auth.js, Stripe, TailwindCSS, Zod, and more.
 
 If you prefer a more stable version, choose the `pinned` option during initialization and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
 
 The other problem with boilerplates is that it is usually a static hard-coded repo. It can't generate unique database schemas and user interfaces specific to your project.
 
-## Technology Inspiration
+## Philosophy
+
+Minimalism is a core tenet of shadriz.
+
+shadriz aims to keep the top-level dependencies to a minimum, and only uses what would be "common" to most full stack web applications.
+
+shadriz only provides an opinionated foundation to be built upon. It is up to the developer to build the interesting parts.
 
 ### Ruby on Rails
 
-**Automation** and **convention over configuration** are two philosophies of Ruby on Rails that shadriz aims to follow.
+**Automation** and **convention over configuration** are two philosophies of Ruby on Rails that shadriz aligns with.
 
 Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. Specially, the `shadriz scaffold` command was modeled after the `rails scaffold` command.
 
@@ -287,27 +295,31 @@ Many of the naming conventions seen in shadriz follow common standards in TypeSc
 
 shadriz generates Next.js and React code that uses full stack development patterns recommended by the Next.js creators, including **server components and server actions**.
 
+Many of the patterns used in shadriz are based on the official Next.js documentation and tutorial.
+
 Next.js provides many conveniences out of the box, such as file system routing, server side rendering, code bundling, and more.
 
-### shadcn/ui
+### shadcn
 
-**Non-dependency and customizability** are the two core ideas of shadcn/ui which shadriz aims to follow, the tool that copies and paste beautifully styled components into your projects.
+**Non-dependency and customizability** are the two core principles of shadcn which shadriz aims to uphold, the tool that copies and pastes beautifully styled components into your projects.
 
 Similarly, shadriz essentially generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
 
-This approach strikes the perfect balance of good default styles combined with flexibility of customization.
+shadriz is never installed into your project as a dependency. A `shadriz.config.json` file is created, however that can be removed when your project no longer requires any scaffolding.
+
+This approach strikes the perfect balance of good defaults combined with flexibility of customization.
 
 ### Drizzle ORM
 
-shadriz uses Drizzle ORM for the best-of-both worlds of **sql-like and relational queres**, as well as automatic **schema generation and database migrations**.
+shadriz uses Drizzle ORM for the best-of-both worlds of **sql-like and relational queres**, as well as **schema generation and database migrations**.
 
-shadriz takes the automations one step further by generating the configuration files required to start using Drizzle ORM, as well as the database schemas and migrations for the full stack scaffolds.
+shadriz takes the automations one step further by generating the configuration files required to start using Drizzle ORM, as well as the database schemas and migrations for the full stack scaffolding.
 
 ### TailwindCSS
 
-shadriz is based on shadcn/ui which has it's styling based on TailwindCSS, a CSS framework which provides reusable utility classes.
+shadriz is based on shadcn which has it's styling based on TailwindCSS, a CSS framework which provides reusable utility classes.
 
-Benefits of TailwindCSS include **development speed and composability**.
+Benefits of TailwindCSS include **development speed and composability**, qualities that shadriz also aspires to achieve.
 
 TailwindCSS simplifies and improves scalability of styling by coupling markup with style. While this may seem counter-intuitive to the idea of separation-of-concern, the trade-offs are usually worth it in most projects.
 
@@ -315,13 +327,13 @@ Furthermore, TailwindCSS is enabled by default in Next.js projects and has becom
 
 ### Auth.js
 
-shadriz uses Auth.js for it's authentication solution. However, running the Auth.js automation is optional, as some applications may not need authentication or a different auth solution is preferred.
+Open Source. Full Stack. Own Your Data.
 
-With one command, you can have authentication mostly setup and configured. Just add the client ids and secrets to the `.env.local` file and you're good to go.
+That's the tagline of Auth.js. shadriz favors proven, open-source solutions that let you maintain control over your data. Similarly, with shadriz, you own not only your data but also your code.
 
-shadriz also provides a `script/create-user.ts` script to create test users. This script is only generated if `credentials` is chosen as a provider.
+However, running the Auth.js automation is optional, as some applications may not need authentication or a different auth solution is preferred.
 
-In addition, shadriz provides code that allows you to use either the `jwt` or `database` session strategy with any auth provider, including `credentials`. You can easily switch strategy with one line of code.
+Note that certain automations including `admin` and `stripe` require Auth.js to be enabled. If Auth.js is not enabled, you'll still be able to generate public scaffolding.
 
 ### Zod
 
