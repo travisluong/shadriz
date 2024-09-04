@@ -25,10 +25,11 @@ import fs from "fs";
 import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
 import packageShadrizJson from "./package-shadriz.json";
+import packageJson from "./package.json";
 
 const PINNED_NEXTJS_VERSION = packageShadrizJson.dependencies["next"];
 
-const VERSION = "2.1.0";
+const VERSION = packageJson["version"];
 
 const program = new Command();
 
