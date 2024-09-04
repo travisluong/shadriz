@@ -1,5 +1,5 @@
         <div>
-          <Label>{{column}}</Label>
+          <Label className="mr-2">{{column}}</Label>
           <Checkbox name="{{column}}" />
           {state.errors?.{{column}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>

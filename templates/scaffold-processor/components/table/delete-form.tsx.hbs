@@ -13,7 +13,7 @@ export default function {{tableObj.singularPascalCase}}DeleteForm({ data }: { da
 
   return (
     <div>
-      <form action={dispatch}>
+      <form action={dispatch} className="flex flex-col gap-2">
         <input type="hidden" name="id" value={data.id} />
         <div>
           <Label>id</Label>
