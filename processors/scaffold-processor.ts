@@ -79,7 +79,7 @@ export class ScaffoldProcessor {
     this.addUpdateForm();
     this.addDeleteForm();
     this.addTableComponent();
-    this.insertSchemaToSchemaFile();
+    this.insertSchemaToSchemaIndex();
     this.printCompletionMessage();
   }
   addSchema(): void {
@@ -499,7 +499,7 @@ export class ScaffoldProcessor {
     }
     return html;
   }
-  insertSchemaToSchemaFile() {
+  insertSchemaToSchemaIndex() {
     const tableObj = caseFactory(this.opts.table);
     if (
       checkIfTextExistsInFile(
@@ -531,25 +531,6 @@ export class ScaffoldProcessor {
   }
   isImageType(arr: string[]) {
     return arr[1] === "image";
-  }
-  validateConstraint(constraint: string): boolean {
-    if (constraint === undefined) {
-      return true;
-    }
-    if (constraint in this.commonConstraintMap) {
-      return true;
-    }
-    if (constraint in this.opts.dbDialectStrategy.dialectConstraintsMap) {
-      return true;
-    }
-    return false;
-  }
-  validateConstraints(constraints: string[]) {
-    for (const constraint of constraints) {
-      if (!this.validateConstraint(constraint)) {
-        throw new Error("invalid constraint " + constraint);
-      }
-    }
   }
   authorizationRouteGroup() {
     switch (this.opts.authorizationLevel) {

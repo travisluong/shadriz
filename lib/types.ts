@@ -111,7 +111,6 @@ export interface DbDialectStrategy {
   drizzleDbCorePackage: string;
   tableConstructor: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
-  dialectConstraintsMap: { [key: string]: string };
   pkStrategyTemplates: Record<PkStrategy, string>;
   createdAtTemplate: string;
   updatedAtTemplate: string;

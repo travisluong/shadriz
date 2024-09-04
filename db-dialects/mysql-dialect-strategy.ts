@@ -324,11 +324,6 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
   };
   drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
   tableConstructor: string = "mysqlTable";
-  dialectConstraintsMap = {
-    "pk-auto": ".primaryKey().autoincrement()",
-    "default-now": ".defaultNow()",
-    "default-uuid": ".$defaultFn(() => sql`(uuid())`)",
-  };
   dialect: DbDialect = "mysql";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
 }

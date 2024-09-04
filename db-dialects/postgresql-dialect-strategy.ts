@@ -302,10 +302,6 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
   };
   drizzleDbCorePackage: string = "drizzle-orm/pg-core";
   tableConstructor: string = "pgTable";
-  dialectConstraintsMap = {
-    "default-now": ".defaultNow()",
-    "default-random": ".defaultRandom()",
-  };
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
 }
