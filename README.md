@@ -194,6 +194,8 @@ npx shadriz@latest scaffold post -c title:text
 npx shadriz@latest scaffold comment -c post:references content:text
 ```
 
+shadriz is unopinionated on how to handle the user interface for foreign key relationships and leaves that up to the developer. Therefore, the generated UI for foreign keys will be kept simple as a plain input field. A blank field will result in a `null` value being saved.
+
 ## File and image uploads
 
 shadriz supports the following special data types:
