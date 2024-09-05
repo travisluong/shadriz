@@ -225,7 +225,7 @@ If the Admin dashboard was enabled during initialization, you will be able to sc
 
 shadriz provides a `script/create-user.ts` script to create test users. This script is only generated if `credentials` is chosen as a provider.
 
-In addition, shadriz provides a `SESSION_STRATEGY` variable in `auth.ts` that allows you to use either the `jwt` or `database` session strategy with any auth provider, including `credentials`. You can easily switch strategy with one line of code.
+In addition, shadriz provides a `SESSION_STRATEGY` variable in `auth.ts` that allows you to use either the `jwt` or `database` session strategy with any auth provider. You can easily switch strategy with one line of code. However, if you only use `credentials`, Auth.js will limit you to `jwt` strategy.
 
 A script is provided to grant users the admin role. Here is an example on how to execute the script: `npx tsx scripts/grant-admin.ts shadriz@example.com`.
 
