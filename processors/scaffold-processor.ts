@@ -142,6 +142,9 @@ export class ScaffoldProcessor {
     for (const dataType of dataTypeSet) {
       code += `  ${dataType},\n`;
     }
+    if (this.opts.dbDialectStrategy.timestampImport) {
+      code += `  ${this.opts.dbDialectStrategy.timestampImport},\n`;
+    }
     code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
     code += `import { createInsertSchema } from "drizzle-zod";\n`;
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;

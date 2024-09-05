@@ -1,3 +1,4 @@
+import { caseFactory } from "../lib/case-utils";
 import { formDataUtils } from "../lib/form-data-utils";
 import {
   DataTypeStrategyMap,
@@ -256,7 +257,8 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     dataTypeOverride: "text",
     getKeyValueStrForSchema: function (opts: { columnName: string }): string {
-      return `${opts.columnName}_id: text(\"${opts.columnName}_id\").references(() => ${opts.columnName}.id)`;
+      const tableObj = caseFactory(opts.columnName);
+      return `${tableObj.singularSnakeCase}_id: text(\"${tableObj.singularSnakeCase}_id\").references(() => ${tableObj.pluralCamelCase}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.columnName);
@@ -304,4 +306,5 @@ export class PostgresqlDialectStrategy implements DbDialectStrategy {
   tableConstructor: string = "pgTable";
   dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
   dialect: DbDialect = "postgresql";
+  timestampImport = "timestamp";
 }

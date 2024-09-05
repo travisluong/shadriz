@@ -1,3 +1,4 @@
+import { caseFactory } from "../lib/case-utils";
 import { formDataUtils } from "../lib/form-data-utils";
 import {
   DataTypeStrategyMap,
@@ -277,7 +278,8 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: { columnName: string }): string {
-      return `${opts.columnName}_id: varchar(\"${opts.columnName}_id\", { length: 255 }).references(() => ${opts.columnName}.id)`;
+      const tableObj = caseFactory(opts.columnName);
+      return `${tableObj.singularSnakeCase}_id: varchar(\"${tableObj.singularSnakeCase}_id\", { length: 255 }).references(() => ${tableObj.pluralCamelCase}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.columnName);
@@ -326,4 +328,5 @@ export class MysqlDialectStrategy implements DbDialectStrategy {
   tableConstructor: string = "mysqlTable";
   dialect: DbDialect = "mysql";
   dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
+  timestampImport = "timestamp";
 }
