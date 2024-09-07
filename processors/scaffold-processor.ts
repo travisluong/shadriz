@@ -139,11 +139,11 @@ export class ScaffoldProcessor {
     }
     let code = "import {\n";
     code += `  ${this.opts.dbDialectStrategy.tableConstructor},\n`;
+    if (this.opts.dbDialectStrategy.timestampImport) {
+      dataTypeSet.add(this.opts.dbDialectStrategy.timestampImport);
+    }
     for (const dataType of dataTypeSet) {
       code += `  ${dataType},\n`;
-    }
-    if (this.opts.dbDialectStrategy.timestampImport) {
-      code += `  ${this.opts.dbDialectStrategy.timestampImport},\n`;
     }
     code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
     code += `import { createInsertSchema } from "drizzle-zod";\n`;
@@ -157,6 +157,7 @@ export class ScaffoldProcessor {
     if (referenceImportsCode !== "") {
       code += "\n" + referenceImportsCode;
     }
+
     return code;
   }
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
