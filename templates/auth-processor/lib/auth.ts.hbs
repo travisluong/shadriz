@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { Provider } from "next-auth/providers";
 import { eq } from "drizzle-orm";
-import { sessions, users } from "@/schema/users";
+import { accounts, sessions, users, verificationTokens } from "@/schema/users";
 import { cookies } from "next/headers";
 import { encode, decode } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";
@@ -15,7 +15,12 @@ type SessionStrategy = "jwt" | "database";
 const SESSION_STRATEGY: SessionStrategy = "{{sessionStrategy}}";
 
 const adapter = {
-  ...DrizzleAdapter(db),
+  ...DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }),
   createUser: async (data: any) => {
     const newUser = {
       {{pkKeyValTemplate}}

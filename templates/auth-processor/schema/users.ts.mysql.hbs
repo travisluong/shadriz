@@ -9,11 +9,11 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters"
 {{pkStrategyImport}}
 
-export const users = mysqlTable("user", {
+export const users = mysqlTable("users", {
   {{pkText}}
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("emailVerified", {
+  emailVerified: timestamp("email_verified", {
     mode: "date",
     fsp: 3,
   }),
@@ -27,16 +27,16 @@ export const users = mysqlTable("user", {
 })
 
 export const accounts = mysqlTable(
-  "account",
+  "accounts",
   {
-    userId: varchar("userId", { length: 255 })
+    userId: varchar("user_id", { length: 255 })
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: varchar("type", { length: 255 })
       .$type<AdapterAccountType>()
       .notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
     expires_at: int("expires_at"),
@@ -52,16 +52,16 @@ export const accounts = mysqlTable(
   })
 )
  
-export const sessions = mysqlTable("session", {
-  sessionToken: varchar("sessionToken", { length: 255 }).primaryKey(),
-  userId: varchar("userId", { length: 255 })
+export const sessions = mysqlTable("sessions", {
+  sessionToken: varchar("session_token", { length: 255 }).primaryKey(),
+  userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
  
 export const verificationTokens = mysqlTable(
-  "verificationToken",
+  "verification_tokens",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
     token: varchar("token", { length: 255 }).notNull(),
@@ -75,21 +75,21 @@ export const verificationTokens = mysqlTable(
 )
  
 export const authenticators = mysqlTable(
-  "authenticator",
+  "authenticators",
   {
-    credentialID: varchar("credentialID", { length: 255 }).notNull().unique(),
-    userId: varchar("userId", { length: 255 })
+    credentialID: varchar("credential_id", { length: 255 }).notNull().unique(),
+    userId: varchar("user_id", { length: 255 })
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
-    credentialPublicKey: varchar("credentialPublicKey", {
+    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
+    credentialPublicKey: varchar("credential_public_key", {
       length: 255,
     }).notNull(),
     counter: int("counter").notNull(),
-    credentialDeviceType: varchar("credentialDeviceType", {
+    credentialDeviceType: varchar("credential_device_type", {
       length: 255,
     }).notNull(),
-    credentialBackedUp: boolean("credentialBackedUp").notNull(),
+    credentialBackedUp: boolean("credential_backed_up").notNull(),
     transports: varchar("transports", { length: 255 }),
   },
   (authenticator) => ({
