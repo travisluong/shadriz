@@ -27,7 +27,7 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.plural
           <TableRow key={ {{tableObj.singularCamelCase}}.id }>
             <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
             {{#each columnNames}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this}}?.toString() }</TableCell>
             {{/each}}
             <TableCell className="justify-end flex gap-2">
               <a href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>

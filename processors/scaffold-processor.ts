@@ -188,12 +188,13 @@ export class ScaffoldProcessor {
   }
   addDetailView(): void {
     const tableObj = caseFactory(this.opts.table);
+    const columnNames = this.getColumnNames();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
         tableObj.pluralKebabCase
       }/[id]/page.tsx`,
-      data: { tableObj: tableObj },
+      data: { tableObj: tableObj, columnNames: columnNames },
     });
   }
   addEditView(): void {
@@ -447,9 +448,7 @@ export class ScaffoldProcessor {
       },
     });
   }
-  addTableComponent(): void {
-    const tableObj = caseFactory(this.opts.table);
-
+  getColumnNames() {
     const columnNames = [];
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
@@ -460,6 +459,11 @@ export class ScaffoldProcessor {
         columnNames.push(columnName);
       }
     }
+    return columnNames;
+  }
+  addTableComponent(): void {
+    const tableObj = caseFactory(this.opts.table);
+    const columnNames = this.getColumnNames();
 
     renderTemplate({
       inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",

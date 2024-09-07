@@ -16,11 +16,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     <div>
       <h1 className="text-3xl font-bold mb-6">{{tableObj.capitalCase}}</h1>
       <div>
-        {Object.entries({{tableObj.singularCamelCase}}Record).map((entry) => (
-          <p key={entry[0]}>
-            {entry[0]}: {JSON.stringify(entry[1])}
-          </p>
-        ))}
+        <p><strong>id:</strong> { {{tableObj.singularCamelCase}}Record.id }</p>
+        {{#each columnNames}}
+        <p><strong>{{this}}:</strong> { {{../tableObj.singularCamelCase}}Record.{{this}}?.toString() }</p>
+        {{/each}}
       </div>
     </div>
   );
