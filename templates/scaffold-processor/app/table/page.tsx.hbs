@@ -9,11 +9,11 @@ import { PlusIcon } from "@radix-ui/react-icons";
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { page: string; pageSize: string };
+  searchParams: { page: string; page_size: string };
 }) {
   const page = parseInt(searchParams.page) || 1;
   const pageIndex = page - 1;
-  const pageSize = parseInt(searchParams.pageSize) || 10;
+  const pageSize = parseInt(searchParams.page_size) || 10;
   const countRecords = await db.select({ value: count() }).from({{tableObj.pluralCamelCase}});
   const countRecord = countRecords[0];
   const totalPages = Math.ceil(countRecord.value / pageSize);

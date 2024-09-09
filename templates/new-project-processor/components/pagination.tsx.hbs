@@ -60,9 +60,9 @@ export default function Pagination({
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  function changeShowValue(str: string) {
+  function changePageSize(str: string) {
     const params = new URLSearchParams(searchParams);
-    params.set("pageSize", str);
+    params.set("page_size", str);
     router.push(`${pathname}?${params.toString()}`);
   }
 
@@ -123,7 +123,7 @@ export default function Pagination({
       </div>
       <div>
         <Select
-          onValueChange={changeShowValue}
+          onValueChange={changePageSize}
           defaultValue={pageSize.toString()}
         >
           <SelectTrigger className="w-[120px]">

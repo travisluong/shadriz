@@ -215,9 +215,9 @@ npx shadriz@latest scaffold media -c pdf:file thumbnail:image description:text
 - Schema variable names are plural camel case: `fooBars`
 - Table names are plural snake case: `foo_bars`
 - File names are singular or plural kebab case: `foo-bar` or `foo-bars`
-- Foreign keys are singular snake case with `_id` appended: `foo_bar_id`
+- Foreign keys are singular snake case: `foo_bar_id`
 - URL pathnames are singular or plural kebab case: `foo-bar` or `foo-bars`.
-- Query string parameters are singular or plural camel case: `fooBar` or `fooBars`.
+- Query string parameters are singular or plural snake case: `foo_bar` or `foo_bars`.
 
 ## Auth
 
