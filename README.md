@@ -108,7 +108,7 @@ Alternatively, you can also run the command non-interactively:
 npx shadriz@latest init -p npm --latest --db-dialect pg -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe --dark-mode
 ```
 
-### Step 4: Complete project configuration
+### Step 4: Project checklist
 
 After initialization, you will be prompted to complete a few additional checklist items depending on the options you chose. For example:
 
