@@ -291,7 +291,7 @@ shadriz only provides an opinionated foundation to be built upon. It is up to th
 
 **Automation** and **convention over configuration** are two philosophies of Ruby on Rails that shadriz aligns with.
 
-Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. Specially, the `shadriz scaffold` command was modeled after the `rails scaffold` command.
+Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. Specifically, the `shadriz scaffold` command was modeled after the `rails scaffold` command.
 
 Many of the naming conventions seen in shadriz follow common standards in TypeScript projects. Having standard conventions for code style will prevent wasted time deciding on subjective preferences. Furthermore, having consistent naming conventions improves readability of code.
 
