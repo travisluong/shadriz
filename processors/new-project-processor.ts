@@ -84,12 +84,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
     const version = packageJson["version"];
 
     renderTemplate({
-      inputPath: "new-project-processor/app/(public)/docs/page.tsx.hbs",
-      outputPath: "app/(public)/docs/page.tsx",
-      data: { readme: html, toc: toc, version: version },
-    });
-
-    renderTemplate({
       inputPath: "new-project-processor/app/page.tsx.hbs",
       outputPath: "app/page.tsx",
     });
@@ -117,11 +111,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "new-project-processor/lib/file-utils.ts.hbs",
       outputPath: "lib/file-utils.ts",
-    });
-
-    renderTemplate({
-      inputPath: "new-project-processor/styles/docs.css",
-      outputPath: "styles/docs.css",
     });
 
     renderTemplateIfNotExists({
