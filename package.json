@@ -11,7 +11,7 @@
     "start": "node dist/index.js",
     "build-docs": "tsx scripts/build-docs"
   },
-  "author": "fullstackbook",
+  "author": "travisluong",
   "license": "MIT",
   "description": "a full stack framework next.js shadcnui and drizzle orm",
   "dependencies": {
