@@ -58,7 +58,7 @@ const authStrategyMap: AuthStrategyMap = {
     authTemplatePath: "auth-processor/lib/auth.ts.github.hbs",
     envTemplatePath: "auth-processor/lib/auth.ts.github.env.hbs",
     printCompletionMessage: function (): void {
-      log.white("\nsetup github provider:");
+      log.log("\nsetup github provider:");
       log.dash(
         "go to github > settings > developer settings > oauth apps > new oauth app"
       );
@@ -73,7 +73,7 @@ const authStrategyMap: AuthStrategyMap = {
     authTemplatePath: "auth-processor/lib/auth.ts.google.hbs",
     envTemplatePath: "auth-processor/lib/auth.ts.google.env.hbs",
     printCompletionMessage: function (): void {
-      log.white("\nsetup google provider:");
+      log.log("\nsetup google provider:");
       log.dash(
         "go to console.cloud.google.com > new project > oauth consent screen + 2.0 client"
       );
@@ -90,7 +90,7 @@ const authStrategyMap: AuthStrategyMap = {
     dependencies: ["bcrypt"],
     devDependencies: ["@types/bcrypt"],
     printCompletionMessage: function (): void {
-      log.white("\ncreate test user for credentials provider:");
+      log.log("\ncreate test user for credentials provider:");
       log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
     },
     textToSearchInEnv: "",
@@ -100,7 +100,7 @@ const authStrategyMap: AuthStrategyMap = {
     authTemplatePath: "auth-processor/lib/auth.ts.postmark.hbs",
     envTemplatePath: "auth-processor/lib/auth.ts.postmark.env.hbs",
     printCompletionMessage: function (): void {
-      log.white("\nsetup postmark provider");
+      log.log("\nsetup postmark provider");
       log.dash("go to postmark > server > api tokens");
       log.dash("generate token");
       log.dash("change the from email in auth.ts");
@@ -114,7 +114,7 @@ const authStrategyMap: AuthStrategyMap = {
     envTemplatePath: "auth-processor/lib/auth.ts.nodemailer.env.hbs",
     dependencies: ["nodemailer"],
     printCompletionMessage: function (): void {
-      log.white("\nsetup nodemailer provider");
+      log.log("\nsetup nodemailer provider");
       log.dash("update EMAIL_SERVER in .env.local");
       log.dash("update EMAIL_FROM in .env.local");
     },

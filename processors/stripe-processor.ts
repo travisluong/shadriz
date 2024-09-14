@@ -156,27 +156,27 @@ export class StripeProcessor implements ShadrizProcessor {
   printCompletionMessage() {
     log.checklist("stripe checklist");
 
-    log.white("\nstripe setup:");
+    log.log("\nstripe setup:");
     log.dash("go to stripe > developers > api keys");
     log.dash("update NEXT_STRIPE_PUBLISHABLE_KEY in .env.local");
     log.dash("update STRIPE_SECRET_KEY in .env.local");
 
-    log.white("\nstripe webhook setup:");
+    log.log("\nstripe webhook setup:");
     log.dash("go to stripe > developers > webhooks");
     log.dash("update STRIPE_WEBHOOK_SECRET in .env.local");
 
-    log.white("\nstart local stripe listener:");
+    log.log("\nstart local stripe listener:");
     log.cmd("stripe login");
     log.cmd("stripe listen --forward-to localhost:3000/api/webhook");
 
-    log.white("\ntest stripe webhook:");
+    log.log("\ntest stripe webhook:");
     log.cmd("stripe trigger payment_intent.succeeded");
     log.cmd("stripe trigger --help");
 
-    log.white("\ncreate products in stripe and db:");
+    log.log("\ncreate products in stripe and db:");
     log.cmd("npx tsx scripts/create-price.ts");
 
-    log.white("\nsave customer portal settings:");
+    log.log("\nsave customer portal settings:");
     log.dash("https://dashboard.stripe.com/test/settings/billing/portal");
   }
 }

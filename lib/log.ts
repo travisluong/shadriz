@@ -17,16 +17,16 @@ export const log = {
     console.log(chalk.bgYellow(str));
   },
 
-  white(str: string) {
-    console.log(chalk.white(str));
+  log(str: string) {
+    console.log(str);
   },
 
   cmd(str: string) {
-    console.log(chalk.gray("$ ") + chalk.white(str));
+    console.log(chalk.gray("$ ") + str);
   },
 
   dash(str: string) {
-    console.log(chalk.gray("- ") + chalk.white(str));
+    console.log(chalk.gray("- ") + str);
   },
 
   reminder() {

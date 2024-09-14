@@ -72,7 +72,7 @@ export class AdminProcessor implements ShadrizProcessor {
   printCompletionMessage() {
     log.checklist("admin checklist");
 
-    log.white("\ngrant admin privilege:");
+    log.log("\ngrant admin privilege:");
     log.cmd("npx tsx scripts/grant-admin.ts shadriz@example.com");
   }
 }
