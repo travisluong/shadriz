@@ -17,7 +17,7 @@ async function main() {
     },
   });
   renderTemplate({
-    inputPath: "new-project-processor/styles/docs.css",
+    inputPath: "docs/style.css",
     outputPath: "docs/style.css",
   });
 }

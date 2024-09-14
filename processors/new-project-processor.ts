@@ -7,9 +7,7 @@ import {
   renderTemplateIfNotExists,
   spawnCommand,
 } from "../lib/utils";
-import { getReadme, getTableOfContents } from "../lib/markdown";
 import packageShadrizJson from "../package-shadriz.json";
-import packageJson from "../package.json";
 
 export class NewProjectProcessor implements ShadrizProcessor {
   opts: NewProjectProcessorOpts;
@@ -79,10 +77,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
   }
 
   async render() {
-    const html = await getReadme();
-    const toc = await getTableOfContents();
-    const version = packageJson["version"];
-
     renderTemplate({
       inputPath: "new-project-processor/app/page.tsx.hbs",
       outputPath: "app/page.tsx",

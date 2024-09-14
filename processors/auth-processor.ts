@@ -366,8 +366,8 @@ export class AuthProcessor implements ShadrizProcessor {
   addAuthTrustHostToEnv() {
     appendToFileIfTextNotExists(
       ".env.local",
-      "AUTH_TRUST_HOST=http://localhost:3000\n",
-      "AUTH_TRUST_HOST=http://localhost:3000"
+      "\nAUTH_TRUST_HOST=http://localhost:3000",
+      "AUTH_TRUST_HOST="
     );
   }
 
