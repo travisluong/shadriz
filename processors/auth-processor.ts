@@ -175,8 +175,6 @@ export class AuthProcessor implements ShadrizProcessor {
       packageManager: this.opts.packageManager,
       latest: this.opts.latest,
     });
-
-    await this.appendAuthSecretToEnv();
   }
 
   async render() {
@@ -190,6 +188,8 @@ export class AuthProcessor implements ShadrizProcessor {
     this.addProfilePage();
     this.addSettingsPage();
     this.addAuthSchema();
+    this.addAuthTrustHostToEnv();
+    this.appendAuthSecretToEnv();
   }
 
   validateOptions() {
@@ -231,12 +231,12 @@ export class AuthProcessor implements ShadrizProcessor {
     }
   }
 
-  async appendAuthSecretToEnv() {
-    if (this.opts.packageManager === "pnpm") {
-      await spawnCommand("pnpm dlx auth secret");
-    } else if (this.opts.packageManager === "npm") {
-      await spawnCommand("npx auth secret");
-    }
+  appendAuthSecretToEnv() {
+    appendToFileIfTextNotExists(
+      ".env.local",
+      `\nAUTH_SECRET=secret`,
+      "AUTH_SECRET="
+    );
   }
 
   addAuthConfig() {
@@ -361,6 +361,14 @@ export class AuthProcessor implements ShadrizProcessor {
         updatedAtTemplate: this.opts.dbDialectStrategy.updatedAtTemplate,
       },
     });
+  }
+
+  addAuthTrustHostToEnv() {
+    appendToFileIfTextNotExists(
+      ".env.local",
+      "AUTH_TRUST_HOST=http://localhost:3000\n",
+      "AUTH_TRUST_HOST=http://localhost:3000"
+    );
   }
 
   printCompletionMessage() {

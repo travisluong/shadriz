@@ -127,5 +127,10 @@ export class NewProjectProcessor implements ShadrizProcessor {
       inputPath: "new-project-processor/components/pagination.tsx.hbs",
       outputPath: "components/pagination.tsx",
     });
+
+    renderTemplate({
+      inputPath: "new-project-processor/.eslintrc.json.hbs",
+      outputPath: ".eslintrc.json",
+    });
   }
 }

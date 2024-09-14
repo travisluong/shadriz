@@ -10,12 +10,12 @@ const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 export async function POST(req: Request) {
   const session = await auth();
 
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return Response.json({ message: "unauthenticated" }, { status: 401 });
   }
 
   const userRecord = await db.query.users.findFirst({
-    where: eq(users.id, session?.user.id!),
+    where: eq(users.id, session.user.id),
   });
 
   const returnUrl = `${req.headers.get("origin")}/account`;

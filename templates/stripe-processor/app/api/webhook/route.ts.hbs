@@ -134,7 +134,7 @@ async function handleInvoicePaid(event: any) {
   const total = event.data.object.total;
   const stripeCustomerId = event.data.object.customer;
 
-  for (let d of data) {
+  for (const d of data) {
     const stripeProductId = d.price.product;
     const productRecord = await db.query.products.findFirst({
       where: eq(products.stripe_product_id, stripeProductId),

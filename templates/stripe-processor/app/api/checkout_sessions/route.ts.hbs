@@ -11,12 +11,12 @@ const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 export async function POST(req: Request) {
   const session = await auth();
 
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     redirect("/signin");
   }
 
   const userRecord = await db.query.users.findFirst({
-    where: eq(users.id, session?.user.id!),
+    where: eq(users.id, session.user.id),
   });
 
   if (!userRecord) {

@@ -27,12 +27,8 @@ export const metadata: Metadata = {
 export default async function Page() {
   const session = await auth();
 
-  if (!session) {
+  if (!session?.user?.id) {
     redirect("/signin");
-  }
-
-  if (!session.user) {
-    throw new Error("user not found");
   }
 
   const orderRecord = await db
@@ -40,7 +36,7 @@ export default async function Page() {
     .from(orders)
     .innerJoin(products, eq(orders.product_id, products.id))
     .innerJoin(users, eq(users.id, orders.user_id))
-    .where(eq(users.id, session?.user.id!));
+    .where(eq(users.id, session.user.id));
 
   if (!session) {
     redirect("/signin");
