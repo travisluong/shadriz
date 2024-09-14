@@ -42,6 +42,6 @@ export const log = {
   },
 
   checklist(str: string) {
-    console.log("\n📋 " + chalk.yellowBright(str));
+    console.log("\n📋 " + chalk.inverse.bold(str));
   },
 };
