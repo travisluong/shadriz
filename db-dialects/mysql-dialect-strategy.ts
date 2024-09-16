@@ -295,7 +295,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.file(opts.columnName);
     },
   },
   image: {
@@ -308,7 +308,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.image(opts.columnName);
     },
   },
 };

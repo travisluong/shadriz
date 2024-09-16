@@ -146,7 +146,7 @@ export class ScaffoldProcessor {
       code += `  ${dataType},\n`;
     }
     code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
-    code += `import { createInsertSchema } from "drizzle-zod";\n`;
+    code += `import { createInsertSchema, createSelectSchema } from "drizzle-zod";\n`;
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
     const dependsOnSql = columns.filter((column) =>
       column.indexOf("sql")
@@ -242,11 +242,7 @@ export class ScaffoldProcessor {
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
       const tableObj = caseFactory(columnName);
-      if (
-        dataType !== "file" &&
-        dataType !== "image" &&
-        dataType !== "references"
-      ) {
+      if (dataType !== "references") {
         columns.push(columnName);
         continue;
       }
@@ -257,8 +253,6 @@ export class ScaffoldProcessor {
 
     const formDataKeyVal = this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !this.isFileType(arr))
-      .filter((arr) => !this.isImageType(arr))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
@@ -280,7 +274,7 @@ export class ScaffoldProcessor {
     const uploadColumnNames = this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
-      .map((arr) => arr[0]);
+      .map((arr) => caseFactory(arr[0]));
 
     const tableObj = caseFactory(this.opts.table);
 
@@ -304,11 +298,7 @@ export class ScaffoldProcessor {
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
       const tableObj = caseFactory(columnName);
-      if (
-        dataType !== "file" &&
-        dataType !== "image" &&
-        dataType !== "references"
-      ) {
+      if (dataType !== "references") {
         columns.push(columnName);
         continue;
       }
@@ -324,8 +314,6 @@ export class ScaffoldProcessor {
 
     const formDataKeyValArr = this.opts.columns
       .map((c) => c.split(":"))
-      .filter((arr) => !this.isFileType(arr))
-      .filter((arr) => !this.isImageType(arr))
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
@@ -354,7 +342,7 @@ export class ScaffoldProcessor {
     const uploadColumnNames = this.opts.columns
       .map((c) => c.split(":"))
       .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
-      .map((arr) => arr[0]);
+      .map((arr) => caseFactory(arr[0]));
 
     const tableObj = caseFactory(this.opts.table);
 

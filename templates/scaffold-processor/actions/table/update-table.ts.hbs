@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { partial{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 {{#if importFileUtils}}
@@ -43,7 +43,21 @@ export async function update{{tableObj.singularPascalCase}}(
   }
 {{/if}}
 
-  const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
+{{#each uploadColumnNames}}
+  const {{this.singularCamelCase}}File = formData.get("{{this.singularSnakeCase}}") as File;
+
+  let {{this.singularCamelCase}}UploadPath;
+
+  if ({{this.singularCamelCase}}File.size) {
+    {{this.singularCamelCase}}UploadPath = getUploadPath({
+      file: {{this.singularCamelCase}}File,
+      dir: "/uploads/{{../tableObj.pluralKebabCase}}/",
+    });
+    uploadFile({ file: {{this.singularCamelCase}}File, uploadPath: {{this.singularCamelCase}}UploadPath });
+  }
+{{/each}}
+
+  const validatedFields = partial{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
 
@@ -60,31 +74,9 @@ export async function update{{tableObj.singularPascalCase}}(
     };
   }
 
-  let data: Partial<{{tableObj.singularPascalCase}}> = {
-    {{#each columns}}
-    {{this}}: validatedFields.data.{{this}},
-    {{/each}}
-    {{updatedAtKeyValTemplate}}
-  };
-
-{{#each uploadColumnNames}}
-  const {{this}}File = formData.get("{{this}}") as File;
-
-  let {{this}}UploadPath;
-
-  if ({{this}}File.size) {
-    {{this}}UploadPath = getUploadPath({
-      file: {{this}}File,
-      dir: "/uploads/{{../tableObj.pluralKebabCase}}/",
-    });
-    data.{{this}} = {{this}}UploadPath;
-    uploadFile({ file: {{this}}File, uploadPath: {{this}}UploadPath });
-  }
-{{/each}}
-
   await db
     .update({{tableObj.pluralCamelCase}})
-    .set(data)
+    .set(validatedFields.data)
     .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
 
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");

@@ -43,6 +43,20 @@ export async function create{{tableObj.singularPascalCase}}(
   }
 {{/if}}
 
+{{#each uploadColumnNames}}
+  const {{this.singularCamelCase}}File = formData.get("{{this.singularSnakeCase}}") as File;
+
+  let {{this.singularCamelCase}}UploadPath;
+
+  if ({{this.singularCamelCase}}File.size) {
+    {{this.singularCamelCase}}UploadPath = getUploadPath({
+      file: {{this.singularCamelCase}}File,
+      dir: "/uploads/{{../tableObj.pluralKebabCase}}/",
+    });
+    uploadFile({ file: {{this.singularCamelCase}}File, uploadPath: {{this.singularCamelCase}}UploadPath });
+  }
+{{/each}}
+
   const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
@@ -54,29 +68,7 @@ export async function create{{tableObj.singularPascalCase}}(
     };
   }
 
-  let data: Partial<{{tableObj.singularPascalCase}}> = {
-    {{#each columns}}
-    {{this}}: validatedFields.data.{{this}},
-    {{/each}}
-  };
-
-{{#each uploadColumnNames}}
-
-  const {{this}}File = formData.get("{{this}}") as File;
-
-  let {{this}}UploadPath;
-
-  if ({{this}}File.size) {
-    {{this}}UploadPath = getUploadPath({
-      file: {{this}}File,
-      dir: "/uploads/{{../tableObj.pluralKebabCase}}/",
-    });
-    data.{{this}} = {{this}}UploadPath;
-    uploadFile({ file: {{this}}File, uploadPath: {{this}}UploadPath });
-  }
-{{/each}}
-
-  await db.insert({{tableObj.pluralCamelCase}}).values(data);
+  await db.insert({{tableObj.pluralCamelCase}}).values(validatedFields.data);
 
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");

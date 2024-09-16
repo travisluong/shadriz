@@ -95,7 +95,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.file(opts.columnName);
     },
   },
   image: {
@@ -108,7 +108,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.image(opts.columnName);
     },
   },
 };

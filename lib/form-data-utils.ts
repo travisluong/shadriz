@@ -1,3 +1,5 @@
+import { caseFactory } from "./case-utils";
+
 export const formDataUtils = {
   integer(col: string): string {
     return `    ${col}: parseInt(formData.get("${col}") as string),`;
@@ -29,5 +31,13 @@ export const formDataUtils = {
 
   references(col: string): string {
     return `    ${col}_id: (formData.get("${col}_id") as string) || null,`;
+  },
+
+  image(col: string): string {
+    return `    ${col}: ${caseFactory(col).singularCamelCase}UploadPath,`;
+  },
+
+  file(col: string): string {
+    return `    ${col}: ${caseFactory(col).singularCamelCase}UploadPath,`;
   },
 };
