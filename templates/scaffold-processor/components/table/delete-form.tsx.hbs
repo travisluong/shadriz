@@ -1,11 +1,11 @@
 "use client";
 
-import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalCase}}State } from "@/actions/{{tableObj.pluralKebabCase}}/delete-{{tableObj.singularKebabCase}}";
-import { Button } from "../ui/button";
+import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/delete-{{tableObj.singularKebabCase}}";
+import { Button } from "@/components/ui/button";
 import { useFormState } from "react-dom";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function {{tableObj.singularPascalCase}}DeleteForm({ data }: { data: {{tableObj.singularPascalCase}} }) {
   const initialState: Delete{{tableObj.singularPascalCase}}State = {};

@@ -183,6 +183,7 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         isAdmin: this.opts.authorizationLevel === "admin",
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -206,6 +207,7 @@ export class ScaffoldProcessor {
       }/[id]/edit/page.tsx`,
       data: {
         tableObj: tableObj,
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -218,6 +220,7 @@ export class ScaffoldProcessor {
       }/new/page.tsx`,
       data: {
         tableObj: tableObj,
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -230,6 +233,7 @@ export class ScaffoldProcessor {
       }/[id]/delete/page.tsx`,
       data: {
         tableObj: tableObj,
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -282,7 +286,7 @@ export class ScaffoldProcessor {
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/create-table.ts.hbs",
-      outputPath: `actions/${tableObj.pluralKebabCase}/create-${tableObj.singularKebabCase}.ts`,
+      outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/create-${tableObj.singularKebabCase}.ts`,
       data: {
         tableObj: tableObj,
         columns: columns,
@@ -356,7 +360,7 @@ export class ScaffoldProcessor {
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/update-table.ts.hbs",
-      outputPath: `actions/${tableObj.pluralKebabCase}/update-${tableObj.singularKebabCase}.ts`,
+      outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/update-${tableObj.singularKebabCase}.ts`,
       data: {
         tableObj: tableObj,
         columns: columns,
@@ -386,7 +390,7 @@ export class ScaffoldProcessor {
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/delete-table.ts.hbs",
-      outputPath: `actions/${tableObj.pluralKebabCase}/delete-${tableObj.singularKebabCase}.ts`,
+      outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/delete-${tableObj.singularKebabCase}.ts`,
       data: {
         tableObj: tableObj,
         isNotPublic: this.opts.authorizationLevel !== "public",
@@ -401,10 +405,11 @@ export class ScaffoldProcessor {
     const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/components/table/create-form.tsx.hbs",
-      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-create-form.tsx`,
+      outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-create-form.tsx`,
       data: {
         tableObj: tableObj,
         formControls: formControlsHtml,
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -431,10 +436,11 @@ export class ScaffoldProcessor {
     const formControlsHtml = this.getUpdateFormControlsHtml();
     renderTemplate({
       inputPath: "scaffold-processor/components/table/update-form.tsx.hbs",
-      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
+      outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
       data: {
         tableObj: tableObj,
         formControls: formControlsHtml,
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -442,9 +448,10 @@ export class ScaffoldProcessor {
     const tableObj = caseFactory(this.opts.table);
     renderTemplate({
       inputPath: "scaffold-processor/components/table/delete-form.tsx.hbs",
-      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-delete-form.tsx`,
+      outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-delete-form.tsx`,
       data: {
         tableObj: tableObj,
+        authorizationLevel: this.opts.authorizationLevel,
       },
     });
   }
@@ -467,7 +474,7 @@ export class ScaffoldProcessor {
 
     renderTemplate({
       inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",
-      outputPath: `components/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-table.tsx`,
+      outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-table.tsx`,
       data: {
         tableObj: tableObj,
         columnNames: columnNames,

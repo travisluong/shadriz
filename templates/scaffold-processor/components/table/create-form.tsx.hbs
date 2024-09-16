@@ -1,11 +1,11 @@
 "use client";
 
-import { create{{tableObj.singularPascalCase}}, Create{{tableObj.singularPascalCase}}State } from "@/actions/{{tableObj.pluralKebabCase}}/create-{{tableObj.singularKebabCase}}";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import { Checkbox } from "../ui/checkbox";
+import { create{{tableObj.singularPascalCase}}, Create{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/create-{{tableObj.singularKebabCase}}";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useFormState } from "react-dom";
 
 export default function {{tableObj.singularPascalCase}}CreateForm() {
