@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { id{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -39,9 +39,18 @@ export async function delete{{tableObj.singularPascalCase}}(
   }
 {{/if}}
 
-  const id = formData.get("id") as string;
+  const idField = id{{tableObj.singularPascalCase}}Schema.safeParse({
+    id: (formData.get("id") as string) || null,
+  });
 
-  await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, id));
+  if (!idField.success) {
+    return {
+      errors: idField.error.flatten().fieldErrors,
+      message: "error",
+    };
+  }
+
+  await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, idField.data.id));
 
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");

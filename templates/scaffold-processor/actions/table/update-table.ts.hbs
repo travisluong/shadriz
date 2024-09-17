@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { partial{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { id{{tableObj.singularPascalCase}}Schema, partial{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 {{#if importFileUtils}}
@@ -57,6 +57,17 @@ export async function update{{tableObj.singularPascalCase}}(
   }
 {{/each}}
 
+  const idField = id{{tableObj.singularPascalCase}}Schema.safeParse({
+    id: (formData.get("id") as string) || null,
+  });
+
+  if (!idField.success) {
+    return {
+      errors: idField.error.flatten().fieldErrors,
+      message: "invalid id",
+    };
+  }
+
   const validatedFields = partial{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
   });
@@ -64,24 +75,18 @@ export async function update{{tableObj.singularPascalCase}}(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "error",
-    };
-  }
-
-  if (!validatedFields.data.id) {
-    return {
-      message: "error",
+      message: "bad request",
     };
   }
 
   await db
     .update({{tableObj.pluralCamelCase}})
     .set(validatedFields.data)
-    .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+    .where(eq({{tableObj.pluralCamelCase}}.id, idField.data.id));
 
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + idField.data.id);
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + idField.data.id + "/edit");
 
   return {
     message: "success",
