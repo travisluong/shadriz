@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}}, {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 {{#if importFileUtils}}
