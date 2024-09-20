@@ -1,5 +1,5 @@
         <div>
-          <Label className="mr-2">{{columnCases.originalCamelCase}}</Label>
+          <Label className="mr-2">{{columnCases.originalCapitalCase}}</Label>
           <Checkbox name="{{columnCases.originalCamelCase}}" defaultChecked={ data.{{columnCases.originalCamelCase}} ?? false } />
           {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>

@@ -14,11 +14,11 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">{{tableObj.capitalCase}}</h1>
+      <h1 className="text-3xl font-bold mb-6">{{tableObj.originalCapitalCase}}</h1>
       <div>
-        <p><strong>id:</strong> { {{tableObj.singularCamelCase}}Record.id }</p>
-        {{#each columnNames}}
-        <p><strong>{{this}}:</strong> { {{../tableObj.singularCamelCase}}Record.{{this}}?.toString() }</p>
+        <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}Record.id }</p>
+        {{#each columnCases}}
+        <p><strong>{{this.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}Record.{{this.originalCamelCase}}?.toString() }</p>
         {{/each}}
       </div>
     </div>

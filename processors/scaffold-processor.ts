@@ -12,7 +12,7 @@ import {
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
-import { caseFactory } from "../lib/case-utils";
+import { caseFactory, Cases } from "../lib/case-utils";
 
 // lib/schema.ts
 // app/post/page.tsx
@@ -203,13 +203,13 @@ export class ScaffoldProcessor {
   }
   addDetailView(): void {
     const tableObj = caseFactory(this.opts.table);
-    const columnNames = this.getColumnNames();
+    const columnCases = this.getColumnCases();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
         tableObj.pluralKebabCase
       }/[id]/page.tsx`,
-      data: { tableObj: tableObj, columnNames: columnNames },
+      data: { tableObj: tableObj, columnCases: columnCases },
     });
   }
   addEditView(): void {
@@ -473,29 +473,30 @@ export class ScaffoldProcessor {
       },
     });
   }
-  getColumnNames() {
-    const columnNames = [];
+  getColumnCases(): Cases[] {
+    const arr = [];
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
-      const tableObj = caseFactory(columnName);
       if (dataType === "references") {
-        columnNames.push(tableObj.singularCamelCase + "Id");
+        const columnCases = caseFactory(columnName + "_id");
+        arr.push(columnCases);
       } else {
-        columnNames.push(tableObj.originalCamelCase);
+        const columnCases = caseFactory(columnName);
+        arr.push(columnCases);
       }
     }
-    return columnNames;
+    return arr;
   }
   addTableComponent(): void {
     const tableObj = caseFactory(this.opts.table);
-    const columnNames = this.getColumnNames();
+    const columnCases = this.getColumnCases();
 
     renderTemplate({
       inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-table.tsx`,
       data: {
         tableObj: tableObj,
-        columnNames: columnNames,
+        columnCases: columnCases,
         isAdmin: this.opts.authorizationLevel === "admin",
       },
     });

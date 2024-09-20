@@ -1,10 +1,10 @@
 import pluralize from "pluralize";
 import { Case } from "change-case-all";
 
-interface Cases {
+export interface Cases {
   original: string;
   originalCamelCase: string;
-  capitalCase: string;
+  originalCapitalCase: string;
   singularCapitalCase: string;
   pluralCapitalCase: string;
   singularSnakeCase: string;
@@ -27,7 +27,7 @@ export function caseFactory(str: string) {
   const obj = {
     original: str,
     originalCamelCase: Case.camel(str),
-    capitalCase: Case.capital(str),
+    originalCapitalCase: Case.capital(str),
     singularCapitalCase: Case.capital(pluralize.singular(str)),
     pluralCapitalCase: Case.capital(pluralize.plural(str)),
     singularSnakeCase: Case.snake(pluralize.singular(str)),

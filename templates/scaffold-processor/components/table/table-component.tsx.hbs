@@ -15,9 +15,9 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.plural
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>id</TableHead>
-          {{#each columnNames}}
-          <TableHead>{{this}}</TableHead>
+          <TableHead>Id</TableHead>
+          {{#each columnCases}}
+          <TableHead>{{this.originalCapitalCase}}</TableHead>
           {{/each}}
           <TableHead></TableHead>
         </TableRow>
@@ -26,8 +26,8 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.plural
         { {{tableObj.pluralCamelCase}}.map(({{tableObj.singularCamelCase}}) => (
           <TableRow key={ {{tableObj.singularCamelCase}}.id }>
             <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
-            {{#each columnNames}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this}}?.toString() }</TableCell>
+            {{#each columnCases}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.originalCamelCase}}?.toString() }</TableCell>
             {{/each}}
             <TableCell className="justify-end flex gap-2">
               <a href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
