@@ -223,9 +223,11 @@ shadriz uses the following naming conventions in the generated code. There may b
 - File names are singular or plural kebab case: `foo-bar` or `foo-bars`.
 - URL pathnames are singular or plural kebab case: `foo-bar` or `foo-bars`.
 - Query string parameters are singular or plural camel case: `fooBar` or `fooBars`.
-- UI table and column names are singular or plural capital case: `Foo Bar` or `Foo Bars`.
-- React array props are singular camel case with List suffix: `fooBarList={fooBarList}`.
-- React object props are singular camel case: `fooBar={fooBar}`.
+- UI table and column names are singular or plural capital case: `Foo Bar` or `Foo Bars`
+- Drizzle findMany variable names are singular camel case with List suffix: `fooBarList`.
+- Drizzle findFirst variable names are singular camel case: `fooBar`.
+- React array props are singular camel case with List suffix: `fooBarList`.
+- React object props are singular camel case: `fooBar`.
 
 ## Auth
 
