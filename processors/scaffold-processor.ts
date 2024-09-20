@@ -300,7 +300,7 @@ export class ScaffoldProcessor {
     const tableObj = caseFactory(this.opts.table);
 
     renderTemplate({
-      inputPath: "scaffold-processor/actions/table/create-table.ts.hbs",
+      inputPath: "scaffold-processor/actions/table/create-action.ts.hbs",
       outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/create-${tableObj.singularKebabCase}.ts`,
       data: {
         tableObj: tableObj,
@@ -376,7 +376,7 @@ export class ScaffoldProcessor {
     const tableObj = caseFactory(this.opts.table);
 
     renderTemplate({
-      inputPath: "scaffold-processor/actions/table/update-table.ts.hbs",
+      inputPath: "scaffold-processor/actions/table/update-action.ts.hbs",
       outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/update-${tableObj.singularKebabCase}.ts`,
       data: {
         tableObj: tableObj,
@@ -407,7 +407,7 @@ export class ScaffoldProcessor {
     const tableObj = caseFactory(this.opts.table);
 
     renderTemplate({
-      inputPath: "scaffold-processor/actions/table/delete-table.ts.hbs",
+      inputPath: "scaffold-processor/actions/table/delete-action.ts.hbs",
       outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/delete-${tableObj.singularKebabCase}.ts`,
       data: {
         tableObj: tableObj,
