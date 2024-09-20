@@ -15,10 +15,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
-      return `${opts.columnName}: integer("${opts.columnName}")`;
+      return `${opts.keyName}: integer("${opts.columnName}")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   real: {
@@ -27,10 +27,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: real("${opts.columnName}")`;
+      return `${opts.keyName}: real("${opts.columnName}")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.columnName);
+      return formDataUtils.float(opts.keyName, opts.columnName);
     },
   },
   text: {
@@ -39,10 +39,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.string(opts.keyName, opts.columnName);
     },
   },
   boolean: {
@@ -52,10 +52,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     dataTypeOverride: "integer",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: integer("${opts.columnName}", { mode: "boolean" } )`;
+      return `${opts.keyName}: integer("${opts.columnName}", { mode: "boolean" } )`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.boolean(opts.columnName);
+      return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
   },
   bigint: {
@@ -64,10 +64,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: blob("${opts.columnName}", { mode: "bigint" })`;
+      return `${opts.keyName}: blob("${opts.columnName}", { mode: "bigint" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.bigint(opts.columnName);
+      return formDataUtils.bigint(opts.keyName, opts.columnName);
     },
   },
   references: {
@@ -77,12 +77,11 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     dataTypeOverride: "text",
-    getKeyValueStrForSchema: function (opts: { columnName: string }): string {
-      const tableObj = caseFactory(opts.columnName);
-      return `${tableObj.singularSnakeCase}_id: text(\"${tableObj.singularSnakeCase}_id\").references(() => ${tableObj.pluralCamelCase}.id)`;
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.columnName);
+      return formDataUtils.references(opts.keyName, opts.columnName);
     },
   },
   file: {
@@ -92,10 +91,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-file.tsx.hbs",
     dataTypeOverride: "text",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.file(opts.columnName);
+      return formDataUtils.file(opts.keyName, opts.columnName);
     },
   },
   image: {
@@ -105,10 +104,10 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-image.tsx.hbs",
     dataTypeOverride: "text",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.columnName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.image(opts.columnName);
+      return formDataUtils.image(opts.keyName, opts.columnName);
     },
   },
 };
@@ -116,9 +115,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 export class SqliteDialectStrategy implements DbDialectStrategy {
   pkDataType: string = "text";
   createdAtTemplate: string =
-    'created_at: text("created_at").default(sql`(CURRENT_DATE)`),';
+    'createdAt: text("created_at").default(sql`(CURRENT_DATE)`),';
   updatedAtTemplate: string =
-    'updated_at: text("updated_at").default(sql`(CURRENT_DATE)`),';
+    'updatedAt: text("updated_at").default(sql`(CURRENT_DATE)`),';
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,

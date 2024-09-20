@@ -10,14 +10,14 @@ export const roles = pgTable("roles", {
 export const usersRoles = pgTable(
   "users_roles",
   {
-    user_id: text("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
-    role_id: text("role_id")
+    roleId: text("role_id")
       .notNull()
       .references(() => roles.id),
   },
   (table) => ({
-    compoundKey: primaryKey({ columns: [table.user_id, table.role_id] }),
+    compoundKey: primaryKey({ columns: [table.userId, table.roleId] }),
   })
 );

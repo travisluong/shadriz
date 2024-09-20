@@ -6,7 +6,7 @@ export async function hasAdminRole(userId: string) {
   const userRole = await db
     .select()
     .from(usersRoles)
-    .innerJoin(roles, eq(usersRoles.role_id, roles.id))
-    .where(and(eq(usersRoles.user_id, userId), eq(roles.name, "admin")));
+    .innerJoin(roles, eq(usersRoles.roleId, roles.id))
+    .where(and(eq(usersRoles.userId, userId), eq(roles.name, "admin")));
   return userRole.length > 0;
 }

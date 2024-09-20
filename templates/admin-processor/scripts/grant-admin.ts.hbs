@@ -34,7 +34,7 @@ async function main() {
 
   await sdb
     .insert(usersRoles)
-    .values({ user_id: userRecord.id, role_id: roleRecord.id });
+    .values({ userId: userRecord.id, roleId: roleRecord.id });
 
   await closeConnection();
 }

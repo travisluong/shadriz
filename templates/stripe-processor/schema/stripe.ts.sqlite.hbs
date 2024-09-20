@@ -6,37 +6,37 @@ import { sql } from "drizzle-orm";
 export const stripeWebhooks = sqliteTable("stripe_webhooks", {
   {{pkText}}
   payload: text("payload"),
-  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
+  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
 });
 
 export const products = sqliteTable("products", {
   {{pkText}}
   slug: text("slug").notNull().unique(),
-  stripe_product_id: text("stripe_product_id").notNull().unique(),
-  stripe_price_id: text("stripe_price_id").notNull(),
+  stripeProductId: text("stripe_product_id").notNull().unique(),
+  stripePriceId: text("stripe_price_id").notNull(),
   name: text("name").notNull(),
   price: integer("price").notNull(),
   description: text("description"),
   mode: text("mode").notNull(),
-  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
-  updated_at: text("updated_at").notNull().default(sql`(current_timestamp)`),
+  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });
 
 export const orders = sqliteTable("orders", {
   {{pkText}}
-  user_id: text("user_id").notNull().references(() => users.id),
-  product_id: text("product_id").notNull().references(() => products.id),
-  stripe_product_id: text("stripe_product_id").notNull(),
-  stripe_price_id: text("stripe_price_id").notNull(),
-  amount_total: integer("amount_total").notNull(),
-  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
+  userId: text("user_id").notNull().references(() => users.id),
+  productId: text("product_id").notNull().references(() => products.id),
+  stripeProductId: text("stripe_product_id").notNull(),
+  stripePriceId: text("stripe_price_id").notNull(),
+  amountTotal: integer("amount_total").notNull(),
+  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
 });
 
 export const subscriptions = sqliteTable("subscriptions", {
   {{pkText}}
-  user_id: text("user_id").notNull().references(() => users.id),
-  start_date: text("start_date").notNull(),
-  end_date: text("end_date").notNull(),
-  created_at: text("created_at").notNull().default(sql`(current_timestamp)`),
-  updated_at: text("updated_at").notNull().default(sql`(current_timestamp)`),
+  userId: text("user_id").notNull().references(() => users.id),
+  startDate: text("start_date").notNull(),
+  endDate: text("end_date").notNull(),
+  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
+  updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
 });

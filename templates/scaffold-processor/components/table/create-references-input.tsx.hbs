@@ -1,7 +1,7 @@
         <div>
-          <Label>{{tableObj.singularSnakeCase}}_id</Label>
-          <Input name="{{tableObj.singularSnakeCase}}_id" />
-          {state.errors?.{{tableObj.singularSnakeCase}}_id?.map((error) => (
+          <Label>{{columnCases.singularCamelCase}}Id</Label>
+          <Input name="{{columnCases.singularCamelCase}}Id" />
+          {state.errors?.{{columnCases.singularCamelCase}}Id?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

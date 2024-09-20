@@ -1,7 +1,7 @@
         <div>
-          <Label>{{column}}</Label>
-          <Input name="{{column}}" />
-          {state.errors?.{{column}}?.map((error) => (
+          <Label>{{columnCases.originalCamelCase}}</Label>
+          <Input name="{{columnCases.originalCamelCase}}" />
+          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

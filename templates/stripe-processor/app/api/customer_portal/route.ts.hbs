@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   });
 
   const returnUrl = `${req.headers.get("origin")}/account`;
-  const customerId = userRecord?.stripe_customer_id;
+  const customerId = userRecord?.stripeCustomerId;
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: customerId,

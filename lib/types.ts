@@ -92,7 +92,9 @@ export interface GetKeyValueStrForSchemaOpts extends ScaffoldProcessorOpts {
 }
 
 export interface DataTypeStrategyOpts {
+  keyName: string;
   columnName: string;
+  referencesTable?: string;
 }
 
 type JSType = "string" | "number" | "boolean" | "object";

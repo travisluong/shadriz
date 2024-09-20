@@ -62,7 +62,7 @@ export default function Pagination({
 
   function changePageSize(str: string) {
     const params = new URLSearchParams(searchParams);
-    params.set("page_size", str);
+    params.set("pageSize", str);
     router.push(`${pathname}?${params.toString()}`);
   }
 

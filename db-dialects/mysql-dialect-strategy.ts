@@ -18,7 +18,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: int(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   tinyint: {
@@ -30,7 +30,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: tinyint(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   smallint: {
@@ -42,7 +42,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: smallint(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   mediumint: {
@@ -54,7 +54,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: mediumint(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   bigint: {
@@ -66,7 +66,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: bigint(\"${opts.columnName}\", { mode: "number" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   real: {
@@ -78,7 +78,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: real(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.columnName);
+      return formDataUtils.float(opts.keyName, opts.columnName);
     },
   },
   decimal: {
@@ -90,7 +90,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: decimal(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.string(opts.keyName, opts.columnName);
     },
   },
   double: {
@@ -102,7 +102,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: double(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.columnName);
+      return formDataUtils.float(opts.keyName, opts.columnName);
     },
   },
   float: {
@@ -114,7 +114,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: float(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.columnName);
+      return formDataUtils.float(opts.keyName, opts.columnName);
     },
   },
   serial: {
@@ -126,7 +126,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: serial(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.columnName);
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
   },
   binary: {
@@ -160,7 +160,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: char(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.string(opts.keyName, opts.columnName);
     },
   },
   varchar: {
@@ -172,7 +172,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.string(opts.keyName, opts.columnName);
     },
   },
   text: {
@@ -184,7 +184,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: text(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.string(opts.keyName, opts.columnName);
     },
   },
   boolean: {
@@ -196,7 +196,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: boolean(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.boolean(opts.columnName);
+      return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
   },
   date: {
@@ -208,7 +208,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: date(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.columnName);
+      return formDataUtils.date(opts.keyName, opts.columnName);
     },
   },
   datetime: {
@@ -220,7 +220,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: datetime(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.columnName);
+      return formDataUtils.date(opts.keyName, opts.columnName);
     },
   },
   time: {
@@ -232,7 +232,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: time(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.columnName);
+      return formDataUtils.string(opts.keyName, opts.columnName);
     },
   },
   year: {
@@ -255,7 +255,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: timestamp(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.columnName);
+      return formDataUtils.date(opts.keyName, opts.columnName);
     },
   },
   json: {
@@ -267,7 +267,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: json(\"${opts.columnName}\")`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.json(opts.columnName);
+      return formDataUtils.json(opts.keyName, opts.columnName);
     },
   },
   references: {
@@ -277,12 +277,11 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     dataTypeOverride: "varchar",
-    getKeyValueStrForSchema: function (opts: { columnName: string }): string {
-      const tableObj = caseFactory(opts.columnName);
-      return `${tableObj.singularSnakeCase}_id: varchar(\"${tableObj.singularSnakeCase}_id\", { length: 255 }).references(() => ${tableObj.pluralCamelCase}.id)`;
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.columnName);
+      return formDataUtils.references(opts.keyName, opts.columnName);
     },
   },
   file: {
@@ -295,7 +294,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.file(opts.columnName);
+      return formDataUtils.file(opts.keyName, opts.columnName);
     },
   },
   image: {
@@ -308,15 +307,15 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.columnName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.image(opts.columnName);
+      return formDataUtils.image(opts.keyName, opts.columnName);
     },
   },
 };
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
   pkDataType: string = "varchar";
-  createdAtTemplate: string = `created_at: timestamp("created_at").defaultNow(),`;
-  updatedAtTemplate: string = `updated_at: timestamp("updated_at").defaultNow(),`;
+  createdAtTemplate: string = `createdAt: timestamp("created_at").defaultNow(),`;
+  updatedAtTemplate: string = `updatedAt: timestamp("updated_at").defaultNow(),`;
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,

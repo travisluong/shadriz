@@ -11,7 +11,7 @@ export const users = sqliteTable("users", {
   image: text("image"),
   password: text("password"),
   {{#if stripeEnabled}}
-  stripe_customer_id: text("stripe_customer_id"),
+  stripeCustomerId: text("stripe_customer_id"),
   {{/if}}
   {{createdAtTemplate}}
   {{updatedAtTemplate}}

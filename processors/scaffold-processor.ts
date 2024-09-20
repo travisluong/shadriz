@@ -40,15 +40,15 @@ const scaffoldDbDialectStrategies: Record<
   postgresql: {
     schemaTableTemplatePath:
       "scaffold-processor/schema/table.ts.postgresql.hbs",
-    updatedAtKeyValTemplate: "updated_at: new Date(),",
+    updatedAtKeyValTemplate: "updatedAt: new Date(),",
   },
   mysql: {
     schemaTableTemplatePath: "scaffold-processor/schema/table.ts.mysql.hbs",
-    updatedAtKeyValTemplate: "updated_at: new Date(),",
+    updatedAtKeyValTemplate: "updatedAt: new Date(),",
   },
   sqlite: {
     schemaTableTemplatePath: "scaffold-processor/schema/table.ts.sqlite.hbs",
-    updatedAtKeyValTemplate: "updated_at: new Date().toISOString(),",
+    updatedAtKeyValTemplate: "updatedAt: new Date().toISOString(),",
   },
 };
 
@@ -168,8 +168,22 @@ export class ScaffoldProcessor {
       throw new Error("data type strategy not found: " + dataType);
     }
     const strategy = dataTypeStrategyMap[dataType];
+    const columnNameCases = caseFactory(columnName);
+
+    let referencesTable;
+    let keyName = columnNameCases.originalCamelCase;
+    if (dataType === "references") {
+      referencesTable = columnNameCases.pluralCamelCase;
+      keyName = columnNameCases.singularCamelCase + "Id";
+    }
+
     let str =
-      "    " + strategy.getKeyValueStrForSchema({ columnName: columnName });
+      "    " +
+      strategy.getKeyValueStrForSchema({
+        keyName: keyName,
+        columnName: columnName,
+        referencesTable,
+      });
     str += ",";
     return str;
   }
@@ -241,13 +255,13 @@ export class ScaffoldProcessor {
     const columns = ["id"];
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
-      const tableObj = caseFactory(columnName);
+      const columnCases = caseFactory(columnName);
       if (dataType !== "references") {
-        columns.push(columnName);
+        columns.push(columnCases.originalCamelCase);
         continue;
       }
       if (dataType === "references") {
-        columns.push(tableObj.singularSnakeCase + "_id");
+        columns.push(columnCases.singularCamelCase + "Id");
       }
     }
 
@@ -259,15 +273,22 @@ export class ScaffoldProcessor {
         const strategy =
           this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-        const tableObj = caseFactory(col);
+        const columnCases = caseFactory(col);
+        let keyName;
         let columnName;
+
         if (dataType === "references") {
-          columnName = tableObj.singularSnakeCase;
+          keyName = columnCases.originalCamelCase + "Id";
+          columnName = columnCases.originalCamelCase + "Id";
         } else {
-          columnName = col;
+          keyName = columnCases.originalCamelCase;
+          columnName = columnCases.originalCamelCase;
         }
 
-        return strategy.getKeyValStrForFormData({ columnName: columnName });
+        return strategy.getKeyValStrForFormData({
+          keyName: keyName,
+          columnName: columnName,
+        });
       })
       .join("\n");
 
@@ -297,13 +318,13 @@ export class ScaffoldProcessor {
     const columns = ["id"];
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
-      const tableObj = caseFactory(columnName);
+      const columnCases = caseFactory(columnName);
       if (dataType !== "references") {
-        columns.push(columnName);
+        columns.push(columnCases.originalCamelCase);
         continue;
       }
       if (dataType === "references") {
-        columns.push(tableObj.singularSnakeCase + "_id");
+        columns.push(columnCases.singularCamelCase + "Id");
       }
     }
 
@@ -320,19 +341,27 @@ export class ScaffoldProcessor {
         const strategy =
           this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-        const tableObj = caseFactory(col);
+        const columnCases = caseFactory(col);
+        let keyName;
         let columnName;
+
         if (dataType === "references") {
-          columnName = tableObj.singularSnakeCase;
+          keyName = columnCases.originalCamelCase + "Id";
+          columnName = columnCases.originalCamelCase + "Id";
         } else {
-          columnName = col;
+          keyName = columnCases.originalCamelCase;
+          columnName = columnCases.originalCamelCase;
         }
 
-        return strategy.getKeyValStrForFormData({ columnName: columnName });
+        return strategy.getKeyValStrForFormData({
+          keyName: keyName,
+          columnName: columnName,
+        });
       });
 
     formDataKeyValArr.unshift(
       dataTypeStrategyForPk.getKeyValStrForFormData({
+        keyName: "id",
         columnName: "id",
       })
     );
@@ -371,6 +400,7 @@ export class ScaffoldProcessor {
       ];
 
     const formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
+      keyName: "id",
       columnName: "id",
     });
 
@@ -410,10 +440,10 @@ export class ScaffoldProcessor {
         throw new Error("invalid data type strategy: " + dataType);
       const dataTypeStrategy =
         this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
-      const tableObj = caseFactory(columnName);
+      const columnCases = caseFactory(columnName);
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
-        data: { column: columnName, tableObj: tableObj },
+        data: { columnCases: columnCases },
       });
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
@@ -449,9 +479,9 @@ export class ScaffoldProcessor {
       const [columnName, dataType] = column.split(":");
       const tableObj = caseFactory(columnName);
       if (dataType === "references") {
-        columnNames.push(tableObj.singularSnakeCase + "_id");
+        columnNames.push(tableObj.singularCamelCase + "Id");
       } else {
-        columnNames.push(columnName);
+        columnNames.push(tableObj.originalCamelCase);
       }
     }
     return columnNames;
@@ -476,7 +506,6 @@ export class ScaffoldProcessor {
     html += compileTemplate({
       inputPath:
         "scaffold-processor/components/table/update-input-hidden.tsx.hbs",
-      data: { column: "id" },
     });
 
     html += "\n";
@@ -491,11 +520,11 @@ export class ScaffoldProcessor {
 
       const updateFormTemplate = dataTypeStrategy.updateFormTemplate;
 
-      const tableObj = caseFactory(columnName);
+      const columnCases = caseFactory(columnName);
 
       html += compileTemplate({
         inputPath: updateFormTemplate,
-        data: { column: columnName, tableObj: tableObj },
+        data: { columnCases: columnCases },
       });
 
       if (index !== this.opts.columns.length - 1) html += "\n";

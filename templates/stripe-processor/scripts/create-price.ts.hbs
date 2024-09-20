@@ -27,8 +27,8 @@ async function main() {
     name: "Monthly Subscription",
     mode: "subscription",
     price: 1000,
-    stripe_price_id: priceMonthly.id,
-    stripe_product_id: productMonthly.id,
+    stripePriceId: priceMonthly.id,
+    stripeProductId: productMonthly.id,
     description: "Monthly subscription",
     slug: "monthly",
   });
@@ -55,8 +55,8 @@ async function main() {
     name: "One Time Purchase",
     mode: "payment",
     price: 10000,
-    stripe_price_id: priceOneTime.id,
-    stripe_product_id: productOneTime.id,
+    stripePriceId: priceOneTime.id,
+    stripeProductId: productOneTime.id,
     description: "One time purchase",
     slug: "one-time",
   });

@@ -1,10 +1,10 @@
         <div>
-          <Label>{{column}}</Label>
+          <Label>{{columnCases.originalCamelCase}}</Label>
           <div>
-            <Link href={data.{{column}} ?? ""}>{data.{{column}} ?? ""}</Link>
+            <Link href={data.{{columnCases.originalCamelCase}} ?? ""}>{data.{{columnCases.originalCamelCase}} ?? ""}</Link>
           </div>
-          <Input type="file" name="{{column}}" />
-          {state.errors?.{{column}}?.map((error) => (
+          <Input type="file" name="{{columnCases.originalCamelCase}}" />
+          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

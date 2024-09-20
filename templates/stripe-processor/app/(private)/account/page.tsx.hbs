@@ -34,8 +34,8 @@ export default async function Page() {
   const orderRecord = await db
     .select()
     .from(orders)
-    .innerJoin(products, eq(orders.product_id, products.id))
-    .innerJoin(users, eq(users.id, orders.user_id))
+    .innerJoin(products, eq(orders.productId, products.id))
+    .innerJoin(users, eq(users.id, orders.userId))
     .where(eq(users.id, session.user.id));
 
   if (!session) {
@@ -45,7 +45,7 @@ export default async function Page() {
   const activeSubscription = await hasActiveSubscription(session.user.id!);
 
   const subscriptionRecord = await db.query.subscriptions.findFirst({
-    where: eq(subscriptions.user_id, session.user.id!),
+    where: eq(subscriptions.userId, session.user.id!),
   });
 
   return (
@@ -61,13 +61,13 @@ export default async function Page() {
           {activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-green-400">Subscription Active</Badge>
-              <div>Expires: {subscriptionRecord?.end_date}</div>
+              <div>Expires: {subscriptionRecord?.endDate}</div>
             </div>
           )}
           {subscriptionRecord && !activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-red-400">Subscription</Badge>
-              <div>Expired: {subscriptionRecord.end_date}</div>
+              <div>Expired: {subscriptionRecord.endDate}</div>
             </div>
           )}
         </CardContent>
@@ -109,13 +109,13 @@ export default async function Page() {
                     <TableCell>{d.products.name}</TableCell>
                     <TableCell>{d.products.description}</TableCell>
                     <TableCell>
-                      {d.orders.amount_total &&
-                        (d.orders.amount_total / 100).toLocaleString("en-US", {
+                      {d.orders.amountTotal &&
+                        (d.orders.amountTotal / 100).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
                         })}
                     </TableCell>
-                    <TableCell>{d.orders.created_at}</TableCell>
+                    <TableCell>{d.orders.createdAt}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

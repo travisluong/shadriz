@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: productRecord.stripe_price_id,
+          price: productRecord.stripePriceId,
           quantity: 1,
         },
       ],

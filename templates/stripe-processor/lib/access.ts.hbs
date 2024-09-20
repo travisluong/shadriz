@@ -4,7 +4,7 @@ import { orders, subscriptions } from "@/schema/stripe";
 
 export async function hasProduct(userId: string, productId: string) {
   const orderRecord = await db.query.orders.findFirst({
-    where: and(eq(orders.user_id, userId), eq(orders.product_id, productId)),
+    where: and(eq(orders.userId, userId), eq(orders.productId, productId)),
   });
   if (!orderRecord) {
     return false;
@@ -14,15 +14,15 @@ export async function hasProduct(userId: string, productId: string) {
 
 export async function hasActiveSubscription(userId: string) {
   const subscriptionRecord = await db.query.subscriptions.findFirst({
-    where: eq(subscriptions.user_id, userId),
-    orderBy: desc(subscriptions.created_at),
+    where: eq(subscriptions.userId, userId),
+    orderBy: desc(subscriptions.createdAt),
   });
 
   if (!subscriptionRecord) {
     return false;
   }
 
-  const expireDate = new Date(subscriptionRecord.end_date);
+  const expireDate = new Date(subscriptionRecord.endDate);
   expireDate.setDate(expireDate.getDate() + 2);
   const now = new Date();
 

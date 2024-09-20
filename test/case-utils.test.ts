@@ -17,3 +17,8 @@ test("case utils", () => {
   expect(caseObj.pluralPascalCase).toBe("FooBars");
   expect(caseObj.pluralKebabCase).toBe("foo-bars");
 });
+
+test("case utils with id", () => {
+  const caseObj = caseFactory("foo_bar_id");
+  expect(caseObj.singularCamelCase).toBe("fooBarId");
+});

@@ -1,43 +1,43 @@
 import { caseFactory } from "./case-utils";
 
 export const formDataUtils = {
-  integer(col: string): string {
-    return `    ${col}: formData.get("${col}") ? parseInt(formData.get("${col}") as string) : null,`;
+  integer(key: string, col: string): string {
+    return `    ${key}: formData.get("${col}") ? parseInt(formData.get("${col}") as string) : null,`;
   },
 
-  boolean(col: string): string {
-    return `    ${col}: !!formData.get("${col}"),`;
+  boolean(key: string, col: string): string {
+    return `    ${key}: !!formData.get("${col}"),`;
   },
 
-  string(col: string): string {
-    return `    ${col}: (formData.get("${col}") as string) || null,`;
+  string(key: string, col: string): string {
+    return `    ${key}: (formData.get("${col}") as string) || null,`;
   },
 
-  json(col: string): string {
-    return `    ${col}: formData.get("${col}") ? JSON.parse(formData.get("${col}") as string) : null,`;
+  json(key: string, col: string): string {
+    return `    ${key}: formData.get("${col}") ? JSON.parse(formData.get("${col}") as string) : null,`;
   },
 
-  date(col: string): string {
-    return `    ${col}: formData.get("${col}") ? new Date(formData.get("${col}") as string) : null,`;
+  date(key: string, col: string): string {
+    return `    ${key}: formData.get("${col}") ? new Date(formData.get("${col}") as string) : null,`;
   },
 
-  float(col: string): string {
-    return `    ${col}: formData.get("${col}") ? parseFloat(formData.get("${col}") as string) : null,`;
+  float(key: string, col: string): string {
+    return `    ${key}: formData.get("${col}") ? parseFloat(formData.get("${col}") as string) : null,`;
   },
 
-  bigint(col: string): string {
-    return `    ${col}: formData.get("${col}") ? BigInt(formData.get("${col}") as string) : null,`;
+  bigint(key: string, col: string): string {
+    return `    ${key}: formData.get("${col}") ? BigInt(formData.get("${col}") as string) : null,`;
   },
 
-  references(col: string): string {
-    return `    ${col}_id: (formData.get("${col}_id") as string) || null,`;
+  references(key: string, col: string): string {
+    return `    ${key}: (formData.get("${col}") as string) || null,`;
   },
 
-  image(col: string): string {
-    return `    ${col}: ${caseFactory(col).singularCamelCase}UploadPath,`;
+  image(key: string, col: string): string {
+    return `    ${key}: ${caseFactory(col).singularCamelCase}UploadPath,`;
   },
 
-  file(col: string): string {
-    return `    ${col}: ${caseFactory(col).singularCamelCase}UploadPath,`;
+  file(key: string, col: string): string {
+    return `    ${key}: ${caseFactory(col).singularCamelCase}UploadPath,`;
   },
 };

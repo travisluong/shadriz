@@ -10,14 +10,14 @@ export const roles = mysqlTable("roles", {
 export const usersRoles = mysqlTable(
   "users_roles",
   {
-    user_id: varchar("user_id", { length: 255 })
+    userId: varchar("user_id", { length: 255 })
       .notNull()
       .references(() => users.id),
-    role_id: varchar("role_id", { length: 255 })
+    roleId: varchar("role_id", { length: 255 })
       .notNull()
       .references(() => roles.id),
   },
   (table) => ({
-    compoundKey: primaryKey({ columns: [table.user_id, table.role_id] }),
+    compoundKey: primaryKey({ columns: [table.userId, table.roleId] }),
   })
 );
