@@ -44,7 +44,7 @@ export async function update{{tableObj.singularPascalCase}}(
 {{/if}}
 
 {{#each uploadColumnNames}}
-  const {{this.singularCamelCase}}File = formData.get("{{this.singularSnakeCase}}") as File;
+  const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
 
   let {{this.singularCamelCase}}UploadPath;
 
