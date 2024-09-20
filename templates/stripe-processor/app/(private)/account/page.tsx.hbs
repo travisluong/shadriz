@@ -31,7 +31,7 @@ export default async function Page() {
     redirect("/signin");
   }
 
-  const orderRecord = await db
+  const order = await db
     .select()
     .from(orders)
     .innerJoin(products, eq(orders.productId, products.id))
@@ -44,7 +44,7 @@ export default async function Page() {
 
   const activeSubscription = await hasActiveSubscription(session.user.id!);
 
-  const subscriptionRecord = await db.query.subscriptions.findFirst({
+  const subscription = await db.query.subscriptions.findFirst({
     where: eq(subscriptions.userId, session.user.id!),
   });
 
@@ -61,18 +61,18 @@ export default async function Page() {
           {activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-green-400">Subscription Active</Badge>
-              <div>Expires: {subscriptionRecord?.endDate}</div>
+              <div>Expires: {subscription?.endDate}</div>
             </div>
           )}
-          {subscriptionRecord && !activeSubscription && (
+          {subscription && !activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-red-400">Subscription</Badge>
-              <div>Expired: {subscriptionRecord.endDate}</div>
+              <div>Expired: {subscription.endDate}</div>
             </div>
           )}
         </CardContent>
       </Card>
-      {subscriptionRecord && (
+      {subscription && (
         <Card>
           <CardHeader>
             <CardTitle className="font-retro uppercase text-sm">
@@ -93,7 +93,7 @@ export default async function Page() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {orderRecord.length > 0 ? (
+          {order.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -104,7 +104,7 @@ export default async function Page() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orderRecord.map((d) => (
+                {order.map((d) => (
                   <TableRow key={d.orders.id}>
                     <TableCell>{d.products.name}</TableCell>
                     <TableCell>{d.products.description}</TableCell>

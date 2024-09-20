@@ -3,26 +3,26 @@ import { db } from "./db";
 import { orders, subscriptions } from "@/schema/stripe";
 
 export async function hasProduct(userId: string, productId: string) {
-  const orderRecord = await db.query.orders.findFirst({
+  const order = await db.query.orders.findFirst({
     where: and(eq(orders.userId, userId), eq(orders.productId, productId)),
   });
-  if (!orderRecord) {
+  if (!order) {
     return false;
   }
   return true;
 }
 
 export async function hasActiveSubscription(userId: string) {
-  const subscriptionRecord = await db.query.subscriptions.findFirst({
+  const subscription = await db.query.subscriptions.findFirst({
     where: eq(subscriptions.userId, userId),
     orderBy: desc(subscriptions.createdAt),
   });
 
-  if (!subscriptionRecord) {
+  if (!subscription) {
     return false;
   }
 
-  const expireDate = new Date(subscriptionRecord.endDate);
+  const expireDate = new Date(subscription.endDate);
   expireDate.setDate(expireDate.getDate() + 2);
   const now = new Date();
 

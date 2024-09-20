@@ -15,11 +15,11 @@ export async function POST(req: Request) {
     redirect("/signin");
   }
 
-  const userRecord = await db.query.users.findFirst({
+  const user = await db.query.users.findFirst({
     where: eq(users.id, session.user.id),
   });
 
-  if (!userRecord) {
+  if (!user) {
     notFound();
   }
 
@@ -31,26 +31,26 @@ export async function POST(req: Request) {
     notFound();
   }
 
-  const productRecord = await db.query.products.findFirst({
+  const product = await db.query.products.findFirst({
     where: eq(products.slug, slug),
   });
 
-  if (!productRecord) {
+  if (!product) {
     notFound();
   }
 
   try {
     // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
-      customer_email: userRecord.email,
+      customer_email: user.email,
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: productRecord.stripePriceId,
+          price: product.stripePriceId,
           quantity: 1,
         },
       ],
-      mode: productRecord?.mode,
+      mode: product?.mode,
       success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
       cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
       allow_promotion_codes: true,

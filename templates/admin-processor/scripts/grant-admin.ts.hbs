@@ -8,33 +8,33 @@ async function main() {
 
   const email = process.argv[2];
 
-  const userRecord = await sdb.query.users.findFirst({
+  const user = await sdb.query.users.findFirst({
     where: eq(users.email, email),
   });
 
-  if (!userRecord) {
+  if (!user) {
     throw new Error("user not found " + email);
   }
 
-  let roleRecord = await sdb.query.roles.findFirst({
+  let role = await sdb.query.roles.findFirst({
     where: eq(roles.name, "admin"),
   });
 
-  if (!roleRecord) {
+  if (!role) {
     await sdb.insert(roles).values({ name: "admin" });
   }
 
-  roleRecord = await sdb.query.roles.findFirst({
+  role = await sdb.query.roles.findFirst({
     where: eq(roles.name, "admin"),
   });
 
-  if (!roleRecord) {
-    throw new Error("role record not found");
+  if (!role) {
+    throw new Error("role not found");
   }
 
   await sdb
     .insert(usersRoles)
-    .values({ userId: userRecord.id, roleId: roleRecord.id });
+    .values({ userId: user.id, roleId: role.id });
 
   await closeConnection();
 }

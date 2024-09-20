@@ -6,16 +6,16 @@ import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  const {{tableObj.singularCamelCase}}Record = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
+  const {{tableObj.singularCamelCase}} = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
 
-  if (!{{tableObj.singularCamelCase}}Record) {
+  if (!{{tableObj.singularCamelCase}}) {
     notFound();
   }
 
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Delete {{tableObj.singularCapitalCase}}</h1>
-      <{{tableObj.singularPascalCase}}DeleteForm data={ {{tableObj.singularCamelCase}}Record } />
+      <{{tableObj.singularPascalCase}}DeleteForm data={ {{tableObj.singularCamelCase}} } />
     </div>
   );
 }

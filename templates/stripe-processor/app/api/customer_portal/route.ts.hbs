@@ -14,12 +14,12 @@ export async function POST(req: Request) {
     return Response.json({ message: "unauthenticated" }, { status: 401 });
   }
 
-  const userRecord = await db.query.users.findFirst({
+  const user = await db.query.users.findFirst({
     where: eq(users.id, session.user.id),
   });
 
   const returnUrl = `${req.headers.get("origin")}/account`;
-  const customerId = userRecord?.stripeCustomerId;
+  const customerId = user?.stripeCustomerId;
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: customerId,

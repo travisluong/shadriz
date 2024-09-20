@@ -6,9 +6,9 @@ import { notFound } from "next/navigation";
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params;
 
-  const {{tableObj.singularCamelCase}}Record = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
+  const {{tableObj.singularCamelCase}} = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
 
-  if (!{{tableObj.singularCamelCase}}Record) {
+  if (!{{tableObj.singularCamelCase}}) {
     notFound();
   }
 
@@ -16,9 +16,9 @@ export default async function Page({ params }: { params: { id: string } }) {
     <div>
       <h1 className="text-3xl font-bold mb-6">{{tableObj.originalCapitalCase}}</h1>
       <div>
-        <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}Record.id }</p>
+        <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}.id }</p>
         {{#each columnCases}}
-        <p><strong>{{this.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}Record.{{this.originalCamelCase}}?.toString() }</p>
+        <p><strong>{{this.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.originalCamelCase}}?.toString() }</p>
         {{/each}}
       </div>
     </div>

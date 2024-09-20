@@ -17,7 +17,7 @@ export default async function Page({
   const countRecords = await db.select({ value: count() }).from({{tableObj.pluralCamelCase}});
   const countRecord = countRecords[0];
   const totalPages = Math.ceil(countRecord.value / pageSize);
-  const {{tableObj.singularCamelCase}}Records = await db.query.{{tableObj.pluralCamelCase}}.findMany({
+  const {{tableObj.singularCamelCase}}List = await db.query.{{tableObj.pluralCamelCase}}.findMany({
     limit: pageSize,
     offset: pageIndex * pageSize,
   });
@@ -33,7 +33,7 @@ export default async function Page({
         </a>
       </div>
       <div className="mb-5">
-        <{{tableObj.singularPascalCase}}Table {{tableObj.pluralCamelCase}}={ {{tableObj.singularCamelCase}}Records } />
+        <{{tableObj.singularPascalCase}}Table {{tableObj.pluralCamelCase}}={ {{tableObj.singularCamelCase}}List } />
       </div>
       <div>
         <Pagination page={page} pageSize={pageSize} totalPages={totalPages} />
