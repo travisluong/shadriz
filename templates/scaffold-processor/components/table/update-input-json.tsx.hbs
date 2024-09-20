@@ -1,6 +1,6 @@
         <div>
           <Label>{{columnCases.originalCapitalCase}}</Label>
-          <Input name="{{columnCases.originalCamelCase}}" defaultValue={ JSON.stringify(data.{{columnCases.originalCamelCase}}) ?? "" } />
+          <Input name="{{columnCases.originalCamelCase}}" defaultValue={ JSON.stringify( {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}}) ?? "" } />
           {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}

@@ -1,7 +1,7 @@
         <div>
           <Label>{{columnCases.originalCapitalCase}}</Label>
           <div>
-            <Link href={data.{{columnCases.originalCamelCase}} ?? ""}>{data.{{columnCases.originalCamelCase}} ?? ""}</Link>
+            <Link href={ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? ""}>{ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? "" }</Link>
           </div>
           <Input type="file" name="{{columnCases.originalCamelCase}}" />
           {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (

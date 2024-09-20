@@ -7,17 +7,17 @@ import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebab
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function {{tableObj.singularPascalCase}}DeleteForm({ data }: { data: {{tableObj.singularPascalCase}} }) {
+export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.singularCamelCase}} }: { {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}} }) {
   const initialState: Delete{{tableObj.singularPascalCase}}State = {};
   const [state, dispatch] = useFormState(delete{{tableObj.singularPascalCase}}, initialState);
 
   return (
     <div>
       <form action={dispatch} className="flex flex-col gap-2">
-        <input type="hidden" name="id" value={data.id} />
+        <input type="hidden" name="id" value={ {{tableObj.singularCamelCase}}.id} />
         <div>
           <Label>Id</Label>
-          <p>{data.id}</p>
+          <p>{ {{tableObj.singularCamelCase}}.id}</p>
         </div>
         <div>
           <Button type="submit" variant="destructive">

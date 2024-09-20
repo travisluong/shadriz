@@ -1,6 +1,6 @@
         <div>
           <Label>{{columnCases.originalCapitalCase}}</Label>
-          <Textarea name="{{columnCases.originalCamelCase}}" defaultValue={ data.{{columnCases.originalCamelCase}} ?? "" } />
+          <Textarea name="{{columnCases.originalCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? "" } />
           {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}

@@ -10,7 +10,7 @@ import {
 import { EyeOpenIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 
-export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.pluralCamelCase}} }: { {{tableObj.pluralCamelCase}}: {{tableObj.singularPascalCase}}[] }) {
+export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.singularPascalCase}}[] }) {
   return (
     <Table>
       <TableHeader>
@@ -23,7 +23,7 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.plural
         </TableRow>
       </TableHeader>
       <TableBody>
-        { {{tableObj.pluralCamelCase}}.map(({{tableObj.singularCamelCase}}) => (
+        { {{tableObj.singularCamelCase}}List.map(({{tableObj.singularCamelCase}}) => (
           <TableRow key={ {{tableObj.singularCamelCase}}.id }>
             <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
             {{#each columnCases}}

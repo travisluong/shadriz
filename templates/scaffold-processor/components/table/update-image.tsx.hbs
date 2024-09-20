@@ -1,13 +1,13 @@
         <div>
           <Label>{{columnCases.originalCapitalCase}}</Label>
           <Image
-            src={data.{{columnCases.originalCamelCase}} ?? ""}
+            src={ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? ""}
             width="200"
             height="200"
             alt="{{columnCases.originalCamelCase}}"
           />
           <div>
-            <Link href={data.{{columnCases.originalCamelCase}} ?? ""}>{data.{{columnCases.originalCamelCase}} ?? ""}</Link>
+            <Link href={ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? ""}>{ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? "" }</Link>
           </div>
           <Input type="file" name="{{columnCases.originalCamelCase}}" />
           {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (

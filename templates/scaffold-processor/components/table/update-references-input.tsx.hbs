@@ -1,6 +1,6 @@
         <div>
           <Label>{{columnCases.originalCapitalCase}} Id</Label>
-          <Input name="{{columnCases.singularCamelCase}}Id" defaultValue={ data.{{columnCases.singularCamelCase}}Id ?? "" } />
+          <Input name="{{columnCases.singularCamelCase}}Id" defaultValue={ {{tableObj.singularCamelCase}}.{{columnCases.singularCamelCase}}Id ?? "" } />
           {state.errors?.{{columnCases.singularCamelCase}}Id?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}

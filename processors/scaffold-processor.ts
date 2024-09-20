@@ -502,11 +502,14 @@ export class ScaffoldProcessor {
     });
   }
   getUpdateFormControlsHtml(): string {
+    const tableObj = caseFactory(this.opts.table);
+
     let html = "";
 
     html += compileTemplate({
       inputPath:
         "scaffold-processor/components/table/update-input-hidden.tsx.hbs",
+      data: { tableObj: tableObj },
     });
 
     html += "\n";
@@ -525,7 +528,7 @@ export class ScaffoldProcessor {
 
       html += compileTemplate({
         inputPath: updateFormTemplate,
-        data: { columnCases: columnCases },
+        data: { columnCases: columnCases, tableObj: tableObj },
       });
 
       if (index !== this.opts.columns.length - 1) html += "\n";

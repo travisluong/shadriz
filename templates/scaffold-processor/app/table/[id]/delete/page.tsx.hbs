@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Delete {{tableObj.singularCapitalCase}}</h1>
-      <{{tableObj.singularPascalCase}}DeleteForm data={ {{tableObj.singularCamelCase}} } />
+      <{{tableObj.singularPascalCase}}DeleteForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} } />
     </div>
   );
 }
