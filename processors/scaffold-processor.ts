@@ -163,17 +163,18 @@ export class ScaffoldProcessor {
   getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
     const { column } = opts;
     const { dataTypeStrategyMap } = this.opts.dbDialectStrategy;
-    const [columnName, dataType] = column.split(":");
+    let [columnName, dataType] = column.split(":");
     if (!(dataType in dataTypeStrategyMap)) {
       throw new Error("data type strategy not found: " + dataType);
     }
     const strategy = dataTypeStrategyMap[dataType];
     const columnNameCases = caseFactory(columnName);
 
-    let referencesTable;
     let keyName = columnNameCases.originalCamelCase;
+    let referencesTable;
     if (dataType === "references") {
       referencesTable = columnNameCases.pluralCamelCase;
+      columnName = columnNameCases.singularSnakeCase + "_id";
       keyName = columnNameCases.singularCamelCase + "Id";
     }
 
