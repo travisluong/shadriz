@@ -211,13 +211,21 @@ npx shadriz@latest scaffold media -c pdf:file thumbnail:image description:text
 
 ## Naming conventions
 
-- Class names are singular pascal case: `FooBar`
-- Schema variable names are plural camel case: `fooBars`
-- Table names are plural snake case: `foo_bars`
-- File names are singular or plural kebab case: `foo-bar` or `foo-bars`
-- Foreign keys are singular snake case: `foo_bar_id`
+shadriz uses the following naming conventions in the generated code. There may be some cases where conventions are not followed due to conventions used in third-party libraries and services.
+
+- Class names are singular pascal case: `FooBar`.
+- Drizzle table variable names are plural camel case: `fooBars`.
+- Drizzle column property names are original camel case: `fooBar`.
+- Drizzle foreign key property names are original camel case with Id suffix: `fooBarId`.
+- Form input names are original camel case: `fooBar`.
+- Database table names are plural snake case: `foo_bars`.
+- Database foreign keys are singular snake case: `foo_bar_id`.
+- File names are singular or plural kebab case: `foo-bar` or `foo-bars`.
 - URL pathnames are singular or plural kebab case: `foo-bar` or `foo-bars`.
-- Query string parameters are singular or plural snake case: `foo_bar` or `foo_bars`.
+- Query string parameters are singular or plural camel case: `fooBar` or `fooBars`.
+- UI table and column names are singular or plural capital case: `Foo Bar` or `Foo Bars`.
+- React array props are singular camel case with List suffix: `fooBarList={fooBarList}`.
+- React object props are singular camel case: `fooBar={fooBar}`.
 
 ## Auth
 
