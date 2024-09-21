@@ -1,9 +1,10 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { insert{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { createInsertSchema } from "drizzle-zod";
 {{#if importFileUtils}}
 import { getUploadPath, uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -13,6 +14,8 @@ import { auth } from "@/lib/auth";
 {{#if isAdmin}}
 import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
+
+const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}});
 
 export interface Create{{tableObj.singularPascalCase}}State {
   errors?: {

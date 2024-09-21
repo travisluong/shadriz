@@ -4,7 +4,6 @@ import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalC
 import { Button } from "@/components/ui/button";
 import { useFormState } from "react-dom";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.singularCamelCase}} }: { {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}} }) {
@@ -16,8 +15,7 @@ export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.s
       <form action={dispatch} className="flex flex-col gap-2">
         <input type="hidden" name="id" value={ {{tableObj.singularCamelCase}}.id} />
         <div>
-          <Label>Id</Label>
-          <p>{ {{tableObj.singularCamelCase}}.id}</p>
+          <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}.id}</p>
         </div>
         <div>
           <Button type="submit" variant="destructive">

@@ -1,16 +1,19 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { id{{tableObj.singularPascalCase}}Schema, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { createSelectSchema } from "drizzle-zod";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
 {{#if isAdmin}}
 import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
+
+const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).pick({ id: true });
 
 export interface Delete{{tableObj.singularPascalCase}}State {
   errors?: {
@@ -39,7 +42,7 @@ export async function delete{{tableObj.singularPascalCase}}(
   }
 {{/if}}
 
-  const validatedFields = id{{tableObj.singularPascalCase}}Schema.safeParse({
+  const validatedFields = delete{{tableObj.singularPascalCase}}Schema.safeParse({
     id: (formData.get("id") as string) || null,
   });
 

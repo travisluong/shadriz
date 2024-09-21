@@ -146,7 +146,6 @@ export class ScaffoldProcessor {
       code += `  ${dataType},\n`;
     }
     code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
-    code += `import { createInsertSchema, createSelectSchema } from "drizzle-zod";\n`;
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
     const dependsOnSql = columns.filter((column) =>
       column.indexOf("sql")
@@ -279,8 +278,8 @@ export class ScaffoldProcessor {
         let columnName;
 
         if (dataType === "references") {
-          keyName = columnCases.originalCamelCase + "Id";
-          columnName = columnCases.originalCamelCase + "Id";
+          keyName = columnCases.singularCamelCase + "Id";
+          columnName = columnCases.singularCamelCase + "Id";
         } else {
           keyName = columnCases.originalCamelCase;
           columnName = columnCases.originalCamelCase;
@@ -347,8 +346,8 @@ export class ScaffoldProcessor {
         let columnName;
 
         if (dataType === "references") {
-          keyName = columnCases.originalCamelCase + "Id";
-          columnName = columnCases.originalCamelCase + "Id";
+          keyName = columnCases.singularCamelCase + "Id";
+          columnName = columnCases.singularCamelCase + "Id";
         } else {
           keyName = columnCases.originalCamelCase;
           columnName = columnCases.originalCamelCase;
