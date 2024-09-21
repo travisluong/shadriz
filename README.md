@@ -285,7 +285,7 @@ You own the code so you can customize it according to your project requirements.
 
 Boilerplates go obsolete fast. Within a few months, many of your dependencies may already be behind the latest version.
 
-That is why shadriz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn components, Auth.js, Stripe, TailwindCSS, Zod, and more.
+That is why shadriz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more.
 
 If you prefer a more stable version, choose the `pinned` option during initialization and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
 
@@ -315,7 +315,7 @@ Many of the patterns used in shadriz are based on the official Next.js documenta
 
 Next.js provides many conveniences out of the box, such as file system routing, server side rendering, code bundling, and more.
 
-### shadcn
+### shadcn/ui
 
 **Non-dependency and customizability** are the two core principles of shadcn which shadriz aims to uphold, the tool that copies and pastes beautifully styled components into your projects.
 
@@ -333,7 +333,7 @@ shadriz takes the automations one step further by generating the configuration f
 
 ### TailwindCSS
 
-shadriz is based on shadcn which has it's styling based on TailwindCSS, a CSS framework which provides reusable utility classes.
+shadriz uses shadcn/ui which has it's styling based on TailwindCSS, a CSS framework which provides reusable utility classes.
 
 Benefits of TailwindCSS include **development speed and composability**, qualities that shadriz also aspires to achieve.
 
