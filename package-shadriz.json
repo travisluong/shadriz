@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.4.2",
+    "@auth/drizzle-adapter": "^1.5.0",
     "@paralleldrive/cuid2": "^2.2.2",
-    "@stripe/stripe-js": "^4.4.0",
+    "@stripe/stripe-js": "^4.5.0",
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.3.0",
     "dotenv": "^16.4.5",
@@ -11,13 +11,13 @@
     "mysql2": "^3.11.0",
     "nanoid": "^5.0.7",
     "nanoid-dictionary": "5.0.0-beta.1",
-    "next": "14.2.11",
+    "next": "14.2.13",
     "next-auth": "5.0.0-beta.20",
     "next-themes": "^0.3.0",
     "nodemailer": "^6.9.15",
     "pg": "^8.12.0",
-    "shadcn": "^2.0.6",
-    "stripe": "^16.11.0",
+    "shadcn": "^2.0.7",
+    "stripe": "^16.12.0",
     "uuidv7": "^1.0.1",
     "zod": "^3.23.8"
   },
