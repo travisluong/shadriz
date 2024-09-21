@@ -296,8 +296,6 @@ The other problem with boilerplates is that it is usually a static hard-coded re
 
 ## Philosophy
 
-Minimalism is a core tenet of shadriz.
-
 shadriz aims to keep the top-level dependencies to a minimum, and only uses what would be "common" to most full stack web applications.
 
 shadriz only provides an opinionated foundation to be built upon. It is up to the developer to build the interesting parts.
