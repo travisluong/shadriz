@@ -332,3 +332,33 @@ export function completeShadrizConfig(
   };
   return completeConfig;
 }
+
+export function commentOutTextInFile(
+  filePath: string,
+  searchText: string,
+  isBlockComment = false
+): void {
+  // Read the file content
+  const absolutePath = path.join(process.cwd(), filePath);
+  const fileContent = fs.readFileSync(absolutePath, "utf-8");
+
+  let updatedContent: string;
+
+  if (isBlockComment) {
+    // Block comment approach
+    updatedContent = fileContent.replace(
+      new RegExp(searchText, "g"),
+      `/* ${searchText} */`
+    );
+  } else {
+    // Line comment approach
+    updatedContent = fileContent
+      .split("\n")
+      .map((line) => (line.includes(searchText) ? `// ${line}` : line))
+      .join("\n");
+  }
+
+  // Write the updated content back to the file
+  fs.writeFileSync(absolutePath, updatedContent, "utf-8");
+  console.log(`Updated file: ${absolutePath}`);
+}

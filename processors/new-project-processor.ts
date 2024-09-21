@@ -1,6 +1,7 @@
 import { NewProjectProcessorOpts, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
+  commentOutTextInFile,
   installDependencies,
   installDevDependencies,
   renderTemplate,
@@ -126,5 +127,12 @@ export class NewProjectProcessor implements ShadrizProcessor {
       inputPath: "new-project-processor/.eslintrc.json.hbs",
       outputPath: ".eslintrc.json",
     });
+
+    // TODO: remove when next.js and shadcn/ui init works with dark mode
+    const textToSearch = `:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}`;
+    commentOutTextInFile("app/globals.css", textToSearch, true);
   }
 }
