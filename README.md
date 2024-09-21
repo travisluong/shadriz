@@ -27,9 +27,9 @@ The code is yours.
 
 Many decisions happen at the beginnings of projects. For example, a developer must decide on: a web framework, a database, UI component library, object relational mapper (ORM), CSS framework, authentication solution, validation library, payment solution, and other technologies relevant to the project.
 
-This can be time consuming and lead to decision fatigue. This is also known as JavaScript fatigue, a phenomenon describing the overwhelming array of technology choices in the JavaScript ecosystem.
+This can be time consuming and lead to decision fatigue. In the JavaScript world, this is known as JavaScript fatigue. It is a phenomenon describing the overwhelming array of technology choices in the JavaScript ecosystem.
 
-shadriz offers a preferred list of technologies integrated together to be used as a foundation for web app projects.
+shadriz offers a preferred list of technologies to be used as a foundation for web app projects.
 
 ### Configuration automation
 
@@ -187,7 +187,7 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
 
 ## Foreign key constraints
 
-shadriz supports adding foreign key constraints using the following constraint format: `table_name:references`.
+shadriz supports adding foreign key constraints using the following constraint format: `table:references`.
 
 ```bash
 npx shadriz@latest scaffold post -c title:text
@@ -211,7 +211,7 @@ npx shadriz@latest scaffold media -c pdf:file thumbnail:image description:text
 
 ## Naming conventions
 
-shadriz uses naming conventions as described in the table below. number and case transformations will be applied to generated code. There may be some cases where conventions are not followed due to conventions used in third-party libraries and services:
+shadriz uses naming conventions as described in the table below. Number and case transformations will be applied to the generated code.
 
 | Generated Code                     | Number           | Case         | Example                 |
 | :--------------------------------- | :--------------- | :----------- | ----------------------- |
