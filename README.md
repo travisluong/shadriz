@@ -211,23 +211,26 @@ npx shadriz@latest scaffold media -c pdf:file thumbnail:image description:text
 
 ## Naming conventions
 
-shadriz uses the following naming conventions in the generated code. There may be some cases where conventions are not followed due to conventions used in third-party libraries and services.
+shadriz uses naming conventions as described in the table below. number and case transformations will be applied to generated code. There may be some cases where conventions are not followed due to conventions used in third-party libraries and services:
 
-- Class names are singular pascal case: `FooBar`.
-- Drizzle table variable names are plural camel case: `fooBars`.
-- Drizzle column property names are original camel case: `fooBar`.
-- Drizzle foreign key property names are original camel case with Id suffix: `fooBarId`.
-- Form input names are original camel case: `fooBar`.
-- Database table names are plural snake case: `foo_bars`.
-- Database foreign keys are singular snake case: `foo_bar_id`.
-- File names are singular or plural kebab case: `foo-bar` or `foo-bars`.
-- URL pathnames are singular or plural kebab case: `foo-bar` or `foo-bars`.
-- Query string parameters are singular or plural camel case: `fooBar` or `fooBars`.
-- UI table and column names are singular or plural capital case: `Foo Bar` or `Foo Bars`
-- Drizzle findMany variable names are singular camel case with List suffix: `fooBarList`.
-- Drizzle findFirst variable names are singular camel case: `fooBar`.
-- React array props are singular camel case with List suffix: `fooBarList`.
-- React object props are singular camel case: `fooBar`.
+| Generated Code                     | Number           | Case         | Example                 |
+| :--------------------------------- | :--------------- | :----------- | ----------------------- |
+| Class names                        | singular         | pascal case  | FooBar                  |
+| Database table names               | plural           | snake case   | foo_bars                |
+| Database column names              | original         | snake case   | foo_bar                 |
+| Database foreign keys              | singular         | snake case   | foo_bar_id              |
+| Drizzle table variable names       | plural           | camel case   | fooBars                 |
+| Drizzle column property names      | original         | camel case   | fooBar                  |
+| Drizzle foreign key property names | singular         | camel case   | fooBarId                |
+| Drizzle findMany variable names    | singular         | camel case   | fooBarList              |
+| Drizzle findFirst variable names   | singular         | camel case   | fooBar                  |
+| File names                         | singular, plural | kebab case   | foo-bar.ts, foo-bars.ts |
+| Form input names                   | original         | camel case   | fooBar                  |
+| React array props                  | singular         | camel case   | fooBarList              |
+| React object props                 | singular         | camel case   | fooBar                  |
+| URL pathnames                      | singular, plural | kebab case   | /foo-bar, /foo-bars     |
+| Query string parameters            | original         | camel case   | ?fooBar=baz             |
+| UI table and column names          | singular, plural | capital case | Foo Bar, Foo Bars       |
 
 ## Auth
 
