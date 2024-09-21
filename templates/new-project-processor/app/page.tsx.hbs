@@ -1,6 +1,7 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Page() {
   return (
@@ -14,9 +15,9 @@ export default function Page() {
           <p className="mt-4">
             Build full stack Next.js apps super fast.
           </p>
-          <a href="https://www.shadriz.com" className="mt-5 block">
+          <Link href="https://www.shadriz.com" className="mt-5 block">
             <Button className="rounded-full">Get Started</Button>
-          </a>
+          </Link>
         </div>
       </section>
 

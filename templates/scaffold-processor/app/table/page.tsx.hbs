@@ -5,6 +5,7 @@ import Pagination from "@/components/pagination";
 import {{tableObj.singularPascalCase}}Table from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-table";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 export default async function Page({
   searchParams,
@@ -26,11 +27,11 @@ export default async function Page({
     <div>
       <h1 className="text-3xl font-bold mb-6">{{tableObj.pluralCapitalCase}}</h1>
       <div className="text-right mr-2">
-        <a href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
+        <Link href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
           <Button>
             <PlusIcon className="mr-2" /> New
           </Button>
-        </a>
+        </Link>
       </div>
       <div className="mb-5">
         <{{tableObj.singularPascalCase}}Table {{tableObj.singularCamelCase}}List={ {{tableObj.singularCamelCase}}List } />

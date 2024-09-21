@@ -10,6 +10,7 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function Layout({
   children,
@@ -43,36 +44,36 @@ export default async function Layout({
           <nav className="py-8">
             <ul>
               <li className="mb-4">
-                <a
+                <Link
                   href="/dashboard"
                   className="flex items-center gap-2 font-semibold"
                 >
                   <DashboardIcon className="flex-shrink-0" /> Dashboard
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
-                <a
+                <Link
                   href="/profile"
                   className="flex items-center gap-2 font-semibold"
                 >
                   <PersonIcon className="flex-shrink-0" /> Profile
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
-                <a
+                <Link
                   href="/settings"
                   className="flex items-center gap-2 font-semibold"
                 >
                   <GearIcon className="flex-shrink-0" /> Settings
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
-                <a
+                <Link
                   href="/account"
                   className="flex items-center gap-2 font-semibold"
                 >
                   <BackpackIcon className="flex-shrink-0" /> Account
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
                 <form

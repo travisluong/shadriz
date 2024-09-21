@@ -8,6 +8,7 @@ import {
   ExitIcon,
 } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function Layout({
   children,
@@ -31,7 +32,7 @@ export default async function Layout({
       <header>
         <div className="border-b mx-auto px-6 py-4 flex justify-between items-center">
           <div className="font-bold flex items-center">
-            <BlendingModeIcon className="mr-2" /> <a href="/">shadriz</a>
+            <BlendingModeIcon className="mr-2" /> <Link href="/">shadriz</Link>
           </div>
           <div>
             <Avatar>
@@ -49,12 +50,12 @@ export default async function Layout({
           <nav className="py-8">
             <ul>
               <li className="mb-4">
-                <a
+                <Link
                   href="/admin"
                   className="flex items-center gap-2 font-semibold"
                 >
                   <DashboardIcon /> Admin
-                </a>
+                </Link>
               </li>
               <li className="mb-4">
                 <form
