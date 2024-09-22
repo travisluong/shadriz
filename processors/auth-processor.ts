@@ -252,6 +252,9 @@ export class AuthProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "auth-processor/components/private/dashboard-sidebar.tsx.hbs",
       outputPath: "components/private/dashboard-sidebar.tsx",
+      data: {
+        stripeEnabled: this.opts.stripeEnabled,
+      },
     });
   }
 

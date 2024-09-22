@@ -16,9 +16,11 @@ export default function Header() {
           <Link href="https://www.shadriz.com" className="mr-4">
             Docs
           </Link>
+          {{#if stripeEnabled}}
           <Link href="/pricing" className="mr-4">
             Pricing
           </Link>
+          {{/if}}
           <Link
             href="/dashboard"
             className="mr-4"
