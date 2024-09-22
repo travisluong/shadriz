@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
@@ -11,6 +12,7 @@ export class DbDialectProcessor implements ShadrizProcessor {
   }
 
   async init(): Promise<void> {
+    log.init("initializing db dialect...");
     await this.render();
   }
 

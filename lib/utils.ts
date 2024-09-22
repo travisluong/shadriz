@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawn, exec } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
@@ -6,6 +6,7 @@ import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
 import { PackageManager, ShadrizConfig } from "./types";
 import { caseFactory } from "./case-utils";
+import ora from "ora";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -18,7 +19,7 @@ export function renderTemplateIfNotExists({
 }) {
   const joinedOutputPath = path.join(process.cwd(), outputPath);
   if (fs.existsSync(joinedOutputPath)) {
-    log.bgYellow("exists: " + outputPath);
+    log.gray("- " + outputPath + " - file exists. no change.");
     return;
   }
   renderTemplate({
@@ -45,7 +46,7 @@ export function renderTemplate({
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(resolvedPath, content);
-  log.bgGreen("added: " + outputPath);
+  log.green("+ " + outputPath);
 }
 
 export function compileTemplate({
@@ -62,8 +63,26 @@ export function compileTemplate({
   return content;
 }
 
-export async function spawnCommand(command: string) {
-  log.bgBlue("running: " + command);
+export function runCommand(command: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const spinner = ora(command).start();
+    exec(command, (error, stdout, stderr) => {
+      spinner.stop();
+      log.blue("> " + command);
+
+      if (error) {
+        console.error(`Error: ${stderr}`);
+        reject(error);
+      } else {
+        // verbose option
+        // console.log(`${stdout}`);
+        resolve();
+      }
+    });
+  });
+}
+
+export async function spawnCommand(command: string): Promise<void> {
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -81,7 +100,7 @@ export async function spawnCommand(command: string) {
 
     child.on("close", (code) => {
       if (code === 0) {
-        resolve(null);
+        resolve();
       } else {
         reject(new Error(`Command ${command} exited with code ${code}`));
       }
@@ -102,9 +121,7 @@ export function appendToFileIfTextNotExists(
 ) {
   const fileContent = fs.readFileSync(filePath, "utf-8");
   if (fileContent.includes(textToSearch)) {
-    log.bgYellow(
-      `exists: ${textToSearch} detected in ${filePath}. skipping append.`
-    );
+    log.gray(`- ${filePath} - ${textToSearch} detected. no change.`);
   } else {
     appendToFile(filePath, textToAppend);
   }
@@ -122,7 +139,7 @@ export function appendToFile(filePath: string, textToAppend: string) {
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     fs.appendFileSync(joinedFilePath, textToAppend);
-    log.bgYellow("modified: " + filePath);
+    log.yellow("M " + filePath);
   } catch (error) {
     console.error(error);
   }
@@ -134,7 +151,7 @@ export function prependToFile(filePath: string, textToPrepend: string) {
     const fileContent = fs.readFileSync(joinedFilePath, "utf-8");
     const updatedContent = textToPrepend + fileContent;
     fs.writeFileSync(joinedFilePath, updatedContent, "utf-8");
-    log.bgYellow("modified: " + filePath);
+    log.yellow("M " + filePath);
   } catch (error: any) {
     console.error(
       `Error while prepending content to the file: ${error.message}`
@@ -146,11 +163,9 @@ export function writeToFile(filePath: string, text: string) {
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     fs.writeFileSync(joinedFilePath, text, "utf-8");
-    log.bgYellow("modified: " + filePath);
+    log.green("+ " + filePath);
   } catch (error: any) {
-    console.error(
-      `Error while prepending content to the file: ${error.message}`
-    );
+    console.error(`Error while writing content to the file: ${error.message}`);
   }
 }
 
@@ -181,7 +196,7 @@ export function insertTextAfter(
   // Write the updated content back to the file
   fs.writeFileSync(filePath, updatedContent, "utf8");
 
-  log.bgYellow("modified: " + filePath);
+  log.yellow("M " + filePath);
 }
 
 export function getFilenamesFromFolder(folderPath: string): string[] {
@@ -239,9 +254,9 @@ export async function installDependencies(opts: {
       version = pinnedVersion;
     }
     if (opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm add ${str}@${version}`);
+      await runCommand(`pnpm add ${str}@${version}`);
     } else {
-      await spawnCommand(`npm install ${str}@${version}`);
+      await runCommand(`npm install ${str}@${version}`);
     }
   }
 }
@@ -271,9 +286,9 @@ export async function installDevDependencies(opts: {
       version = pinnedVersion;
     }
     if (opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm add -D ${str}@${version}`);
+      await runCommand(`pnpm add -D ${str}@${version}`);
     } else if (opts.packageManager === "npm") {
-      await spawnCommand(`npm install -D ${str}@${version}`);
+      await runCommand(`npm install -D ${str}@${version}`);
     }
   }
 }
@@ -295,9 +310,9 @@ export async function addShadcnComponents(opts: {
   }
   for (const component of opts.shadcnComponents) {
     if (opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm dlx shadcn@${version} add -y -o ${component}`);
+      await runCommand(`pnpm dlx shadcn@${version} add -y -o ${component}`);
     } else if (opts.packageManager === "npm") {
-      await spawnCommand(`npx shadcn@${version} add -y -o ${component}`);
+      await runCommand(`npx shadcn@${version} add -y -o ${component}`);
     }
   }
 }

@@ -9,7 +9,7 @@ import {
   completeShadrizConfig,
   loadShadrizConfig,
   regenerateSchemaIndex,
-  spawnCommand,
+  runCommand,
   writeToFile,
 } from "./lib/utils";
 import { packageStrategyFactory } from "./lib/strategy-factory";
@@ -91,11 +91,11 @@ program
 
     try {
       if (packageManager === "pnpm") {
-        await spawnCommand(
+        await runCommand(
           `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
         );
       } else {
-        await spawnCommand(
+        await runCommand(
           `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
         );
       }
@@ -154,9 +154,9 @@ program
       const validProviders = new Set([
         "github",
         "google",
-        "credentials",
         "postmark",
         "nodemailer",
+        "credentials",
       ]);
       for (const p of authProviders) {
         if (!validProviders.has(p)) {
@@ -284,9 +284,9 @@ program
             choices: [
               { name: "github", value: "github" },
               { name: "google", value: "google" },
-              { name: "credentials", value: "credentials" },
               { name: "postmark", value: "postmark" },
               { name: "nodemailer", value: "nodemailer" },
+              { name: "credentials", value: "credentials" },
             ],
           }));
 
@@ -383,7 +383,7 @@ program
 
       log.success("shadriz init success");
     } catch (error) {
-      log.bgRed(`${error}`);
+      log.red(`${error}`);
     }
   });
 
@@ -440,13 +440,11 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
       }));
 
     if (authorizationLevel === "admin" && !fs.existsSync("app/(admin)")) {
-      log.bgRed(
-        "(admin) route group not found. authorization must be enabled."
-      );
+      log.red("(admin) route group not found. authorization must be enabled.");
       process.exit(1);
     }
     if (authorizationLevel === "private" && !fs.existsSync("app/(private)")) {
-      log.bgRed("(private) route group not found. auth must be enabled.");
+      log.red("(private) route group not found. auth must be enabled.");
       process.exit(1);
     }
 

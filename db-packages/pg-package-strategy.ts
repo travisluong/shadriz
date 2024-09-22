@@ -21,6 +21,7 @@ export class PgPackageStrategy implements DbPackageStrategy {
   devDependencies = ["@types/pg"];
 
   async init() {
+    log.init("initializing pg package...");
     await this.install();
     this.copyMigrateScript();
     this.appendDbUrl();
@@ -88,10 +89,8 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   printCompletionMessage(): void {
     log.checklist("pg checklist");
-    log.log("\nconfigure database:");
-    log.dash("update DB_URL in .env.local");
-    log.log("\nrun migrations:");
-    log.cmd("npx drizzle-kit generate");
-    log.cmd("npx drizzle-kit migrate");
+    log.task("update DB_URL in .env.local");
+    log.cmdtask("npx drizzle-kit generate");
+    log.cmdtask("npx drizzle-kit migrate");
   }
 }

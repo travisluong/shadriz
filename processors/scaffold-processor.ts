@@ -549,7 +549,9 @@ export class ScaffoldProcessor {
         `@/schema/${tableObj.pluralKebabCase}`
       )
     ) {
-      log.bgYellow(`${tableObj.pluralKebabCase} exists in schema.ts`);
+      log.gray(
+        `- lib/schema.ts - ${tableObj.pluralKebabCase} detected. no change.`
+      );
       return;
     }
     prependToFile(
@@ -579,10 +581,10 @@ export class ScaffoldProcessor {
     );
   }
   printCompletionMessage() {
-    log.success("scaffolding success: " + this.opts.table);
-    log.reminder();
-    log.cmd("npx drizzle-kit generate");
-    log.cmd("npx drizzle-kit migrate");
+    log.success("scaffold success: " + this.opts.table);
+    log.checklist("scaffold checklist");
+    log.cmdtask("npx drizzle-kit generate");
+    log.cmdtask("npx drizzle-kit migrate");
   }
   isFileType(arr: string[]) {
     return arr[1] === "file";

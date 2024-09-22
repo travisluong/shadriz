@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
@@ -16,6 +17,7 @@ export class DarkModeProcessor implements ShadrizProcessor {
   shadcnComponents: string[] = ["dropdown-menu"];
 
   async init() {
+    log.init("initializing dark mode...");
     await this.install();
     await this.render();
   }

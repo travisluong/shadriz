@@ -1,18 +1,55 @@
 import { test } from "vitest";
 import { AuthProcessor } from "../processors/auth-processor";
-import { SqliteDialectStrategy } from "../db-dialects/sqlite-dialect-strategy";
+import { AdminProcessor } from "../processors/admin-processor";
+import { StripeProcessor } from "../processors/stripe-processor";
+import { BetterSqlite3PackageStrategy } from "../db-packages/better-sqlite3-package-strategy";
+import { PgPackageStrategy } from "../db-packages/pg-package-strategy";
+import { ShadrizConfig } from "../lib/types";
+import { Mysql2PackageStrategy } from "../db-packages/mysql2-package-strategy";
+
+const shadrizConfig: ShadrizConfig = {
+  authProviders: ["google", "github", "credentials", "nodemailer", "postmark"],
+  sessionStrategy: "jwt",
+  install: false,
+  packageManager: "npm",
+  stripeEnabled: true,
+  dbDialect: "sqlite",
+  latest: true,
+  pkStrategy: "uuidv4",
+  adminEnabled: true,
+  authEnabled: true,
+  authSolution: "authjs",
+  darkModeEnabled: true,
+  dbPackage: "better-sqlite3",
+  version: "2",
+};
+
+test("better sqlite3 package strategy", () => {
+  const s = new BetterSqlite3PackageStrategy(shadrizConfig);
+  s.printCompletionMessage();
+});
+
+test("pg package strategy", () => {
+  const s = new PgPackageStrategy(shadrizConfig);
+  s.printCompletionMessage();
+});
+
+test("mysql2 package strategy", () => {
+  const s = new Mysql2PackageStrategy(shadrizConfig);
+  s.printCompletionMessage();
+});
 
 test("auth processor", () => {
-  const a = new AuthProcessor({
-    providers: ["google", "github", "credentials"],
-    sessionStrategy: "jwt",
-    install: false,
-    packageManager: "npm",
-    stripeEnabled: true,
-    dbDialect: "sqlite",
-    latest: true,
-    pkStrategy: "uuidv4",
-    dbDialectStrategy: new SqliteDialectStrategy(),
-  });
+  const a = new AuthProcessor(shadrizConfig);
   a.printCompletionMessage();
+});
+
+test("admin processor", () => {
+  const a = new AdminProcessor(shadrizConfig);
+  a.printCompletionMessage();
+});
+
+test("stripe processor", () => {
+  const p = new StripeProcessor(shadrizConfig);
+  p.printCompletionMessage();
 });

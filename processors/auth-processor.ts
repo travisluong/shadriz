@@ -5,16 +5,11 @@ import {
   installDependencies,
   installDevDependencies,
   renderTemplate,
-  spawnCommand,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import {
-  AuthProvider,
   DbDialect,
   DbDialectStrategy,
-  PackageManager,
-  PkStrategy,
-  SessionStrategy,
   ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
@@ -24,25 +19,13 @@ import {
 } from "./pk-strategy-processor";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 
-interface AuthProcessorOpts {
-  providers: AuthProvider[];
-  packageManager: PackageManager;
-  sessionStrategy: SessionStrategy;
-  install: boolean;
-  latest: boolean;
-  stripeEnabled: boolean;
-  pkStrategy: PkStrategy;
-  dbDialectStrategy: DbDialectStrategy;
-  dbDialect: DbDialect;
-}
-
 interface AuthStrategy {
   importTemplatePath: string;
   authTemplatePath: string;
   envTemplatePath: string;
   dependencies?: string[];
   devDependencies?: string[];
-  textToSearchInEnv: string;
+  textToSearchInEnv?: string;
   printCompletionMessage(): void;
 }
 
@@ -60,13 +43,13 @@ const authStrategyMap: AuthStrategyMap = {
     authTemplatePath: "auth-processor/lib/auth.ts.github.hbs",
     envTemplatePath: "auth-processor/lib/auth.ts.github.env.hbs",
     printCompletionMessage: function (): void {
-      log.log("\nsetup github provider:");
-      log.dash(
+      log.task("setup github provider");
+      log.subtask(
         "go to github > settings > developer settings > oauth apps > new oauth app"
       );
-      log.dash("callback: http://localhost:3000/api/auth/callback/github");
-      log.dash("update AUTH_GITHUB_ID in .env.local");
-      log.dash("update AUTH_GITHUB_SECRET in .env.local");
+      log.subtask("callback: http://localhost:3000/api/auth/callback/github");
+      log.subtask("update AUTH_GITHUB_ID in .env.local");
+      log.subtask("update AUTH_GITHUB_SECRET in .env.local");
     },
     textToSearchInEnv: "AUTH_GITHUB_ID",
   },
@@ -75,13 +58,13 @@ const authStrategyMap: AuthStrategyMap = {
     authTemplatePath: "auth-processor/lib/auth.ts.google.hbs",
     envTemplatePath: "auth-processor/lib/auth.ts.google.env.hbs",
     printCompletionMessage: function (): void {
-      log.log("\nsetup google provider:");
-      log.dash(
+      log.task("setup google provider");
+      log.subtask(
         "go to console.cloud.google.com > new project > oauth consent screen + 2.0 client"
       );
-      log.dash("callback: http://localhost:3000/api/auth/callback/google");
-      log.dash("update AUTH_GOOGLE_ID in .env.local");
-      log.dash("update AUTH_GOOGLE_SECRET in .env.local");
+      log.subtask("callback: http://localhost:3000/api/auth/callback/google");
+      log.subtask("update AUTH_GOOGLE_ID in .env.local");
+      log.subtask("update AUTH_GOOGLE_SECRET in .env.local");
     },
     textToSearchInEnv: "AUTH_GOOGLE_ID",
   },
@@ -92,21 +75,23 @@ const authStrategyMap: AuthStrategyMap = {
     dependencies: ["bcrypt"],
     devDependencies: ["@types/bcrypt"],
     printCompletionMessage: function (): void {
-      log.log("\ncreate test user for credentials provider:");
-      log.cmd("npx tsx scripts/create-user.ts shadriz@example.com password123");
+      log.task("create test user for credentials provider");
+      log.cmdsubtask(
+        "npx tsx scripts/create-user.ts shadriz@example.com password123"
+      );
     },
-    textToSearchInEnv: "",
+    textToSearchInEnv: undefined,
   },
   postmark: {
     importTemplatePath: "auth-processor/lib/auth.ts.postmark.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.postmark.hbs",
     envTemplatePath: "auth-processor/lib/auth.ts.postmark.env.hbs",
     printCompletionMessage: function (): void {
-      log.log("\nsetup postmark provider");
-      log.dash("go to postmark > server > api tokens");
-      log.dash("generate token");
-      log.dash("change the from email in auth.ts");
-      log.dash("update AUTH_POSTMARK_KEY in .env.local");
+      log.task("setup postmark provider");
+      log.subtask("go to postmark > server > api tokens");
+      log.subtask("generate token");
+      log.subtask("change the from email in auth.ts");
+      log.subtask("update AUTH_POSTMARK_KEY in .env.local");
     },
     textToSearchInEnv: "AUTH_POSTMARK_KEY",
   },
@@ -116,9 +101,9 @@ const authStrategyMap: AuthStrategyMap = {
     envTemplatePath: "auth-processor/lib/auth.ts.nodemailer.env.hbs",
     dependencies: ["nodemailer"],
     printCompletionMessage: function (): void {
-      log.log("\nsetup nodemailer provider");
-      log.dash("update EMAIL_SERVER in .env.local");
-      log.dash("update EMAIL_FROM in .env.local");
+      log.task("setup nodemailer provider");
+      log.subtask("update EMAIL_SERVER in .env.local");
+      log.subtask("update EMAIL_FROM in .env.local");
     },
     textToSearchInEnv: "EMAIL_SERVER",
   },
@@ -158,6 +143,7 @@ export class AuthProcessor implements ShadrizProcessor {
   dbDialectStrategy: DbDialectStrategy;
 
   async init() {
+    log.init("initializing auth...");
     this.validateOptions();
     await this.install();
     await this.render();
@@ -243,7 +229,7 @@ export class AuthProcessor implements ShadrizProcessor {
     appendToFileIfTextNotExists(
       ".env.local",
       `\nAUTH_SECRET=secret`,
-      "AUTH_SECRET="
+      "AUTH_SECRET"
     );
   }
 
@@ -316,6 +302,7 @@ export class AuthProcessor implements ShadrizProcessor {
         data: {},
       });
       envVars = "\n" + envVars;
+      if (!strategy.textToSearchInEnv) return;
       appendToFileIfTextNotExists(
         ".env.local",
         envVars,
@@ -392,7 +379,7 @@ export class AuthProcessor implements ShadrizProcessor {
     appendToFileIfTextNotExists(
       ".env.local",
       "\nAUTH_TRUST_HOST=http://localhost:3000",
-      "AUTH_TRUST_HOST="
+      "AUTH_TRUST_HOST"
     );
   }
 

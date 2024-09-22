@@ -16,6 +16,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
   devDependencies = [];
 
   async init() {
+    log.init("initializing mysql2 package...");
     await this.install();
     await this.render();
   }
@@ -77,10 +78,8 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   printCompletionMessage(): void {
     log.checklist("mysql2 checklist");
-    log.log("\nconfigure database:");
-    log.dash("update DB_URL in .env.local");
-    log.log("\nrun migrations:");
-    log.cmd("npx drizzle-kit generate");
-    log.cmd("npx drizzle-kit migrate");
+    log.task("update DB_URL in .env.local");
+    log.cmdtask("npx drizzle-kit generate");
+    log.cmdtask("npx drizzle-kit migrate");
   }
 }

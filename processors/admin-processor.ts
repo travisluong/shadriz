@@ -21,6 +21,7 @@ export class AdminProcessor implements ShadrizProcessor {
   }
 
   async init(): Promise<void> {
+    log.init("initializing admin...");
     await this.install();
     await this.render();
   }
@@ -83,8 +84,7 @@ export class AdminProcessor implements ShadrizProcessor {
 
   printCompletionMessage() {
     log.checklist("admin checklist");
-
-    log.log("\ngrant admin privilege:");
-    log.cmd("npx tsx scripts/grant-admin.ts shadriz@example.com");
+    log.task("grant admin privilege:");
+    log.cmdsubtask("npx tsx scripts/grant-admin.ts shadriz@example.com");
   }
 }

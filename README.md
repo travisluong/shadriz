@@ -92,7 +92,7 @@ You will be asked a few questions to configure the app.
 ```
 ? Which package manager do you want to use? npm
 ? Do you want to install latest packages or pinned packages? pinned
-? Which database dialect would you like to use? pg
+? Which database dialect would you like to use? sqlite
 ? Which primary key generation strategy would you like to use? cuid2
 ? Which authentication solution do you want to use? authjs
 ? Which auth providers would you like to use? github, google, credentials
@@ -105,7 +105,7 @@ You will be asked a few questions to configure the app.
 Alternatively, you can also run the command non-interactively:
 
 ```
-npx shadriz@latest init -p npm --latest --db-dialect pg -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe --dark-mode
+npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe --dark-mode
 ```
 
 ### Step 4: Project checklist

@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import { ShadrizProcessor, ShadrizConfig, PkStrategy } from "../lib/types";
 import { installDependencies } from "../lib/utils";
 
@@ -33,6 +34,7 @@ export class PkStrategyProcessor implements ShadrizProcessor {
   }
 
   async init(): Promise<void> {
+    log.init("initializing pk strategy...");
     await this.install();
   }
 

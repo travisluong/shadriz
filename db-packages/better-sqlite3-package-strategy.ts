@@ -21,6 +21,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   devDependencies: string[] = [];
 
   async init() {
+    log.init("initializing better-sqlite3 package...");
     await this.install();
     await this.render();
   }
@@ -87,10 +88,8 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
 
   printCompletionMessage(): void {
     log.checklist("better-sqlite3 checklist");
-    log.log("\nconfigure database:");
-    log.dash("update DB_URL in .env.local");
-    log.log("\nrun migrations:");
-    log.cmd("npx drizzle-kit generate");
-    log.cmd("npx drizzle-kit migrate");
+    log.task("update DB_URL in .env.local");
+    log.cmdtask("npx drizzle-kit generate");
+    log.cmdtask("npx drizzle-kit migrate");
   }
 }

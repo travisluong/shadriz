@@ -1,47 +1,55 @@
 import chalk from "chalk";
 
 export const log = {
-  bgBlue(str: string) {
-    console.log(chalk.bgBlue(str));
+  blue(str: string) {
+    console.log(chalk.blueBright(str));
   },
 
-  bgRed(str: string) {
-    console.log(chalk.bgRed(str));
+  red(str: string) {
+    console.log(chalk.red(str));
   },
 
-  bgGreen(str: string) {
-    console.log(chalk.bgGreen(str));
+  green(str: string) {
+    console.log(chalk.green(str));
   },
 
-  bgYellow(str: string) {
-    console.log(chalk.bgYellow(str));
+  yellow(str: string) {
+    console.log(chalk.yellow(str));
+  },
+
+  gray(str: string) {
+    console.log(chalk.gray(str));
   },
 
   log(str: string) {
     console.log(str);
   },
 
-  cmd(str: string) {
-    console.log(chalk.gray("$ ") + str);
-  },
-
-  dash(str: string) {
-    console.log(chalk.gray("- ") + str);
-  },
-
-  reminder() {
-    console.log(chalk.yellowBright("\n🔔 reminder:"));
-  },
-
-  point(str: string) {
-    console.log("👉 " + chalk.white(str));
-  },
-
   success(str: string) {
-    console.log("\n✅ " + chalk.greenBright(str));
+    console.log(chalk.greenBright("✓ " + str));
+  },
+
+  init(str: string) {
+    console.log(chalk.bold(str));
   },
 
   checklist(str: string) {
-    console.log("\n📋 " + chalk.inverse.bold(str));
+    console.log(chalk.bold.underline(str.toUpperCase()));
+  },
+
+  task(str: string) {
+    console.log("□ " + str);
+  },
+
+  cmdtask(str: string) {
+    console.log("□ run: " + str);
+  },
+
+  subtask(str: string) {
+    console.log("  □ " + str);
+  },
+
+  cmdsubtask(str: string) {
+    console.log("  □ run: " + str);
   },
 };

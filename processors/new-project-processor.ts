@@ -1,3 +1,4 @@
+import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
@@ -6,7 +7,7 @@ import {
   removeTextFromFile,
   renderTemplate,
   renderTemplateIfNotExists,
-  spawnCommand,
+  runCommand,
 } from "../lib/utils";
 import packageShadrizJson from "../package-shadriz.json";
 
@@ -32,6 +33,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
   }
 
   async init() {
+    log.init("initializing new project...");
     await this.install();
     await this.render();
   }
@@ -53,9 +55,9 @@ export class NewProjectProcessor implements ShadrizProcessor {
     }
 
     if (this.opts.packageManager === "pnpm") {
-      await spawnCommand(`pnpm dlx shadcn@${version} init -y -d`);
+      await runCommand(`pnpm dlx shadcn@${version} init -y -d`);
     } else if (this.opts.packageManager === "npm") {
-      await spawnCommand(`npx shadcn@${version} init -y -d`);
+      await runCommand(`npx shadcn@${version} init -y -d`);
     }
 
     await installDependencies({
