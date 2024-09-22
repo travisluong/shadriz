@@ -328,86 +328,41 @@ program
 
       const completeConfig = completeShadrizConfig(partialConfig);
 
-      const newProjectProcessor = new NewProjectProcessor({
-        packageManager: completeConfig.packageManager,
-        install: options.install,
-        latest: completeConfig.latest,
-        darkMode: completeConfig.darkModeEnabled,
-        authEnabled: completeConfig.authSolution !== "none",
-        stripeEnabled: !!completeConfig.stripeEnabled,
-      });
+      const newProjectProcessor = new NewProjectProcessor(completeConfig);
       const dbPackageStrategy = packageStrategyFactory(
         completeConfig.dbPackage,
         {
           packageManager: completeConfig.packageManager,
           install: options.install,
           latest: completeConfig.latest,
+          shadrizConfig: completeConfig,
         }
       );
       const dbDialectStrategy = dialectStrategyFactory(
         partialConfig.dbDialect!
       );
-      const dbDialectProcessor = new DbDialectProcessor({
-        dbDialect: completeConfig.dbDialect,
-        install: options.install,
-        latest: completeConfig.latest,
-        packageManager: completeConfig.packageManager,
-      });
-      const pkStrategyProcessor = new PkStrategyProcessor({
-        packageManager: completeConfig.packageManager,
-        install: options.install,
-        latest: completeConfig.latest,
-        pkStrategy: completeConfig.pkStrategy,
-      });
+      const dbDialectProcessor = new DbDialectProcessor(completeConfig);
+      const pkStrategyProcessor = new PkStrategyProcessor(completeConfig);
 
       let authProcessor;
       let adminProcessor;
       let stripeProcessor;
 
       if (completeConfig.authSolution !== "none") {
-        authProcessor = new AuthProcessor({
-          packageManager: completeConfig.packageManager,
-          providers: completeConfig.authProviders,
-          sessionStrategy: completeConfig.sessionStrategy!,
-          install: options.install,
-          latest: completeConfig.latest,
-          stripeEnabled: completeConfig.stripeEnabled,
-          pkStrategy: completeConfig.pkStrategy!,
-          dbDialectStrategy: dbDialectStrategy,
-          dbDialect: completeConfig.dbDialect,
-        });
+        authProcessor = new AuthProcessor(completeConfig);
       }
       if (completeConfig.authSolution !== "none") {
-        adminProcessor = new AdminProcessor({
-          packageManager: partialConfig.packageManager!,
-          install: options.install,
-          latest: completeConfig.latest,
-          dbDialect: completeConfig.dbDialect,
-          dbDialectStrategy: dbDialectStrategy,
-          pkStrategy: completeConfig.pkStrategy,
-          dbPackage: completeConfig.dbPackage,
-        });
+        adminProcessor = new AdminProcessor(completeConfig);
       }
       if (completeConfig.stripeEnabled) {
-        stripeProcessor = new StripeProcessor({
-          dbDialectStrategy: dbDialectStrategy,
-          packageManager: completeConfig.packageManager,
-          install: options.install,
-          latest: completeConfig.latest,
-          pkStrategy: completeConfig.pkStrategy!,
-          dbDialect: completeConfig.dbDialect,
-        });
+        stripeProcessor = new StripeProcessor(completeConfig);
       }
       await newProjectProcessor.init();
       await dbPackageStrategy.init();
       dbDialectProcessor.init();
       await pkStrategyProcessor.init();
       if (completeConfig.darkModeEnabled) {
-        const darkModeProcessor = new DarkModeProcessor({
-          packageManager: completeConfig.packageManager,
-          install: options.install,
-          latest: completeConfig.latest,
-        });
+        const darkModeProcessor = new DarkModeProcessor(completeConfig);
         await darkModeProcessor.init();
       }
       writeToFile(

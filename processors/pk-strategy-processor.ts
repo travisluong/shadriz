@@ -1,8 +1,4 @@
-import {
-  ShadrizProcessor,
-  PkStrategyProcessorOpts,
-  PkStrategy,
-} from "../lib/types";
+import { ShadrizProcessor, ShadrizConfig, PkStrategy } from "../lib/types";
 import { installDependencies } from "../lib/utils";
 
 export const pkStrategyImportTemplates: Record<PkStrategy, string> = {
@@ -27,12 +23,12 @@ const pkDependencies: Record<PkStrategy, string[]> = {
 };
 
 export class PkStrategyProcessor implements ShadrizProcessor {
-  opts: PkStrategyProcessorOpts;
+  opts: ShadrizConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = [];
 
-  constructor(opts: PkStrategyProcessorOpts) {
+  constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
 

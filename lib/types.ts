@@ -5,12 +5,14 @@ export interface ShadrizConfig {
   dbDialect: DbDialect;
   dbPackage: DbPackage;
   pkStrategy: PkStrategy;
+  authEnabled: boolean;
   authSolution: AuthSolution;
   authProviders: AuthProvider[];
   adminEnabled: boolean;
   stripeEnabled: boolean;
   sessionStrategy: SessionStrategy;
   darkModeEnabled: boolean;
+  install: boolean;
 }
 
 export type AuthSolution = "authjs" | "none";
@@ -21,6 +23,7 @@ export interface ShadrizProcessorOpts {
   packageManager: PackageManager;
   install: boolean;
   latest: boolean;
+  shadrizConfig: ShadrizConfig;
 }
 
 export interface DbDialectProcessorOpts extends ShadrizProcessorOpts {
@@ -57,10 +60,11 @@ export interface StripeProcessorOpts extends ShadrizProcessorOpts {
 }
 
 export interface ShadrizProcessor {
-  opts: ShadrizProcessorOpts;
+  opts: ShadrizConfig;
   dependencies: string[];
   devDependencies: string[];
   shadcnComponents: string[];
+  dbDialectStrategy?: DbDialectStrategy;
   init(): Promise<void>;
   install(): Promise<void>;
   render(): Promise<void>;

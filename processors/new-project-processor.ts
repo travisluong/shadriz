@@ -1,4 +1,4 @@
-import { NewProjectProcessorOpts, ShadrizProcessor } from "../lib/types";
+import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
   commentOutTextInFile,
@@ -11,7 +11,7 @@ import {
 import packageShadrizJson from "../package-shadriz.json";
 
 export class NewProjectProcessor implements ShadrizProcessor {
-  opts: NewProjectProcessorOpts;
+  opts: ShadrizConfig;
 
   dependencies = ["drizzle-orm", "dotenv", "zod", "drizzle-zod"];
 
@@ -27,7 +27,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
     "select",
   ];
 
-  constructor(opts: NewProjectProcessorOpts) {
+  constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
 
@@ -87,9 +87,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
       inputPath: "new-project-processor/components/header.tsx.hbs",
       outputPath: "components/header.tsx",
       data: {
-        darkMode: this.opts.darkMode,
-        authEnabled: this.opts.authEnabled,
-        stripeEnabled: this.opts.stripeEnabled,
+        opts: this.opts,
       },
     });
 

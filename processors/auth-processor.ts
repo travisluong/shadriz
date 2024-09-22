@@ -15,12 +15,14 @@ import {
   PackageManager,
   PkStrategy,
   SessionStrategy,
+  ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
 import {
   pkKeyValTemplates,
   pkStrategyImportTemplates,
 } from "./pk-strategy-processor";
+import { dialectStrategyFactory } from "../lib/strategy-factory";
 
 interface AuthProcessorOpts {
   providers: AuthProvider[];
@@ -143,13 +145,17 @@ const authDbDialectStrategy: Record<DbDialect, AuthDbDialect> = {
 };
 
 export class AuthProcessor implements ShadrizProcessor {
-  constructor(public opts: AuthProcessorOpts) {}
+  constructor(public opts: ShadrizConfig) {
+    this.dbDialectStrategy = dialectStrategyFactory(this.opts.dbDialect);
+  }
 
   dependencies = ["next-auth", "@auth/drizzle-adapter"];
 
   devDependencies = [];
 
   shadcnComponents: string[] = ["separator", "avatar"];
+
+  dbDialectStrategy: DbDialectStrategy;
 
   async init() {
     this.validateOptions();
@@ -195,7 +201,7 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   validateOptions() {
-    for (const provider of this.opts.providers) {
+    for (const provider of this.opts.authProviders) {
       if (!(provider in authStrategyMap)) {
         throw new Error("invalid provider: " + provider);
       }
@@ -214,7 +220,7 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   async installProviderDependencies() {
-    for (const provider of this.opts.providers) {
+    for (const provider of this.opts.authProviders) {
       const authStrategy = authStrategyMap[provider];
       if (authStrategy.dependencies) {
         await installDependencies({
@@ -261,7 +267,7 @@ export class AuthProcessor implements ShadrizProcessor {
   addAuthConfig() {
     let importsCode = "";
     let providersCode = "";
-    for (const provider of this.opts.providers) {
+    for (const provider of this.opts.authProviders) {
       const strategy = authStrategyMap[provider];
       importsCode += compileTemplate({
         inputPath: strategy.importTemplatePath,
@@ -303,7 +309,7 @@ export class AuthProcessor implements ShadrizProcessor {
   // }
 
   appendSecretsToEnv() {
-    for (const provider of this.opts.providers) {
+    for (const provider of this.opts.authProviders) {
       const strategy = authStrategyMap[provider];
       let envVars = compileTemplate({
         inputPath: strategy.envTemplatePath,
@@ -341,11 +347,11 @@ export class AuthProcessor implements ShadrizProcessor {
       outputPath: "app/signin/page.tsx",
       data: {
         providers: {
-          google: this.opts.providers.includes("google"),
-          github: this.opts.providers.includes("github"),
-          credentials: this.opts.providers.includes("credentials"),
-          postmark: this.opts.providers.includes("postmark"),
-          nodemailer: this.opts.providers.includes("nodemailer"),
+          google: this.opts.authProviders.includes("google"),
+          github: this.opts.authProviders.includes("github"),
+          credentials: this.opts.authProviders.includes("credentials"),
+          postmark: this.opts.authProviders.includes("postmark"),
+          nodemailer: this.opts.authProviders.includes("nodemailer"),
         },
       },
     });
@@ -367,7 +373,7 @@ export class AuthProcessor implements ShadrizProcessor {
 
   addAuthSchema() {
     const pkText =
-      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+      this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
     renderTemplate({
       inputPath: authDbDialectStrategy[this.opts.dbDialect].authSchemaTemplate,
@@ -376,8 +382,8 @@ export class AuthProcessor implements ShadrizProcessor {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
         stripeEnabled: this.opts.stripeEnabled,
-        createdAtTemplate: this.opts.dbDialectStrategy.createdAtTemplate,
-        updatedAtTemplate: this.opts.dbDialectStrategy.updatedAtTemplate,
+        createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
+        updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
     });
   }
@@ -392,7 +398,7 @@ export class AuthProcessor implements ShadrizProcessor {
 
   printCompletionMessage() {
     log.checklist("auth checklist");
-    for (const provider of this.opts.providers) {
+    for (const provider of this.opts.authProviders) {
       const authStrategy = authStrategyMap[provider];
       authStrategy.printCompletionMessage();
     }

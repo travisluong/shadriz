@@ -1,12 +1,12 @@
-import { DbDialectProcessorOpts, ShadrizProcessor } from "../lib/types";
+import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
 export class DbDialectProcessor implements ShadrizProcessor {
-  opts: DbDialectProcessorOpts;
+  opts: ShadrizConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = [];
-  constructor(opts: DbDialectProcessorOpts) {
+  constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
 

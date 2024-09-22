@@ -1,5 +1,7 @@
 import { BlendingModeIcon } from "@radix-ui/react-icons";
+{{#if opts.darkModeEnabled}}
 import { ModeToggle } from "@/components/mode-toggle";
+{{/if}}
 import Link from "next/link";
 
 export default function Header() {
@@ -16,29 +18,37 @@ export default function Header() {
           <Link href="https://www.shadriz.com" className="mr-4">
             Docs
           </Link>
-          {{#if stripeEnabled}}
+          {{#if opts.stripeEnabled}}
           <Link href="/pricing" className="mr-4">
             Pricing
           </Link>
           {{/if}}
+          {{#if opts.authEnabled}}
           <Link
             href="/dashboard"
             className="mr-4"
           >
             Dashboard
           </Link>
+          {{/if}}
+          {{#if opts.adminEnabled}}
           <Link
             href="/admin"
             className="mr-4"
           >
             Admin
           </Link>
+          {{/if}}
+          {{#if opts.authEnabled}}
           <Link href="/signin">
             Sign In
           </Link>
+          {{/if}}
+          {{#if opts.darkModeEnabled}}
           <div className="ml-5 inline-block">
             <ModeToggle />
           </div>
+          {{/if}}
         </div>
       </div>
     </header>

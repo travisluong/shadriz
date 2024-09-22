@@ -323,13 +323,15 @@ export function completeShadrizConfig(
     latest: partialConfig.latest ?? false,
     dbDialect: partialConfig.dbDialect ?? "sqlite",
     dbPackage: partialConfig.dbPackage ?? "better-sqlite3",
-    pkStrategy: partialConfig.pkStrategy ?? "uuidv4",
+    pkStrategy: partialConfig.pkStrategy ?? "cuid2",
+    authEnabled: partialConfig.authSolution === "authjs",
     authSolution: partialConfig.authSolution ?? "none",
-    authProviders: partialConfig.authProviders ?? ["credentials"],
-    adminEnabled: partialConfig.adminEnabled ?? true,
-    stripeEnabled: partialConfig.stripeEnabled ?? true,
+    authProviders: partialConfig.authProviders ?? ["credentials", "github"],
+    adminEnabled: partialConfig.adminEnabled ?? false,
+    stripeEnabled: partialConfig.stripeEnabled ?? false,
     sessionStrategy: partialConfig.sessionStrategy ?? "database",
-    darkModeEnabled: partialConfig.darkModeEnabled ?? true,
+    darkModeEnabled: partialConfig.darkModeEnabled ?? false,
+    install: partialConfig.install ?? true,
   };
   return completeConfig;
 }

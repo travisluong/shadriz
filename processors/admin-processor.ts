@@ -1,15 +1,22 @@
 import { log } from "../lib/log";
-import { AdminProcessorOpts, ShadrizProcessor } from "../lib/types";
+import { dialectStrategyFactory } from "../lib/strategy-factory";
+import {
+  DbDialectStrategy,
+  ShadrizConfig,
+  ShadrizProcessor,
+} from "../lib/types";
 import { addShadcnComponents, renderTemplate } from "../lib/utils";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
 
 export class AdminProcessor implements ShadrizProcessor {
-  opts: AdminProcessorOpts;
+  opts: ShadrizConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = ["card"];
+  dbDialectStrategy: DbDialectStrategy;
 
-  constructor(opts: AdminProcessorOpts) {
+  constructor(opts: ShadrizConfig) {
+    this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
   }
 
@@ -50,7 +57,7 @@ export class AdminProcessor implements ShadrizProcessor {
     });
 
     const pkText =
-      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+      this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
 
     const pkImport = pkStrategyImportTemplates[this.opts.pkStrategy];
 

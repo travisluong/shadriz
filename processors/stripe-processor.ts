@@ -1,5 +1,11 @@
 import { log } from "../lib/log";
-import { DbDialect, ShadrizProcessor, StripeProcessorOpts } from "../lib/types";
+import { dialectStrategyFactory } from "../lib/strategy-factory";
+import {
+  DbDialect,
+  ShadrizProcessor,
+  ShadrizConfig,
+  DbDialectStrategy,
+} from "../lib/types";
 import {
   addShadcnComponents,
   appendToFileIfTextNotExists,
@@ -27,9 +33,10 @@ const stripeDbDialectStrategy: Record<DbDialect, StripeDbDialectStrategy> = {
 };
 
 export class StripeProcessor implements ShadrizProcessor {
-  opts: StripeProcessorOpts;
+  opts: ShadrizConfig;
 
-  constructor(opts: StripeProcessorOpts) {
+  constructor(opts: ShadrizConfig) {
+    this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
   }
 
@@ -38,6 +45,8 @@ export class StripeProcessor implements ShadrizProcessor {
   devDependencies = [];
 
   shadcnComponents: string[] = ["card", "badge", "alert"];
+
+  dbDialectStrategy: DbDialectStrategy;
 
   async init() {
     await this.install();
@@ -98,7 +107,7 @@ export class StripeProcessor implements ShadrizProcessor {
 
   addStripeSchema() {
     const pkText =
-      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+      this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
     renderTemplate({
       inputPath:
