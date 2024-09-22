@@ -184,10 +184,6 @@ export function insertTextAfter(
   log.bgYellow("modified: " + filePath);
 }
 
-export function capitalize(str: string) {
-  return str[0].toUpperCase() + str.slice(1);
-}
-
 export function getFilenamesFromFolder(folderPath: string): string[] {
   try {
     const filenames = fs.readdirSync(folderPath);
