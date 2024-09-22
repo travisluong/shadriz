@@ -190,6 +190,8 @@ export class AuthProcessor implements ShadrizProcessor {
     this.addAuthSchema();
     this.addAuthTrustHostToEnv();
     this.appendAuthSecretToEnv();
+    this.addSignOutPage();
+    this.addDashboardSidebar();
   }
 
   validateOptions() {
@@ -237,6 +239,20 @@ export class AuthProcessor implements ShadrizProcessor {
       `\nAUTH_SECRET=secret`,
       "AUTH_SECRET="
     );
+  }
+
+  addSignOutPage() {
+    renderTemplate({
+      inputPath: "auth-processor/app/signout/page.tsx.hbs",
+      outputPath: "app/signout/page.tsx",
+    });
+  }
+
+  addDashboardSidebar() {
+    renderTemplate({
+      inputPath: "auth-processor/components/private/dashboard-sidebar.tsx.hbs",
+      outputPath: "components/private/dashboard-sidebar.tsx",
+    });
   }
 
   addAuthConfig() {

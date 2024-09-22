@@ -1,16 +1,8 @@
-import { auth, signOut } from "@/lib/auth";
+import { auth } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  AvatarIcon,
-  BackpackIcon,
-  BlendingModeIcon,
-  DashboardIcon,
-  ExitIcon,
-  GearIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
+import { AvatarIcon, BlendingModeIcon } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import DashboardSidebar from "@/components/private/dashboard-sidebar";
 
 export default async function Layout({
   children,
@@ -40,59 +32,7 @@ export default async function Layout({
       </header>
 
       <div className="flex">
-        <aside className="min-w-40 max-w-sm px-5 border-r min-h-screen">
-          <nav className="py-8">
-            <ul>
-              <li className="mb-4">
-                <Link
-                  href="/dashboard"
-                  className="flex items-center gap-2 font-semibold"
-                >
-                  <DashboardIcon className="flex-shrink-0" /> Dashboard
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  href="/profile"
-                  className="flex items-center gap-2 font-semibold"
-                >
-                  <PersonIcon className="flex-shrink-0" /> Profile
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  href="/settings"
-                  className="flex items-center gap-2 font-semibold"
-                >
-                  <GearIcon className="flex-shrink-0" /> Settings
-                </Link>
-              </li>
-              <li className="mb-4">
-                <Link
-                  href="/account"
-                  className="flex items-center gap-2 font-semibold"
-                >
-                  <BackpackIcon className="flex-shrink-0" /> Account
-                </Link>
-              </li>
-              <li className="mb-4">
-                <form
-                  action={async () => {
-                    "use server";
-                    await signOut({ redirectTo: "/" });
-                  }}
-                >
-                  <button
-                    type="submit"
-                    className="flex items-center gap-2 font-semibold"
-                  >
-                    <ExitIcon className="flex-shrink-0" /> Sign Out
-                  </button>
-                </form>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        <DashboardSidebar />
         <main className="p-5 w-full">{children}</main>
       </div>
     </div>

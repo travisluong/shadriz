@@ -180,6 +180,8 @@ export function insertTextAfter(
 
   // Write the updated content back to the file
   fs.writeFileSync(filePath, updatedContent, "utf8");
+
+  log.bgYellow("modified: " + filePath);
 }
 
 export function capitalize(str: string) {

@@ -80,6 +80,12 @@ export class ScaffoldProcessor {
     this.addDeleteForm();
     this.addTableComponent();
     this.insertSchemaToSchemaIndex();
+    if (this.opts.authorizationLevel === "admin") {
+      this.addLinkToAdminSidebar();
+    }
+    if (this.opts.authorizationLevel === "private") {
+      this.addLinkToDashboardSidebar();
+    }
     this.printCompletionMessage();
   }
   addSchema(): void {
@@ -554,6 +560,22 @@ export class ScaffoldProcessor {
       "lib/schema.ts",
       "export const schema = {",
       `\n  ...${tableObj.pluralCamelCase},`
+    );
+  }
+  addLinkToAdminSidebar() {
+    const tableObj = caseFactory(this.opts.table);
+    insertTextAfter(
+      "components/admin/admin-sidebar.tsx",
+      "const SIDEBAR_LINKS = [",
+      `\n  { href: "/admin/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <DashboardIcon /> },`
+    );
+  }
+  addLinkToDashboardSidebar() {
+    const tableObj = caseFactory(this.opts.table);
+    insertTextAfter(
+      "components/private/dashboard-sidebar.tsx",
+      "const SIDEBAR_LINKS = [",
+      `\n  { href: "/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <DashboardIcon /> },`
     );
   }
   printCompletionMessage() {
