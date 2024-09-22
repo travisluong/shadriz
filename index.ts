@@ -12,10 +12,7 @@ import {
   spawnCommand,
   writeToFile,
 } from "./lib/utils";
-import {
-  dialectStrategyFactory,
-  packageStrategyFactory,
-} from "./lib/strategy-factory";
+import { packageStrategyFactory } from "./lib/strategy-factory";
 import { AuthProcessor } from "./processors/auth-processor";
 import { NewProjectProcessor } from "./processors/new-project-processor";
 import { DarkModeProcessor } from "./processors/dark-mode-processor";
