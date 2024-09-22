@@ -40,21 +40,10 @@ export interface DataTypeStrategyMap {
 
 export type AuthorizationLevel = "admin" | "private" | "public";
 
-export interface ScaffoldProcessorOpts {
+export interface ScaffoldProcessorOpts extends ShadrizConfig {
   table: string;
   columns: string[];
-  dbDialectStrategy: DbDialectStrategy;
   authorizationLevel: AuthorizationLevel;
-  pkStrategy: PkStrategy;
-  dbDialect: DbDialect;
-}
-
-export interface GetColumnDefObjsOpts {
-  columnName: string;
-}
-
-export interface GetKeyValueStrForSchemaOpts extends ScaffoldProcessorOpts {
-  column: string;
 }
 
 export interface DataTypeStrategyOpts {

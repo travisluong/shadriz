@@ -1,6 +1,6 @@
 import {
   DbDialect,
-  GetKeyValueStrForSchemaOpts,
+  DbDialectStrategy,
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import {
@@ -13,6 +13,7 @@ import {
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
 import { caseFactory, Cases } from "../lib/case-utils";
+import { dialectStrategyFactory } from "../lib/strategy-factory";
 
 // lib/schema.ts
 // app/post/page.tsx
@@ -61,7 +62,10 @@ export class ScaffoldProcessor {
     "default-uuidv4": ".$defaultFn(() => crypto.randomUUID())",
   };
 
+  dbDialectStrategy: DbDialectStrategy;
+
   constructor(opts: ScaffoldProcessorOpts) {
+    this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
   }
 
@@ -95,21 +99,20 @@ export class ScaffoldProcessor {
 
     // add primary key id
     const pkCode =
-      this.opts.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+      this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     columnsCode += "    " + pkCode + "\n";
 
     // add other columns
     for (const [index, column] of columns.entries()) {
-      columnsCode += this.getKeyValueStrForSchema({ ...this.opts, column });
+      columnsCode += this.getKeyValueStrForSchema(column);
       if (index !== columns.length - 1) {
         columnsCode += "\n";
       }
     }
 
     // add timestamps
-    columnsCode +=
-      "\n    " + this.opts.dbDialectStrategy.createdAtTemplate + "\n";
-    columnsCode += "    " + this.opts.dbDialectStrategy.updatedAtTemplate;
+    columnsCode += "\n    " + this.dbDialectStrategy.createdAtTemplate + "\n";
+    columnsCode += "    " + this.dbDialectStrategy.updatedAtTemplate;
 
     // generate imports code
     const importsCode = this.generateImportsCodeFromColumns(columns);
@@ -133,7 +136,7 @@ export class ScaffoldProcessor {
       const [columnName, dataType] = column.split(":");
       const tableObj = caseFactory(columnName);
       const dataTypeStrategy =
-        this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       if (dataTypeStrategy.dataTypeOverride) {
         dataTypeSet.add(dataTypeStrategy.dataTypeOverride);
       } else {
@@ -144,14 +147,14 @@ export class ScaffoldProcessor {
       }
     }
     let code = "import {\n";
-    code += `  ${this.opts.dbDialectStrategy.tableConstructor},\n`;
-    if (this.opts.dbDialectStrategy.timestampImport) {
-      dataTypeSet.add(this.opts.dbDialectStrategy.timestampImport);
+    code += `  ${this.dbDialectStrategy.tableConstructor},\n`;
+    if (this.dbDialectStrategy.timestampImport) {
+      dataTypeSet.add(this.dbDialectStrategy.timestampImport);
     }
     for (const dataType of dataTypeSet) {
       code += `  ${dataType},\n`;
     }
-    code += `} from "${this.opts.dbDialectStrategy.drizzleDbCorePackage}";\n`;
+    code += `} from "${this.dbDialectStrategy.drizzleDbCorePackage}";\n`;
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
     const dependsOnSql = columns.filter((column) =>
       column.indexOf("sql")
@@ -165,9 +168,8 @@ export class ScaffoldProcessor {
 
     return code;
   }
-  getKeyValueStrForSchema(opts: GetKeyValueStrForSchemaOpts): string {
-    const { column } = opts;
-    const { dataTypeStrategyMap } = this.opts.dbDialectStrategy;
+  getKeyValueStrForSchema(column: string): string {
+    const { dataTypeStrategyMap } = this.dbDialectStrategy;
     let [columnName, dataType] = column.split(":");
     if (!(dataType in dataTypeStrategyMap)) {
       throw new Error("data type strategy not found: " + dataType);
@@ -276,8 +278,7 @@ export class ScaffoldProcessor {
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
-        const strategy =
-          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
         const columnCases = caseFactory(col);
         let keyName;
@@ -335,8 +336,8 @@ export class ScaffoldProcessor {
     }
 
     const dataTypeStrategyForPk =
-      this.opts.dbDialectStrategy.dataTypeStrategyMap[
-        this.opts.dbDialectStrategy.pkDataType
+      this.dbDialectStrategy.dataTypeStrategyMap[
+        this.dbDialectStrategy.pkDataType
       ];
 
     const formDataKeyValArr = this.opts.columns
@@ -344,8 +345,7 @@ export class ScaffoldProcessor {
       .map((arr) => {
         const col = arr[0];
         const dataType = arr[1];
-        const strategy =
-          this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
         const columnCases = caseFactory(col);
         let keyName;
@@ -401,8 +401,8 @@ export class ScaffoldProcessor {
   }
   addDeleteAction(): void {
     const dataTypeStrategyForPk =
-      this.opts.dbDialectStrategy.dataTypeStrategyMap[
-        this.opts.dbDialectStrategy.pkDataType
+      this.dbDialectStrategy.dataTypeStrategyMap[
+        this.dbDialectStrategy.pkDataType
       ];
 
     const formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
@@ -442,10 +442,10 @@ export class ScaffoldProcessor {
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
       // TODO: validation should go earlier in process
-      if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
+      if (!(dataType in this.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
       const dataTypeStrategy =
-        this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       const columnCases = caseFactory(columnName);
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
@@ -522,11 +522,11 @@ export class ScaffoldProcessor {
 
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
-      if (!(dataType in this.opts.dbDialectStrategy.dataTypeStrategyMap))
+      if (!(dataType in this.dbDialectStrategy.dataTypeStrategyMap))
         throw new Error("invalid data type strategy: " + dataType);
 
       const dataTypeStrategy =
-        this.opts.dbDialectStrategy.dataTypeStrategyMap[dataType];
+        this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
       const updateFormTemplate = dataTypeStrategy.updateFormTemplate;
 

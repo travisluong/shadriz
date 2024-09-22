@@ -453,14 +453,11 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
       process.exit(1);
     }
 
-    const dialectStrategy = dialectStrategyFactory(shadrizConfig.dbDialect);
     const scaffoldProcessor = new ScaffoldProcessor({
       table: table,
       columns: options.columns,
-      dbDialectStrategy: dialectStrategy,
       authorizationLevel: authorizationLevel,
-      pkStrategy: shadrizConfig.pkStrategy,
-      dbDialect: shadrizConfig.dbDialect,
+      ...shadrizConfig,
     });
     scaffoldProcessor.process();
   });
