@@ -1,9 +1,9 @@
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
   addShadcnComponents,
-  commentOutTextInFile,
   installDependencies,
   installDevDependencies,
+  removeTextFromFile,
   renderTemplate,
   renderTemplateIfNotExists,
   spawnCommand,
@@ -131,6 +131,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
   --background: #ffffff;
   --foreground: #171717;
 }`;
-    commentOutTextInFile("app/globals.css", textToSearch, true);
+
+    removeTextFromFile("app/globals.css", textToSearch);
   }
 }

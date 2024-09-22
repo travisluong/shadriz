@@ -332,32 +332,16 @@ export function completeShadrizConfig(
   return completeConfig;
 }
 
-export function commentOutTextInFile(
+export function removeTextFromFile(
   filePath: string,
-  searchText: string,
-  isBlockComment = false
+  targetString: string
 ): void {
   // Read the file content
-  const absolutePath = path.join(process.cwd(), filePath);
-  const fileContent = fs.readFileSync(absolutePath, "utf-8");
+  let fileContent = fs.readFileSync(path.join(process.cwd(), filePath), "utf8");
 
-  let updatedContent: string;
-
-  if (isBlockComment) {
-    // Block comment approach
-    updatedContent = fileContent.replace(
-      new RegExp(searchText, "g"),
-      `/* ${searchText} */`
-    );
-  } else {
-    // Line comment approach
-    updatedContent = fileContent
-      .split("\n")
-      .map((line) => (line.includes(searchText) ? `// ${line}` : line))
-      .join("\n");
-  }
+  // Replace the target multiline string with an empty string
+  const updatedContent = fileContent.replace(targetString, "");
 
   // Write the updated content back to the file
-  fs.writeFileSync(absolutePath, updatedContent, "utf-8");
-  console.log(`Updated file: ${absolutePath}`);
+  fs.writeFileSync(filePath, updatedContent, "utf8");
 }
