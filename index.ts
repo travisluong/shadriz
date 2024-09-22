@@ -194,6 +194,8 @@ program
           choices: [{ value: "npm" }, { value: "pnpm" }],
         }));
 
+      partialConfig.install = options.install;
+
       if (options.install) {
         partialConfig.latest =
           options.latest ??
@@ -329,18 +331,7 @@ program
       const completeConfig = completeShadrizConfig(partialConfig);
 
       const newProjectProcessor = new NewProjectProcessor(completeConfig);
-      const dbPackageStrategy = packageStrategyFactory(
-        completeConfig.dbPackage,
-        {
-          packageManager: completeConfig.packageManager,
-          install: options.install,
-          latest: completeConfig.latest,
-          shadrizConfig: completeConfig,
-        }
-      );
-      const dbDialectStrategy = dialectStrategyFactory(
-        partialConfig.dbDialect!
-      );
+      const dbPackageStrategy = packageStrategyFactory(completeConfig);
       const dbDialectProcessor = new DbDialectProcessor(completeConfig);
       const pkStrategyProcessor = new PkStrategyProcessor(completeConfig);
 

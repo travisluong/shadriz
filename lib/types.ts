@@ -19,45 +19,7 @@ export type AuthSolution = "authjs" | "none";
 
 export type PackageManager = "npm" | "pnpm";
 
-export interface ShadrizProcessorOpts {
-  packageManager: PackageManager;
-  install: boolean;
-  latest: boolean;
-  shadrizConfig: ShadrizConfig;
-}
-
-export interface DbDialectProcessorOpts extends ShadrizProcessorOpts {
-  dbDialect: DbDialect;
-}
-
-export interface AdminProcessorOpts extends ShadrizProcessorOpts {
-  dbDialect: DbDialect;
-  dbDialectStrategy: DbDialectStrategy;
-  pkStrategy: PkStrategy;
-  dbPackage: DbPackage;
-}
-
-export interface PkStrategyProcessorOpts extends ShadrizProcessorOpts {
-  pkStrategy: PkStrategy;
-}
-
-export interface NewProjectProcessorOpts extends ShadrizProcessorOpts {
-  darkMode: boolean;
-  authEnabled: boolean;
-  stripeEnabled: boolean;
-}
-
-export interface DbPackageStrategyOpts extends ShadrizProcessorOpts {}
-
-export interface DarkModeProcessorOpts extends ShadrizProcessorOpts {}
-
 export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "nanoid";
-
-export interface StripeProcessorOpts extends ShadrizProcessorOpts {
-  dbDialectStrategy: DbDialectStrategy;
-  pkStrategy: PkStrategy;
-  dbDialect: DbDialect;
-}
 
 export interface ShadrizProcessor {
   opts: ShadrizConfig;
@@ -125,7 +87,7 @@ export interface DbDialectStrategy {
 }
 
 export interface DbPackageStrategy {
-  opts: DbPackageStrategyOpts;
+  opts: ShadrizConfig;
   dialect: DbDialect;
   dependencies: string[];
   devDependencies: string[];

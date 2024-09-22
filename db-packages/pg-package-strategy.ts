@@ -1,9 +1,5 @@
 import { log } from "../lib/log";
-import {
-  DbDialect,
-  DbPackageStrategy,
-  DbPackageStrategyOpts,
-} from "../lib/types";
+import { DbDialect, DbPackageStrategy, ShadrizConfig } from "../lib/types";
 import {
   appendDbUrl,
   installDependencies,
@@ -12,11 +8,11 @@ import {
 } from "../lib/utils";
 
 export class PgPackageStrategy implements DbPackageStrategy {
-  constructor(opts: DbPackageStrategyOpts) {
+  constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
 
-  opts: DbPackageStrategyOpts;
+  opts: ShadrizConfig;
 
   dialect: DbDialect = "postgresql";
 

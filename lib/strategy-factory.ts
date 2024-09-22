@@ -1,4 +1,4 @@
-import { DbDialect, DbPackageStrategyOpts } from "./types";
+import { DbDialect, ShadrizConfig } from "./types";
 import { BetterSqlite3PackageStrategy } from "../db-packages/better-sqlite3-package-strategy";
 import { Mysql2PackageStrategy } from "../db-packages/mysql2-package-strategy";
 import { PgPackageStrategy } from "../db-packages/pg-package-strategy";
@@ -6,11 +6,8 @@ import { SqliteDialectStrategy } from "../db-dialects/sqlite-dialect-strategy";
 import { MysqlDialectStrategy } from "../db-dialects/mysql-dialect-strategy";
 import { PostgresqlDialectStrategy } from "../db-dialects/postgresql-dialect-strategy";
 
-export function packageStrategyFactory(
-  dbPackage: string,
-  opts: DbPackageStrategyOpts
-) {
-  switch (dbPackage) {
+export function packageStrategyFactory(opts: ShadrizConfig) {
+  switch (opts.dbPackage) {
     case "better-sqlite3":
       return new BetterSqlite3PackageStrategy(opts);
     case "mysql2":
@@ -18,7 +15,7 @@ export function packageStrategyFactory(
     case "pg":
       return new PgPackageStrategy(opts);
     default:
-      throw new Error("invalid db package: " + dbPackage);
+      throw new Error("invalid db package: " + opts.dbPackage);
   }
 }
 
