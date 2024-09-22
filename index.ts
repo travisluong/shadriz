@@ -437,6 +437,8 @@ program
       } else {
         regenerateSchemaIndex();
       }
+
+      log.success("shadriz init success");
     } catch (error) {
       log.bgRed(`${error}`);
     }

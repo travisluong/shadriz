@@ -196,7 +196,6 @@ export function getFilenamesFromFolder(folderPath: string): string[] {
       return fs.lstatSync(filePath).isFile();
     });
   } catch (error: any) {
-    console.error(`Error reading folder: ${error.message}`);
     return [];
   }
 }
