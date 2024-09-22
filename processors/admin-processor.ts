@@ -84,7 +84,7 @@ export class AdminProcessor implements ShadrizProcessor {
 
   printCompletionMessage() {
     log.checklist("admin checklist");
-    log.task("grant admin privilege:");
+    log.task("grant admin privilege");
     log.cmdsubtask("npx tsx scripts/grant-admin.ts shadriz@example.com");
   }
 }

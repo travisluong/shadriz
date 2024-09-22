@@ -19,7 +19,7 @@ export function renderTemplateIfNotExists({
 }) {
   const joinedOutputPath = path.join(process.cwd(), outputPath);
   if (fs.existsSync(joinedOutputPath)) {
-    log.gray("- " + outputPath + " - file exists. no change.");
+    log.gray("- " + outputPath + " - file exists");
     return;
   }
   renderTemplate({
@@ -121,7 +121,9 @@ export function appendToFileIfTextNotExists(
 ) {
   const fileContent = fs.readFileSync(filePath, "utf-8");
   if (fileContent.includes(textToSearch)) {
-    log.gray(`- ${filePath} - ${textToSearch} detected. no change.`);
+    log.gray(
+      `- ${filePath} - text exists: ${textToSearch.trim().substring(0, 50)}...`
+    );
   } else {
     appendToFile(filePath, textToAppend);
   }
@@ -139,7 +141,11 @@ export function appendToFile(filePath: string, textToAppend: string) {
   try {
     const joinedFilePath = path.join(process.cwd(), filePath);
     fs.appendFileSync(joinedFilePath, textToAppend);
-    log.yellow("M " + filePath);
+    log.yellow(
+      `M ${filePath} - text appended: ${textToAppend
+        .trim()
+        .substring(0, 50)}...`
+    );
   } catch (error) {
     console.error(error);
   }
@@ -151,12 +157,29 @@ export function prependToFile(filePath: string, textToPrepend: string) {
     const fileContent = fs.readFileSync(joinedFilePath, "utf-8");
     const updatedContent = textToPrepend + fileContent;
     fs.writeFileSync(joinedFilePath, updatedContent, "utf-8");
-    log.yellow("M " + filePath);
+    log.yellow(
+      "M " +
+        filePath +
+        ` - text prepended: ${textToPrepend.trim().substring(0, 50)}...`
+    );
   } catch (error: any) {
     console.error(
       `Error while prepending content to the file: ${error.message}`
     );
   }
+}
+
+export function prependToFileIfNotExists(
+  filePath: string,
+  textToPrepend: string
+) {
+  if (checkIfTextExistsInFile(filePath, textToPrepend)) {
+    log.gray(
+      `- ${filePath} - text exists: ${textToPrepend.trim().substring(0, 50)}...`
+    );
+    return;
+  }
+  prependToFile(filePath, textToPrepend);
 }
 
 export function writeToFile(filePath: string, text: string) {
@@ -196,7 +219,32 @@ export function insertTextAfter(
   // Write the updated content back to the file
   fs.writeFileSync(filePath, updatedContent, "utf8");
 
-  log.yellow("M " + filePath);
+  log.yellow(
+    "M " + filePath + ` - text inserted: ${newText.trim().substring(0, 50)}...`
+  );
+}
+
+export function insertTextAfterIfNotExists(
+  filePath: string,
+  searchText: string,
+  newText: string
+) {
+  // Read the file content
+  const fileContent = fs.readFileSync(
+    path.join(process.cwd(), filePath),
+    "utf8"
+  );
+
+  const newTextIndex = fileContent.indexOf(newText);
+
+  if (newTextIndex > -1) {
+    log.gray(
+      `- ${filePath} - text exists: ${newText.trim().substring(0, 50)}...`
+    );
+    return;
+  }
+
+  insertTextAfter(filePath, searchText, newText);
 }
 
 export function getFilenamesFromFolder(folderPath: string): string[] {

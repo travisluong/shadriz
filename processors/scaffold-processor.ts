@@ -6,9 +6,8 @@ import {
 import {
   compileTemplate,
   renderTemplate,
-  insertTextAfter,
-  prependToFile,
-  checkIfTextExistsInFile,
+  insertTextAfterIfNotExists,
+  prependToFileIfNotExists,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "./pk-strategy-processor";
@@ -543,22 +542,11 @@ export class ScaffoldProcessor {
   }
   insertSchemaToSchemaIndex() {
     const tableObj = caseFactory(this.opts.table);
-    if (
-      checkIfTextExistsInFile(
-        "lib/schema.ts",
-        `@/schema/${tableObj.pluralKebabCase}`
-      )
-    ) {
-      log.gray(
-        `- lib/schema.ts - ${tableObj.pluralKebabCase} detected. no change.`
-      );
-      return;
-    }
-    prependToFile(
+    prependToFileIfNotExists(
       "lib/schema.ts",
       `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.pluralKebabCase}";\n`
     );
-    insertTextAfter(
+    insertTextAfterIfNotExists(
       "lib/schema.ts",
       "export const schema = {",
       `\n  ...${tableObj.pluralCamelCase},`
@@ -566,7 +554,7 @@ export class ScaffoldProcessor {
   }
   addLinkToAdminSidebar() {
     const tableObj = caseFactory(this.opts.table);
-    insertTextAfter(
+    insertTextAfterIfNotExists(
       "components/admin/admin-sidebar.tsx",
       "const SIDEBAR_LINKS = [",
       `\n  { href: "/admin/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <DashboardIcon /> },`
@@ -574,7 +562,7 @@ export class ScaffoldProcessor {
   }
   addLinkToDashboardSidebar() {
     const tableObj = caseFactory(this.opts.table);
-    insertTextAfter(
+    insertTextAfterIfNotExists(
       "components/private/dashboard-sidebar.tsx",
       "const SIDEBAR_LINKS = [",
       `\n  { href: "/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <DashboardIcon /> },`
