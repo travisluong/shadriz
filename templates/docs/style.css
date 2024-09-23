@@ -116,3 +116,40 @@ a {
   padding: 5px;
   border: 1px solid gray;
 }
+.shadriz-menu {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .shadriz-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .shadriz-sidebar {
+    display: none;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+  .shadriz-sidebar.active {
+    display: block;
+  }
+  .shadriz-menu {
+    padding: 20px;
+    text-align: right;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    display: block;
+  }
+  .shadriz-menu button {
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}

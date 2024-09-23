@@ -20,6 +20,10 @@ async function main() {
     inputPath: "docs/style.css",
     outputPath: "docs/style.css",
   });
+  renderTemplate({
+    inputPath: "docs/app.js",
+    outputPath: "docs/app.js",
+  });
 }
 
 main();
