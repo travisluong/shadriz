@@ -122,7 +122,7 @@ export function appendToFileIfTextNotExists(
   const fileContent = fs.readFileSync(filePath, "utf-8");
   if (fileContent.includes(textToSearch)) {
     log.gray(
-      `- ${filePath} - text exists: ${textToSearch.trim().substring(0, 50)}...`
+      `- ${filePath} - text exists: ${textToSearch.trim().substring(0, 30)}...`
     );
   } else {
     appendToFile(filePath, textToAppend);
@@ -144,7 +144,7 @@ export function appendToFile(filePath: string, textToAppend: string) {
     log.yellow(
       `M ${filePath} - text appended: ${textToAppend
         .trim()
-        .substring(0, 50)}...`
+        .substring(0, 30)}...`
     );
   } catch (error) {
     console.error(error);
@@ -160,7 +160,7 @@ export function prependToFile(filePath: string, textToPrepend: string) {
     log.yellow(
       "M " +
         filePath +
-        ` - text prepended: ${textToPrepend.trim().substring(0, 50)}...`
+        ` - text prepended: ${textToPrepend.trim().substring(0, 30)}...`
     );
   } catch (error: any) {
     console.error(
@@ -175,7 +175,7 @@ export function prependToFileIfNotExists(
 ) {
   if (checkIfTextExistsInFile(filePath, textToPrepend)) {
     log.gray(
-      `- ${filePath} - text exists: ${textToPrepend.trim().substring(0, 50)}...`
+      `- ${filePath} - text exists: ${textToPrepend.trim().substring(0, 30)}...`
     );
     return;
   }
@@ -220,7 +220,7 @@ export function insertTextAfter(
   fs.writeFileSync(filePath, updatedContent, "utf8");
 
   log.yellow(
-    "M " + filePath + ` - text inserted: ${newText.trim().substring(0, 50)}...`
+    "M " + filePath + ` - text inserted: ${newText.trim().substring(0, 30)}...`
   );
 }
 
@@ -239,7 +239,7 @@ export function insertTextAfterIfNotExists(
 
   if (newTextIndex > -1) {
     log.gray(
-      `- ${filePath} - text exists: ${newText.trim().substring(0, 50)}...`
+      `- ${filePath} - text exists: ${newText.trim().substring(0, 30)}...`
     );
     return;
   }
