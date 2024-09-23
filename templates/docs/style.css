@@ -48,6 +48,9 @@ a {
   padding: 20px;
   height: 100%;
 }
+.shadriz-docs a {
+  color: black;
+}
 .shadriz-docs h1 {
   font-weight: bold;
   font-size: 48px;
@@ -83,11 +86,6 @@ a {
   list-style-type: disc;
   margin-left: 20px;
 }
-.shadriz-docs ul li a {
-  &:hover {
-    text-decoration: underline;
-  }
-}
 .dark .shadriz-docs pre {
   background-color: #111827;
 }
@@ -117,10 +115,31 @@ a {
   border: 1px solid gray;
 }
 .shadriz-menu {
+  padding: 20px;
+  text-align: right;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  gap: 5px;
+}
+.shadriz-menu button {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.shadriz-menu #menu-btn {
   display: none;
 }
 
 @media only screen and (max-width: 768px) {
+  .shadriz-menu #menu-btn {
+    display: block;
+  }
   .shadriz-container {
     display: flex;
     flex-direction: column;
@@ -135,21 +154,23 @@ a {
   .shadriz-sidebar.active {
     display: block;
   }
-  .shadriz-menu {
-    padding: 20px;
-    text-align: right;
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 9999;
-    display: block;
-  }
-  .shadriz-menu button {
-    background-color: black;
-    color: white;
-    padding: 5px;
-    border: 0;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+}
+
+body.dark {
+  background-color: black;
+  color: white;
+}
+
+.dark .shadriz-sidebar {
+  background-color: black;
+  color: white;
+}
+
+.dark .shadriz-menu button {
+  color: black;
+  background-color: white;
+}
+
+.dark .shadriz-docs a {
+  color: white;
 }
