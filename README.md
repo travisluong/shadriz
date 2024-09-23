@@ -17,11 +17,17 @@ It is a command line interface code generation tool.
 
 You use it to generate full stack features including authentication, authorization, and payments.
 
-You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
+You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
 The code is yours.
 
 ## Philosophy
+
+shadriz offers an opinionated foundation to be built upon.
+
+shadriz focuses on writing simple and easy-to-read code that you can customize.
+
+It is up to the developer to build the interesting parts.
 
 ### Technology curation
 
@@ -306,10 +312,6 @@ The other problem with boilerplates is that it is usually a static hard-coded re
 ## Technology and Inspiration
 
 shadriz is inspired by a wide range of tools and technologies.
-
-shadriz offers an opinionated foundation to be built upon.
-
-It is up to the developer to build the interesting parts.
 
 ### Ruby on Rails
 
