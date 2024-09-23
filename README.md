@@ -367,7 +367,7 @@ Furthermore, TailwindCSS is enabled by default in Next.js projects and has becom
 
 **Open Source. Full Stack. Own Your Data.**
 
-That's the tagline of Auth.js. shadriz favors proven, open-source solutions that let you maintain control over your data.
+shadriz favors proven, open-source solutions that let you maintain control over your data.
 
 Similarly, with shadriz, you own not only your data but also your code.
 
