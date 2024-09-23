@@ -381,6 +381,7 @@ program
         regenerateSchemaIndex();
       }
 
+      log.log("");
       log.success("shadriz init success");
     } catch (error) {
       log.red(`${error}`);

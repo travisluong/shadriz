@@ -34,7 +34,7 @@ export const log = {
   },
 
   checklist(str: string) {
-    console.log(chalk.bold.underline(str.toUpperCase()));
+    console.log("\n" + chalk.bold(str.toUpperCase()));
   },
 
   task(str: string) {
