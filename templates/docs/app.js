@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.querySelector(".shadriz-sidebar");
   const darkBtn = document.querySelector("#dark-btn");
   menuBtn.addEventListener("click", () => {
-    console.log("menu clicked");
-
     if (!sidebar.classList.contains("active")) {
       sidebar.classList.add("active");
     } else {
