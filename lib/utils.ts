@@ -6,7 +6,6 @@ import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
 import { PackageManager, ShadrizConfig } from "./types";
 import { caseFactory } from "./case-utils";
-import ora from "ora";
 
 export function renderTemplateIfNotExists({
   inputPath,
@@ -65,11 +64,8 @@ export function compileTemplate({
 
 export function runCommand(command: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const spinner = ora(command).start();
+    log.blue("> " + command);
     exec(command, (error, stdout, stderr) => {
-      spinner.stop();
-      log.blue("> " + command);
-
       if (error) {
         console.error(`Error: ${stderr}`);
         reject(error);
