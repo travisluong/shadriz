@@ -9,7 +9,7 @@ import {
   completeShadrizConfig,
   loadShadrizConfig,
   regenerateSchemaIndex,
-  runCommand,
+  spawnCommand,
   writeToFile,
 } from "./lib/utils";
 import { packageStrategyFactory } from "./lib/strategy-factory";
@@ -91,11 +91,11 @@ program
 
     try {
       if (packageManager === "pnpm") {
-        await runCommand(
+        await spawnCommand(
           `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
         );
       } else {
-        await runCommand(
+        await spawnCommand(
           `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
         );
       }

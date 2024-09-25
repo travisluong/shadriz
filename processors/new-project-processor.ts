@@ -131,8 +131,8 @@ export class NewProjectProcessor implements ShadrizProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/components/combobox.tsx.hbs",
-      outputPath: "components/combobox.tsx",
+      inputPath: "new-project-processor/components/generic-combobox.tsx.hbs",
+      outputPath: "components/generic-combobox.tsx",
     });
 
     renderTemplate({
