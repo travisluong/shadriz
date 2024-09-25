@@ -116,6 +116,7 @@ export class ScaffoldProcessor {
     // generate imports code
     const importsCode = this.generateImportsCodeFromColumns(columns);
     const tableObj = caseFactory(table);
+    const referencesColumnList = this.getReferencesColumnList();
     renderTemplate({
       inputPath:
         scaffoldDbDialectStrategies[this.opts.dbDialect]
@@ -125,6 +126,7 @@ export class ScaffoldProcessor {
         columns: columnsCode,
         imports: importsCode,
         tableObj: tableObj,
+        referencesColumnList: referencesColumnList,
       },
     });
   }
@@ -155,12 +157,6 @@ export class ScaffoldProcessor {
     }
     code += `} from "${this.dbDialectStrategy.drizzleDbCorePackage}";\n`;
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
-    const dependsOnSql = columns.filter((column) =>
-      column.indexOf("sql")
-    ).length;
-    if (dependsOnSql) {
-      code += `import { sql } from "drizzle-orm";`;
-    }
     if (referenceImportsCode !== "") {
       code += "\n" + referenceImportsCode;
     }
