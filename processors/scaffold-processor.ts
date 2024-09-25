@@ -499,7 +499,8 @@ export class ScaffoldProcessor {
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
       if (dataType.startsWith("references")) {
-        const columnCases = caseFactory(columnName + "_id");
+        const fkColumn = caseFactory(columnName);
+        const columnCases = caseFactory(fkColumn.singularSnakeCase + "_id");
         arr.push(columnCases);
       } else {
         const columnCases = caseFactory(columnName);
