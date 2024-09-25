@@ -184,14 +184,34 @@ The strategy that you choose during the `init` process will be saved in `shadriz
 
 ## Foreign key constraints
 
-shadriz supports adding foreign key constraints using the following constraint format: `table:references`.
+shadriz supports adding foreign key constraints using a special `references` data type.
+
+### References Input
+
+This will use an Input component that accepts a foreign key string.
 
 ```bash
-npx shadriz@latest scaffold post -c title:text
-npx shadriz@latest scaffold comment -c post:references content:text
+npx shadriz@latest scaffold product_type -c type:text
+npx shadriz@latest scaffold product -c product_type:references name:text
 ```
 
-shadriz is unopinionated on how to handle the user interface for foreign key relationships and leaves that up to the developer. Therefore, the generated UI for foreign keys will be kept simple as a plain input field. A blank field will result in a `null` value being saved.
+### References Combobox
+
+This will use a Combobox component where you can search for and select the related item.
+
+```bash
+npx shadriz@latest scaffold product_type -c type:text
+npx shadriz@latest scaffold product -c product_type:references_combobox name:text
+```
+
+### References Select
+
+This will use a Select component where you can select from a dropdown list of items.
+
+```bash
+npx shadriz@latest scaffold product_type -c type:text
+npx shadriz@latest scaffold product -c product_type:references_select name:text
+```
 
 ## File and image uploads
 
