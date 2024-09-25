@@ -1,3 +1,4 @@
+import { sql, relations } from "drizzle-orm";
 {{imports}}
 
 export const {{tableObj.pluralCamelCase}} = pgTable(
@@ -8,3 +9,12 @@ export const {{tableObj.pluralCamelCase}} = pgTable(
 )
 
 export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
+
+export const {{tableObj.pluralCamelCase}}Relations = relations({{tableObj.pluralCamelCase}}, ({ one, many }) => ({
+  {{#each referencesColumnList}}
+  {{this.singularCamelCase}}: one({{this.pluralCamelCase}}, {
+    fields: [{{../tableObj.pluralCamelCase}}.{{this.singularCamelCase}}Id],
+    references: [{{this.pluralCamelCase}}.id]
+  }),
+  {{/each}}
+}));
