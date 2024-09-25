@@ -186,32 +186,42 @@ The strategy that you choose during the `init` process will be saved in `shadriz
 
 shadriz supports adding foreign key constraints using a special `references` data type.
 
-### References Input
+This will set up the Drizzle relations and the UI form controls for managing the relations.
 
-This will use an Input component that accepts a foreign key string.
+For example, a one to many relationship where a product belongs to a category can be set up using the following scaffold:
 
 ```bash
-npx shadriz@latest scaffold product_type -c type:text
-npx shadriz@latest scaffold product -c product_type:references name:text
+npx shadriz@latest scaffold category -c title:text
+npx shadriz@latest scaffold product -c category:references title:text
 ```
+
+The `references` data type has several options for the form control UI as outlined below:
+
+### References Input
+
+By default, the `references` data type will use an Input component that accepts a foreign key string. This is recommended as a basic starting point for custom development.
 
 ### References Combobox
 
-This will use a Combobox component where you can search for and select the related item.
+The `references_combobox` data type will use a Generic Combobox component where you can search for and select the related item. This is recommended for larger datasets.
 
 ```bash
-npx shadriz@latest scaffold product_type -c type:text
-npx shadriz@latest scaffold product -c product_type:references_combobox name:text
+npx shadriz@latest scaffold product -c category:references_combobox title:text
 ```
+
+By default the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop.
+
+Note: Every record from the referenced table will be loaded. For extremely large datasets, a custom component with performance optimizations may be recommended.
 
 ### References Select
 
-This will use a Select component where you can select from a dropdown list of items.
+The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items. This is recommended for smaller datasets.
 
 ```bash
-npx shadriz@latest scaffold product_type -c type:text
-npx shadriz@latest scaffold product -c product_type:references_select name:text
+npx shadriz@latest scaffold product -c category:references_select title:text
 ```
+
+By default the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop.
 
 ## File and image uploads
 
