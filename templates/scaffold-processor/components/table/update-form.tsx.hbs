@@ -6,12 +6,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox } from "@/components/combobox";
 import { useFormState } from "react-dom";
-import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import Link from "next/link";
 import Image from "next/image";
+import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+{{#each referencesColumnList}}
+import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
+{{/each}}
 
-export default function {{tableObj.singularPascalCase}}UpdateForm({ {{tableObj.singularCamelCase}} }: { {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}} }) {
+export default function {{tableObj.singularPascalCase}}UpdateForm({ 
+  {{tableObj.singularCamelCase}},
+  {{#each referencesColumnList}}
+  {{this.singularCamelCase}}List,
+  {{/each}}
+}: { 
+  {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}};
+  {{#each referencesColumnList}}
+  {{this.singularCamelCase}}List: {{this.singularPascalCase}}[];
+  {{/each}}
+}) {
   const initialState: Update{{tableObj.singularPascalCase}}State = {};
   const [state, dispatch] = useFormState(update{{tableObj.singularPascalCase}}, initialState);
 

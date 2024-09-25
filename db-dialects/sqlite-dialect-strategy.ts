@@ -84,6 +84,20 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
   },
+  references_combobox: {
+    jsType: "string",
+    formTemplate:
+      "scaffold-processor/components/table/create-references-combobox.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
+    dataTypeOverride: "text",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.references(opts.keyName, opts.columnName);
+    },
+  },
   file: {
     jsType: "string",
     formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",

@@ -26,6 +26,8 @@ export class NewProjectProcessor implements ShadrizProcessor {
     "textarea",
     "checkbox",
     "select",
+    "popover",
+    "command",
   ];
 
   constructor(opts: ShadrizConfig) {
@@ -126,6 +128,11 @@ export class NewProjectProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "new-project-processor/.eslintrc.json.hbs",
       outputPath: ".eslintrc.json",
+    });
+
+    renderTemplate({
+      inputPath: "new-project-processor/components/combobox.tsx.hbs",
+      outputPath: "components/combobox.tsx",
     });
 
     // TODO: remove when next.js and shadcn/ui init works with dark mode

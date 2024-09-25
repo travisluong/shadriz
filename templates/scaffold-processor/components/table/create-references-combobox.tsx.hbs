@@ -1,0 +1,17 @@
+        <div className="flex flex-col gap-2">
+          <Label>{{columnCases.singularCapitalCase}} Id</Label>
+          <Combobox
+            list={ {{columnCases.singularCamelCase}}List }
+            name="{{columnCases.singularCamelCase}}Id"
+            valueField="id"
+            labelField="id"
+            searchPlaceholder="Search {{columnCases.singularCamelCase}}..."
+            selectPlaceholder="Select {{columnCases.singularCamelCase}}..."
+            emptyText="No {{columnCases.singularCamelCase}} found"
+          />
+          {state.errors?.{{columnCases.singularCamelCase}}Id?.map((error) => (
+            <p className="text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+        </div>

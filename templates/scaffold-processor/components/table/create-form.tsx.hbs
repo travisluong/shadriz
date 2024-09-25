@@ -6,9 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox } from "@/components/combobox";
 import { useFormState } from "react-dom";
+{{#each referencesColumnList}}
+import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
+{{/each}}
 
-export default function {{tableObj.singularPascalCase}}CreateForm() {
+export default function {{tableObj.singularPascalCase}}CreateForm({
+  {{#each referencesColumnList}}
+  {{this.singularCamelCase}}List,
+  {{/each}}
+}: {
+  {{#each referencesColumnList}}
+  {{this.singularCamelCase}}List: {{this.singularPascalCase}}[];
+  {{/each}}
+}) {
   const initialState: Create{{tableObj.singularPascalCase}}State = {};
   const [state, dispatch] = useFormState(create{{tableObj.singularPascalCase}}, initialState);
 

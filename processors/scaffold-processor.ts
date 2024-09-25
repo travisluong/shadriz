@@ -141,7 +141,7 @@ export class ScaffoldProcessor {
       } else {
         dataTypeSet.add(dataType);
       }
-      if (dataType === "references") {
+      if (dataType.startsWith("references")) {
         referenceImportsCode += `import { ${tableObj.pluralCamelCase} } from "./${tableObj.pluralKebabCase}";\n`;
       }
     }
@@ -178,7 +178,7 @@ export class ScaffoldProcessor {
 
     let keyName = columnNameCases.originalCamelCase;
     let referencesTable;
-    if (dataType === "references") {
+    if (dataType.startsWith("references")) {
       referencesTable = columnNameCases.pluralCamelCase;
       columnName = columnNameCases.singularSnakeCase + "_id";
       keyName = columnNameCases.singularCamelCase + "Id";
@@ -221,6 +221,11 @@ export class ScaffoldProcessor {
   }
   addEditView(): void {
     const tableObj = caseFactory(this.opts.table);
+    const referencesColumnList = this.opts.columns
+      .map((column) => column.split(":"))
+      .filter((arr) => arr[1].startsWith("references"))
+      .map((arr) => arr[0])
+      .map((str) => caseFactory(str));
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/edit/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -229,11 +234,13 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         authorizationLevel: this.opts.authorizationLevel,
+        referencesColumnList: referencesColumnList,
       },
     });
   }
   addNewView(): void {
     const tableObj = caseFactory(this.opts.table);
+    const referencesColumnList = this.getReferencesColumnList();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/new/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -242,6 +249,7 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         authorizationLevel: this.opts.authorizationLevel,
+        referencesColumnList: referencesColumnList,
       },
     });
   }
@@ -263,11 +271,11 @@ export class ScaffoldProcessor {
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
       const columnCases = caseFactory(columnName);
-      if (dataType !== "references") {
+      if (!dataType.startsWith("references")) {
         columns.push(columnCases.originalCamelCase);
         continue;
       }
-      if (dataType === "references") {
+      if (dataType.startsWith("references")) {
         columns.push(columnCases.singularCamelCase + "Id");
       }
     }
@@ -283,7 +291,7 @@ export class ScaffoldProcessor {
         let keyName;
         let columnName;
 
-        if (dataType === "references") {
+        if (dataType.startsWith("references")) {
           keyName = columnCases.singularCamelCase + "Id";
           columnName = columnCases.singularCamelCase + "Id";
         } else {
@@ -325,11 +333,11 @@ export class ScaffoldProcessor {
     for (const col of this.opts.columns.values()) {
       const [columnName, dataType] = col.split(":");
       const columnCases = caseFactory(columnName);
-      if (dataType !== "references") {
+      if (!dataType.startsWith("references")) {
         columns.push(columnCases.originalCamelCase);
         continue;
       }
-      if (dataType === "references") {
+      if (dataType.startsWith("references")) {
         columns.push(columnCases.singularCamelCase + "Id");
       }
     }
@@ -350,7 +358,7 @@ export class ScaffoldProcessor {
         let keyName;
         let columnName;
 
-        if (dataType === "references") {
+        if (dataType.startsWith("references")) {
           keyName = columnCases.singularCamelCase + "Id";
           columnName = columnCases.singularCamelCase + "Id";
         } else {
@@ -426,6 +434,7 @@ export class ScaffoldProcessor {
   addCreateForm(): void {
     const formControlsHtml = this.getFormControlsHtml();
     const tableObj = caseFactory(this.opts.table);
+    const referencesColumnList = this.getReferencesColumnList();
     renderTemplate({
       inputPath: "scaffold-processor/components/table/create-form.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-create-form.tsx`,
@@ -433,6 +442,7 @@ export class ScaffoldProcessor {
         tableObj: tableObj,
         formControls: formControlsHtml,
         authorizationLevel: this.opts.authorizationLevel,
+        referencesColumnList: referencesColumnList,
       },
     });
   }
@@ -454,9 +464,18 @@ export class ScaffoldProcessor {
     }
     return html;
   }
+  getReferencesColumnList() {
+    const referencesColumnList = this.opts.columns
+      .map((column) => column.split(":"))
+      .filter((arr) => arr[1].startsWith("references"))
+      .map((arr) => arr[0])
+      .map((str) => caseFactory(str));
+    return referencesColumnList;
+  }
   addUpdateForm(): void {
     const tableObj = caseFactory(this.opts.table);
     const formControlsHtml = this.getUpdateFormControlsHtml();
+    const referencesColumnList = this.getReferencesColumnList();
     renderTemplate({
       inputPath: "scaffold-processor/components/table/update-form.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
@@ -464,6 +483,7 @@ export class ScaffoldProcessor {
         tableObj: tableObj,
         formControls: formControlsHtml,
         authorizationLevel: this.opts.authorizationLevel,
+        referencesColumnList: referencesColumnList,
       },
     });
   }
@@ -482,7 +502,7 @@ export class ScaffoldProcessor {
     const arr = [];
     for (const [index, column] of this.opts.columns.entries()) {
       const [columnName, dataType] = column.split(":");
-      if (dataType === "references") {
+      if (dataType.startsWith("references")) {
         const columnCases = caseFactory(columnName + "_id");
         arr.push(columnCases);
       } else {

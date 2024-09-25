@@ -12,10 +12,19 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  {{#each referencesColumnList}}
+  const {{this.singularCamelCase}}List = await db.query.{{this.pluralCamelCase}}.findMany();
+  {{/each}}
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Update {{tableObj.singularCapitalCase}}</h1>
-      <{{tableObj.singularPascalCase}}UpdateForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} } />
+      <{{tableObj.singularPascalCase}}UpdateForm 
+        {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} }
+        {{#each referencesColumnList}}
+        {{this.singularCamelCase}}List={ {{this.singularCamelCase}}List }
+        {{/each}}
+      />
     </div>
   );
 }
