@@ -278,7 +278,35 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.references(opts.keyName, opts.columnName);
+    },
+  },
+  references_combobox: {
+    jsType: "string",
+    formTemplate:
+      "scaffold-processor/components/table/create-references-combobox.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
+    dataTypeOverride: "varchar",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.references(opts.keyName, opts.columnName);
+    },
+  },
+  references_select: {
+    jsType: "string",
+    formTemplate:
+      "scaffold-processor/components/table/create-references-select.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-references-select.tsx.hbs",
+    dataTypeOverride: "varchar",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);

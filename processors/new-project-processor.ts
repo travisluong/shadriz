@@ -135,6 +135,11 @@ export class NewProjectProcessor implements ShadrizProcessor {
       outputPath: "components/combobox.tsx",
     });
 
+    renderTemplate({
+      inputPath: "new-project-processor/components/generic-select.tsx.hbs",
+      outputPath: "components/generic-select.tsx",
+    });
+
     // TODO: remove when next.js and shadcn/ui init works with dark mode
     const textToSearch = `:root {
   --background: #ffffff;
