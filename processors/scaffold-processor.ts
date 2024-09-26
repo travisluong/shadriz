@@ -116,7 +116,7 @@ export class ScaffoldProcessor {
     // generate imports code
     const importsCode = this.generateImportsCodeFromColumns(columns);
     const tableObj = caseFactory(table);
-    const referencesColumnList = this.getReferencesColumnList();
+    const referencesColumnList = this.getReferencesColumnList("references");
     renderTemplate({
       inputPath:
         scaffoldDbDialectStrategies[this.opts.dbDialect]
@@ -219,7 +219,7 @@ export class ScaffoldProcessor {
     const tableObj = caseFactory(this.opts.table);
     const referencesColumnList = this.opts.columns
       .map((column) => column.split(":"))
-      .filter((arr) => arr[1].startsWith("references"))
+      .filter((arr) => arr[1].startsWith("references_"))
       .map((arr) => arr[0])
       .map((str) => caseFactory(str));
     renderTemplate({
@@ -236,7 +236,7 @@ export class ScaffoldProcessor {
   }
   addNewView(): void {
     const tableObj = caseFactory(this.opts.table);
-    const referencesColumnList = this.getReferencesColumnList();
+    const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/app/table/new/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -430,7 +430,7 @@ export class ScaffoldProcessor {
   addCreateForm(): void {
     const formControlsHtml = this.getFormControlsHtml();
     const tableObj = caseFactory(this.opts.table);
-    const referencesColumnList = this.getReferencesColumnList();
+    const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/components/table/create-form.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-create-form.tsx`,
@@ -460,10 +460,10 @@ export class ScaffoldProcessor {
     }
     return html;
   }
-  getReferencesColumnList() {
+  getReferencesColumnList(startsWith: string) {
     const referencesColumnList = this.opts.columns
       .map((column) => column.split(":"))
-      .filter((arr) => arr[1].startsWith("references"))
+      .filter((arr) => arr[1].startsWith(startsWith))
       .map((arr) => arr[0])
       .map((str) => caseFactory(str));
     return referencesColumnList;
@@ -471,7 +471,7 @@ export class ScaffoldProcessor {
   addUpdateForm(): void {
     const tableObj = caseFactory(this.opts.table);
     const formControlsHtml = this.getUpdateFormControlsHtml();
-    const referencesColumnList = this.getReferencesColumnList();
+    const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/components/table/update-form.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
