@@ -203,7 +203,7 @@ By default, the `references` data type will use an Input component that accepts 
 
 ### References Combobox
 
-The `references_combobox` data type will use a Generic Combobox component where you can search for and select the related item. This is recommended for larger datasets.
+The `references_combobox` data type will use a Generic Combobox component where you can search for and select the related item.
 
 ```bash
 npx shadriz@latest scaffold product -c category:references_combobox title:text
@@ -211,17 +211,19 @@ npx shadriz@latest scaffold product -c category:references_combobox title:text
 
 By default the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop.
 
-Note: Every record from the referenced table will be loaded. For extremely large datasets, a custom component with performance optimizations may be recommended.
-
 ### References Select
 
-The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items. This is recommended for smaller datasets.
+The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items.
 
 ```bash
 npx shadriz@latest scaffold product -c category:references_select title:text
 ```
 
 By default the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop.
+
+### Note on performance
+
+For the Combobox and Select option, every record from the referenced table will be loaded. For extremely large datasets, a custom component with optimizations is recommended.
 
 ## File and image uploads
 
