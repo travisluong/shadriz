@@ -65,7 +65,9 @@ export function GenericCombobox<Type extends GenericType>({
         <Command
           filter={(value, search, keywords) => {
             const extendValue = value + " " + keywords?.join(" ");
-            if (extendValue.includes(search)) return 1;
+            if (extendValue.toLowerCase().includes(search.toLowerCase())) {
+              return 1;
+            }
             return 0;
           }}
         >

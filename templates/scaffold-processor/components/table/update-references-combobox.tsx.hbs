@@ -6,8 +6,8 @@
             valueField="id"
             labelField="id"
             defaultValue={ {{tableObj.singularCamelCase}}.{{columnCases.singularCamelCase}}Id }
-            searchPlaceholder="Search {{columnCases.singularCamelCase}}..."
-            selectPlaceholder="Select {{columnCases.singularCamelCase}}..."
+            searchPlaceholder="Search {{columnCases.pluralCapitalCase}}..."
+            selectPlaceholder="Select {{columnCases.singularCapitalCase}}..."
             emptyText="No {{columnCases.singularCamelCase}} found"
           />
           {state.errors?.{{columnCases.singularCamelCase}}Id?.map((error) => (

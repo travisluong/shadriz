@@ -129,8 +129,11 @@ export function checkIfTextExistsInFile(
   filePath: string,
   textToSearch: string
 ) {
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  return fileContent.includes(textToSearch);
+  const fileContent = fs.readFileSync(
+    path.join(process.cwd(), filePath),
+    "utf-8"
+  );
+  return fileContent.includes(textToSearch.trim());
 }
 
 export function appendToFile(filePath: string, textToAppend: string) {
