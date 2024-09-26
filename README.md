@@ -184,22 +184,31 @@ The strategy that you choose during the `init` process will be saved in `shadriz
 
 ## Foreign key constraints
 
-shadriz supports adding foreign key constraints using a special `references` data type.
+shadriz supports adding foreign key constraints using the following special data types:
+
+- `references`
+- `references_combobox`
+- `references_select`
 
 This will set up the Drizzle relations and the UI form controls for managing the relations.
 
-For example, a one to many relationship where a product belongs to a category can be set up using the following scaffold:
+For example, a one to many relationship where a product belongs to a category can be set up using the following scaffolds.
+
+First, scaffold the `one` side of the relationship.
 
 ```bash
 npx shadriz@latest scaffold category -c title:text
-npx shadriz@latest scaffold product -c category:references title:text
 ```
 
-The `references` data type has several options for the form control UI as outlined below:
+Second, scaffold the `many` side of the relationship using one of the references data types below:
 
 ### References Input
 
-By default, the `references` data type will use an Input component that accepts a foreign key string. This is recommended as a basic starting point for custom development.
+The standard `references` data type will use an Input component that accepts a foreign key string.
+
+```bash
+npx shadriz@latest scaffold product -c category:references title:text
+```
 
 ### References Combobox
 
@@ -209,8 +218,6 @@ The `references_combobox` data type will use a Generic Combobox component where 
 npx shadriz@latest scaffold product -c category:references_combobox title:text
 ```
 
-By default the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop.
-
 ### References Select
 
 The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items.
@@ -219,11 +226,15 @@ The `references_select` data type will use a Generic Select component where you 
 npx shadriz@latest scaffold product -c category:references_select title:text
 ```
 
-By default the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop.
+### Labels
+
+For the `references_combobox` and `references_select` components, the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop. Both components search on the `labelField`.
 
 ### Note on performance
 
-For the Combobox and Select option, every record from the referenced table will be loaded. For extremely large datasets, a custom component with optimizations is recommended.
+For the standard `references` data type, the referenced table will not be queried and loaded.
+
+For both the `references_combobox` and `references_select` data type, the entire referenced table will be queried server-side and loaded into the client components.
 
 ## File and image uploads
 
