@@ -55,12 +55,6 @@ const scaffoldDbDialectStrategies: Record<
 export class ScaffoldProcessor {
   opts: ScaffoldProcessorOpts;
 
-  commonConstraintMap: { [key: string]: string } = {
-    pk: ".primaryKey()",
-    "default-uuidv7": ".$defaultFn(() => uuidv7())",
-    "default-uuidv4": ".$defaultFn(() => crypto.randomUUID())",
-  };
-
   dbDialectStrategy: DbDialectStrategy;
 
   constructor(opts: ScaffoldProcessorOpts) {
