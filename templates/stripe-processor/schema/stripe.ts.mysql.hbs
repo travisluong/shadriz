@@ -19,7 +19,7 @@ import { users } from "./users";
 
 export const stripeWebhooks = mysqlTable("stripe_webhooks", {
   {{pkText}}
-  payload: json("payload"),
+  payload: text("payload"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -49,6 +49,7 @@ export const orders = mysqlTable("orders", {
 export const subscriptions = mysqlTable("subscriptions", {
   {{pkText}}
   userId: varchar("user_id", { length: 255 }).notNull().references(() => users.id),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }).notNull(),
   startDate: date("start_date", { mode: "date" }).notNull(),
   endDate: date("end_date", { mode: "date" }).notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),

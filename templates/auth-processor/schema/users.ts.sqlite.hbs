@@ -10,9 +10,6 @@ export const users = sqliteTable("users", {
   emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
   image: text("image"),
   password: text("password"),
-  {{#if stripeEnabled}}
-  stripeCustomerId: text("stripe_customer_id"),
-  {{/if}}
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 })

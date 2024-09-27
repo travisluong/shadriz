@@ -61,13 +61,13 @@ export default async function Page() {
           {activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-green-400">Subscription Active</Badge>
-              <div>Expires: {subscription?.endDate}</div>
+              <div>Expires: {subscription?.endDate.toLocaleDateString()}</div>
             </div>
           )}
           {subscription && !activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-red-400">Subscription</Badge>
-              <div>Expired: {subscription.endDate}</div>
+              <div>Expired: {subscription.endDate.toLocaleDateString()}</div>
             </div>
           )}
         </CardContent>
@@ -115,7 +115,7 @@ export default async function Page() {
                           currency: "USD",
                         })}
                     </TableCell>
-                    <TableCell>{d.orders.createdAt}</TableCell>
+                    <TableCell>{d.orders.createdAt.toLocaleDateString()}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

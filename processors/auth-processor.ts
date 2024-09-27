@@ -315,9 +315,6 @@ export class AuthProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "auth-processor/app/(private)/layout.tsx.hbs",
       outputPath: "app/(private)/layout.tsx",
-      data: {
-        stripeEnabled: this.opts.stripeEnabled,
-      },
     });
   }
 
@@ -368,7 +365,6 @@ export class AuthProcessor implements ShadrizProcessor {
       data: {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
-        stripeEnabled: this.opts.stripeEnabled,
         createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },

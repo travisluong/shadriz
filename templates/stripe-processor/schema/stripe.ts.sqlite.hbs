@@ -35,6 +35,7 @@ export const orders = sqliteTable("orders", {
 export const subscriptions = sqliteTable("subscriptions", {
   {{pkText}}
   userId: text("user_id").notNull().references(() => users.id),
+  stripeCustomerId: text("stripe_customer_id").notNull(),
   startDate: text("start_date").notNull(),
   endDate: text("end_date").notNull(),
   createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),

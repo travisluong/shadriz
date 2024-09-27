@@ -19,7 +19,7 @@ import { users } from "./users";
 
 export const stripeWebhooks = pgTable("stripe_webhooks", {
   {{pkText}}
-  payload: json("payload"),
+  payload: text("payload"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -49,6 +49,7 @@ export const orders = pgTable("orders", {
 export const subscriptions = pgTable("subscriptions", {
   {{pkText}}
   userId: text("user_id").notNull().references(() => users.id),
+  stripeCustomerId: text("stripe_customer_id").notNull(),
   productId: text("product_id").notNull().references(() => products.id),
   startDate: date("start_date", { mode: "date" }).notNull(),
   endDate: date("end_date", { mode: "date" }).notNull(),

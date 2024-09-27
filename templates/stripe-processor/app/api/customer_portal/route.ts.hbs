@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { users } from "@/schema/users";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { subscriptions } from "@/schema/stripe";
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 
@@ -18,11 +19,22 @@ export async function POST(req: Request) {
     where: eq(users.id, session.user.id),
   });
 
+  if (!user) {
+    throw new Error("user not found " + session.user.id);
+  }
+
   const returnUrl = `${req.headers.get("origin")}/account`;
-  const customerId = user?.stripeCustomerId;
+  
+  const subscription = await db.query.subscriptions.findFirst({
+    where: eq(subscriptions.userId, user.id),
+  });
+
+  if (!subscription) {
+    throw new Error("subscription not found for user " + session.user.id);
+  }
 
   const portalSession = await stripe.billingPortal.sessions.create({
-    customer: customerId,
+    customer: subscription.stripeCustomerId,
     return_url: returnUrl,
   });
 

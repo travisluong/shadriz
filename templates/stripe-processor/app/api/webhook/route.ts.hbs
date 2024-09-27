@@ -100,11 +100,6 @@ async function handleCheckoutSessionCompleted(event: any) {
 
     const productId = product.id;
 
-    await db
-      .update(users)
-      .set({ stripeCustomerId: event.data.object.customer })
-      .where(eq(users.id, user.id));
-
     if (product.slug === "one-time") {
       // only create an order here if it is the one-time purchase product
       // for subscriptions, the order is created during the invoice paid event
@@ -144,15 +139,11 @@ async function handleInvoicePaid(event: any) {
       const endDate = new Date(d.period.end * 1000);
       const newSubscription = {
         userId: user.id,
+        stripeCustomerId: stripeCustomerId,
         productId: product.id,
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
+        startDate: startDate,
+        endDate: endDate,
       };
-
-      await db
-        .update(users)
-        .set({ stripeCustomerId: stripeCustomerId })
-        .where(eq(users.id, user.id));
 
       const subscription = await db.query.subscriptions.findFirst({
         where: and(
@@ -165,8 +156,8 @@ async function handleInvoicePaid(event: any) {
         await db
           .update(subscriptions)
           .set({
-            endDate: endDate.toISOString(),
-            updatedAt: new Date().toISOString(),
+            endDate: endDate,
+            updatedAt: new Date(),
           })
           .where(eq(subscriptions.id, subscription.id));
       } else {

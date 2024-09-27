@@ -19,9 +19,6 @@ export const users = mysqlTable("users", {
   }),
   image: varchar("image", { length: 255 }),
   password: varchar("password", { length: 255 }),
-  {{#if stripeEnabled}}
-  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
-  {{/if}}
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 })
