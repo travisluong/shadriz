@@ -6,7 +6,7 @@ import { sql } from "drizzle-orm";
 export const stripeWebhooks = sqliteTable("stripe_webhooks", {
   {{pkText}}
   payload: text("payload"),
-  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
 });
 
 export const products = sqliteTable("products", {
@@ -18,8 +18,8 @@ export const products = sqliteTable("products", {
   price: integer("price").notNull(),
   description: text("description"),
   mode: text("mode").notNull(),
-  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
-  updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
 });
 
 export const orders = sqliteTable("orders", {
@@ -29,15 +29,15 @@ export const orders = sqliteTable("orders", {
   stripeProductId: text("stripe_product_id").notNull(),
   stripePriceId: text("stripe_price_id").notNull(),
   amountTotal: integer("amount_total").notNull(),
-  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
 });
 
 export const subscriptions = sqliteTable("subscriptions", {
   {{pkText}}
   userId: text("user_id").notNull().references(() => users.id),
   stripeCustomerId: text("stripe_customer_id").notNull(),
-  startDate: text("start_date").notNull(),
-  endDate: text("end_date").notNull(),
-  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
-  updatedAt: text("updated_at").notNull().default(sql`(current_timestamp)`),
+  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
+  endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
 });
