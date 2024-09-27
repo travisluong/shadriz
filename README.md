@@ -236,6 +236,8 @@ For the standard `references` data type, the referenced table will not be querie
 
 For both the `references_combobox` and `references_select` data type, the entire referenced table will be queried server-side and loaded into the client components.
 
+For extremely large datasets, consider building a custom component with pagination or other optimizations.
+
 ## File and image uploads
 
 shadriz supports the following special data types:
