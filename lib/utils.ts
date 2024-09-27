@@ -281,6 +281,7 @@ export async function installDependencies(opts: {
   packageManager: PackageManager;
   latest: boolean;
 }) {
+  const collectDependencies = [];
   for (const str of opts.dependencies) {
     const pinnedVersion =
       packageShadrizJson.dependencies[
@@ -300,11 +301,15 @@ export async function installDependencies(opts: {
       // priority 3
       version = pinnedVersion;
     }
-    if (opts.packageManager === "pnpm") {
-      await runCommand(`pnpm add ${str}@${version}`);
-    } else {
-      await runCommand(`npm install ${str}@${version}`);
-    }
+    collectDependencies.push(`${str}@${version}`);
+  }
+  if (collectDependencies.length === 0) {
+    return;
+  }
+  if (opts.packageManager === "pnpm") {
+    await runCommand(`pnpm add ${collectDependencies.join(" ")}`);
+  } else {
+    await runCommand(`npm install ${collectDependencies.join(" ")}`);
   }
 }
 
@@ -313,6 +318,7 @@ export async function installDevDependencies(opts: {
   packageManager: PackageManager;
   latest: boolean;
 }) {
+  const collectDevDependencies = [];
   for (const str of opts.devDependencies) {
     const pinnedVersion =
       packageShadrizJson.devDependencies[
@@ -332,11 +338,15 @@ export async function installDevDependencies(opts: {
       // priority 3
       version = pinnedVersion;
     }
-    if (opts.packageManager === "pnpm") {
-      await runCommand(`pnpm add -D ${str}@${version}`);
-    } else if (opts.packageManager === "npm") {
-      await runCommand(`npm install -D ${str}@${version}`);
-    }
+    collectDevDependencies.push(`${str}@${version}`);
+  }
+  if (collectDevDependencies.length === 0) {
+    return;
+  }
+  if (opts.packageManager === "pnpm") {
+    await runCommand(`pnpm add -D ${collectDevDependencies.join(" ")}`);
+  } else if (opts.packageManager === "npm") {
+    await runCommand(`npm install -D ${collectDevDependencies.join(" ")}`);
   }
 }
 
@@ -355,12 +365,17 @@ export async function addShadcnComponents(opts: {
   } else {
     version = pinnedVersion;
   }
-  for (const component of opts.shadcnComponents) {
-    if (opts.packageManager === "pnpm") {
-      await runCommand(`pnpm dlx shadcn@${version} add -y -o ${component}`);
-    } else if (opts.packageManager === "npm") {
-      await runCommand(`npx shadcn@${version} add -y -o ${component}`);
-    }
+  if (opts.shadcnComponents.length === 0) {
+    return;
+  }
+  if (opts.packageManager === "pnpm") {
+    await runCommand(
+      `pnpm dlx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`
+    );
+  } else if (opts.packageManager === "npm") {
+    await runCommand(
+      `npx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`
+    );
   }
 }
 
