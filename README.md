@@ -192,7 +192,7 @@ shadriz supports adding foreign key constraints using the following special data
 
 This will set up the Drizzle relations and the UI form controls for managing the relations.
 
-For example, a one to many relationship where a product belongs to a category can be set up using the following scaffolds.
+For example, a one to many relationship where a post belongs to a category can be set up using the following scaffolds.
 
 First, scaffold the `one` side of the relationship.
 
@@ -207,7 +207,7 @@ Second, scaffold the `many` side of the relationship using one of the references
 The standard `references` data type will use an Input component that accepts a foreign key string.
 
 ```bash
-npx shadriz@latest scaffold product -c category:references title:text
+npx shadriz@latest scaffold post -c category:references title:text
 ```
 
 ### References Combobox
@@ -215,7 +215,7 @@ npx shadriz@latest scaffold product -c category:references title:text
 The `references_combobox` data type will use a Generic Combobox component where you can search for and select the related item.
 
 ```bash
-npx shadriz@latest scaffold product -c category:references_combobox title:text
+npx shadriz@latest scaffold post -c category:references_combobox title:text
 ```
 
 ### References Select
@@ -223,7 +223,7 @@ npx shadriz@latest scaffold product -c category:references_combobox title:text
 The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items.
 
 ```bash
-npx shadriz@latest scaffold product -c category:references_select title:text
+npx shadriz@latest scaffold post -c category:references_select title:text
 ```
 
 ### Labels
