@@ -65,7 +65,7 @@ program
       }));
 
     const latest =
-      options.latest ||
+      options.latest ??
       (await select({
         message: `Do you want to install the latest Next.js version or the pinned version ${PINNED_NEXTJS_VERSION}?`,
         choices: [

@@ -155,4 +155,5 @@ export class SqliteDialectStrategy implements DbDialectStrategy {
   drizzleDbCorePackage: string = "drizzle-orm/sqlite-core";
   dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
   dialect: DbDialect = "sqlite";
+  timestampImport: string = "integer";
 }

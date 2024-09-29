@@ -13,7 +13,7 @@ import { useFormState } from "react-dom";
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
 {{/each}}
 
-export default function {{tableObj.singularPascalCase}}CreateForm({
+export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasReferences}}{
   {{#each referencesColumnList}}
   {{this.singularCamelCase}}List,
   {{/each}}
@@ -21,7 +21,7 @@ export default function {{tableObj.singularPascalCase}}CreateForm({
   {{#each referencesColumnList}}
   {{this.singularCamelCase}}List: {{this.singularPascalCase}}[];
   {{/each}}
-}) {
+}{{/if}}) {
   const initialState: Create{{tableObj.singularPascalCase}}State = {};
   const [state, dispatch] = useFormState(create{{tableObj.singularPascalCase}}, initialState);
 

@@ -433,6 +433,7 @@ export class ScaffoldProcessor {
         formControls: formControlsHtml,
         authorizationLevel: this.opts.authorizationLevel,
         referencesColumnList: referencesColumnList,
+        hasReferences: referencesColumnList.length > 0,
       },
     });
   }
