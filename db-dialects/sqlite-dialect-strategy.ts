@@ -69,6 +69,19 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.bigint(opts.keyName, opts.columnName);
     },
   },
+  timestamp: {
+    jsType: "string",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
+    dataTypeOverride: "integer",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: integer(\"${opts.columnName}\", { mode: "timestamp" })`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.date(opts.keyName, opts.columnName);
+    },
+  },
   references: {
     jsType: "string",
     formTemplate:
