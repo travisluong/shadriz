@@ -6,7 +6,8 @@ import { sql } from "drizzle-orm";
 export const stripeWebhooks = sqliteTable("stripe_webhooks", {
   {{pkText}}
   payload: text("payload"),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const products = sqliteTable("products", {
@@ -18,8 +19,8 @@ export const products = sqliteTable("products", {
   price: integer("price").notNull(),
   description: text("description"),
   mode: text("mode").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const orders = sqliteTable("orders", {
@@ -29,7 +30,8 @@ export const orders = sqliteTable("orders", {
   stripeProductId: text("stripe_product_id").notNull(),
   stripePriceId: text("stripe_price_id").notNull(),
   amountTotal: integer("amount_total").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const subscriptions = sqliteTable("subscriptions", {
@@ -38,6 +40,6 @@ export const subscriptions = sqliteTable("subscriptions", {
   stripeCustomerId: text("stripe_customer_id").notNull(),
   startDate: integer("start_date", { mode: "timestamp" }).notNull(),
   endDate: integer("end_date", { mode: "timestamp" }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });

@@ -20,7 +20,8 @@ import { users } from "./users";
 export const stripeWebhooks = mysqlTable("stripe_webhooks", {
   {{pkText}}
   payload: text("payload"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const products = mysqlTable("products", {
@@ -32,8 +33,8 @@ export const products = mysqlTable("products", {
   price: int("price").notNull(),
   description: text("description"),
   mode: varchar("mode", { length: 255 }).notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const orders = mysqlTable("orders", {
@@ -43,7 +44,8 @@ export const orders = mysqlTable("orders", {
   stripeProductId: varchar("stripe_product_id", { length: 255 }).notNull(),
   stripePriceId: varchar("stripe_price_id", { length: 255 }).notNull(),
   amountTotal: int("amount_total").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const subscriptions = mysqlTable("subscriptions", {
@@ -52,6 +54,6 @@ export const subscriptions = mysqlTable("subscriptions", {
   stripeCustomerId: varchar("stripe_customer_id", { length: 255 }).notNull(),
   startDate: date("start_date", { mode: "date" }).notNull(),
   endDate: date("end_date", { mode: "date" }).notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });

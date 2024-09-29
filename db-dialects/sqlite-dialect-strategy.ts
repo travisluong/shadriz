@@ -142,9 +142,9 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 export class SqliteDialectStrategy implements DbDialectStrategy {
   pkDataType: string = "text";
   createdAtTemplate: string =
-    "createdAt: integer(\"created_at\", { mode: \"timestamp\" }).default(sql`(strftime('%s', 'now'))`),";
+    "createdAt: integer(\"created_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`),";
   updatedAtTemplate: string =
-    "updatedAt: integer(\"updated_at\", { mode: \"timestamp\" }).default(sql`(strftime('%s', 'now'))`),";
+    "updatedAt: integer(\"updated_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`).$onUpdate(() => new Date()),";
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,

@@ -117,6 +117,8 @@ export class StripeProcessor implements ShadrizProcessor {
       data: {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
+        createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
+        updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
     });
   }

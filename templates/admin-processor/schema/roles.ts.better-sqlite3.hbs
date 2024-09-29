@@ -1,21 +1,22 @@
-import { sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core";
+import { sql } from "drizzle-orm";
+import { sqliteTable, text, integer, primaryKey } from "drizzle-orm/sqlite-core";
 import { users } from "./users";
 {{pkImport}}
 
 export const roles = sqliteTable("roles", {
   {{pkText}}
   name: text("name").notNull().unique(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const usersRoles = sqliteTable(
   "users_roles",
   {
-    userId: text("user_id")
-      .notNull()
-      .references(() => users.id),
-    roleId: text("role_id")
-      .notNull()
-      .references(() => roles.id),
+    userId: text("user_id").notNull().references(() => users.id),
+    roleId: text("role_id").notNull().references(() => roles.id),
+    {{createdAtTemplate}}
+    {{updatedAtTemplate}}
   },
   (table) => ({
     compoundKey: primaryKey({ columns: [table.userId, table.roleId] }),

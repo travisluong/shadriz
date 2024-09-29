@@ -68,6 +68,8 @@ export class AdminProcessor implements ShadrizProcessor {
       data: {
         pkText: pkText,
         pkImport: pkImport,
+        createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
+        updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
     });
 

@@ -20,7 +20,8 @@ import { users } from "./users";
 export const stripeWebhooks = pgTable("stripe_webhooks", {
   {{pkText}}
   payload: text("payload"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const products = pgTable("products", {
@@ -32,8 +33,8 @@ export const products = pgTable("products", {
   price: integer("price").notNull(),
   description: text("description"),
   mode: text("mode").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const orders = pgTable("orders", {
@@ -43,7 +44,8 @@ export const orders = pgTable("orders", {
   stripeProductId: text("stripe_product_id").notNull(),
   stripePriceId: text("stripe_price_id").notNull(),
   amountTotal: integer("amount_total").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });
 
 export const subscriptions = pgTable("subscriptions", {
@@ -53,6 +55,6 @@ export const subscriptions = pgTable("subscriptions", {
   productId: text("product_id").notNull().references(() => products.id),
   startDate: date("start_date", { mode: "date" }).notNull(),
   endDate: date("end_date", { mode: "date" }).notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
 });

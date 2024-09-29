@@ -341,8 +341,8 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export class MysqlDialectStrategy implements DbDialectStrategy {
   pkDataType: string = "varchar";
-  createdAtTemplate: string = `createdAt: timestamp("created_at").defaultNow(),`;
-  updatedAtTemplate: string = `updatedAt: timestamp("updated_at").defaultNow(),`;
+  createdAtTemplate: string = `createdAt: timestamp("created_at").notNull().defaultNow(),`;
+  updatedAtTemplate: string = `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`;
   pkStrategyTemplates: Record<PkStrategy, string> = {
     uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,
