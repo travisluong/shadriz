@@ -48,14 +48,35 @@ const scaffoldDbDialectStrategies: Record<
   },
 };
 
+interface ValidatedColumn {
+  columnName: string;
+  dataType: string;
+}
+
 export class ScaffoldProcessor {
   opts: ScaffoldProcessorOpts;
 
   dbDialectStrategy: DbDialectStrategy;
 
+  validatedColumns: ValidatedColumn[];
+
   constructor(opts: ScaffoldProcessorOpts) {
-    this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
+    this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
+    this.validatedColumns = this.parseColumns(opts.columns);
+  }
+
+  parseColumns(columns: string[]) {
+    const dataTypeStrategyMap = this.dbDialectStrategy.dataTypeStrategyMap;
+    const validatedColumns: ValidatedColumn[] = [];
+    for (const column of columns) {
+      const [columnName, dataType] = column.split(":");
+      if (!(dataType in dataTypeStrategyMap)) {
+        throw new Error(`invalid data type ${dataType}`);
+      }
+      validatedColumns.push({ columnName, dataType });
+    }
+    return validatedColumns;
   }
 
   process(): void {
@@ -82,7 +103,7 @@ export class ScaffoldProcessor {
     this.printCompletionMessage();
   }
   addSchema(): void {
-    const { table, columns } = this.opts;
+    const { table } = this.opts;
     // compile columns
     let columnsCode = "";
 
@@ -92,9 +113,9 @@ export class ScaffoldProcessor {
     columnsCode += "    " + pkCode + "\n";
 
     // add other columns
-    for (const [index, column] of columns.entries()) {
+    for (const [index, column] of this.validatedColumns.entries()) {
       columnsCode += this.getKeyValueStrForSchema(column);
-      if (index !== columns.length - 1) {
+      if (index !== this.validatedColumns.length - 1) {
         columnsCode += "\n";
       }
     }
@@ -104,7 +125,7 @@ export class ScaffoldProcessor {
     columnsCode += "    " + this.dbDialectStrategy.updatedAtTemplate;
 
     // generate imports code
-    const importsCode = this.generateImportsCodeFromColumns(columns);
+    const importsCode = this.generateImportsCodeFromColumns();
     const tableObj = caseFactory(table);
     const referencesColumnList = this.getReferencesColumnList("references");
     renderTemplate({
@@ -120,12 +141,12 @@ export class ScaffoldProcessor {
       },
     });
   }
-  generateImportsCodeFromColumns(columns: string[]) {
+  generateImportsCodeFromColumns() {
     const dataTypeSet = new Set<string>();
     dataTypeSet.add(this.dbDialectStrategy.pkDataType);
     let referenceImportsCode = "";
-    for (const column of columns) {
-      const [columnName, dataType] = column.split(":");
+    for (const validatedColumn of this.validatedColumns) {
+      const { columnName, dataType } = validatedColumn;
       const tableObj = caseFactory(columnName);
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
@@ -154,12 +175,9 @@ export class ScaffoldProcessor {
 
     return code;
   }
-  getKeyValueStrForSchema(column: string): string {
+  getKeyValueStrForSchema(validatedColumn: ValidatedColumn): string {
     const { dataTypeStrategyMap } = this.dbDialectStrategy;
-    let [columnName, dataType] = column.split(":");
-    if (!(dataType in dataTypeStrategyMap)) {
-      throw new Error("data type strategy not found: " + dataType);
-    }
+    let { columnName, dataType } = validatedColumn;
     const strategy = dataTypeStrategyMap[dataType];
     const columnNameCases = caseFactory(columnName);
 
@@ -197,7 +215,7 @@ export class ScaffoldProcessor {
   }
   addDetailView(): void {
     const tableObj = caseFactory(this.opts.table);
-    const columnCases = this.getColumnCases();
+    const columnCases = this.getColumnCaseVariants();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -208,11 +226,7 @@ export class ScaffoldProcessor {
   }
   addEditView(): void {
     const tableObj = caseFactory(this.opts.table);
-    const referencesColumnList = this.opts.columns
-      .map((column) => column.split(":"))
-      .filter((arr) => arr[1].startsWith("references_"))
-      .map((arr) => arr[0])
-      .map((str) => caseFactory(str));
+    const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/edit/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -255,8 +269,8 @@ export class ScaffoldProcessor {
   }
   addCreateAction(): void {
     const columns = ["id"];
-    for (const col of this.opts.columns.values()) {
-      const [columnName, dataType] = col.split(":");
+    for (const validatedColumn of this.validatedColumns) {
+      const { columnName, dataType } = validatedColumn;
       const columnCases = caseFactory(columnName);
       if (!dataType.startsWith("references")) {
         columns.push(columnCases.originalCamelCase);
@@ -267,36 +281,37 @@ export class ScaffoldProcessor {
       }
     }
 
-    const formDataKeyVal = this.opts.columns
-      .map((c) => c.split(":"))
-      .map((arr) => {
-        const col = arr[0];
-        const dataType = arr[1];
+    const formDataKeyVal = this.validatedColumns
+      .map((validatedColumn) => {
+        const { columnName, dataType } = validatedColumn;
         const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-        const columnCases = caseFactory(col);
+        const columnCases = caseFactory(columnName);
         let keyName;
-        let columnName;
+        let colName;
 
         if (dataType.startsWith("references")) {
           keyName = columnCases.singularCamelCase + "Id";
-          columnName = columnCases.singularCamelCase + "Id";
+          colName = columnCases.singularCamelCase + "Id";
         } else {
           keyName = columnCases.originalCamelCase;
-          columnName = columnCases.originalCamelCase;
+          colName = columnCases.originalCamelCase;
         }
 
         return strategy.getKeyValStrForFormData({
           keyName: keyName,
-          columnName: columnName,
+          columnName: colName,
         });
       })
       .join("\n");
 
-    const uploadColumnNames = this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
-      .map((arr) => caseFactory(arr[0]));
+    const uploadColumnNames = this.validatedColumns
+      .filter(
+        (validatedColumn) =>
+          validatedColumn.dataType === "file" ||
+          validatedColumn.dataType === "image"
+      )
+      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
     const tableObj = caseFactory(this.opts.table);
 
@@ -317,8 +332,8 @@ export class ScaffoldProcessor {
   }
   addUpdateAction(): void {
     const columns = ["id"];
-    for (const col of this.opts.columns.values()) {
-      const [columnName, dataType] = col.split(":");
+    for (const validatedColumn of this.validatedColumns) {
+      const { columnName, dataType } = validatedColumn;
       const columnCases = caseFactory(columnName);
       if (!dataType.startsWith("references")) {
         columns.push(columnCases.originalCamelCase);
@@ -334,30 +349,27 @@ export class ScaffoldProcessor {
         this.dbDialectStrategy.pkDataType
       ];
 
-    const formDataKeyValArr = this.opts.columns
-      .map((c) => c.split(":"))
-      .map((arr) => {
-        const col = arr[0];
-        const dataType = arr[1];
-        const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
+    const formDataKeyValArr = this.validatedColumns.map((validatedColumn) => {
+      const { columnName, dataType } = validatedColumn;
+      const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-        const columnCases = caseFactory(col);
-        let keyName;
-        let columnName;
+      const columnCases = caseFactory(columnName);
+      let keyName;
+      let colName;
 
-        if (dataType.startsWith("references")) {
-          keyName = columnCases.singularCamelCase + "Id";
-          columnName = columnCases.singularCamelCase + "Id";
-        } else {
-          keyName = columnCases.originalCamelCase;
-          columnName = columnCases.originalCamelCase;
-        }
+      if (dataType.startsWith("references")) {
+        keyName = columnCases.singularCamelCase + "Id";
+        colName = columnCases.singularCamelCase + "Id";
+      } else {
+        keyName = columnCases.originalCamelCase;
+        colName = columnCases.originalCamelCase;
+      }
 
-        return strategy.getKeyValStrForFormData({
-          keyName: keyName,
-          columnName: columnName,
-        });
+      return strategy.getKeyValStrForFormData({
+        keyName: keyName,
+        columnName: colName,
       });
+    });
 
     formDataKeyValArr.unshift(
       dataTypeStrategyForPk.getKeyValStrForFormData({
@@ -368,10 +380,13 @@ export class ScaffoldProcessor {
 
     const formDataKeyVal = formDataKeyValArr.join("\n");
 
-    const uploadColumnNames = this.opts.columns
-      .map((c) => c.split(":"))
-      .filter((arr) => this.isFileType(arr) || this.isImageType(arr))
-      .map((arr) => caseFactory(arr[0]));
+    const uploadColumnNames = this.validatedColumns
+      .filter(
+        (validatedColumn) =>
+          validatedColumn.dataType === "file" ||
+          validatedColumn.dataType === "image"
+      )
+      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
     const tableObj = caseFactory(this.opts.table);
 
@@ -433,11 +448,8 @@ export class ScaffoldProcessor {
   }
   getFormControlsHtml(): string {
     let html = "";
-    for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType] = column.split(":");
-      // TODO: validation should go earlier in process
-      if (!(dataType in this.dbDialectStrategy.dataTypeStrategyMap))
-        throw new Error("invalid data type strategy: " + dataType);
+    for (const [index, validatedColumn] of this.validatedColumns.entries()) {
+      const { columnName, dataType } = validatedColumn;
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       const columnCases = caseFactory(columnName);
@@ -450,10 +462,11 @@ export class ScaffoldProcessor {
     return html;
   }
   getReferencesColumnList(startsWith: string) {
-    const referencesColumnList = this.opts.columns
-      .map((column) => column.split(":"))
-      .filter((arr) => arr[1].startsWith(startsWith))
-      .map((arr) => arr[0])
+    const referencesColumnList = this.validatedColumns
+      .filter((validatedColumn) =>
+        validatedColumn.dataType.startsWith(startsWith)
+      )
+      .map((validatedColumn) => validatedColumn.columnName)
       .map((str) => caseFactory(str));
     return referencesColumnList;
   }
@@ -483,10 +496,10 @@ export class ScaffoldProcessor {
       },
     });
   }
-  getColumnCases(): Cases[] {
+  getColumnCaseVariants(): Cases[] {
     const arr = [];
-    for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType] = column.split(":");
+    for (const validatedColumn of this.validatedColumns) {
+      const { columnName, dataType } = validatedColumn;
       if (dataType.startsWith("references")) {
         const fkColumn = caseFactory(columnName);
         const columnCases = caseFactory(fkColumn.singularSnakeCase + "_id");
@@ -500,7 +513,7 @@ export class ScaffoldProcessor {
   }
   addTableComponent(): void {
     const tableObj = caseFactory(this.opts.table);
-    const columnCases = this.getColumnCases();
+    const columnCases = this.getColumnCaseVariants();
 
     renderTemplate({
       inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",
@@ -525,10 +538,8 @@ export class ScaffoldProcessor {
 
     html += "\n";
 
-    for (const [index, column] of this.opts.columns.entries()) {
-      const [columnName, dataType] = column.split(":");
-      if (!(dataType in this.dbDialectStrategy.dataTypeStrategyMap))
-        throw new Error("invalid data type strategy: " + dataType);
+    for (const [index, validatedColumn] of this.validatedColumns.entries()) {
+      const { columnName, dataType } = validatedColumn;
 
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
@@ -579,12 +590,6 @@ export class ScaffoldProcessor {
     log.checklist("scaffold checklist");
     log.cmdtask("npx drizzle-kit generate");
     log.cmdtask("npx drizzle-kit migrate");
-  }
-  isFileType(arr: string[]) {
-    return arr[1] === "file";
-  }
-  isImageType(arr: string[]) {
-    return arr[1] === "image";
   }
   authorizationRouteGroup() {
     switch (this.opts.authorizationLevel) {
