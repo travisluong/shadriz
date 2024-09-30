@@ -122,6 +122,7 @@ export class ScaffoldProcessor {
   }
   generateImportsCodeFromColumns(columns: string[]) {
     const dataTypeSet = new Set<string>();
+    dataTypeSet.add(this.dbDialectStrategy.pkDataType);
     let referenceImportsCode = "";
     for (const column of columns) {
       const [columnName, dataType] = column.split(":");
