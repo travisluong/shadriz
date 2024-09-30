@@ -7,10 +7,8 @@ import {
   DbDialectStrategy,
 } from "../lib/types";
 import {
-  addShadcnComponents,
   appendToFileIfTextNotExists,
   compileTemplate,
-  installDependencies,
   renderTemplate,
 } from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
@@ -51,24 +49,6 @@ export class StripeProcessor implements ShadrizProcessor {
   async init() {
     log.init("initializing stripe...");
     await this.render();
-  }
-
-  async install(): Promise<void> {
-    if (!this.opts.install) {
-      return;
-    }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await addShadcnComponents({
-      shadcnComponents: this.shadcnComponents,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
   }
 
   async render(): Promise<void> {

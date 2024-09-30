@@ -1,11 +1,6 @@
 import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
-import {
-  addShadcnComponents,
-  installDependencies,
-  installDevDependencies,
-  renderTemplate,
-} from "../lib/utils";
+import { renderTemplate } from "../lib/utils";
 
 export class DarkModeProcessor implements ShadrizProcessor {
   constructor(public opts: ShadrizConfig) {}
@@ -19,30 +14,6 @@ export class DarkModeProcessor implements ShadrizProcessor {
   async init() {
     log.init("initializing dark mode...");
     await this.render();
-  }
-
-  async install() {
-    if (!this.opts.install) {
-      return;
-    }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await installDevDependencies({
-      devDependencies: this.devDependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await addShadcnComponents({
-      shadcnComponents: this.shadcnComponents,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
   }
 
   async render() {

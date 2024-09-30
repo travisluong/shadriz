@@ -1,9 +1,6 @@
 import {
-  addShadcnComponents,
   appendToFileIfTextNotExists,
   compileTemplate,
-  installDependencies,
-  installDevDependencies,
   renderTemplate,
 } from "../lib/utils";
 import { log } from "../lib/log";
@@ -23,8 +20,8 @@ interface AuthStrategy {
   importTemplatePath: string;
   authTemplatePath: string;
   envTemplatePath: string;
-  dependencies?: string[];
-  devDependencies?: string[];
+  dependencies: string[];
+  devDependencies: string[];
   textToSearchInEnv?: string;
   printCompletionMessage(): void;
 }
@@ -37,7 +34,7 @@ interface AuthStrategyMap {
   nodemailer: AuthStrategy;
 }
 
-const authStrategyMap: AuthStrategyMap = {
+export const authStrategyMap: AuthStrategyMap = {
   github: {
     importTemplatePath: "auth-processor/lib/auth.ts.github.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.github.hbs",
@@ -52,6 +49,8 @@ const authStrategyMap: AuthStrategyMap = {
       log.subtask("update AUTH_GITHUB_SECRET in .env.local");
     },
     textToSearchInEnv: "AUTH_GITHUB_ID",
+    dependencies: [],
+    devDependencies: [],
   },
   google: {
     importTemplatePath: "auth-processor/lib/auth.ts.google.imports.hbs",
@@ -67,6 +66,8 @@ const authStrategyMap: AuthStrategyMap = {
       log.subtask("update AUTH_GOOGLE_SECRET in .env.local");
     },
     textToSearchInEnv: "AUTH_GOOGLE_ID",
+    dependencies: [],
+    devDependencies: [],
   },
   credentials: {
     importTemplatePath: "auth-processor/lib/auth.ts.credentials.imports.hbs",
@@ -94,6 +95,8 @@ const authStrategyMap: AuthStrategyMap = {
       log.subtask("update AUTH_POSTMARK_KEY in .env.local");
     },
     textToSearchInEnv: "AUTH_POSTMARK_KEY",
+    dependencies: [],
+    devDependencies: [],
   },
   nodemailer: {
     importTemplatePath: "auth-processor/lib/auth.ts.nodemailer.imports.hbs",
@@ -106,6 +109,7 @@ const authStrategyMap: AuthStrategyMap = {
       log.subtask("update EMAIL_FROM in .env.local");
     },
     textToSearchInEnv: "EMAIL_SERVER",
+    devDependencies: [],
   },
 };
 
@@ -148,26 +152,6 @@ export class AuthProcessor implements ShadrizProcessor {
     await this.render();
   }
 
-  async install() {
-    if (!this.opts.install) {
-      return;
-    }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await this.installProviderDependencies();
-
-    await addShadcnComponents({
-      shadcnComponents: this.shadcnComponents,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-  }
-
   async render() {
     this.addAuthConfig();
     this.addAuthRouteHandler();
@@ -202,26 +186,6 @@ export class AuthProcessor implements ShadrizProcessor {
     // ) {
     //   throw new Error("credentials provider must use jwt");
     // }
-  }
-
-  async installProviderDependencies() {
-    for (const provider of this.opts.authProviders) {
-      const authStrategy = authStrategyMap[provider];
-      if (authStrategy.dependencies) {
-        await installDependencies({
-          dependencies: authStrategy.dependencies,
-          packageManager: this.opts.packageManager,
-          latest: this.opts.latest,
-        });
-      }
-      if (authStrategy.devDependencies) {
-        await installDevDependencies({
-          devDependencies: authStrategy.devDependencies,
-          packageManager: this.opts.packageManager,
-          latest: this.opts.latest,
-        });
-      }
-    }
   }
 
   appendAuthSecretToEnv() {

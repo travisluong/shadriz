@@ -16,10 +16,6 @@ export class DbDialectProcessor implements ShadrizProcessor {
     await this.render();
   }
 
-  async install(): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
   async render(): Promise<void> {
     renderTemplate({
       inputPath: "db-dialect-processor/drizzle.config.ts.hbs",

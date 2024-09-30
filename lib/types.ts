@@ -28,7 +28,6 @@ export interface ShadrizProcessor {
   shadcnComponents: string[];
   dbDialectStrategy?: DbDialectStrategy;
   init(): Promise<void>;
-  install(): Promise<void>;
   render(): Promise<void>;
   printCompletionMessage: () => void;
 }

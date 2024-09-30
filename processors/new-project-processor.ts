@@ -1,9 +1,6 @@
 import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
-  addShadcnComponents,
-  installDependencies,
-  installDevDependencies,
   removeTextFromFile,
   renderTemplate,
   renderTemplateIfNotExists,

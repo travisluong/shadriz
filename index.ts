@@ -20,7 +20,7 @@ import {
   writeToFile,
 } from "./lib/utils";
 import { packageStrategyFactory } from "./lib/strategy-factory";
-import { AuthProcessor } from "./processors/auth-processor";
+import { AuthProcessor, authStrategyMap } from "./processors/auth-processor";
 import { NewProjectProcessor } from "./processors/new-project-processor";
 import { DarkModeProcessor } from "./processors/dark-mode-processor";
 import { StripeProcessor } from "./processors/stripe-processor";
@@ -29,7 +29,6 @@ import fs from "fs";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
 import packageShadrizJson from "./package-shadriz.json";
 import packageJson from "./package.json";
-import { DependencyInstaller } from "./lib/dependency-installer";
 import { pkDependencies } from "./lib/pk-strategy";
 
 const PINNED_NEXTJS_VERSION = packageShadrizJson.dependencies["next"];
@@ -337,6 +336,11 @@ program
 
       const completeConfig = completeShadrizConfig(partialConfig);
 
+      writeToFile(
+        "shadriz.config.json",
+        JSON.stringify(completeConfig, null, 2)
+      );
+
       const newProjectProcessor = new NewProjectProcessor(completeConfig);
 
       await newProjectProcessor.install();
@@ -375,15 +379,17 @@ program
         const darkModeProcessor = new DarkModeProcessor(completeConfig);
         processors.push(darkModeProcessor);
       }
-      writeToFile(
-        "shadriz.config.json",
-        JSON.stringify(completeConfig, null, 2)
-      );
 
       for (const processor of processors) {
         dependencies.push(...processor.dependencies);
         devDependencies.push(...processor.devDependencies);
         shadcnComponents.push(...processor.shadcnComponents);
+      }
+
+      for (const authProvider of completeConfig.authProviders) {
+        const authStrategy = authStrategyMap[authProvider];
+        dependencies.push(...authStrategy.dependencies);
+        devDependencies.push(...authStrategy.devDependencies);
       }
 
       await installDependencies({

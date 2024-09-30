@@ -5,7 +5,7 @@ import {
   ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
-import { addShadcnComponents, renderTemplate } from "../lib/utils";
+import { renderTemplate } from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 
 export class AdminProcessor implements ShadrizProcessor {
@@ -24,17 +24,7 @@ export class AdminProcessor implements ShadrizProcessor {
     log.init("initializing admin...");
     await this.render();
   }
-  async install(): Promise<void> {
-    if (!this.opts.install) {
-      return;
-    }
 
-    await addShadcnComponents({
-      shadcnComponents: this.shadcnComponents,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-  }
   async render(): Promise<void> {
     renderTemplate({
       inputPath: "admin-processor/app/(admin)/layout.tsx.hbs",
