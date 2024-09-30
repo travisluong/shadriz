@@ -10,7 +10,7 @@ import {
   prependToFileIfNotExists,
 } from "../lib/utils";
 import { log } from "../lib/log";
-import { pkStrategyImportTemplates } from "./pk-strategy-processor";
+import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { caseFactory, Cases } from "../lib/case-utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 

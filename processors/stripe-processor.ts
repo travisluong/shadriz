@@ -13,7 +13,7 @@ import {
   installDependencies,
   renderTemplate,
 } from "../lib/utils";
-import { pkStrategyImportTemplates } from "./pk-strategy-processor";
+import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 
 interface StripeDbDialectStrategy {
   stripeSchemaTemplatePath: string;
@@ -50,7 +50,6 @@ export class StripeProcessor implements ShadrizProcessor {
 
   async init() {
     log.init("initializing stripe...");
-    await this.install();
     await this.render();
   }
 

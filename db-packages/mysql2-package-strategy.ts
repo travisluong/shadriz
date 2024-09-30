@@ -6,6 +6,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
   constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
+  shadcnComponents: string[] = [];
 
   opts: ShadrizConfig;
 
@@ -17,7 +18,6 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   async init() {
     log.init("initializing mysql2 package...");
-    await this.install();
     await this.render();
   }
 

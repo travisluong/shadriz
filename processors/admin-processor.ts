@@ -6,7 +6,7 @@ import {
   ShadrizProcessor,
 } from "../lib/types";
 import { addShadcnComponents, renderTemplate } from "../lib/utils";
-import { pkStrategyImportTemplates } from "./pk-strategy-processor";
+import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 
 export class AdminProcessor implements ShadrizProcessor {
   opts: ShadrizConfig;
@@ -22,7 +22,6 @@ export class AdminProcessor implements ShadrizProcessor {
 
   async init(): Promise<void> {
     log.init("initializing admin...");
-    await this.install();
     await this.render();
   }
   async install(): Promise<void> {

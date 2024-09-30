@@ -30,6 +30,7 @@ export interface ShadrizProcessor {
   init(): Promise<void>;
   install(): Promise<void>;
   render(): Promise<void>;
+  printCompletionMessage: () => void;
 }
 
 export type DbDialect = "postgresql" | "mysql" | "sqlite";
@@ -75,14 +76,9 @@ export interface DbDialectStrategy {
   timestampImport?: string;
 }
 
-export interface DbPackageStrategy {
+export interface DbPackageStrategy extends ShadrizProcessor {
   opts: ShadrizConfig;
   dialect: DbDialect;
-  dependencies: string[];
-  devDependencies: string[];
-  init(): Promise<void>;
-  install(): Promise<void>;
-  render(): Promise<void>;
   copyCreateUserScript(): void;
   copyMigrateScript(): void;
   appendDbUrl(): void;

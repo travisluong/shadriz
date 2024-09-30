@@ -2,11 +2,18 @@
 
 import { Command, Option } from "commander";
 import { log } from "./lib/log";
-import { AuthorizationLevel, ShadrizConfig } from "./lib/types";
+import {
+  AuthorizationLevel,
+  ShadrizConfig,
+  ShadrizProcessor,
+} from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import {
+  addShadcnComponents,
   completeShadrizConfig,
+  installDependencies,
+  installDevDependencies,
   loadShadrizConfig,
   regenerateSchemaIndex,
   spawnCommand,
@@ -19,10 +26,11 @@ import { DarkModeProcessor } from "./processors/dark-mode-processor";
 import { StripeProcessor } from "./processors/stripe-processor";
 import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
-import { PkStrategyProcessor } from "./processors/pk-strategy-processor";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
 import packageShadrizJson from "./package-shadriz.json";
 import packageJson from "./package.json";
+import { DependencyInstaller } from "./lib/dependency-installer";
+import { pkDependencies } from "./lib/pk-strategy";
 
 const PINNED_NEXTJS_VERSION = packageShadrizJson.dependencies["next"];
 
@@ -325,12 +333,20 @@ program
 
       // process
 
+      const processors: ShadrizProcessor[] = [];
+
       const completeConfig = completeShadrizConfig(partialConfig);
 
       const newProjectProcessor = new NewProjectProcessor(completeConfig);
+
+      await newProjectProcessor.install();
+
       const dbPackageStrategy = packageStrategyFactory(completeConfig);
       const dbDialectProcessor = new DbDialectProcessor(completeConfig);
-      const pkStrategyProcessor = new PkStrategyProcessor(completeConfig);
+
+      processors.push(newProjectProcessor);
+      processors.push(dbPackageStrategy);
+      processors.push(dbDialectProcessor);
 
       let authProcessor;
       let adminProcessor;
@@ -338,47 +354,64 @@ program
 
       if (completeConfig.authSolution !== "none") {
         authProcessor = new AuthProcessor(completeConfig);
+        processors.push(authProcessor);
       }
       if (completeConfig.authSolution !== "none") {
         adminProcessor = new AdminProcessor(completeConfig);
+        processors.push(adminProcessor);
       }
       if (completeConfig.stripeEnabled) {
         stripeProcessor = new StripeProcessor(completeConfig);
+        processors.push(stripeProcessor);
       }
-      await newProjectProcessor.init();
-      await dbPackageStrategy.init();
-      dbDialectProcessor.init();
-      await pkStrategyProcessor.init();
+
+      const dependencies = [];
+      const devDependencies = [];
+      const shadcnComponents = [];
+
+      dependencies.push(...pkDependencies[completeConfig.pkStrategy]);
+
       if (completeConfig.darkModeEnabled) {
         const darkModeProcessor = new DarkModeProcessor(completeConfig);
-        await darkModeProcessor.init();
+        processors.push(darkModeProcessor);
       }
       writeToFile(
         "shadriz.config.json",
         JSON.stringify(completeConfig, null, 2)
       );
-      if (authProcessor) {
-        await authProcessor.init();
 
-        if (adminProcessor) {
-          await adminProcessor.init();
-        }
+      for (const processor of processors) {
+        dependencies.push(...processor.dependencies);
+        devDependencies.push(...processor.devDependencies);
+        shadcnComponents.push(...processor.shadcnComponents);
+      }
 
-        if (stripeProcessor) {
-          await stripeProcessor.init();
-        }
+      await installDependencies({
+        dependencies,
+        packageManager: completeConfig.packageManager,
+        latest: completeConfig.latest,
+      });
 
-        regenerateSchemaIndex();
-        dbPackageStrategy.printCompletionMessage();
-        authProcessor.printCompletionMessage();
-        if (adminProcessor) {
-          adminProcessor.printCompletionMessage();
-        }
-        if (stripeProcessor) {
-          stripeProcessor.printCompletionMessage();
-        }
-      } else {
-        regenerateSchemaIndex();
+      await installDevDependencies({
+        devDependencies,
+        packageManager: completeConfig.packageManager,
+        latest: completeConfig.latest,
+      });
+
+      await addShadcnComponents({
+        shadcnComponents,
+        packageManager: completeConfig.packageManager,
+        latest: completeConfig.latest,
+      });
+
+      for (const processor of processors) {
+        await processor.init();
+      }
+
+      regenerateSchemaIndex();
+
+      for (const processor of processors) {
+        processor.printCompletionMessage();
       }
 
       log.log("");

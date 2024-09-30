@@ -11,6 +11,7 @@ export class PgPackageStrategy implements DbPackageStrategy {
   constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
+  shadcnComponents: string[] = [];
 
   opts: ShadrizConfig;
 
@@ -22,7 +23,6 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   async init() {
     log.init("initializing pg package...");
-    await this.install();
     this.copyMigrateScript();
     this.appendDbUrl();
     this.copyDbInstance();

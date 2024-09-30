@@ -36,7 +36,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
 
   async init() {
     log.init("initializing new project...");
-    await this.install();
     await this.render();
   }
 
@@ -61,24 +60,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
     } else if (this.opts.packageManager === "npm") {
       await runCommand(`npx shadcn@${version} init -y -d`);
     }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await installDevDependencies({
-      devDependencies: this.devDependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await addShadcnComponents({
-      packageManager: this.opts.packageManager,
-      shadcnComponents: this.shadcnComponents,
-      latest: this.opts.latest,
-    });
   }
 
   async render() {
@@ -148,4 +129,6 @@ export class NewProjectProcessor implements ShadrizProcessor {
 
     removeTextFromFile("app/globals.css", textToSearch);
   }
+
+  printCompletionMessage() {}
 }

@@ -18,7 +18,6 @@ export class DarkModeProcessor implements ShadrizProcessor {
 
   async init() {
     log.init("initializing dark mode...");
-    await this.install();
     await this.render();
   }
 
@@ -72,4 +71,6 @@ export class DarkModeProcessor implements ShadrizProcessor {
       outputPath: "components/mode-toggle.tsx",
     });
   }
+
+  printCompletionMessage() {}
 }

@@ -32,4 +32,6 @@ export class DbDialectProcessor implements ShadrizProcessor {
       outputPath: "lib/schema.ts",
     });
   }
+
+  printCompletionMessage() {}
 }

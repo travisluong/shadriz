@@ -16,7 +16,7 @@ import {
 import {
   pkKeyValTemplates,
   pkStrategyImportTemplates,
-} from "./pk-strategy-processor";
+} from "../lib/pk-strategy";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 
 interface AuthStrategy {
@@ -145,7 +145,6 @@ export class AuthProcessor implements ShadrizProcessor {
   async init() {
     log.init("initializing auth...");
     this.validateOptions();
-    await this.install();
     await this.render();
   }
 
