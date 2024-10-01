@@ -1,25 +1,17 @@
 import { log } from "../lib/log";
 import { DbDialect, DbPackageStrategy, ShadrizConfig } from "../lib/types";
-import {
-  appendDbUrl,
-  installDependencies,
-  installDevDependencies,
-  renderTemplate,
-} from "../lib/utils";
+import { appendDbUrl, renderTemplate } from "../lib/utils";
 
 export class PgPackageStrategy implements DbPackageStrategy {
+  opts: ShadrizConfig;
+  shadcnComponents: string[] = [];
+  dialect: DbDialect = "postgresql";
+  dependencies = ["pg"];
+  devDependencies = ["@types/pg"];
+
   constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
-  shadcnComponents: string[] = [];
-
-  opts: ShadrizConfig;
-
-  dialect: DbDialect = "postgresql";
-
-  dependencies = ["pg"];
-
-  devDependencies = ["@types/pg"];
 
   async init() {
     log.init("initializing pg package...");
@@ -28,24 +20,6 @@ export class PgPackageStrategy implements DbPackageStrategy {
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
     this.copyCreateUserScript();
-  }
-
-  async install(): Promise<void> {
-    if (!this.opts.install) {
-      return;
-    }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
-
-    await installDevDependencies({
-      devDependencies: this.devDependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
   }
 
   render(): Promise<void> {

@@ -3,40 +3,23 @@ import { DbDialect, DbPackageStrategy, ShadrizConfig } from "../lib/types";
 import {
   appendDbUrl,
   appendToFileIfTextNotExists,
-  installDependencies,
   renderTemplate,
 } from "../lib/utils";
 
 export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
+  opts: ShadrizConfig;
+  shadcnComponents: string[] = [];
+  dialect: DbDialect = "sqlite";
+  dependencies: string[] = ["better-sqlite3"];
+  devDependencies: string[] = [];
+
   constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
 
-  shadcnComponents: string[] = [];
-
-  opts: ShadrizConfig;
-
-  dialect: DbDialect = "sqlite";
-
-  dependencies: string[] = ["better-sqlite3"];
-
-  devDependencies: string[] = [];
-
   async init() {
     log.init("initializing better-sqlite3 package...");
     await this.render();
-  }
-
-  async install(): Promise<void> {
-    if (!this.opts.install) {
-      return;
-    }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
   }
 
   async render(): Promise<void> {

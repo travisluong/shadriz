@@ -1,36 +1,21 @@
 import { log } from "../lib/log";
 import { DbDialect, DbPackageStrategy, ShadrizConfig } from "../lib/types";
-import { appendDbUrl, installDependencies, renderTemplate } from "../lib/utils";
+import { appendDbUrl, renderTemplate } from "../lib/utils";
 
 export class Mysql2PackageStrategy implements DbPackageStrategy {
+  opts: ShadrizConfig;
+  shadcnComponents: string[] = [];
+  dialect: DbDialect = "mysql";
+  dependencies = ["mysql2"];
+  devDependencies = [];
+
   constructor(opts: ShadrizConfig) {
     this.opts = opts;
   }
-  shadcnComponents: string[] = [];
-
-  opts: ShadrizConfig;
-
-  dialect: DbDialect = "mysql";
-
-  dependencies = ["mysql2"];
-
-  devDependencies = [];
 
   async init() {
     log.init("initializing mysql2 package...");
     await this.render();
-  }
-
-  async install(): Promise<void> {
-    if (!this.opts.install) {
-      return;
-    }
-
-    await installDependencies({
-      dependencies: this.dependencies,
-      packageManager: this.opts.packageManager,
-      latest: this.opts.latest,
-    });
   }
 
   async render(): Promise<void> {

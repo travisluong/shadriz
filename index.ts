@@ -392,23 +392,25 @@ program
         devDependencies.push(...authStrategy.devDependencies);
       }
 
-      await installDependencies({
-        dependencies,
-        packageManager: completeConfig.packageManager,
-        latest: completeConfig.latest,
-      });
+      if (completeConfig.install) {
+        await installDependencies({
+          dependencies,
+          packageManager: completeConfig.packageManager,
+          latest: completeConfig.latest,
+        });
 
-      await installDevDependencies({
-        devDependencies,
-        packageManager: completeConfig.packageManager,
-        latest: completeConfig.latest,
-      });
+        await installDevDependencies({
+          devDependencies,
+          packageManager: completeConfig.packageManager,
+          latest: completeConfig.latest,
+        });
 
-      await addShadcnComponents({
-        shadcnComponents,
-        packageManager: completeConfig.packageManager,
-        latest: completeConfig.latest,
-      });
+        await addShadcnComponents({
+          shadcnComponents,
+          packageManager: completeConfig.packageManager,
+          latest: completeConfig.latest,
+        });
+      }
 
       for (const processor of processors) {
         await processor.init();
