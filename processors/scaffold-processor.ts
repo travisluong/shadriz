@@ -150,8 +150,8 @@ export class ScaffoldProcessor {
       const tableObj = caseFactory(columnName);
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
-      if (dataTypeStrategy.dataTypeOverride) {
-        dataTypeSet.add(dataTypeStrategy.dataTypeOverride);
+      if (dataTypeStrategy.sqlType) {
+        dataTypeSet.add(dataTypeStrategy.sqlType);
       } else {
         dataTypeSet.add(dataType);
       }

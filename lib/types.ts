@@ -56,9 +56,9 @@ type JSType = "string" | "number" | "boolean" | "object";
 
 export interface DataTypeStrategy {
   jsType: JSType;
+  sqlType: string;
   formTemplate: string;
   updateFormTemplate: string;
-  dataTypeOverride?: string;
   getKeyValueStrForSchema(opts: DataTypeStrategyOpts): string;
   getKeyValStrForFormData(opts: DataTypeStrategyOpts): string;
 }

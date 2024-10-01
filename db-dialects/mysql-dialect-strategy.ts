@@ -10,6 +10,7 @@ import {
 const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   int: {
     jsType: "number",
+    sqlType: "int",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -22,6 +23,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   tinyint: {
     jsType: "number",
+    sqlType: "tinyint",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -34,6 +36,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   smallint: {
     jsType: "number",
+    sqlType: "smallint",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -46,6 +49,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   mediumint: {
     jsType: "number",
+    sqlType: "mediumint",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -58,6 +62,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   bigint: {
     jsType: "number",
+    sqlType: "bigint",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -70,6 +75,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   real: {
     jsType: "number",
+    sqlType: "real",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -82,6 +88,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   decimal: {
     jsType: "number",
+    sqlType: "decimal",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -94,6 +101,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   double: {
     jsType: "number",
+    sqlType: "double",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -106,6 +114,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   float: {
     jsType: "number",
+    sqlType: "float",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -118,6 +127,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   serial: {
     jsType: "number",
+    sqlType: "serial",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -130,6 +140,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   binary: {
     jsType: "string",
+    sqlType: "",
     formTemplate: "",
     updateFormTemplate: "",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
@@ -141,6 +152,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   varbinary: {
     jsType: "string",
+    sqlType: "",
     formTemplate: "",
     updateFormTemplate: "",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
@@ -152,6 +164,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   char: {
     jsType: "string",
+    sqlType: "char",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -164,6 +177,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   varchar: {
     jsType: "string",
+    sqlType: "varchar",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -176,6 +190,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   text: {
     jsType: "string",
+    sqlType: "text",
     formTemplate: "scaffold-processor/components/table/create-textarea.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-textarea.tsx.hbs",
@@ -188,6 +203,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   boolean: {
     jsType: "boolean",
+    sqlType: "boolean",
     formTemplate: "scaffold-processor/components/table/create-checkbox.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
@@ -200,6 +216,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   date: {
     jsType: "string",
+    sqlType: "date",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -212,6 +229,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   datetime: {
     jsType: "string",
+    sqlType: "datetime",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
@@ -224,6 +242,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   time: {
     jsType: "string",
+    sqlType: "time",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
@@ -236,6 +255,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   year: {
     jsType: "string",
+    sqlType: "",
     formTemplate: "",
     updateFormTemplate: "",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
@@ -247,6 +267,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   timestamp: {
     jsType: "string",
+    sqlType: "timestamp",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
@@ -259,6 +280,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   json: {
     jsType: "object",
+    sqlType: "json",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-json.tsx.hbs",
@@ -271,11 +293,11 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   references: {
     jsType: "string",
+    sqlType: "varchar",
     formTemplate:
       "scaffold-processor/components/table/create-references-input.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
-    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
@@ -285,11 +307,11 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   references_combobox: {
     jsType: "string",
+    sqlType: "varchar",
     formTemplate:
       "scaffold-processor/components/table/create-references-combobox.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
-    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
@@ -299,11 +321,11 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   references_select: {
     jsType: "string",
+    sqlType: "varchar",
     formTemplate:
       "scaffold-processor/components/table/create-references-select.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
-    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
@@ -313,10 +335,10 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   file: {
     jsType: "string",
+    sqlType: "varchar",
     formTemplate: "scaffold-processor/components/table/create-file.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-file.tsx.hbs",
-    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
@@ -326,10 +348,10 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   image: {
     jsType: "string",
+    sqlType: "varchar",
     formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
     updateFormTemplate:
       "scaffold-processor/components/table/update-image.tsx.hbs",
-    dataTypeOverride: "varchar",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 })`;
     },
