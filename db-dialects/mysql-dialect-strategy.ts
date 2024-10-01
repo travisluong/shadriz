@@ -361,20 +361,20 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export class MysqlDialectStrategy implements DbDialectStrategy {
-  pkDataType: string = "varchar";
-  createdAtTemplate: string = `createdAt: timestamp("created_at").notNull().defaultNow(),`;
-  updatedAtTemplate: string = `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`;
-  pkStrategyTemplates: Record<PkStrategy, string> = {
+export const mysqlDialectStrategy: DbDialectStrategy = {
+  pkDataType: "varchar",
+  createdAtTemplate: `createdAt: timestamp("created_at").notNull().defaultNow(),`,
+  updatedAtTemplate: `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`,
+  pkStrategyTemplates: {
     uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2:
       'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => createId()),',
     nanoid: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,
-  };
-  drizzleDbCorePackage: string = "drizzle-orm/mysql-core";
-  tableConstructor: string = "mysqlTable";
-  dialect: DbDialect = "mysql";
-  dataTypeStrategyMap: DataTypeStrategyMap = mysqlDataTypeStrategies;
-  timestampImport = "timestamp";
-}
+  },
+  drizzleDbCorePackage: "drizzle-orm/mysql-core",
+  tableConstructor: "mysqlTable",
+  dialect: "mysql",
+  dataTypeStrategyMap: mysqlDataTypeStrategies,
+  timestampImport: "timestamp",
+};

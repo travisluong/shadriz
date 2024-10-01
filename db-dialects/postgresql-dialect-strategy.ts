@@ -338,19 +338,19 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export class PostgresqlDialectStrategy implements DbDialectStrategy {
-  pkDataType: string = "text";
-  createdAtTemplate: string = `createdAt: timestamp("created_at").notNull().defaultNow(),`;
-  updatedAtTemplate: string = `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`;
-  pkStrategyTemplates: Record<PkStrategy, string> = {
+export const postgresqlDialectStrategy: DbDialectStrategy = {
+  pkDataType: "text",
+  createdAtTemplate: `createdAt: timestamp("created_at").notNull().defaultNow(),`,
+  updatedAtTemplate: `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`,
+  pkStrategyTemplates: {
     uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
-  };
-  drizzleDbCorePackage: string = "drizzle-orm/pg-core";
-  tableConstructor: string = "pgTable";
-  dataTypeStrategyMap: DataTypeStrategyMap = postgresqlDataTypeStrategies;
-  dialect: DbDialect = "postgresql";
-  timestampImport = "timestamp";
-}
+  },
+  drizzleDbCorePackage: "drizzle-orm/pg-core",
+  tableConstructor: "pgTable",
+  dataTypeStrategyMap: postgresqlDataTypeStrategies,
+  dialect: "postgresql",
+  timestampImport: "timestamp",
+};

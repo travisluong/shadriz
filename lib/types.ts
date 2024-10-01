@@ -72,7 +72,7 @@ export interface DbDialectStrategy {
   createdAtTemplate: string;
   updatedAtTemplate: string;
   pkDataType: string;
-  timestampImport?: string;
+  timestampImport: string;
 }
 
 export interface DbPackageStrategy extends ShadrizProcessor {

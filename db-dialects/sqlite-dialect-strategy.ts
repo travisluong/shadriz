@@ -156,21 +156,21 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
   },
 };
 
-export class SqliteDialectStrategy implements DbDialectStrategy {
-  pkDataType: string = "text";
-  createdAtTemplate: string =
-    "createdAt: integer(\"created_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`),";
-  updatedAtTemplate: string =
-    "updatedAt: integer(\"updated_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`).$onUpdate(() => new Date()),";
-  pkStrategyTemplates: Record<PkStrategy, string> = {
+export const sqliteDialectStrategy: DbDialectStrategy = {
+  pkDataType: "text",
+  createdAtTemplate:
+    "createdAt: integer(\"created_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`),",
+  updatedAtTemplate:
+    "updatedAt: integer(\"updated_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`).$onUpdate(() => new Date()),",
+  pkStrategyTemplates: {
     uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
     uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
-  };
-  tableConstructor: string = "sqliteTable";
-  drizzleDbCorePackage: string = "drizzle-orm/sqlite-core";
-  dataTypeStrategyMap: DataTypeStrategyMap = sqliteDataTypeStrategies;
-  dialect: DbDialect = "sqlite";
-  timestampImport: string = "integer";
-}
+  },
+  tableConstructor: "sqliteTable",
+  drizzleDbCorePackage: "drizzle-orm/sqlite-core",
+  dataTypeStrategyMap: sqliteDataTypeStrategies,
+  dialect: "sqlite",
+  timestampImport: "integer",
+};

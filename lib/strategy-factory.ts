@@ -2,9 +2,9 @@ import { DbDialect, ShadrizConfig } from "./types";
 import { BetterSqlite3PackageStrategy } from "../db-packages/better-sqlite3-package-strategy";
 import { Mysql2PackageStrategy } from "../db-packages/mysql2-package-strategy";
 import { PgPackageStrategy } from "../db-packages/pg-package-strategy";
-import { SqliteDialectStrategy } from "../db-dialects/sqlite-dialect-strategy";
-import { MysqlDialectStrategy } from "../db-dialects/mysql-dialect-strategy";
-import { PostgresqlDialectStrategy } from "../db-dialects/postgresql-dialect-strategy";
+import { sqliteDialectStrategy } from "../db-dialects/sqlite-dialect-strategy";
+import { mysqlDialectStrategy } from "../db-dialects/mysql-dialect-strategy";
+import { postgresqlDialectStrategy } from "../db-dialects/postgresql-dialect-strategy";
 
 export function packageStrategyFactory(opts: ShadrizConfig) {
   switch (opts.dbPackage) {
@@ -22,11 +22,11 @@ export function packageStrategyFactory(opts: ShadrizConfig) {
 export function dialectStrategyFactory(dialect: DbDialect) {
   switch (dialect) {
     case "sqlite":
-      return new SqliteDialectStrategy();
+      return sqliteDialectStrategy;
     case "mysql":
-      return new MysqlDialectStrategy();
+      return mysqlDialectStrategy;
     case "postgresql":
-      return new PostgresqlDialectStrategy();
+      return postgresqlDialectStrategy;
     default:
       throw new Error("invalid dialect: " + dialect);
   }
