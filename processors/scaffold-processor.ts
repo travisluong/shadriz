@@ -272,12 +272,10 @@ export class ScaffoldProcessor {
     for (const validatedColumn of this.validatedColumns) {
       const { columnName, dataType } = validatedColumn;
       const columnCases = caseFactory(columnName);
-      if (!dataType.startsWith("references")) {
-        columns.push(columnCases.originalCamelCase);
-        continue;
-      }
       if (dataType.startsWith("references")) {
         columns.push(columnCases.singularCamelCase + "Id");
+      } else {
+        columns.push(columnCases.originalCamelCase);
       }
     }
 
@@ -335,12 +333,10 @@ export class ScaffoldProcessor {
     for (const validatedColumn of this.validatedColumns) {
       const { columnName, dataType } = validatedColumn;
       const columnCases = caseFactory(columnName);
-      if (!dataType.startsWith("references")) {
-        columns.push(columnCases.originalCamelCase);
-        continue;
-      }
       if (dataType.startsWith("references")) {
         columns.push(columnCases.singularCamelCase + "Id");
+      } else {
+        columns.push(columnCases.originalCamelCase);
       }
     }
 
@@ -461,7 +457,7 @@ export class ScaffoldProcessor {
     }
     return html;
   }
-  getReferencesColumnList(startsWith: string) {
+  getReferencesColumnList(startsWith: "references" | "references_") {
     const referencesColumnList = this.validatedColumns
       .filter((validatedColumn) =>
         validatedColumn.dataType.startsWith(startsWith)
