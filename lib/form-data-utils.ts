@@ -33,10 +33,6 @@ export const formDataUtils = {
     return `    ${key}: (formData.get("${col}") as string) || null,`;
   },
 
-  image(key: string, col: string): string {
-    return `    ${key}: ${caseFactory(col).singularCamelCase}UploadPath,`;
-  },
-
   file(key: string, col: string): string {
     return `    ${key}: ${caseFactory(col).singularCamelCase}UploadPath,`;
   },

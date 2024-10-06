@@ -139,19 +139,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
   },
-  image: {
-    jsType: "string",
-    sqlType: "text",
-    formTemplate: "scaffold-processor/components/table/create-image.tsx.hbs",
-    updateFormTemplate:
-      "scaffold-processor/components/table/update-image.tsx.hbs",
-    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\")`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.image(opts.keyName, opts.columnName);
-    },
-  },
 };
 
 export const sqliteDialectStrategy: DbDialectStrategy = {

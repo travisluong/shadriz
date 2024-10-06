@@ -1,6 +1,7 @@
 import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
+  appendToFileIfTextNotExists,
   removeTextFromFile,
   renderTemplate,
   renderTemplateIfNotExists,
@@ -125,6 +126,8 @@ export class NewProjectProcessor implements ShadrizProcessor {
 }`;
 
     removeTextFromFile("app/globals.css", textToSearch);
+
+    appendToFileIfTextNotExists(".gitignore", "\n/uploads", "/uploads");
   }
 
   printCompletionMessage() {}

@@ -238,18 +238,25 @@ For both the `references_combobox` and `references_select` data type, the entire
 
 For extremely large datasets, consider building a custom component with pagination or other optimizations.
 
-## File and image uploads
+## File uploads
 
 shadriz supports the following special data types:
 
-- `file` - creates a text db column to store the file path along with a basic ui for file uploads to the file system
-- `image` - creates a text db column to store the file path along with a basic ui for image uploads to the file system
+- `file` - creates a text db column to store the file path along with a basic ui for uploads to the file system
 
 Example:
 
 ```bash
-npx shadriz@latest scaffold media -c pdf:file thumbnail:image description:text
+npx shadriz@latest scaffold media -c image:file video:file document:file
 ```
+
+Note: Next.js only generates routes for public files at compile time. If you need to serve the uploaded files, putting them into the `/public` directory will not work in production without a new build each time.
+
+If the uploaded files need to be served immediately after uploading, consider using a web server like nginx to serve the static files, object storage, or an s3 compatible bucket instead.
+
+In developmnt, shadriz will put the files in `/public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
+
+In production, shadriz will put the files in `/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads` to the `/uploads` folder. Also note, this won't work in serverless environments.
 
 ## Auth
 

@@ -22,7 +22,8 @@ export async function uploadFile({
 }) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const resolvedPath = path.join(process.cwd(), "public", uploadPath);
+  const publicPath = process.env.NODE_ENV === "development" ? "public" : "";
+  const resolvedPath = path.join(process.cwd(), publicPath, uploadPath);
   const dir = path.dirname(resolvedPath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });

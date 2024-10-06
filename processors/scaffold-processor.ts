@@ -304,11 +304,7 @@ export class ScaffoldProcessor {
       .join("\n");
 
     const uploadColumnNames = this.validatedColumns
-      .filter(
-        (validatedColumn) =>
-          validatedColumn.dataType === "file" ||
-          validatedColumn.dataType === "image"
-      )
+      .filter((validatedColumn) => validatedColumn.dataType === "file")
       .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
     const tableObj = caseFactory(this.opts.table);
@@ -377,11 +373,7 @@ export class ScaffoldProcessor {
     const formDataKeyVal = formDataKeyValArr.join("\n");
 
     const uploadColumnNames = this.validatedColumns
-      .filter(
-        (validatedColumn) =>
-          validatedColumn.dataType === "file" ||
-          validatedColumn.dataType === "image"
-      )
+      .filter((validatedColumn) => validatedColumn.dataType === "file")
       .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
     const tableObj = caseFactory(this.opts.table);
