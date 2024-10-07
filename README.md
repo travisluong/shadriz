@@ -256,7 +256,7 @@ If the uploaded files need to be served immediately after uploading, consider us
 
 In developmnt, shadriz will put the files in `/public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
 
-In production, shadriz will put the files in `/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads` to the `/uploads` folder. Also note, this won't work in serverless environments.
+In production, shadriz will put the files in `/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads` to the `/uploads` folder. Also note, this won't work in serverless environments. If you're using serverless, consider using object storage like s3.
 
 ## Auth
 
