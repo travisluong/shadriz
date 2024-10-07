@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createInsertSchema } from "drizzle-zod";
 {{#if importFileUtils}}
-import { getUploadPath, uploadFile } from "@/lib/file-utils";
+import { uploadFile } from "@/lib/file-utils";
 {{/if}}
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
@@ -49,14 +49,13 @@ export async function create{{tableObj.singularPascalCase}}(
 {{#each uploadColumnNames}}
   const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
 
-  let {{this.singularCamelCase}}UploadPath;
+  let {{this.singularCamelCase}}Uri;
 
   if ({{this.singularCamelCase}}File.size) {
-    {{this.singularCamelCase}}UploadPath = getUploadPath({
+    {{this.singularCamelCase}}Uri = await uploadFile({
       file: {{this.singularCamelCase}}File,
-      dir: "/uploads/{{../tableObj.pluralKebabCase}}/",
-    });
-    uploadFile({ file: {{this.singularCamelCase}}File, uploadPath: {{this.singularCamelCase}}UploadPath });
+      dir: "{{../tableObj.pluralKebabCase}}"
+    })
   }
 {{/each}}
 

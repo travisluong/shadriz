@@ -34,6 +34,6 @@ export const formDataUtils = {
   },
 
   file(key: string, col: string): string {
-    return `    ${key}: ${caseFactory(col).singularCamelCase}UploadPath,`;
+    return `    ${key}: ${caseFactory(col).singularCamelCase}Uri,`;
   },
 };

@@ -4,29 +4,33 @@ import { init } from "@paralleldrive/cuid2";
 
 const createId = init({ length: 10 });
 
-export function getUploadPath({ file, dir }: { file: File; dir: string }) {
-  const randomString = createId();
-  const originalName = path.parse(file.name).name;
-  const fileExt = path.extname(file.name);
-  const newFileName = `${originalName}_${randomString}${fileExt}`;
-  const relativePath = dir + newFileName;
-  return relativePath;
-}
-
-export async function uploadFile({
-  file,
-  uploadPath,
-}: {
-  file: File;
-  uploadPath: string;
-}) {
+export async function uploadFile({ file, dir }: { file: File; dir: string }) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const publicPath = process.env.NODE_ENV === "development" ? "public" : "";
-  const resolvedPath = path.join(process.cwd(), publicPath, uploadPath);
-  const dir = path.dirname(resolvedPath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  const randomString = createId(); // abcdefghij
+  const originalName = path.parse(file.name).name; // test image.png
+  const sluggedName = originalName.replace(" ", "-"); // test-image.png
+  const fileExt = path.extname(file.name); // .png
+  const newFileName = `${originalName}-${randomString}${fileExt}`; // test-image-abcdefghij.png
+  const resolvedPath = path.join(getUploadPathByEnv(), dir, newFileName); // /var/www/uploads/test-image-abcdefghij.png
+  const resolvedDirPath = path.dirname(resolvedPath); // /var/www/uploads
+  const imageUri = `/${dir}/${newFileName}`; // /testdir/test-image.png
+  if (!fs.existsSync(resolvedDirPath)) {
+    fs.mkdirSync(resolvedDirPath, { recursive: true });
   }
   fs.writeFileSync(resolvedPath, buffer);
+  return imageUri;
+}
+
+function getUploadPathByEnv(): string {
+  switch (process.env.NODE_ENV) {
+    case "development":
+      return path.join(process.cwd(), "public/uploads");
+    case "production":
+      return "/var/www/uploads";
+    case "test":
+      return path.join(process.cwd(), "public/uploads/test");
+    default:
+      throw new Error("invalid env for upload path " + process.env.NODE_ENV);
+  }
 }
