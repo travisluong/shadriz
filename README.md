@@ -352,7 +352,7 @@ shadriz uses naming conventions as described in the table below. Number and case
 
 **What can I build with shadriz?**
 
-shadriz is ideal for full stack monolithic server side rendered web applications.
+shadriz is suitable for full stack monolithic server side rendered web applications.
 
 Here are a few example use cases: blog, software as a service app, course platform, content website, digital product shop, social media app, bespoke ecommerce systems.
 
