@@ -1,6 +1,6 @@
 # shadriz
 
-Build full stack Next.js apps super fast.
+Full Stack Next.js Ephemeral Rapid Development Framework.
 
 - [Docs](https://travisluong.github.io/shadriz)
 - [GitHub](https://github.com/travisluong/shadriz)
@@ -15,11 +15,13 @@ You do not install it into your project as a dependency.
 
 It is a command line interface code generation tool.
 
-You use it to generate full stack features including authentication, authorization, and payments.
+You use it to generate common, customizable, and configured web development boilerplate including authentication, authorization, and data validations.
 
-You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
+You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
-The code is yours.
+The customizable code is inspired by shadcn/ui.
+
+The scaffolding automation is inspired by Ruby on Rails.
 
 ## Philosophy
 
@@ -254,7 +256,7 @@ If the uploaded files need to be served immediately after uploading, consider us
 
 In developmnt, shadriz will put the files in `/public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
 
-In production, shadriz will put the files in `/var/www/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads/` to the `/var/www/uploads` folder.
+In production, shadriz will put the files in `/var/www/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads/` to the `/var/www/uploads` folder. Note: This won't work in serverless environments. If you're using serverless, consider using object storage like s3.
 
 The file URI will be saved to the database. The upload paths can be changed in `file-utils.ts`.
 
@@ -276,8 +278,6 @@ server {
        }
 }
 ```
-
-Note: This won't work in serverless environments. If you're using serverless, consider using object storage like s3.
 
 Tip: The Next.js `Image` component performs automatic resizing of images. This works well for static images. However, uploaded images will not show up immediately unless you use the `unoptimized` attribute. Alternatively, you can use a regular `img` tag.
 
