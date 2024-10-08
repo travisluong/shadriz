@@ -254,7 +254,9 @@ If the uploaded files need to be served immediately after uploading, consider us
 
 In developmnt, shadriz will put the files in `/public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
 
-In production, shadriz will put the files in `/var/www/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads/` to the `/var/www/uploads` folder. The upload path can be changed in `file-utils.ts`.
+In production, shadriz will put the files in `/var/www/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads/` to the `/var/www/uploads` folder.
+
+The file URI will be saved to the database. The upload paths can be changed in `file-utils.ts`.
 
 Example nginx config:
 
