@@ -1,6 +1,6 @@
 # shadriz
 
-Full Stack Next.js Ephemeral Rapid Development Framework.
+Full Stack Next.js Scaffolding Framework.
 
 - [Docs](https://travisluong.github.io/shadriz)
 - [GitHub](https://github.com/travisluong/shadriz)
