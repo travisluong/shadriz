@@ -120,12 +120,18 @@ export class NewProjectProcessor implements ShadrizProcessor {
     });
 
     // TODO: remove when next.js and shadcn/ui init works with dark mode
-    const textToSearch = `:root {
+    // prettier-ignore
+    removeTextFromFile("app/globals.css", `:root {
   --background: #ffffff;
   --foreground: #171717;
-}`;
-
-    removeTextFromFile("app/globals.css", textToSearch);
+}`);
+    // prettier-ignore
+    removeTextFromFile("app/globals.css", `@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}`)
 
     appendToFileIfTextNotExists(".gitignore", "\n/uploads", "/uploads");
   }
