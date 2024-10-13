@@ -250,11 +250,11 @@ Example:
 npx shadriz@latest scaffold media -c title:text image:file video:file
 ```
 
-Note: Next.js only generates routes for public files at compile time. If you need to serve the uploaded files, putting them into the `/public` directory will not work in production without a new build every time.
+Note: Next.js only generates routes for public files at compile time. If you need to serve the uploaded files, putting them into the `public` directory will not work in production without a new build every time.
 
 If the uploaded files need to be served immediately after uploading, consider using a web server like nginx to serve the static files or an s3 compatible bucket instead.
 
-In developmnt, shadriz will put the files in `/public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
+In developmnt, shadriz will put the files in `public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
 
 In production, shadriz will put the files in `/var/www/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads/` to the `/var/www/uploads` folder. Note: This won't work in serverless environments. If you're using serverless, consider using object storage like s3.
 

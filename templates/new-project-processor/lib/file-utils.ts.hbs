@@ -14,12 +14,12 @@ export async function uploadFile({ file, dir }: { file: File; dir: string }) {
   const newFileName = `${sluggedName}-${randomString}${fileExt}`; // test-image-abcdefghij.png
   const resolvedPath = path.join(getUploadPathByEnv(), dir, newFileName); // /var/www/uploads/test-image-abcdefghij.png
   const resolvedDirPath = path.dirname(resolvedPath); // /var/www/uploads
-  const imageUri = `/${dir}/${newFileName}`; // /testdir/test-image.png
+  const fileUri = `/${dir}/${newFileName}`; // /testdir/test-image.png
   if (!fs.existsSync(resolvedDirPath)) {
     fs.mkdirSync(resolvedDirPath, { recursive: true });
   }
   fs.writeFileSync(resolvedPath, buffer);
-  return imageUri;
+  return fileUri;
 }
 
 function getUploadPathByEnv(): string {
