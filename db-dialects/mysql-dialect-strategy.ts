@@ -91,10 +91,10 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: decimal(\"${opts.columnName}\")`;
+      return `${opts.keyName}: decimal(\"${opts.columnName}\").$type<number>()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
+      return formDataUtils.float(opts.keyName, opts.columnName);
     },
   },
   double: {

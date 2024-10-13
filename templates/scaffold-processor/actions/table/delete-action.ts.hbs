@@ -20,6 +20,7 @@ export interface Delete{{tableObj.singularPascalCase}}State {
     id?: string[];
   };
   message?: string;
+  status?: "success" | "error";
 }
 
 export async function delete{{tableObj.singularPascalCase}}(
@@ -43,18 +44,27 @@ export async function delete{{tableObj.singularPascalCase}}(
 {{/if}}
 
   const validatedFields = delete{{tableObj.singularPascalCase}}Schema.safeParse({
-    id: (formData.get("id") as string) || null,
+    id: formData.get("id") as string,
   });
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "error",
+      status: "error",
     };
   }
 
-  await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
-
+  try {
+    await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+  } catch (error) {
+    console.log(error);
+    return {
+      message: "server error",
+      status: "error",
+    }
+  }
+  
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }

@@ -309,6 +309,14 @@ export class ScaffoldProcessor {
 
     const tableObj = caseFactory(this.opts.table);
 
+    const decimalColumns = this.validatedColumns
+      .filter((validatedColumn) =>
+        ["decimal", "numeric"].includes(validatedColumn.dataType)
+      )
+      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
+
+    const hasDecimalColumn = decimalColumns.length > 0;
+
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/create-action.ts.hbs",
       outputPath: `actions/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/create-${tableObj.singularKebabCase}.ts`,
@@ -321,6 +329,8 @@ export class ScaffoldProcessor {
         isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
+        decimalColumns: decimalColumns,
+        hasDecimalColumn: hasDecimalColumn,
       },
     });
   }
@@ -376,6 +386,14 @@ export class ScaffoldProcessor {
       .filter((validatedColumn) => validatedColumn.dataType === "file")
       .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
+    const decimalColumns = this.validatedColumns
+      .filter((validatedColumn) =>
+        ["decimal", "numeric"].includes(validatedColumn.dataType)
+      )
+      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
+
+    const hasDecimalColumn = decimalColumns.length > 0;
+
     const tableObj = caseFactory(this.opts.table);
 
     renderTemplate({
@@ -390,6 +408,8 @@ export class ScaffoldProcessor {
         isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
+        decimalColumns: decimalColumns,
+        hasDecimalColumn: hasDecimalColumn,
       },
     });
   }

@@ -2,7 +2,7 @@ import { caseFactory } from "./case-utils";
 
 export const formDataUtils = {
   integer(key: string, col: string): string {
-    return `    ${key}: formData.get("${col}") ? parseInt(formData.get("${col}") as string) : null,`;
+    return `    ${key}: parseInt(formData.get("${col}") as string),`;
   },
 
   boolean(key: string, col: string): string {
@@ -10,27 +10,27 @@ export const formDataUtils = {
   },
 
   string(key: string, col: string): string {
-    return `    ${key}: (formData.get("${col}") as string) || null,`;
+    return `    ${key}: formData.get("${col}") as string,`;
   },
 
   json(key: string, col: string): string {
-    return `    ${key}: formData.get("${col}") ? JSON.parse(formData.get("${col}") as string) : null,`;
+    return `    ${key}: JSON.parse(formData.get("${col}") as string),`;
   },
 
   date(key: string, col: string): string {
-    return `    ${key}: formData.get("${col}") ? new Date(formData.get("${col}") as string) : null,`;
+    return `    ${key}: new Date(formData.get("${col}") as string),`;
   },
 
   float(key: string, col: string): string {
-    return `    ${key}: formData.get("${col}") ? parseFloat(formData.get("${col}") as string) : null,`;
+    return `    ${key}: parseFloat(formData.get("${col}") as string),`;
   },
 
   bigint(key: string, col: string): string {
-    return `    ${key}: formData.get("${col}") ? BigInt(formData.get("${col}") as string) : null,`;
+    return `    ${key}: BigInt(formData.get("${col}") as string),`;
   },
 
   references(key: string, col: string): string {
-    return `    ${key}: (formData.get("${col}") as string) || null,`;
+    return `    ${key}: formData.get("${col}") as string,`;
   },
 
   file(key: string, col: string): string {

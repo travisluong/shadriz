@@ -14,8 +14,21 @@ import { auth } from "@/lib/auth";
 {{#if isAdmin}}
 import { hasAdminRole } from "@/lib/authorization";
 {{/if}}
+{{#if hasDecimalColumn}}
+import { z } from "zod";
+{{/if}}
 
-const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).partial();
+{{#if hasDecimalColumn}}
+const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}, {
+  {{#each decimalColumns}}
+  {{this.originalCamelCase}}: z.number(),
+  {{/each}}
+})
+  .partial()
+  .required({ id: true });
+{{else}}
+const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).partial().required({ id: true });
+{{/if}}
 
 export interface Update{{tableObj.singularPascalCase}}State {
   errors?: {
@@ -24,6 +37,7 @@ export interface Update{{tableObj.singularPascalCase}}State {
     {{/each}}
   };
   message?: string;
+  status?: "success" | "error";
 }
 
 export async function update{{tableObj.singularPascalCase}}(
@@ -66,26 +80,30 @@ export async function update{{tableObj.singularPascalCase}}(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "bad request",
+      message: "invalid data",
+      status: "error",
     };
   }
 
-  if (!validatedFields.data.id) {
+  try {
+    await db
+      .update({{tableObj.pluralCamelCase}})
+      .set(validatedFields.data)
+      .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+  } catch (error) {
+    console.error(error);
     return {
-      message: "id required"
+      message: "server error",
+      status: "error",
     }
   }
-
-  await db
-    .update({{tableObj.pluralCamelCase}})
-    .set(validatedFields.data)
-    .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
 
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
   revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
 
   return {
-    message: "success",
+    message: "update success",
+    status: "success",
   };
 }

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useFormState } from "react-dom";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.singularCamelCase}} }: { {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}} }) {
   const initialState: Delete{{tableObj.singularPascalCase}}State = {};
@@ -21,6 +22,16 @@ export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.s
           <Button type="submit" variant="destructive">
             Delete
           </Button>
+        </div>
+        <div>
+          <p
+            className={cn(
+              state.status === "success" && "text-green-500",
+              state.status === "error" && "text-red-500"
+            )}
+          >
+            {state.message}
+          </p>
         </div>
       </form>
     </div>

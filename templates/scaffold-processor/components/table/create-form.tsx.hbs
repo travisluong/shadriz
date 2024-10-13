@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { GenericCombobox } from "@/components/generic-combobox";
 import { GenericSelect } from "@/components/generic-select";
 import { useFormState } from "react-dom";
+import { cn } from "@/lib/utils";
 {{#each referencesColumnList}}
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
 {{/each}}
@@ -33,7 +34,14 @@ export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasRefer
           <Button type="submit">Submit</Button>
         </div>
         <div>
-          {state.message === "error" && <p className="text-red-500">error</p>}
+          <p
+            className={cn(
+              state.status === "success" && "text-green-500",
+              state.status === "error" && "text-red-500"
+            )}
+          >
+            {state.message}
+          </p>
         </div>
       </form>
     </div>
