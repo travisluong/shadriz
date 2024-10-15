@@ -254,7 +254,7 @@ Note: Next.js only generates routes for public files at compile time. If you nee
 
 If the uploaded files need to be served immediately after uploading, consider using a web server like nginx to serve the static files or an s3 compatible bucket instead.
 
-In developmnt, shadriz will put the files in `public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
+In development, shadriz will put the files in `public/uploads`, so that they can be served during development. This works in development because routes are compiled without running a new build.
 
 In production, shadriz will put the files in `/var/www/uploads`. You'll have to find a way to serve these files. For example, pointing an nginx location `/uploads/` to the `/var/www/uploads` folder. Note: This won't work in serverless environments. If you're using serverless, consider using object storage like s3.
 
