@@ -6,11 +6,7 @@ import {
   ShadrizConfig,
   DbDialectStrategy,
 } from "../lib/types";
-import {
-  appendToFileIfTextNotExists,
-  compileTemplate,
-  renderTemplate,
-} from "../lib/utils";
+import { appendToEnvLocal, renderTemplate } from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 
 interface StripeDbDialectStrategy {
@@ -103,10 +99,12 @@ export class StripeProcessor implements ShadrizProcessor {
   }
 
   appendStripeSecretsToEnvLocal() {
-    const text = compileTemplate({
-      inputPath: "stripe-processor/.env.local.hbs",
-    });
-    appendToFileIfTextNotExists(".env.local", text, "STRIPE_SECRET_KEY");
+    appendToEnvLocal(
+      "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+      "{NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}"
+    );
+    appendToEnvLocal("STRIPE_SECRET_KEY", "{STRIPE_SECRET_KEY}");
+    appendToEnvLocal("STRIPE_WEBHOOK_SECRET", "{STRIPE_WEBHOOK_SECRET}");
   }
 
   addCheckOutSessionsApiRoute() {

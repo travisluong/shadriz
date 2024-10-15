@@ -13,6 +13,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import { config } from "@/lib/config";
 {{#each referencesColumnList}}
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
 {{/each}}

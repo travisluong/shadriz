@@ -1,6 +1,6 @@
 import { log } from "../lib/log";
 import { DbDialect, DbPackageStrategy, ShadrizConfig } from "../lib/types";
-import { appendDbUrl, renderTemplate } from "../lib/utils";
+import { appendToEnvLocal, renderTemplate } from "../lib/utils";
 
 export class Mysql2PackageStrategy implements DbPackageStrategy {
   opts: ShadrizConfig;
@@ -37,7 +37,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
   }
 
   appendDbUrl(): void {
-    appendDbUrl("mysql://user:password@host:port/db");
+    appendToEnvLocal("DB_URL", "mysql://user:password@host:port/db");
   }
 
   copyDbInstance(): void {

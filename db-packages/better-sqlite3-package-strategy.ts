@@ -1,7 +1,7 @@
 import { log } from "../lib/log";
 import { DbDialect, DbPackageStrategy, ShadrizConfig } from "../lib/types";
 import {
-  appendDbUrl,
+  appendToEnvLocal,
   appendToFileIfTextNotExists,
   renderTemplate,
 } from "../lib/utils";
@@ -42,7 +42,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   }
 
   appendDbUrl(): void {
-    appendDbUrl("sqlite.db");
+    appendToEnvLocal("DB_URL", "sqlite.db");
   }
 
   copyDbInstance(): void {
@@ -67,7 +67,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   }
 
   appendSqliteToGitignore() {
-    appendToFileIfTextNotExists(".gitignore", "\nsqlite.db", "sqlite.db");
+    appendToFileIfTextNotExists(".gitignore", "sqlite.db", "sqlite.db");
   }
 
   printCompletionMessage(): void {

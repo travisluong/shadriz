@@ -1,6 +1,7 @@
 import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
+  appendToEnvLocal,
   appendToFileIfTextNotExists,
   removeTextFromFile,
   renderTemplate,
@@ -133,7 +134,12 @@ export class NewProjectProcessor implements ShadrizProcessor {
   }
 }`)
 
-    appendToFileIfTextNotExists(".gitignore", "\n/uploads", "/uploads");
+    appendToFileIfTextNotExists(".gitignore", "/uploads", "/uploads");
+
+    appendToEnvLocal(
+      "NEXT_PUBLIC_UPLOAD_BASE_URL",
+      "http://localhost:3000/uploads"
+    );
   }
 
   printCompletionMessage() {}

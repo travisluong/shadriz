@@ -104,10 +104,8 @@ export async function spawnCommand(command: string): Promise<void> {
   });
 }
 
-export function appendDbUrl(url: string) {
-  const filePath = ".env.local";
-  const textToAppend = "DB_URL=" + url;
-  appendToFileIfTextNotExists(filePath, textToAppend, "DB_URL");
+export function appendToEnvLocal(key: string, val: string) {
+  appendToFileIfTextNotExists(".env.local", `${key}=${val}`, `${key}=`);
 }
 
 export function appendToFileIfTextNotExists(
@@ -121,7 +119,7 @@ export function appendToFileIfTextNotExists(
       `- ${filePath} - text exists: ${textToSearch.trim().substring(0, 30)}...`
     );
   } else {
-    appendToFile(filePath, textToAppend);
+    appendToFile(filePath, "\n" + textToAppend);
   }
 }
 

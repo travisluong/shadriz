@@ -2,7 +2,7 @@
           <Label>{{columnCases.originalCapitalCase}}</Label>
           { {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}}  && (
             <div>
-              <Link href={"/uploads" +  {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} }>{ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} }</Link>
+              <Link href={config.NEXT_PUBLIC_UPLOAD_BASE_URL +  {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} }>{ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} }</Link>
             </div>
           )}
           <Input type="file" name="{{columnCases.originalCamelCase}}" />

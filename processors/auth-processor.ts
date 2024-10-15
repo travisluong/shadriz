@@ -1,4 +1,5 @@
 import {
+  appendToEnvLocal,
   appendToFileIfTextNotExists,
   compileTemplate,
   renderTemplate,
@@ -19,7 +20,7 @@ import { dialectStrategyFactory } from "../lib/strategy-factory";
 interface AuthStrategy {
   importTemplatePath: string;
   authTemplatePath: string;
-  envTemplatePath: string;
+  appendPlaceholdersToEnvLocal: () => void;
   dependencies: string[];
   devDependencies: string[];
   textToSearchInEnv?: string;
@@ -38,7 +39,6 @@ export const authStrategyMap: AuthStrategyMap = {
   github: {
     importTemplatePath: "auth-processor/lib/auth.ts.github.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.github.hbs",
-    envTemplatePath: "auth-processor/lib/auth.ts.github.env.hbs",
     printCompletionMessage: function (): void {
       log.task("setup github provider");
       log.subtask(
@@ -51,11 +51,14 @@ export const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "AUTH_GITHUB_ID",
     dependencies: [],
     devDependencies: [],
+    appendPlaceholdersToEnvLocal: function (): void {
+      appendToEnvLocal("AUTH_GITHUB_ID", "{AUTH_GITHUB_ID}");
+      appendToEnvLocal("AUTH_GITHUB_SECRET", "{AUTH_GITHUB_SECRET}");
+    },
   },
   google: {
     importTemplatePath: "auth-processor/lib/auth.ts.google.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.google.hbs",
-    envTemplatePath: "auth-processor/lib/auth.ts.google.env.hbs",
     printCompletionMessage: function (): void {
       log.task("setup google provider");
       log.subtask(
@@ -68,11 +71,14 @@ export const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "AUTH_GOOGLE_ID",
     dependencies: [],
     devDependencies: [],
+    appendPlaceholdersToEnvLocal: function (): void {
+      appendToEnvLocal("AUTH_GOOGLE_ID", "{AUTH_GOOGLE_ID}");
+      appendToEnvLocal("AUTH_GOOGLE_SECRET", "{AUTH_GOOGLE_SECRET}");
+    },
   },
   credentials: {
     importTemplatePath: "auth-processor/lib/auth.ts.credentials.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.credentials.hbs",
-    envTemplatePath: "auth-processor/lib/auth.ts.credentials.env.hbs",
     dependencies: ["bcrypt"],
     devDependencies: ["@types/bcrypt"],
     printCompletionMessage: function (): void {
@@ -82,11 +88,11 @@ export const authStrategyMap: AuthStrategyMap = {
       );
     },
     textToSearchInEnv: undefined,
+    appendPlaceholdersToEnvLocal: function (): void {},
   },
   postmark: {
     importTemplatePath: "auth-processor/lib/auth.ts.postmark.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.postmark.hbs",
-    envTemplatePath: "auth-processor/lib/auth.ts.postmark.env.hbs",
     printCompletionMessage: function (): void {
       log.task("setup postmark provider");
       log.subtask("go to postmark > server > api tokens");
@@ -97,11 +103,13 @@ export const authStrategyMap: AuthStrategyMap = {
     textToSearchInEnv: "AUTH_POSTMARK_KEY",
     dependencies: [],
     devDependencies: [],
+    appendPlaceholdersToEnvLocal: function (): void {
+      appendToEnvLocal("AUTH_POSTMARK_KEY", "{AUTH_POSTMARK_KEY}");
+    },
   },
   nodemailer: {
     importTemplatePath: "auth-processor/lib/auth.ts.nodemailer.imports.hbs",
     authTemplatePath: "auth-processor/lib/auth.ts.nodemailer.hbs",
-    envTemplatePath: "auth-processor/lib/auth.ts.nodemailer.env.hbs",
     dependencies: ["nodemailer"],
     printCompletionMessage: function (): void {
       log.task("setup nodemailer provider");
@@ -110,6 +118,13 @@ export const authStrategyMap: AuthStrategyMap = {
     },
     textToSearchInEnv: "EMAIL_SERVER",
     devDependencies: [],
+    appendPlaceholdersToEnvLocal: function (): void {
+      appendToEnvLocal(
+        "EMAIL_SERVER",
+        "smtps://username:password@smtp.example.com:465"
+      );
+      appendToEnvLocal("EMAIL_FROM", "noreply@example.com");
+    },
   },
 };
 
@@ -189,11 +204,7 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   appendAuthSecretToEnv() {
-    appendToFileIfTextNotExists(
-      ".env.local",
-      `\nAUTH_SECRET=secret`,
-      "AUTH_SECRET"
-    );
+    appendToEnvLocal("AUTH_SECRET", "secret");
   }
 
   addSignOutPage() {
@@ -260,17 +271,7 @@ export class AuthProcessor implements ShadrizProcessor {
   appendSecretsToEnv() {
     for (const provider of this.opts.authProviders) {
       const strategy = authStrategyMap[provider];
-      let envVars = compileTemplate({
-        inputPath: strategy.envTemplatePath,
-        data: {},
-      });
-      envVars = "\n" + envVars;
-      if (!strategy.textToSearchInEnv) return;
-      appendToFileIfTextNotExists(
-        ".env.local",
-        envVars,
-        strategy.textToSearchInEnv
-      );
+      strategy.appendPlaceholdersToEnvLocal();
     }
   }
 
@@ -335,11 +336,7 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   addAuthTrustHostToEnv() {
-    appendToFileIfTextNotExists(
-      ".env.local",
-      "\nAUTH_TRUST_HOST=http://localhost:3000",
-      "AUTH_TRUST_HOST"
-    );
+    appendToEnvLocal("AUTH_TRUST_HOST", "http://localhost:3000");
   }
 
   printCompletionMessage() {
