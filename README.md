@@ -1,6 +1,8 @@
 # shadriz
 
-Full Stack Next.js Scaffolding Framework.
+Full Stack Next.js Scaffolding Framework
+
+Build Next.js Apps Using Ruby on Rails Inspired Scaffolding Automations
 
 - [Docs](https://travisluong.github.io/shadriz)
 - [GitHub](https://github.com/travisluong/shadriz)
@@ -15,13 +17,9 @@ You do not install it into your project as a dependency.
 
 It is a command line interface code generation tool.
 
-You use it to generate common, customizable, and configured web development boilerplate including authentication, authorization, and data validations.
+You use it to generate customizable web development boilerplate including authentication, authorization, and data validations.
 
 You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
-
-The customizable code is inspired by shadcn/ui.
-
-The scaffolding automation is inspired by Ruby on Rails.
 
 ## Philosophy
 
@@ -125,7 +123,7 @@ After initialization, you will be prompted to complete a few additional checklis
 
 ## Scaffold
 
-After the initial configuration is completed, you can scaffold full stack features with the `scaffold` command.
+After the initial configuration is completed, you can create full stack scaffolding with the `scaffold` command.
 
 This command will generate the user interface, database migration and schema, server actions, server components, and client components of a full stack feature.
 
