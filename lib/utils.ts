@@ -256,24 +256,6 @@ export function getFilenamesFromFolder(folderPath: string): string[] {
   }
 }
 
-export function regenerateSchemaIndex(): void {
-  const filenames = getFilenamesFromFolder("schema");
-  const tablenames = filenames.map((filename) => filename.split(".")[0]);
-  let code = "";
-  for (const table of tablenames) {
-    const tableObj = caseFactory(table);
-    code += `import * as ${tableObj.originalCamelCase} from "@/schema/${tableObj.original}";\n`;
-  }
-  code += "\n";
-  code += "export const schema = {\n";
-  for (const table of tablenames) {
-    const tableObj = caseFactory(table);
-    code += `  ...${tableObj.originalCamelCase},\n`;
-  }
-  code += "};\n";
-  writeToFile(`lib/schema.ts`, code);
-}
-
 export async function installDependencies(opts: {
   dependencies: string[];
   packageManager: PackageManager;

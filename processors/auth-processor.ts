@@ -2,6 +2,7 @@ import {
   appendToEnvLocal,
   appendToFileIfTextNotExists,
   compileTemplate,
+  insertSchemaToSchemaIndex,
   renderTemplate,
 } from "../lib/utils";
 import { log } from "../lib/log";
@@ -135,15 +136,15 @@ interface AuthDbDialect {
 
 const authDbDialectStrategy: Record<DbDialect, AuthDbDialect> = {
   postgresql: {
-    authSchemaTemplate: "auth-processor/schema/users.ts.postgresql.hbs",
+    authSchemaTemplate: "auth-processor/schema/auth-tables.ts.postgresql.hbs",
     pkDataType: "text",
   },
   mysql: {
-    authSchemaTemplate: "auth-processor/schema/users.ts.mysql.hbs",
+    authSchemaTemplate: "auth-processor/schema/auth-tables.ts.mysql.hbs",
     pkDataType: "varchar",
   },
   sqlite: {
-    authSchemaTemplate: "auth-processor/schema/users.ts.sqlite.hbs",
+    authSchemaTemplate: "auth-processor/schema/auth-tables.ts.sqlite.hbs",
     pkDataType: "text",
   },
 };
@@ -325,7 +326,7 @@ export class AuthProcessor implements ShadrizProcessor {
     const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
     renderTemplate({
       inputPath: authDbDialectStrategy[this.opts.dbDialect].authSchemaTemplate,
-      outputPath: "schema/users.ts",
+      outputPath: "schema/auth-tables.ts",
       data: {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
@@ -333,6 +334,8 @@ export class AuthProcessor implements ShadrizProcessor {
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
     });
+
+    insertSchemaToSchemaIndex("auth_tables");
   }
 
   addAuthTrustHostToEnv() {

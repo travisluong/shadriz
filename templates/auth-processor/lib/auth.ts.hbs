@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { Provider } from "next-auth/providers";
 import { eq } from "drizzle-orm";
-import { accounts, sessions, users, verificationTokens } from "@/schema/users";
+import { accounts, sessions, users, verificationTokens } from "@/schema/auth-tables";
 import { cookies } from "next/headers";
 import { encode, decode } from "next-auth/jwt";
 import { AdapterUser } from "next-auth/adapters";

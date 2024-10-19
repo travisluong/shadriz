@@ -1,5 +1,5 @@
 import { pgTable, text, primaryKey } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { users } from "@/schema/auth-tables";
 {{pkImport}}
 
 export const roles = pgTable("roles", {

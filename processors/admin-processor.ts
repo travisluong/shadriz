@@ -5,7 +5,11 @@ import {
   ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
-import { renderTemplate, renderTemplateIfNotExists } from "../lib/utils";
+import {
+  insertSchemaToSchemaIndex,
+  renderTemplate,
+  renderTemplateIfNotExists,
+} from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 
 export class AdminProcessor implements ShadrizProcessor {
@@ -52,8 +56,8 @@ export class AdminProcessor implements ShadrizProcessor {
     const pkImport = pkStrategyImportTemplates[this.opts.pkStrategy];
 
     renderTemplate({
-      inputPath: `admin-processor/schema/roles.ts.${this.opts.dbPackage}.hbs`,
-      outputPath: "schema/roles.ts",
+      inputPath: `admin-processor/schema/role-tables.ts.${this.opts.dbPackage}.hbs`,
+      outputPath: "schema/role-tables.ts",
       data: {
         pkText: pkText,
         pkImport: pkImport,
@@ -61,6 +65,8 @@ export class AdminProcessor implements ShadrizProcessor {
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
     });
+
+    insertSchemaToSchemaIndex("role_tables");
 
     renderTemplate({
       inputPath: `admin-processor/scripts/grant-admin.ts.hbs`,

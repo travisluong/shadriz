@@ -15,7 +15,6 @@ import {
   installDependencies,
   installDevDependencies,
   loadShadrizConfig,
-  regenerateSchemaIndex,
   spawnCommand,
   writeToFile,
 } from "./lib/utils";
@@ -416,8 +415,6 @@ program
       for (const processor of processors) {
         await processor.init();
       }
-
-      regenerateSchemaIndex();
 
       for (const processor of processors) {
         processor.printCompletionMessage();

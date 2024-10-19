@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "./db";
-import { roles, usersRoles } from "@/schema/roles";
+import { roles, usersRoles } from "@/schema/role-tables";
 
 export async function hasAdminRole(userId: string) {
   const userRole = await db

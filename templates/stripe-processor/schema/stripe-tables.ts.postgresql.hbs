@@ -5,7 +5,7 @@ import {
   integer,
   date,
 } from "drizzle-orm/pg-core";
-import { users } from "./users";
+import { users } from "@/schema/auth-tables";
 {{pkStrategyImport}}
 
 export const stripeWebhooks = pgTable("stripe_webhooks", {

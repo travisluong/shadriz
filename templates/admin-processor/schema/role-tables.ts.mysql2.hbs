@@ -1,5 +1,5 @@
 import { mysqlTable, varchar, primaryKey } from "drizzle-orm/mysql-core";
-import { users } from "./users";
+import { users } from "@/schema/auth-tables";
 {{pkImport}}
 
 export const roles = mysqlTable("roles", {
