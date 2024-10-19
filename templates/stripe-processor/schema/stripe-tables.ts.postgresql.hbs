@@ -1,20 +1,25 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  timestamp,
+  pgTable,
+  text,
+  integer,
+  date,
+} from "drizzle-orm/pg-core";
 import { users } from "./users";
-import { sql } from "drizzle-orm";
 {{pkStrategyImport}}
 
-export const stripeWebhooks = sqliteTable("stripe_webhooks", {
+export const stripeWebhooks = pgTable("stripe_webhooks", {
   {{pkText}}
   payload: text("payload"),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
-export const products = sqliteTable("products", {
+export const products = pgTable("products", {
   {{pkText}}
   slug: text("slug").notNull().unique(),
   stripeProductId: text("stripe_product_id").notNull().unique(),
-  stripePriceId: text("stripe_price_id").notNull(),
+  stripePriceId: text("stripe_price_id"),
   name: text("name").notNull(),
   price: integer("price").notNull(),
   description: text("description"),
@@ -23,23 +28,23 @@ export const products = sqliteTable("products", {
   {{updatedAtTemplate}}
 });
 
-export const orders = sqliteTable("orders", {
+export const orders = pgTable("orders", {
   {{pkText}}
   userId: text("user_id").notNull().references(() => users.id),
-  productId: text("product_id").notNull().references(() => products.id),
-  stripeProductId: text("stripe_product_id").notNull(),
-  stripePriceId: text("stripe_price_id").notNull(),
+  productId: text("product_id").references(() => products.id),
+  note: text("note"),
   amountTotal: integer("amount_total").notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
-export const subscriptions = sqliteTable("subscriptions", {
+export const subscriptions = pgTable("subscriptions", {
   {{pkText}}
   userId: text("user_id").notNull().references(() => users.id),
   stripeCustomerId: text("stripe_customer_id").notNull(),
-  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-  endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+  productId: text("product_id").notNull().references(() => products.id),
+  startDate: date("start_date", { mode: "date" }).notNull(),
+  endDate: date("end_date", { mode: "date" }).notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });

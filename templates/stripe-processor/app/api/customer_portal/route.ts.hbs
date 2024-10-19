@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { users } from "@/schema/users";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { subscriptions } from "@/schema/stripe";
+import { subscriptions } from "@/schema/stripe-tables";
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   }
 
   const returnUrl = `${req.headers.get("origin")}/account`;
-  
+
   const subscription = await db.query.subscriptions.findFirst({
     where: eq(subscriptions.userId, user.id),
   });

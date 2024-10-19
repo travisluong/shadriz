@@ -33,9 +33,8 @@ export const products = mysqlTable("products", {
 export const orders = mysqlTable("orders", {
   {{pkText}}
   userId: varchar("user_id", { length: 255 }).notNull().references(() => users.id),
-  productId: varchar("product_id", { length: 255 }).notNull().references(() => products.id),
-  stripeProductId: varchar("stripe_product_id", { length: 255 }).notNull(),
-  stripePriceId: varchar("stripe_price_id", { length: 255 }).notNull(),
+  productId: varchar("product_id", { length: 255 }).references(() => products.id),
+  note: varchar("note", { length: 255 }),
   amountTotal: int("amount_total").notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}

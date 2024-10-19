@@ -7,7 +7,7 @@ import {
   compileTemplate,
   renderTemplate,
   insertTextAfterIfNotExists,
-  prependToFileIfNotExists,
+  insertSchemaToSchemaIndex,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
@@ -93,7 +93,7 @@ export class ScaffoldProcessor {
     this.addUpdateForm();
     this.addDeleteForm();
     this.addTableComponent();
-    this.insertSchemaToSchemaIndex();
+    insertSchemaToSchemaIndex(this.opts.table);
     if (this.opts.authorizationLevel === "admin") {
       this.addLinkToAdminSidebar();
     }
@@ -564,18 +564,6 @@ export class ScaffoldProcessor {
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
     return html;
-  }
-  insertSchemaToSchemaIndex() {
-    const tableObj = caseFactory(this.opts.table);
-    prependToFileIfNotExists(
-      "lib/schema.ts",
-      `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.pluralKebabCase}";\n`
-    );
-    insertTextAfterIfNotExists(
-      "lib/schema.ts",
-      "export const schema = {",
-      `\n  ...${tableObj.pluralCamelCase},`
-    );
   }
   addLinkToAdminSidebar() {
     const tableObj = caseFactory(this.opts.table);

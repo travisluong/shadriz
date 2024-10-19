@@ -420,3 +420,16 @@ export function removeTextFromFile(
   // Write the updated content back to the file
   fs.writeFileSync(filePath, updatedContent, "utf8");
 }
+
+export function insertSchemaToSchemaIndex(table: string) {
+  const tableObj = caseFactory(table);
+  prependToFileIfNotExists(
+    "lib/schema.ts",
+    `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.pluralKebabCase}";\n`
+  );
+  insertTextAfterIfNotExists(
+    "lib/schema.ts",
+    "export const schema = {",
+    `\n  ...${tableObj.pluralCamelCase},`
+  );
+}

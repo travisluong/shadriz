@@ -1,10 +1,11 @@
 import { auth } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
-import { products } from "@/schema/stripe";
+import { products } from "@/schema/stripe-tables";
 import { users } from "@/schema/users";
 import { eq } from "drizzle-orm";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
+{{pkStrategyImport}}
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 
@@ -20,7 +21,7 @@ export async function POST(req: Request) {
   });
 
   if (!user) {
-    notFound();
+    throw new Error("user not found");
   }
 
   const formData = await req.formData();
@@ -28,7 +29,39 @@ export async function POST(req: Request) {
   const slug = formData.get("slug")?.toString();
 
   if (!slug) {
-    notFound();
+    throw new Error("slug not found");
+  }
+
+  if (slug === "dynamic") {
+    const orderId = {{pkFunctionInvoke}}
+    try {
+      const session = await stripe.checkout.sessions.create({
+        customer_email: user.email,
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              unit_amount: 500,
+              product_data: {
+                name: `Custom order ${orderId}`,
+              },
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          order_id: orderId,
+        },
+        mode: "payment",
+        success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
+        cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
+        allow_promotion_codes: false,
+      });
+      return Response.redirect(session.url);
+    } catch (err: any) {
+      console.error(err);
+      return Response.json(err.message, { status: 500 });
+    }
   }
 
   const product = await db.query.products.findFirst({
@@ -36,11 +69,10 @@ export async function POST(req: Request) {
   });
 
   if (!product) {
-    notFound();
+    throw new Error("product not found");
   }
 
   try {
-    // Create Checkout Sessions from body params.
     const session = await stripe.checkout.sessions.create({
       customer_email: user.email,
       line_items: [

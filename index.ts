@@ -30,6 +30,7 @@ import { DbDialectProcessor } from "./processors/db-dialect-processor";
 import packageShadrizJson from "./package-shadriz.json";
 import packageJson from "./package.json";
 import { pkDependencies } from "./lib/pk-strategy";
+import { ADD_ON_REGISTRY, getAddOnHelpText } from "./lib/add-on-registry";
 
 const PINNED_NEXTJS_VERSION = packageShadrizJson.dependencies["next"];
 
@@ -497,6 +498,55 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
       ...shadrizConfig,
     });
     scaffoldProcessor.process();
+  });
+
+program
+  .command("add")
+  .summary("add an add-on extension to the application")
+  .description(
+    `add-ons are extensions that can be added after a project has been initialized\n\navailable add-ons:\n${getAddOnHelpText()}`
+  )
+  .argument("<extension>", "the name of the add-on extension")
+  .option(
+    "--no-install",
+    "skip installation of dependencies and shadcn components"
+  )
+  .action(async (name, options) => {
+    if (!(name in ADD_ON_REGISTRY)) {
+      log.red(`${name} not found in add-on registry`);
+      process.exit(1);
+    }
+
+    const addOn = ADD_ON_REGISTRY[name as keyof typeof ADD_ON_REGISTRY];
+    const Processor = addOn.Processor;
+
+    const shadrizConfig: ShadrizConfig = loadShadrizConfig();
+
+    const processor = new Processor(shadrizConfig);
+
+    if (options.install) {
+      await installDependencies({
+        dependencies: processor.dependencies,
+        packageManager: shadrizConfig.packageManager,
+        latest: shadrizConfig.latest,
+      });
+
+      await installDevDependencies({
+        devDependencies: processor.devDependencies,
+        packageManager: shadrizConfig.packageManager,
+        latest: shadrizConfig.latest,
+      });
+
+      await addShadcnComponents({
+        shadcnComponents: processor.shadcnComponents,
+        packageManager: shadrizConfig.packageManager,
+        latest: shadrizConfig.latest,
+      });
+    }
+
+    processor.init();
+
+    processor.printCompletionMessage();
   });
 
 program.parse();

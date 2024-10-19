@@ -5,7 +5,7 @@ import {
   products,
   stripeWebhooks,
   subscriptions,
-} from "@/schema/stripe";
+} from "@/schema/stripe-tables";
 import { users } from "@/schema/users";
 import { and, eq } from "drizzle-orm";
 
@@ -36,20 +36,12 @@ export async function POST(req: Request) {
 
   switch (event.type) {
     case "checkout.session.completed":
-      // Payment is successful and the subscription is created.
-      // You should provision the subscription and save the customer ID to your database.
       await handleCheckoutSessionCompleted(event);
       break;
     case "invoice.paid":
-      // Continue to provision the subscription as payments continue to be made.
-      // Store the status in your database and check when a user accesses your service.
-      // This approach helps you avoid hitting rate limits.
       await handleInvoicePaid(event);
       break;
     case "invoice.payment_failed":
-      // The payment failed or the customer does not have a valid payment method.
-      // The subscription becomes past_due. Notify your customer and send them to the
-      // customer portal to update their payment information.
       await handleInvoicePaymentFailed(event);
       break;
     default:
@@ -60,9 +52,6 @@ export async function POST(req: Request) {
 }
 
 async function handleCheckoutSessionCompleted(event: any) {
-  console.log(event);
-  console.log(event.data);
-  console.log(event.data.object);
   const email = event.data.object.customer_email;
 
   const user = await db.query.users.findFirst({
@@ -75,7 +64,6 @@ async function handleCheckoutSessionCompleted(event: any) {
     );
   }
 
-  // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
   const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
     event.data.object.id,
     {
@@ -84,7 +72,6 @@ async function handleCheckoutSessionCompleted(event: any) {
   );
   const lineItems = sessionWithLineItems.line_items;
 
-  console.log(lineItems.data);
   for (const item of lineItems.data) {
     const stripeProductId = item.price.product;
     const stripePriceId = item.price.id;
@@ -94,21 +81,23 @@ async function handleCheckoutSessionCompleted(event: any) {
       where: eq(products.stripeProductId, stripeProductId),
     });
 
-    if (!product) {
-      throw new Error("stripe product id not found in db: " + stripeProductId);
-    }
-
-    const productId = product.id;
-
-    if (product.slug === "one-time") {
-      // only create an order here if it is the one-time purchase product
-      // for subscriptions, the order is created during the invoice paid event
+    if (product && product.slug === "one-time") {
       await db.insert(orders).values({
-        productId: productId,
+        productId: product.id,
         amountTotal: amountTotal,
         userId: user.id,
-        stripeProductId: stripeProductId,
-        stripePriceId: stripePriceId,
+        note: "a one time purchase"
+      });
+    }
+
+    // process dynamic order
+    const orderId = event.data.object.metadata.order_id;
+    if (orderId) {
+      await db.insert(orders).values({
+        id: orderId,
+        amountTotal: amountTotal,
+        userId: user.id,
+        note: "a dynamic order"
       });
     }
   }
@@ -146,10 +135,7 @@ async function handleInvoicePaid(event: any) {
       };
 
       const subscription = await db.query.subscriptions.findFirst({
-        where: and(
-          eq(users.id, user.id),
-          eq(products.id, product.id)
-        ),
+        where: and(eq(users.id, user.id), eq(products.id, product.id)),
       });
 
       if (subscription) {
@@ -164,19 +150,17 @@ async function handleInvoicePaid(event: any) {
         await db.insert(subscriptions).values(newSubscription);
       }
 
-      // for subscriptions, orders should only be created after invoice.paid event
       await db.insert(orders).values({
         productId: product.id,
         amountTotal: total,
-        stripePriceId: d.price.id,
-        stripeProductId: d.price.product,
         userId: user.id,
+        note: "a subscription order"
       });
     }
   }
 }
 
 async function handleInvoicePaymentFailed(event: any) {
-  console.log("HANDLE INVOICE PAYMENT FAILED");
+  console.log("handle invoice payment failed");
   console.log(event);
 }

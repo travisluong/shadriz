@@ -6,8 +6,15 @@ import {
   ShadrizConfig,
   DbDialectStrategy,
 } from "../lib/types";
-import { appendToEnvLocal, renderTemplate } from "../lib/utils";
-import { pkStrategyImportTemplates } from "../lib/pk-strategy";
+import {
+  appendToEnvLocal,
+  insertSchemaToSchemaIndex,
+  renderTemplate,
+} from "../lib/utils";
+import {
+  pkFunctionInvoke,
+  pkStrategyImportTemplates,
+} from "../lib/pk-strategy";
 
 interface StripeDbDialectStrategy {
   stripeSchemaTemplatePath: string;
@@ -16,13 +23,15 @@ interface StripeDbDialectStrategy {
 const stripeDbDialectStrategy: Record<DbDialect, StripeDbDialectStrategy> = {
   postgresql: {
     stripeSchemaTemplatePath:
-      "stripe-processor/schema/stripe.ts.postgresql.hbs",
+      "stripe-processor/schema/stripe-tables.ts.postgresql.hbs",
   },
   mysql: {
-    stripeSchemaTemplatePath: "stripe-processor/schema/stripe.ts.mysql.hbs",
+    stripeSchemaTemplatePath:
+      "stripe-processor/schema/stripe-tables.ts.mysql.hbs",
   },
   sqlite: {
-    stripeSchemaTemplatePath: "stripe-processor/schema/stripe.ts.sqlite.hbs",
+    stripeSchemaTemplatePath:
+      "stripe-processor/schema/stripe-tables.ts.sqlite.hbs",
   },
 };
 
@@ -58,6 +67,7 @@ export class StripeProcessor implements ShadrizProcessor {
     this.addWebhookApiRoute();
     this.addConfirmationPage();
     this.addCreatePriceScript();
+    insertSchemaToSchemaIndex("stripe_webhooks");
   }
 
   addAccountPage() {
@@ -88,7 +98,7 @@ export class StripeProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath:
         stripeDbDialectStrategy[this.opts.dbDialect].stripeSchemaTemplatePath,
-      outputPath: "schema/stripe.ts",
+      outputPath: "schema/stripe-tables.ts",
       data: {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
@@ -111,6 +121,10 @@ export class StripeProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "stripe-processor/app/api/checkout_sessions/route.ts.hbs",
       outputPath: "app/api/checkout_sessions/route.ts",
+      data: {
+        pkFunctionInvoke: pkFunctionInvoke[this.opts.pkStrategy],
+        pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
+      },
     });
   }
 

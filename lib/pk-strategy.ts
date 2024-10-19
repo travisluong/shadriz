@@ -20,3 +20,10 @@ export const pkDependencies: Record<PkStrategy, string[]> = {
   uuidv4: [],
   nanoid: ["nanoid"],
 };
+
+export const pkFunctionInvoke: Record<PkStrategy, string> = {
+  cuid2: "createId()",
+  uuidv7: "uuidv7()",
+  uuidv4: "crypto.randomUUID()",
+  nanoid: "nanoid()",
+};

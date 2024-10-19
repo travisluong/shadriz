@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="flex max-w-7xl m-auto p-5 justify-center">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <Card className="min-w-80 sm:max-w-96 flex-grow-0">
           <CardHeader className="bg-accent text-accent-foreground rounded-t-xl">
             <CardTitle>One Time</CardTitle>
@@ -94,6 +94,44 @@ export default function Page() {
             <form action="/api/checkout_sessions" method="POST">
               <input type="hidden" name="slug" value="monthly" />
               <Button type="submit">Subscribe</Button>
+            </form>
+          </CardFooter>
+        </Card>
+
+        <Card className="min-w-80 sm:max-w-96 flex-grow-0">
+          <CardHeader className="bg-accent text-accent-foreground rounded-t-xl">
+            <CardTitle>Dynamic Example</CardTitle>
+            <CardDescription>Dynamic Line Items</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <h2 className="font-bold text-3xl my-5">Dynamic Price</h2>
+            <ul>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature A
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature B
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature C
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature D
+              </li>
+              <li className="flex gap-2">
+                <CheckIcon className="w-6 h-6 flex-shrink-0 text-brand-foreground" />{" "}
+                Feature E
+              </li>
+            </ul>
+          </CardContent>
+          <CardFooter>
+            <form action="/api/checkout_sessions" method="POST">
+              <input type="hidden" name="slug" value="dynamic" />
+              <Button type="submit">Checkout</Button>
             </form>
           </CardFooter>
         </Card>
