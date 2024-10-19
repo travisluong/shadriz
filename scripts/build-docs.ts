@@ -10,6 +10,10 @@ async function main() {
   renderTemplate({
     inputPath: "docs/index.html.hbs",
     outputPath: "docs/index.html",
+  });
+  renderTemplate({
+    inputPath: "docs/docs.html.hbs",
+    outputPath: "docs/docs.html",
     data: {
       readme: readme,
       toc: toc,
