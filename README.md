@@ -315,15 +315,37 @@ A `grant-admin.ts` script is provided to grant users the admin role.
 
 Additional roles can be added to the `users_roles` table according to project needs. Additional access control functions can be added to `authorization.ts` and used throughout the application.
 
-## Stripe
+## Add-on Extensions
 
-If Stripe was enabled during initialization, all the code needed for a simple one-time purchase and monthly subscription model will be generated. This includes the webhook, checkout session, and customer portal api endpoints.
+Add-ons are full stack components that can be added after a project has been initialized.
 
-Also, a basic pricing page with the one-time purchase and subscription is included. A `create-price.ts` script is provided to create the initial products on Stripe and on the local database.
+An add-on extension can be added using the `add` command.
+
+To see a list of available add-ons, run `npx shadriz@latest add -h`.
+
+Here is an example on how to add the stripe add-on.
+
+```
+npx shadriz@latest add stripe
+```
+
+This command will install all necessary UI components, npm dependencies and dev dependencies for the add-on.
+
+Then it will write all of the necessary code for the add-on to your project.
+
+### Stripe
+
+Code will be generated for a one-time purchase, monthly subscription plan, and a dynamic pricing checkout. This includes the webhook, checkout session, and customer portal api endpoints.
+
+A pricing page will be generated. The buttons will initiate a stripe checkout if the user is logged in. If the user is not logged in, they will redirect to the sign in page.
+
+A `create-price.ts` script is provided to create the initial products on Stripe and on the local database. This is required before using the one-time purchase and subscription plan.
+
+The dynamic pricing does not require creating and mapping to products on Stripe. Dynamic pricing is useful if you need to generate a custom price in the application.
 
 The file `access.ts` contain utility functions to check user access to products and subscriptions. You can use this as you build out the paywall for the paid features.
 
-Any of the code and content can be changed to fit your business model. The goal of this Stripe automation is to provide a fully functional example to use as a starting point.
+Any of the code and content can be changed to fit your business model. The goal of this Stripe automation is to provide some common integration patterns to use as a starting point.
 
 ## Naming conventions
 
