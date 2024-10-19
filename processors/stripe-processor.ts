@@ -67,7 +67,7 @@ export class StripeProcessor implements ShadrizProcessor {
     this.addWebhookApiRoute();
     this.addConfirmationPage();
     this.addCreatePriceScript();
-    insertSchemaToSchemaIndex("stripe_webhooks");
+    insertSchemaToSchemaIndex("stripe_tables");
   }
 
   addAccountPage() {
