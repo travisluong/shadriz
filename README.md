@@ -9,49 +9,7 @@ Build Next.js Apps Using Ruby on Rails Inspired Scaffolding Automations
 
 ## Introduction
 
-shadriz is a full stack automation tool for building TypeScript web applications using a curated selection of technologies.
-
-This is an ephemeral web framework.
-
-You do not install it into your project as a dependency.
-
-It is a command line interface code generation tool.
-
-You use it to generate customizable web development boilerplate including authentication, authorization, and data validations.
-
-You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
-
-## Philosophy
-
-shadriz offers an opinionated foundation to be built upon.
-
-shadriz focuses on writing simple and easy-to-read code that you can customize.
-
-It is up to the developer to build the interesting parts.
-
-### Technology curation
-
-Many decisions happen at the beginnings of projects. For example, a developer must decide on: a web framework, a database, UI component library, object relational mapper (ORM), CSS framework, authentication solution, validation library, payment solution, and other technologies relevant to the project.
-
-This can be time consuming and lead to decision fatigue. In the JavaScript world, this is known as JavaScript fatigue. It is a phenomenon describing the overwhelming array of technology choices in the JavaScript ecosystem.
-
-shadriz offers a preferred list of technologies to be used as a foundation for web app projects.
-
-### Configuration automation
-
-Typically, once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is integrated properly into the framework code, and that integrations with external services are working.
-
-Developers will often use libraries to handle common functionality such as authentication, data validations, and payments. However, setting these up can be challenging even for an experienced developer. shadriz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadriz will write all the code necessary for the selected features.
-
-By having a simple working example, you'll save time not having to build it entirely from scratch. You can customize the generated code to fit your project requirements. Additionally, shadriz will display a checklist of tasks to complete the initial configuration. The `init` command is intended to be run once at the beginning of a new project.
-
-### Scaffold automation
-
-Once the technologies are selected and configured, the next step is to begin building the actual app itself. Typically, this involves a number of tasks including creating the database tables, API endpoints or server actions, user interface, layouts, pages, and web forms. This process may involve referencing documentation and writing the "boilerplate" or "skeleton" code that the rest of the app will be built upon. This too is a time consuming process.
-
-shadriz provides a `scaffold` command to automate the entire process of setting up the initial "skeleton" code. You only have to provide the table name along with the columns and data types. shadriz will generate the database migration files, back end code, and front end code for the provided database schema.
-
-What is the purpose of the scaffolded code? It is to provide a fully working full stack Create Read Update Delete (CRUD) feature that you can use as a reference to build the rest of your app. The `scaffold` command is intended to be run as many times as you need to generate full stack scaffolding, typically at the beginning of a project. This automation is heavily inspired by the Ruby on Rails scaffold command.
+shadriz is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code that is typically used in full stack projects. You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
 ## Tech stack
 
@@ -230,14 +188,6 @@ npx shadriz@latest scaffold post -c category:references_select title:text
 
 For the `references_combobox` and `references_select` components, the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop. Both components search on the `labelField`.
 
-### Note on performance
-
-For the standard `references` data type, the referenced table will not be queried and loaded.
-
-For both the `references_combobox` and `references_select` data type, the entire referenced table will be queried server-side and loaded into the client components.
-
-For extremely large datasets, consider building a custom component with pagination or other optimizations.
-
 ## File uploads
 
 shadriz supports a `file` data type. This creates a text db column to store the file path along with a basic ui for uploads to the file system
@@ -368,111 +318,75 @@ shadriz uses naming conventions as described in the table below. Number and case
 | Query string parameters            | original         | camel case   | ?fooBar=baz             |
 | UI table and column names          | singular, plural | capital case | Foo Bar, Foo Bars       |
 
+## Philosophy
+
+### Technology curation
+
+Many decisions happen at the beginnings of projects. A developer must decide on: a web framework, a database, UI component library, object relational mapper (ORM), CSS framework, authentication solution, validation library, payment solution, and other technologies relevant to the project. This can be time consuming and lead to decision fatigue. In the JavaScript world, this is known as JavaScript fatigue. It is a phenomenon describing the overwhelming array of technology choices in the JavaScript ecosystem. shadriz offers a preferred list of technologies to be used as a foundation for web app projects.
+
+### Configuration automation
+
+Typically, once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is installed, and that integrations with external services are working.
+
+Developers will often use libraries to add capabilities such as authentication, data validations, and payments. However, setting these up can be time consuming. shadriz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadriz will write all the code necessary for the selected features.
+
+By having a simple working example, you'll save time not having to build it entirely from scratch. You can customize the generated code to fit your project requirements. Additionally, shadriz will display a checklist of tasks to complete the initial configuration. The `init` command is intended to be run once at the beginning of a new project.
+
+### Scaffold automation
+
+Once the technologies are selected and configured, the next step is to begin building the interesting parts of the app. Typically, this involves a number of tasks including creating the database tables, API endpoints or server actions, user interface, layouts, pages, and web forms. This process may involve referencing documentation and writing the "boilerplate" code that the rest of the app will be built upon. This too is a time consuming process.
+
+shadriz provides a `scaffold` command to automate the entire process of setting up the initial "boilerplate" code. You only have to provide the table name along with the columns and data types. shadriz will generate the database migration files, back end code, and front end code for the provided database schema.
+
+What is the purpose of the scaffolded code? It is to provide a fully working full stack Create Read Update Delete (CRUD) feature that you can use as a reference to build the rest of your app. The `scaffold` command is intended to be run as many times as you need to generate full stack scaffolding. This automation is heavily inspired by the Ruby on Rails scaffold command.
+
+## Technology and Inspiration
+
+### Ruby on Rails
+
+Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. The `shadriz scaffold` command was modeled after the `rails scaffold` command. With a predefined set of conventions, you'll spend less time configuring things, and more time building.
+
+### Next.js
+
+Many of the full stack patterns used in shadriz are based on the official Next.js documentation. Next.js provides many conveniences out of the box, such as file system routing, server side rendering, code bundling, and more.
+
+### shadcn/ui
+
+shadcn/ui is the tool that copies and pastes beautifully styled components into your projects. Similarly, shadriz generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
+
+### Drizzle ORM
+
+Drizzle ORM provides both SQL-like and relational queries, as well as schema generation and database migrations. If you know SQL, you know Drizzle. If you prefer an ORM, you can use their query API. Drizzle always outputs 1 query.
+
+### TailwindCSS
+
+TailwindCSS is a CSS framework which provides reusable utility classes. TailwindCSS simplifies and improves scalability of styling by coupling markup with style.
+
+### Auth.js
+
+shadriz favors proven, open-source solutions that let you maintain control over your data. Similarly, with shadriz, you own not only your data but also your code.
+
+### Zod
+
+shadriz uses `zod` and `drizzle-zod` for data validations. Each server action that is generated by the scaffolding tool will also contain zod validations to check for the correctness of data being submitted.
+
 ## FAQ
 
 **What can I build with shadriz?**
 
-shadriz is suitable for full stack monolithic server side rendered web applications.
-
-Here are a few example use cases: blog, software as a service app, course platform, content website, digital product shop, social media app, bespoke ecommerce systems.
-
-It is a full stack tool kit that automates away the time consuming things you need to do at the start of a new full stack Next.js project, saving you days worth of boilerplate coding.
+shadriz is suitable for full stack monolithic server side rendered web applications. It is a full stack tool kit that automates away the time consuming things you need to do at the start of a new full stack Next.js project, saving you days worth of boilerplate coding.
 
 **What is a scaffold?**
 
-A scaffold is all of the starter code, including the UI and data layer, that is required to have a fully functional CRUD (Create Read Update Delete) application. Scaffolding was popular in MVC (Model View Controller) frameworks such as Ruby on Rails.
-
-This was helpful as it saved time setting up the initial boilerplate of an application. It also served as a starting reference point for building out the actual web app. This is useful for people or organizations who start many projects.
-
-With scaffolding, you spend less time looking things up because there is a point of reference to build upon. This frees up time and energy to focus on the service layer, which usually requires more custom business logic beyond basic CRUD.
+A scaffold is all of the starter code, including the UI and data layer, that is required to have a fully functional CRUD application. Scaffolding was popular in MVC frameworks such as Ruby on Rails. With scaffolding, you spend less time looking things up because there is a point of reference to build upon. This frees up time and energy to focus on building the interesting parts of the app.
 
 **Why not a web framework?**
 
-Next.js is the underlying web framework. However, despite all of the conveniences it offers, you still have to write a significant amount of boilerplate code when you start a project from a fresh Next.js installation.
-
-shadriz differs in that it provides an opinionated abstraction for creating a solid starting point for app development. shadriz works by writing code to a new Next.js project.
-
-You own the code so you can customize it according to your project requirements. The code is written to your Next.js repo and you can review it before committing to anything.
+shadriz differs in that it provides an opinionated abstraction for creating a solid starting point for app development. shadriz works by writing code to a new Next.js project. The code is written to your Next.js repo and you can review it before committing to anything.
 
 **Why not a boilerplate?**
 
-Boilerplates go obsolete fast. Within a few months, many of your dependencies may already be behind the latest version.
-
-That is why shadriz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more.
-
-If you prefer a more stable version, choose the `pinned` option during initialization and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
-
-The other problem with boilerplates is that it is usually a static hard-coded repo. It can't generate unique database schemas and user interfaces specific to your project.
-
-## Technology and Inspiration
-
-shadriz is inspired by a wide range of tools and technologies.
-
-### Ruby on Rails
-
-**Convention over configuration**
-
-Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadriz. Specifically, the `shadriz scaffold` command was modeled after the `rails scaffold` command.
-
-With a predefined set of conventions, you'll spend less time configuring things, and more time building.
-
-Having standard conventions will prevent wasted time deciding on subjective preferences.
-
-### Next.js
-
-**Server components and server actions**
-
-Many of the full stack patterns used in shadriz are based on the official Next.js documentation.
-
-Server side rendering and interaction is recommended to reduce client side computation and improve performance.
-
-Next.js provides many conveniences out of the box, such as file system routing, server side rendering, code bundling, and more.
-
-### shadcn/ui
-
-**Non-dependency and customizability**
-
-shadcn/ui is the CLI tool that copies and pastes beautifully styled components into your projects.
-
-Similarly, shadriz generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
-
-This approach is the perfect balance of good defaults combined with flexibility of customization.
-
-### Drizzle ORM
-
-**SQL-like and relational queries**
-
-Drizzle ORM provides both SQL-like and relational queries, as well as schema generation and database migrations.
-
-If you know SQL, you know Drizzle. If you prefer an ORM, you can use their query API. Drizzle always outputs 1 query.
-
-shadriz generates the configuration files required to start using Drizzle ORM. shadriz also generates the database schemas and migrations for the full stack scaffolding.
-
-### TailwindCSS
-
-**Development speed and composability**
-
-TailwindCSS is a CSS framework which provides reusable utility classes.
-
-TailwindCSS simplifies and improves scalability of styling by coupling markup with style. While this may seem counter-intuitive to the idea of separation-of-concern, the trade-offs are usually worth it in most projects.
-
-Furthermore, TailwindCSS is enabled by default in Next.js projects and has become the standard CSS framework in many projects.
-
-### Auth.js
-
-**Open Source. Full Stack. Own Your Data.**
-
-shadriz favors proven, open-source solutions that let you maintain control over your data.
-
-Similarly, with shadriz, you own not only your data but also your code.
-
-### Zod
-
-**TypeScript-first schema validation**
-
-shadriz uses `zod` and `drizzle-zod` for data validations. Each server action that is generated by the scaffolding tool will also contain zod validations to check for the correctness of data being submitted.
-
-`drizzle-zod` automatically creates a zod schema based on a drizzle table. This reduces boilerplate. However, if specific validations are needed, the generated zod schemas can be extended to have custom validation rules.
+Boilerplates go obsolete fast. Shadriz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more. If you prefer a more stable version, choose the `pinned` option during initialization and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadriz.json` in the shadriz GitHub repo.
 
 ## Author
 
