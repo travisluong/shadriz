@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { count } from "drizzle-orm";
 import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import Pagination from "@/components/pagination";
 import {{tableObj.singularPascalCase}}Table from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-table";
@@ -15,9 +14,8 @@ export default async function Page({
   const page = parseInt(searchParams.page) || 1;
   const pageIndex = page - 1;
   const pageSize = parseInt(searchParams.pageSize) || 10;
-  const countRecords = await db.select({ value: count() }).from({{tableObj.pluralCamelCase}});
-  const countRecord = countRecords[0];
-  const totalPages = Math.ceil(countRecord.value / pageSize);
+  const count = await db.$count({{tableObj.pluralCamelCase}});
+  const totalPages = Math.ceil(count / pageSize);
   const {{tableObj.singularCamelCase}}List = await db.query.{{tableObj.pluralCamelCase}}.findMany({
     limit: pageSize,
     offset: pageIndex * pageSize,
