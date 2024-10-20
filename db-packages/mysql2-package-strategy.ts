@@ -24,6 +24,11 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
     this.copyCreateUserScript();
+
+    renderTemplate({
+      inputPath: "db-packages/lib/custom-types.ts.mysql2.hbs",
+      outputPath: "lib/custom-types.ts",
+    });
   }
 
   copyMigrateScript(): void {

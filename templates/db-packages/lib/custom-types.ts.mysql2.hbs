@@ -1,0 +1,10 @@
+import { customType } from "drizzle-orm/mysql-core";
+
+export const customDecimal = customType<{ data: number }>({
+  dataType() {
+    return "decimal";
+  },
+  fromDriver(value) {
+    return Number(value);
+  },
+});

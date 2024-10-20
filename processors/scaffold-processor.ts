@@ -145,6 +145,7 @@ export class ScaffoldProcessor {
     const dataTypeSet = new Set<string>();
     dataTypeSet.add(this.dbDialectStrategy.pkDataType);
     let referenceImportsCode = "";
+    let isDecimalTypePresent = false;
     for (const validatedColumn of this.validatedColumns) {
       const { columnName, dataType } = validatedColumn;
       const tableObj = caseFactory(columnName);
@@ -155,10 +156,19 @@ export class ScaffoldProcessor {
       } else {
         dataTypeSet.add(dataType);
       }
+
+      // references
       if (dataType.startsWith("references")) {
         referenceImportsCode += `import { ${tableObj.pluralCamelCase} } from "./${tableObj.pluralKebabCase}";\n`;
       }
+
+      // decimal types
+      if (dataType.startsWith("decimal") || dataType.startsWith("numeric")) {
+        isDecimalTypePresent = true;
+      }
     }
+
+    // drizzle imports
     let code = "import {\n";
     code += `  ${this.dbDialectStrategy.tableConstructor},\n`;
     if (this.dbDialectStrategy.timestampImport) {
@@ -168,7 +178,16 @@ export class ScaffoldProcessor {
       code += `  ${dataType},\n`;
     }
     code += `} from "${this.dbDialectStrategy.drizzleDbCorePackage}";\n`;
+
+    // custom decimal type import
+    if (isDecimalTypePresent) {
+      code += `import { customDecimal } from "@/lib/custom-types";\n`;
+    }
+
+    // pk strategy import
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
+
+    // reference import
     if (referenceImportsCode !== "") {
       code += "\n" + referenceImportsCode;
     }

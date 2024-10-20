@@ -15,15 +15,20 @@ export class PgPackageStrategy implements DbPackageStrategy {
 
   async init() {
     log.init("initializing pg package...");
+    await this.render();
+  }
+
+  async render(): Promise<void> {
     this.copyMigrateScript();
     this.appendDbUrl();
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
     this.copyCreateUserScript();
-  }
 
-  render(): Promise<void> {
-    throw new Error("Method not implemented.");
+    renderTemplate({
+      inputPath: "db-packages/lib/custom-types.ts.pg.hbs",
+      outputPath: "lib/custom-types.ts",
+    });
   }
 
   copyMigrateScript(): void {
