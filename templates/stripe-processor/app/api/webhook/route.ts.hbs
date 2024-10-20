@@ -64,6 +64,19 @@ async function handleCheckoutSessionCompleted(event: any) {
     );
   }
 
+  // process dynamic order
+  const orderId = event.data.object.metadata.order_id;
+  if (orderId) {
+    await db.insert(orders).values({
+      id: orderId,
+      amountTotal: event.data.object.amount_total,
+      userId: user.id,
+      note: "a dynamic order",
+    });
+    return;
+  }
+
+  // process one-time purchase
   const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
     event.data.object.id,
     {
@@ -74,7 +87,6 @@ async function handleCheckoutSessionCompleted(event: any) {
 
   for (const item of lineItems.data) {
     const stripeProductId = item.price.product;
-    const stripePriceId = item.price.id;
     const amountTotal = item.amount_total;
 
     const product = await db.query.products.findFirst({
@@ -86,18 +98,7 @@ async function handleCheckoutSessionCompleted(event: any) {
         productId: product.id,
         amountTotal: amountTotal,
         userId: user.id,
-        note: "a one time purchase"
-      });
-    }
-
-    // process dynamic order
-    const orderId = event.data.object.metadata.order_id;
-    if (orderId) {
-      await db.insert(orders).values({
-        id: orderId,
-        amountTotal: amountTotal,
-        userId: user.id,
-        note: "a dynamic order"
+        note: "a one time purchase",
       });
     }
   }
@@ -154,7 +155,7 @@ async function handleInvoicePaid(event: any) {
         productId: product.id,
         amountTotal: total,
         userId: user.id,
-        note: "a subscription order"
+        note: "a subscription order",
       });
     }
   }
