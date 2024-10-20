@@ -5,7 +5,7 @@ import { users } from "@/schema/auth-tables";
 
 export const roles = sqliteTable("roles", {
   {{pkText}}
-  name: text("name").notNull().unique(),
+  name: text().notNull().unique(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
@@ -13,8 +13,8 @@ export const roles = sqliteTable("roles", {
 export const usersRoles = sqliteTable(
   "users_roles",
   {
-    userId: text("user_id").notNull().references(() => users.id),
-    roleId: text("role_id").notNull().references(() => roles.id),
+    userId: text().notNull().references(() => users.id),
+    roleId: text().notNull().references(() => roles.id),
     {{createdAtTemplate}}
     {{updatedAtTemplate}}
   },

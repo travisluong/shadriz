@@ -7,7 +7,7 @@ dotenv.config({ path: ".env.local" });
 
 export async function openConnection() {
   const connection = createConnection(process.env.DB_URL!);
-  const sdb = drizzle(connection, { schema, mode: "default" });
+  const sdb = drizzle(connection, { schema, mode: "default", casing: "snake_case" });
   const closeConnection = async () => await connection.end();
   return {
     sdb,

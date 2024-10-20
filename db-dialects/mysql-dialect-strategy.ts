@@ -13,7 +13,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: int(\"${opts.columnName}\")`;
+      return `${opts.keyName}: int()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -26,7 +26,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: tinyint(\"${opts.columnName}\")`;
+      return `${opts.keyName}: tinyint()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -39,7 +39,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: smallint(\"${opts.columnName}\")`;
+      return `${opts.keyName}: smallint()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -52,7 +52,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: mediumint(\"${opts.columnName}\")`;
+      return `${opts.keyName}: mediumint()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -65,7 +65,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: bigint(\"${opts.columnName}\", { mode: "number" })`;
+      return `${opts.keyName}: bigint({ mode: "number" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -78,7 +78,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: real(\"${opts.columnName}\")`;
+      return `${opts.keyName}: real()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -91,7 +91,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: customDecimal(\"${opts.columnName}\")`;
+      return `${opts.keyName}: customDecimal()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -104,7 +104,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: double(\"${opts.columnName}\")`;
+      return `${opts.keyName}: double()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -117,7 +117,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: float(\"${opts.columnName}\")`;
+      return `${opts.keyName}: float()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -130,7 +130,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: serial(\"${opts.columnName}\")`;
+      return `${opts.keyName}: serial()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -167,7 +167,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: char(\"${opts.columnName}\")`;
+      return `${opts.keyName}: char()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -180,7 +180,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+      return `${opts.keyName}: varchar({ length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -193,7 +193,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-textarea.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -206,7 +206,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: boolean(\"${opts.columnName}\")`;
+      return `${opts.keyName}: boolean()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
@@ -219,7 +219,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: date(\"${opts.columnName}\")`;
+      return `${opts.keyName}: date()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
@@ -232,7 +232,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: datetime(\"${opts.columnName}\")`;
+      return `${opts.keyName}: datetime()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
@@ -245,7 +245,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: time(\"${opts.columnName}\")`;
+      return `${opts.keyName}: time()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -270,7 +270,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: timestamp(\"${opts.columnName}\")`;
+      return `${opts.keyName}: timestamp()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
@@ -283,7 +283,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: json(\"${opts.columnName}\")`;
+      return `${opts.keyName}: json()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.json(opts.keyName, opts.columnName);
@@ -297,7 +297,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: varchar({ length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -311,7 +311,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: varchar({ length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -325,7 +325,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 }).references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: varchar({ length: 255 }).references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -338,7 +338,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-file.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+      return `${opts.keyName}: varchar({ length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.file(opts.keyName, opts.columnName);
@@ -348,14 +348,14 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export const mysqlDialectStrategy: DbDialectStrategy = {
   pkDataType: "varchar",
-  createdAtTemplate: `createdAt: timestamp("created_at").notNull().defaultNow(),`,
-  updatedAtTemplate: `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`,
+  createdAtTemplate: `createdAt: timestamp().notNull().defaultNow(),`,
+  updatedAtTemplate: `updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),`,
   pkStrategyTemplates: {
-    uuidv7: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuidv7: `id: varchar({ length: 255 }).primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: varchar({ length: 255 }).primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2:
-      'id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => createId()),',
-    nanoid: `id: varchar("id", { length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,
+      "id: varchar({ length: 255 }).primaryKey().$defaultFn(() => createId()),",
+    nanoid: `id: varchar({ length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,
   },
   drizzleDbCorePackage: "drizzle-orm/mysql-core",
   tableConstructor: "mysqlTable",

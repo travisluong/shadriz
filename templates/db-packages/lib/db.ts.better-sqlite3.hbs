@@ -5,4 +5,4 @@ import { schema } from "./schema";
 
 const sqlite = new Database(config.DB_URL);
 
-export const db = drizzle(sqlite, { schema });
+export const db = drizzle(sqlite, { schema, casing: "snake_case" });

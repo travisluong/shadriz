@@ -12,40 +12,40 @@ import { users } from "@/schema/auth-tables";
 
 export const stripeWebhooks = mysqlTable("stripe_webhooks", {
   {{pkText}}
-  payload: text("payload"),
+  payload: text(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const products = mysqlTable("products", {
   {{pkText}}
-  slug: varchar("slug", { length: 255 }).unique(),
-  stripeProductId: varchar("stripe_product_id", { length: 255 }).notNull().unique(),
-  stripePriceId: varchar("stripe_price_id", { length: 255 }).notNull(),
-  name: varchar("name", { length: 255 }).notNull(),
-  price: int("price").notNull(),
-  description: text("description"),
-  mode: varchar("mode", { length: 255 }).notNull(),
+  slug: varchar({ length: 255 }).unique(),
+  stripeProductId: varchar({ length: 255 }).notNull().unique(),
+  stripePriceId: varchar({ length: 255 }).notNull(),
+  name: varchar({ length: 255 }).notNull(),
+  price: int().notNull(),
+  description: text(),
+  mode: varchar({ length: 255 }).notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const orders = mysqlTable("orders", {
   {{pkText}}
-  userId: varchar("user_id", { length: 255 }).notNull().references(() => users.id),
-  productId: varchar("product_id", { length: 255 }).references(() => products.id),
-  note: varchar("note", { length: 255 }),
-  amountTotal: int("amount_total").notNull(),
+  userId: varchar({ length: 255 }).notNull().references(() => users.id),
+  productId: varchar({ length: 255 }).references(() => products.id),
+  note: varchar({ length: 255 }),
+  amountTotal: int().notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const subscriptions = mysqlTable("subscriptions", {
   {{pkText}}
-  userId: varchar("user_id", { length: 255 }).notNull().references(() => users.id),
-  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }).notNull(),
-  startDate: date("start_date", { mode: "date" }).notNull(),
-  endDate: date("end_date", { mode: "date" }).notNull(),
+  userId: varchar({ length: 255 }).notNull().references(() => users.id),
+  stripeCustomerId: varchar({ length: 255 }).notNull(),
+  startDate: date({ mode: "date" }).notNull(),
+  endDate: date({ mode: "date" }).notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });

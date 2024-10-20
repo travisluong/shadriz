@@ -5,40 +5,40 @@ import { sql } from "drizzle-orm";
 
 export const stripeWebhooks = sqliteTable("stripe_webhooks", {
   {{pkText}}
-  payload: text("payload"),
+  payload: text(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const products = sqliteTable("products", {
   {{pkText}}
-  slug: text("slug").notNull().unique(),
-  stripeProductId: text("stripe_product_id").notNull().unique(),
-  stripePriceId: text("stripe_price_id").notNull(),
-  name: text("name").notNull(),
-  price: integer("price").notNull(),
-  description: text("description"),
-  mode: text("mode").notNull(),
+  slug: text().notNull().unique(),
+  stripeProductId: text().notNull().unique(),
+  stripePriceId: text().notNull(),
+  name: text().notNull(),
+  price: integer().notNull(),
+  description: text(),
+  mode: text().notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const orders = sqliteTable("orders", {
   {{pkText}}
-  userId: text("user_id").notNull().references(() => users.id),
-  productId: text("product_id").references(() => products.id),
-  note: text("note"),
-  amountTotal: integer("amount_total").notNull(),
+  userId: text().notNull().references(() => users.id),
+  productId: text().references(() => products.id),
+  note: text(),
+  amountTotal: integer().notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const subscriptions = sqliteTable("subscriptions", {
   {{pkText}}
-  userId: text("user_id").notNull().references(() => users.id),
-  stripeCustomerId: text("stripe_customer_id").notNull(),
-  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-  endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+  userId: text().notNull().references(() => users.id),
+  stripeCustomerId: text().notNull(),
+  startDate: integer({ mode: "timestamp" }).notNull(),
+  endDate: integer({ mode: "timestamp" }).notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });

@@ -10,41 +10,41 @@ import { users } from "@/schema/auth-tables";
 
 export const stripeWebhooks = pgTable("stripe_webhooks", {
   {{pkText}}
-  payload: text("payload"),
+  payload: text(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const products = pgTable("products", {
   {{pkText}}
-  slug: text("slug").notNull().unique(),
-  stripeProductId: text("stripe_product_id").notNull().unique(),
-  stripePriceId: text("stripe_price_id"),
-  name: text("name").notNull(),
-  price: integer("price").notNull(),
-  description: text("description"),
-  mode: text("mode").notNull(),
+  slug: text().notNull().unique(),
+  stripeProductId: text().notNull().unique(),
+  stripePriceId: text(),
+  name: text().notNull(),
+  price: integer().notNull(),
+  description: text(),
+  mode: text().notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const orders = pgTable("orders", {
   {{pkText}}
-  userId: text("user_id").notNull().references(() => users.id),
-  productId: text("product_id").references(() => products.id),
-  note: text("note"),
-  amountTotal: integer("amount_total").notNull(),
+  userId: text().notNull().references(() => users.id),
+  productId: text().references(() => products.id),
+  note: text(),
+  amountTotal: integer().notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });
 
 export const subscriptions = pgTable("subscriptions", {
   {{pkText}}
-  userId: text("user_id").notNull().references(() => users.id),
-  stripeCustomerId: text("stripe_customer_id").notNull(),
-  productId: text("product_id").notNull().references(() => products.id),
-  startDate: date("start_date", { mode: "date" }).notNull(),
-  endDate: date("end_date", { mode: "date" }).notNull(),
+  userId: text().notNull().references(() => users.id),
+  stripeCustomerId: text().notNull(),
+  productId: text().notNull().references(() => products.id),
+  startDate: date({ mode: "date" }).notNull(),
+  endDate: date({ mode: "date" }).notNull(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 });

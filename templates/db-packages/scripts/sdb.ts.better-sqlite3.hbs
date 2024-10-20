@@ -7,7 +7,7 @@ dotenv.config({ path: ".env.local" });
 
 export async function openConnection() {
   const betterSqlite = new Database(process.env.DB_URL);
-  const sdb = drizzle(betterSqlite, { schema });
+  const sdb = drizzle(betterSqlite, { schema, casing: "snake_case" });
   const closeConnection = async () => await betterSqlite.close();
   return {
     sdb,

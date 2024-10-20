@@ -13,7 +13,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: integer(\"${opts.columnName}\")`;
+      return `${opts.keyName}: integer()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -26,7 +26,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: smallint(\"${opts.columnName}\")`;
+      return `${opts.keyName}: smallint()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -39,7 +39,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: bigint(\"${opts.columnName}\", { mode: "number" })`;
+      return `${opts.keyName}: bigint({ mode: "number" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -52,7 +52,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: serial(\"${opts.columnName}\")`;
+      return `${opts.keyName}: serial()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -65,7 +65,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: smallserial(\"${opts.columnName}\")`;
+      return `${opts.keyName}: smallserial()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -78,7 +78,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: bigserial(\"${opts.columnName}\", { mode: "number" })`;
+      return `${opts.keyName}: bigserial({ mode: "number" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -91,7 +91,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: boolean(\"${opts.columnName}\")`;
+      return `${opts.keyName}: boolean()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
@@ -104,7 +104,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -117,7 +117,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar(\"${opts.columnName}\", { length: 255 })`;
+      return `${opts.keyName}: varchar({ length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -130,7 +130,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: char(\"${opts.columnName}\", { length: 255 })`;
+      return `${opts.keyName}: char({ length: 255 })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -143,7 +143,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: customDecimal(\"${opts.columnName}\")`;
+      return `${opts.keyName}: customDecimal()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -156,7 +156,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: customDecimal(\"${opts.columnName}\")`;
+      return `${opts.keyName}: customDecimal()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -169,7 +169,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: real(\"${opts.columnName}\")`;
+      return `${opts.keyName}: real()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -182,7 +182,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: doublePrecision(\"${opts.columnName}\")`;
+      return `${opts.keyName}: doublePrecision()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -195,7 +195,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: json(\"${opts.columnName}\")`;
+      return `${opts.keyName}: json()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.json(opts.keyName, opts.columnName);
@@ -208,7 +208,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: jsonb(\"${opts.columnName}\")`;
+      return `${opts.keyName}: jsonb()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.json(opts.keyName, opts.columnName);
@@ -221,7 +221,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: time(\"${opts.columnName}\")`;
+      return `${opts.keyName}: time()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -234,7 +234,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: timestamp(\"${opts.columnName}\")`;
+      return `${opts.keyName}: timestamp()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
@@ -247,7 +247,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: date(\"${opts.columnName}\")`;
+      return `${opts.keyName}: date()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -260,7 +260,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: uuid(\"${opts.columnName}\")`;
+      return `${opts.keyName}: uuid()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -274,7 +274,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -288,7 +288,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -302,7 +302,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -315,7 +315,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-file.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.file(opts.keyName, opts.columnName);
@@ -325,13 +325,13 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export const postgresqlDialectStrategy: DbDialectStrategy = {
   pkDataType: "text",
-  createdAtTemplate: `createdAt: timestamp("created_at").notNull().defaultNow(),`,
-  updatedAtTemplate: `updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),`,
+  createdAtTemplate: `createdAt: timestamp().notNull().defaultNow(),`,
+  updatedAtTemplate: `updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),`,
   pkStrategyTemplates: {
-    uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
-    nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
+    uuidv7: `id: text().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    cuid2: `id: text().primaryKey().$defaultFn(() => createId()),`,
+    nanoid: `id: text().primaryKey().$defaultFn(() => nanoid()),`,
   },
   drizzleDbCorePackage: "drizzle-orm/pg-core",
   tableConstructor: "pgTable",

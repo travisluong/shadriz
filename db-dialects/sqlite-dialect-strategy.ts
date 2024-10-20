@@ -13,7 +13,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
-      return `${opts.keyName}: integer("${opts.columnName}")`;
+      return `${opts.keyName}: integer()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
@@ -26,7 +26,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: real("${opts.columnName}")`;
+      return `${opts.keyName}: real()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
@@ -39,7 +39,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
@@ -52,7 +52,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: integer("${opts.columnName}", { mode: "boolean" } )`;
+      return `${opts.keyName}: integer({ mode: "boolean" } )`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
@@ -65,7 +65,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: blob("${opts.columnName}", { mode: "bigint" })`;
+      return `${opts.keyName}: blob({ mode: "bigint" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.bigint(opts.keyName, opts.columnName);
@@ -78,7 +78,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: integer(\"${opts.columnName}\", { mode: "timestamp" })`;
+      return `${opts.keyName}: integer({ mode: "timestamp" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
@@ -92,7 +92,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -106,7 +106,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -120,7 +120,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\").references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -133,7 +133,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-file.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text(\"${opts.columnName}\")`;
+      return `${opts.keyName}: text()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.file(opts.keyName, opts.columnName);
@@ -144,14 +144,14 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 export const sqliteDialectStrategy: DbDialectStrategy = {
   pkDataType: "text",
   createdAtTemplate:
-    "createdAt: integer(\"created_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`),",
+    "createdAt: integer({ mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`),",
   updatedAtTemplate:
-    "updatedAt: integer(\"updated_at\", { mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`).$onUpdate(() => new Date()),",
+    "updatedAt: integer({ mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`).$onUpdate(() => new Date()),",
   pkStrategyTemplates: {
-    uuidv7: `id: text("id").primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),`,
-    cuid2: `id: text("id").primaryKey().$defaultFn(() => createId()),`,
-    nanoid: `id: text("id").primaryKey().$defaultFn(() => nanoid()),`,
+    uuidv7: `id: text().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    cuid2: `id: text().primaryKey().$defaultFn(() => createId()),`,
+    nanoid: `id: text().primaryKey().$defaultFn(() => nanoid()),`,
   },
   tableConstructor: "sqliteTable",
   drizzleDbCorePackage: "drizzle-orm/sqlite-core",

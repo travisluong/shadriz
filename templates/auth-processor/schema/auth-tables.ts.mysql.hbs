@@ -11,14 +11,14 @@ import type { AdapterAccountType } from "next-auth/adapters"
 
 export const users = mysqlTable("users", {
   {{pkText}}
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("email_verified", {
+  name: varchar({ length: 255 }),
+  email: varchar({ length: 255 }).notNull(),
+  emailVerified: timestamp({
     mode: "date",
     fsp: 3,
   }),
-  image: varchar("image", { length: 255 }),
-  password: varchar("password", { length: 255 }),
+  image: varchar({ length: 255 }),
+  password: varchar({ length: 255 }),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
 })
@@ -26,21 +26,21 @@ export const users = mysqlTable("users", {
 export const accounts = mysqlTable(
   "accounts",
   {
-    userId: varchar("user_id", { length: 255 })
+    userId: varchar({ length: 255 })
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    type: varchar("type", { length: 255 })
+    type: varchar({ length: 255 })
       .$type<AdapterAccountType>()
       .notNull(),
-    provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
-    refresh_token: varchar("refresh_token", { length: 255 }),
-    access_token: varchar("access_token", { length: 255 }),
-    expires_at: int("expires_at"),
-    token_type: varchar("token_type", { length: 255 }),
-    scope: varchar("scope", { length: 255 }),
-    id_token: varchar("id_token", { length: 2048 }),
-    session_state: varchar("session_state", { length: 255 }),
+    provider: varchar({ length: 255 }).notNull(),
+    providerAccountId: varchar({ length: 255 }).notNull(),
+    refresh_token: varchar({ length: 255 }),
+    access_token: varchar({ length: 255 }),
+    expires_at: int(),
+    token_type: varchar({ length: 255 }),
+    scope: varchar({ length: 255 }),
+    id_token: varchar({ length: 2048 }),
+    session_state: varchar({ length: 255 }),
   },
   (account) => ({
     compoundKey: primaryKey({
@@ -50,19 +50,19 @@ export const accounts = mysqlTable(
 )
  
 export const sessions = mysqlTable("sessions", {
-  sessionToken: varchar("session_token", { length: 255 }).primaryKey(),
-  userId: varchar("user_id", { length: 255 })
+  sessionToken: varchar({ length: 255 }).primaryKey(),
+  userId: varchar({ length: 255 })
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
+  expires: timestamp({ mode: "date" }).notNull(),
 })
  
 export const verificationTokens = mysqlTable(
   "verification_tokens",
   {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
+    identifier: varchar({ length: 255 }).notNull(),
+    token: varchar({ length: 255 }).notNull(),
+    expires: timestamp({ mode: "date" }).notNull(),
   },
   (verificationToken) => ({
     compositePk: primaryKey({
@@ -74,20 +74,20 @@ export const verificationTokens = mysqlTable(
 export const authenticators = mysqlTable(
   "authenticators",
   {
-    credentialID: varchar("credential_id", { length: 255 }).notNull().unique(),
-    userId: varchar("user_id", { length: 255 })
+    credentialID: varchar({ length: 255 }).notNull().unique(),
+    userId: varchar({ length: 255 })
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
-    credentialPublicKey: varchar("credential_public_key", {
+    providerAccountId: varchar({ length: 255 }).notNull(),
+    credentialPublicKey: varchar({
       length: 255,
     }).notNull(),
-    counter: int("counter").notNull(),
-    credentialDeviceType: varchar("credential_device_type", {
+    counter: int().notNull(),
+    credentialDeviceType: varchar({
       length: 255,
     }).notNull(),
-    credentialBackedUp: boolean("credential_backed_up").notNull(),
-    transports: varchar("transports", { length: 255 }),
+    credentialBackedUp: boolean().notNull(),
+    transports: varchar({ length: 255 }),
   },
   (authenticator) => ({
     compositePk: primaryKey({

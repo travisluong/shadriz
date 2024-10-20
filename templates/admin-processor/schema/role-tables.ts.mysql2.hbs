@@ -4,16 +4,16 @@ import { users } from "@/schema/auth-tables";
 
 export const roles = mysqlTable("roles", {
   {{pkText}}
-  name: varchar("name", { length: 255 }).notNull().unique(),
+  name: varchar({ length: 255 }).notNull().unique(),
 });
 
 export const usersRoles = mysqlTable(
   "users_roles",
   {
-    userId: varchar("user_id", { length: 255 })
+    userId: varchar({ length: 255 })
       .notNull()
       .references(() => users.id),
-    roleId: varchar("role_id", { length: 255 })
+    roleId: varchar({ length: 255 })
       .notNull()
       .references(() => roles.id),
   },
