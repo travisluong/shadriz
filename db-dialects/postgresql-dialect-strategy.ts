@@ -18,6 +18,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   smallint: {
     jsType: "number",
@@ -31,6 +32,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   bigint: {
     jsType: "number",
@@ -44,6 +46,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   serial: {
     jsType: "number",
@@ -57,6 +60,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   smallserial: {
     jsType: "number",
@@ -70,6 +74,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   bigserial: {
     jsType: "number",
@@ -83,6 +88,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   boolean: {
     jsType: "boolean",
@@ -96,6 +102,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
+    formComponents: ["checkbox"],
   },
   text: {
     jsType: "string",
@@ -109,6 +116,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   varchar: {
     jsType: "string",
@@ -122,6 +130,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   char: {
     jsType: "string",
@@ -135,6 +144,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   numeric: {
     jsType: "number",
@@ -148,6 +158,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   decimal: {
     jsType: "number",
@@ -161,6 +172,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   real: {
     jsType: "number",
@@ -174,6 +186,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   doublePrecision: {
     jsType: "number",
@@ -187,6 +200,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   json: {
     jsType: "object",
@@ -200,6 +214,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   jsonb: {
     jsType: "object",
@@ -213,6 +228,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   time: {
     jsType: "string",
@@ -226,6 +242,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   timestamp: {
     jsType: "string",
@@ -239,6 +256,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   date: {
     jsType: "string",
@@ -252,6 +270,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   uuid: {
     jsType: "string",
@@ -265,6 +284,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   references: {
     jsType: "string",
@@ -279,6 +299,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   references_combobox: {
     jsType: "string",
@@ -293,6 +314,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["generic-combobox"],
   },
   references_select: {
     jsType: "string",
@@ -307,6 +329,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["generic-select"],
   },
   file: {
     jsType: "string",
@@ -320,6 +343,21 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
+  },
+  text_tiptap: {
+    jsType: "string",
+    sqlType: "text",
+    formTemplate: "tiptap-processor/components/create-tiptap-editor.tsx.hbs",
+    updateFormTemplate:
+      "tiptap-processor/components/update-tiptap-editor.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: text()`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.string(opts.keyName, opts.columnName);
+    },
+    formComponents: ["tiptap-editor"],
   },
 };
 

@@ -54,11 +54,20 @@ export interface DataTypeStrategyOpts {
 
 type JSType = "string" | "number" | "boolean" | "object";
 
+export type FormComponent =
+  | "input"
+  | "textarea"
+  | "checkbox"
+  | "generic-combobox"
+  | "generic-select"
+  | "tiptap-editor";
+
 export interface DataTypeStrategy {
   jsType: JSType;
   sqlType: string;
   formTemplate: string;
   updateFormTemplate: string;
+  formComponents: FormComponent[];
   getKeyValueStrForSchema(opts: DataTypeStrategyOpts): string;
   getKeyValStrForFormData(opts: DataTypeStrategyOpts): string;
 }

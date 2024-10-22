@@ -1,0 +1,7 @@
+        <div>
+          <Label>{{columnCases.originalCapitalCase}}</Label>
+          <TiptapEditor html="" name="{{columnCases.originalCamelCase}}" />
+          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
+            <p className="text-red-500" key={error}>{error}</p>
+          ))}
+        </div>

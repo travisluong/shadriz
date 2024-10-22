@@ -18,6 +18,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   real: {
     jsType: "number",
@@ -31,6 +32,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   text: {
     jsType: "string",
@@ -44,6 +46,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   boolean: {
     jsType: "boolean",
@@ -57,6 +60,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
+    formComponents: ["checkbox"],
   },
   bigint: {
     jsType: "number",
@@ -70,6 +74,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.bigint(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   timestamp: {
     jsType: "string",
@@ -83,6 +88,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   references: {
     jsType: "string",
@@ -97,6 +103,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   references_combobox: {
     jsType: "string",
@@ -111,6 +118,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["generic-combobox"],
   },
   references_select: {
     jsType: "string",
@@ -125,6 +133,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["generic-select"],
   },
   file: {
     jsType: "string",
@@ -138,6 +147,21 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
+  },
+  text_tiptap: {
+    jsType: "string",
+    sqlType: "text",
+    formTemplate: "tiptap-processor/components/create-tiptap-editor.tsx.hbs",
+    updateFormTemplate:
+      "tiptap-processor/components/update-tiptap-editor.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: text()`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.string(opts.keyName, opts.columnName);
+    },
+    formComponents: ["tiptap-editor"],
   },
 };
 

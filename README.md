@@ -271,17 +271,15 @@ An add-on extension can be added using the `add` command.
 
 To see a list of available add-ons, run `npx shadriz@latest add -h`.
 
-Here is an example on how to add the stripe add-on.
-
-```
-npx shadriz@latest add stripe
-```
-
-This command will install all necessary UI components, npm dependencies and dev dependencies for the add-on.
+The `add` command will install all necessary UI components, npm dependencies and dev dependencies for the add-on.
 
 Then it will write all of the necessary code for the add-on to your project.
 
 ### Stripe
+
+```
+npx shadriz@latest add stripe
+```
 
 Code will be generated for a one-time purchase, monthly subscription plan, and a dynamic pricing checkout. This includes the webhook, checkout session, and customer portal api endpoints.
 
@@ -294,6 +292,22 @@ The dynamic pricing does not require creating and mapping to products on Stripe.
 The file `access.ts` contain utility functions to check user access to products and subscriptions. You can use this as you build out the paywall for the paid features.
 
 Any of the code and content can be changed to fit your business model. The goal of this Stripe automation is to provide some common integration patterns to use as a starting point.
+
+### Tiptap Editor
+
+```
+npx shadriz@latest add tiptap
+```
+
+This add-on will install several tiptap dependencies and write the code for a generic tiptap editor component.
+
+After installing the add-on, you'll be able to scaffold with a `text_tiptap` data type.
+
+For example:
+
+```
+npx shadriz@latest scaffold posts -c title:text content:text_tiptap
+```
 
 ## Naming conventions
 
@@ -395,3 +409,7 @@ Built by [travisluong](https://www.travisluong.com).
 ## License
 
 MIT
+
+```
+
+```

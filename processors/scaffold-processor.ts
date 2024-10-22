@@ -1,6 +1,7 @@
 import {
   DbDialect,
   DbDialectStrategy,
+  FormComponent,
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import {
@@ -46,6 +47,15 @@ const scaffoldDbDialectStrategies: Record<
   sqlite: {
     schemaTableTemplatePath: "scaffold-processor/schema/table.ts.sqlite.hbs",
   },
+};
+
+const formComponentImports: Record<FormComponent, string> = {
+  input: `import { Input } from "@/components/ui/input";`,
+  textarea: `import { Textarea } from "@/components/ui/textarea";`,
+  checkbox: `import { Checkbox } from "@/components/ui/checkbox";`,
+  "generic-combobox": `import { GenericCombobox } from "@/components/generic-combobox";`,
+  "generic-select": `import { GenericSelect } from "@/components/generic-select";`,
+  "tiptap-editor": `import TiptapEditor from "@/components/tiptap-editor";`,
 };
 
 interface ValidatedColumn {
@@ -458,6 +468,7 @@ export class ScaffoldProcessor {
     });
   }
   addCreateForm(): void {
+    const formControlsImports = this.getFormControlsImports();
     const formControlsHtml = this.getFormControlsHtml();
     const tableObj = caseFactory(this.opts.table);
     const referencesColumnList = this.getReferencesColumnList("references_");
@@ -466,6 +477,7 @@ export class ScaffoldProcessor {
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-create-form.tsx`,
       data: {
         tableObj: tableObj,
+        formControlsImports: formControlsImports,
         formControls: formControlsHtml,
         authorizationLevel: this.opts.authorizationLevel,
         referencesColumnList: referencesColumnList,
@@ -488,6 +500,22 @@ export class ScaffoldProcessor {
     }
     return html;
   }
+  getFormControlsImports(): string {
+    let html = "";
+    const formComponentSet = new Set<FormComponent>();
+    for (const [index, validatedColumn] of this.validatedColumns.entries()) {
+      const { columnName, dataType } = validatedColumn;
+      const dataTypeStrategy =
+        this.dbDialectStrategy.dataTypeStrategyMap[dataType];
+      dataTypeStrategy.formComponents.forEach((component) => {
+        formComponentSet.add(component);
+      });
+    }
+    formComponentSet.forEach((component) => {
+      html += formComponentImports[component] + "\n";
+    });
+    return html;
+  }
   getReferencesColumnList(startsWith: "references" | "references_") {
     const referencesColumnList = this.validatedColumns
       .filter((validatedColumn) =>
@@ -499,6 +527,7 @@ export class ScaffoldProcessor {
   }
   addUpdateForm(): void {
     const tableObj = caseFactory(this.opts.table);
+    const formControlsImports = this.getFormControlsImports();
     const formControlsHtml = this.getUpdateFormControlsHtml();
     const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
@@ -506,6 +535,7 @@ export class ScaffoldProcessor {
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
       data: {
         tableObj: tableObj,
+        formControlsImports: formControlsImports,
         formControls: formControlsHtml,
         authorizationLevel: this.opts.authorizationLevel,
         referencesColumnList: referencesColumnList,

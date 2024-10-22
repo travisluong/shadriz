@@ -1,0 +1,144 @@
+import {
+  FontBoldIcon,
+  FontItalicIcon,
+  HeadingIcon,
+  TextAlignCenterIcon,
+  TextAlignLeftIcon,
+  TextAlignRightIcon,
+} from "@radix-ui/react-icons";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import TextAlign from "@tiptap/extension-text-align";
+
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import "@/styles/tiptap-editor.css";
+
+const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
+  const [editorContent, setEditorContent] = useState(html);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+    ],
+    content: html,
+  });
+
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+
+    editor.on("update", ({ editor }) => {
+      const html = editor.getHTML(); // Get content as HTML
+      console.log(html);
+      setEditorContent(editor.getHTML());
+    });
+  }, [editor]);
+
+  if (!editor) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="border border-input p-5 rounded-md">
+      {/* Toolbar */}
+      <div className="mb-5 flex gap-2">
+        <Button
+          type="button"
+          size="icon"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          disabled={!editor.can().chain().focus().toggleBold().run()}
+          className={editor.isActive("bold") ? "is-active" : ""}
+        >
+          <FontBoldIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          disabled={!editor.can().chain().focus().toggleItalic().run()}
+          className={editor.isActive("italic") ? "is-active" : ""}
+        >
+          <FontItalicIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          disabled={
+            !editor.can().chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={editor.isActive("heading") ? "is-active" : ""}
+        >
+          <HeadingIcon />1
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          disabled={
+            !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={editor.isActive("heading") ? "is-active" : ""}
+        >
+          <HeadingIcon />2
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          disabled={
+            !editor.can().chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          className={editor.isActive("heading") ? "is-active" : ""}
+        >
+          <HeadingIcon /> 3
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
+        >
+          <TextAlignLeftIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          className={
+            editor.isActive({ textAlign: "center" }) ? "is-active" : ""
+          }
+        >
+          <TextAlignCenterIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          className={
+            editor.isActive({ textAlign: "center" }) ? "is-active" : ""
+          }
+        >
+          <TextAlignRightIcon />
+        </Button>
+      </div>
+
+      <EditorContent editor={editor} />
+
+      <input type="hidden" name={name} value={editorContent} />
+    </div>
+  );
+};
+
+export default TiptapEditor;

@@ -18,6 +18,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   tinyint: {
     jsType: "number",
@@ -31,6 +32,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   smallint: {
     jsType: "number",
@@ -44,6 +46,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   mediumint: {
     jsType: "number",
@@ -57,6 +60,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   bigint: {
     jsType: "number",
@@ -70,6 +74,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   real: {
     jsType: "number",
@@ -83,6 +88,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   decimal: {
     jsType: "number",
@@ -96,6 +102,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   double: {
     jsType: "number",
@@ -109,6 +116,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   float: {
     jsType: "number",
@@ -122,6 +130,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   serial: {
     jsType: "number",
@@ -135,6 +144,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   binary: {
     jsType: "string",
@@ -147,6 +157,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       throw new Error("Function not implemented.");
     },
+    formComponents: [],
   },
   varbinary: {
     jsType: "string",
@@ -159,6 +170,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       throw new Error("Function not implemented.");
     },
+    formComponents: [],
   },
   char: {
     jsType: "string",
@@ -172,6 +184,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   varchar: {
     jsType: "string",
@@ -185,6 +198,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   text: {
     jsType: "string",
@@ -198,6 +212,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["textarea"],
   },
   boolean: {
     jsType: "boolean",
@@ -211,6 +226,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
+    formComponents: ["checkbox"],
   },
   date: {
     jsType: "string",
@@ -224,6 +240,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   datetime: {
     jsType: "string",
@@ -237,6 +254,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   time: {
     jsType: "string",
@@ -250,6 +268,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   year: {
     jsType: "string",
@@ -262,6 +281,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       throw new Error("Function not implemented.");
     },
+    formComponents: [],
   },
   timestamp: {
     jsType: "string",
@@ -275,6 +295,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   json: {
     jsType: "object",
@@ -288,6 +309,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   references: {
     jsType: "string",
@@ -302,6 +324,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
   },
   references_combobox: {
     jsType: "string",
@@ -316,6 +339,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["generic-combobox"],
   },
   references_select: {
     jsType: "string",
@@ -330,6 +354,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
+    formComponents: ["generic-select"],
   },
   file: {
     jsType: "string",
@@ -343,6 +368,21 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
+    formComponents: ["input"],
+  },
+  text_tiptap: {
+    jsType: "string",
+    sqlType: "text",
+    formTemplate: "tiptap-processor/components/create-tiptap-editor.tsx.hbs",
+    updateFormTemplate:
+      "tiptap-processor/components/update-tiptap-editor.tsx.hbs",
+    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
+      return `${opts.keyName}: text()`;
+    },
+    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      return formDataUtils.string(opts.keyName, opts.columnName);
+    },
+    formComponents: ["tiptap-editor"],
   },
 };
 
