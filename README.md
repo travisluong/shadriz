@@ -409,7 +409,3 @@ Built by [travisluong](https://www.travisluong.com).
 ## License
 
 MIT
-
-```
-
-```
