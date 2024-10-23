@@ -383,7 +383,6 @@ export function completeShadrizConfig(
     adminEnabled: partialConfig.adminEnabled ?? false,
     stripeEnabled: partialConfig.stripeEnabled ?? false,
     sessionStrategy: partialConfig.sessionStrategy ?? "database",
-    darkModeEnabled: partialConfig.darkModeEnabled ?? false,
     install: partialConfig.install ?? true,
   };
   return completeConfig;

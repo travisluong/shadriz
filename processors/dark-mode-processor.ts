@@ -2,6 +2,12 @@ import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
+/**
+ * previously only for dark mode.
+ * now responsible for variety of root layout changes
+ * - dark mode support
+ * - toast
+ */
 export class DarkModeProcessor implements ShadrizProcessor {
   constructor(public opts: ShadrizConfig) {}
 
@@ -9,7 +15,7 @@ export class DarkModeProcessor implements ShadrizProcessor {
 
   devDependencies = [];
 
-  shadcnComponents: string[] = ["dropdown-menu"];
+  shadcnComponents: string[] = ["dropdown-menu", "toast"];
 
   async init() {
     log.init("initializing dark mode...");

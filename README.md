@@ -65,7 +65,7 @@ You will be asked a few questions to configure the app.
 Alternatively, you can also run the command non-interactively:
 
 ```
-npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe --dark-mode
+npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe
 ```
 
 ### Step 4: Project checklist

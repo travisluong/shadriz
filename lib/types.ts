@@ -11,7 +11,6 @@ export interface ShadrizConfig {
   adminEnabled: boolean;
   stripeEnabled: boolean;
   sessionStrategy: SessionStrategy;
-  darkModeEnabled: boolean;
   install: boolean;
 }
 

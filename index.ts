@@ -183,8 +183,6 @@ program
   .option("--no-admin", "no admin dashboard")
   .option("-sp, --stripe", "stripe payment processing")
   .option("--no-stripe", "no stripe")
-  .option("-dm, --dark-mode", "dark mode")
-  .option("--no-dark-mode", "no dark mode")
   .action(async (options) => {
     try {
       // inquire
@@ -323,12 +321,6 @@ program
             message: "Do you want to add Stripe for payments?",
           }));
       }
-      partialConfig.darkModeEnabled =
-        options.darkMode ??
-        (await confirm({
-          message: "Do you want to add a dark mode toggle?",
-          default: true,
-        }));
 
       // process
 
@@ -375,10 +367,8 @@ program
 
       dependencies.push(...pkDependencies[completeConfig.pkStrategy]);
 
-      if (completeConfig.darkModeEnabled) {
-        const darkModeProcessor = new DarkModeProcessor(completeConfig);
-        processors.push(darkModeProcessor);
-      }
+      const darkModeProcessor = new DarkModeProcessor(completeConfig);
+      processors.push(darkModeProcessor);
 
       for (const processor of processors) {
         dependencies.push(...processor.dependencies);

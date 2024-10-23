@@ -1,6 +1,8 @@
 "use client";
 
 import { useFormState } from "react-dom";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { create{{tableObj.singularPascalCase}}, Create{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/create-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -21,6 +23,16 @@ export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasRefer
 }{{/if}}) {
   const initialState: Create{{tableObj.singularPascalCase}}State = {};
   const [state, dispatch] = useFormState(create{{tableObj.singularPascalCase}}, initialState);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (state.message) {
+      toast({
+        description: state.message,
+        variant: state.status === "error" ? "destructive" : "default",
+      });
+    }
+  }, [state, toast]);
 
   return (
     <div>
@@ -28,16 +40,6 @@ export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasRefer
 {{formControls}}
         <div>
           <Button type="submit">Submit</Button>
-        </div>
-        <div>
-          <p
-            className={cn(
-              state.status === "success" && "text-green-500",
-              state.status === "error" && "text-red-500"
-            )}
-          >
-            {state.message}
-          </p>
         </div>
       </form>
     </div>
