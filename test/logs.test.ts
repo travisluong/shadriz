@@ -19,7 +19,6 @@ const shadrizConfig: ShadrizConfig = {
   adminEnabled: true,
   authEnabled: true,
   authSolution: "authjs",
-  darkModeEnabled: true,
   dbPackage: "better-sqlite3",
   version: "2",
 };
