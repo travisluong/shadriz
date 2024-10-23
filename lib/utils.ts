@@ -189,6 +189,50 @@ export function writeToFile(filePath: string, text: string) {
   }
 }
 
+export function insertTextBeforeIfNotExists(
+  filePath: string,
+  searchText: string,
+  newText: string
+) {
+  if (checkIfTextExistsInFile(filePath, newText)) {
+    log.gray(
+      `- ${filePath} - text exists: ${newText.trim().substring(0, 30)}...`
+    );
+    return;
+  }
+  insertTextBefore(filePath, searchText, newText);
+}
+
+export function insertTextBefore(
+  filePath: string,
+  searchText: string,
+  newText: string
+) {
+  // Read the file content
+  const fileContent = fs.readFileSync(
+    path.join(process.cwd(), filePath),
+    "utf8"
+  );
+
+  // Find the position of the searchText
+  const index = fileContent.indexOf(searchText);
+
+  if (index === -1) {
+    throw new Error(`Text "${searchText}" not found in the file.`);
+  }
+
+  // Insert the new text before the searchText
+  const updatedContent =
+    fileContent.slice(0, index) + newText + fileContent.slice(index);
+
+  // Write the updated content back to the file
+  fs.writeFileSync(filePath, updatedContent, "utf8");
+
+  log.yellow(
+    "M " + filePath + ` - text inserted: ${newText.trim().substring(0, 30)}...`
+  );
+}
+
 export function insertTextAfter(
   filePath: string,
   searchText: string,

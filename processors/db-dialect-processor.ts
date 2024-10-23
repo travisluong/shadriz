@@ -1,6 +1,6 @@
 import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
-import { renderTemplate } from "../lib/utils";
+import { renderTemplate, renderTemplateIfNotExists } from "../lib/utils";
 
 export class DbDialectProcessor implements ShadrizProcessor {
   opts: ShadrizConfig;
@@ -23,7 +23,7 @@ export class DbDialectProcessor implements ShadrizProcessor {
       data: { dialect: this.opts.dbDialect },
     });
 
-    renderTemplate({
+    renderTemplateIfNotExists({
       inputPath: `db-dialect-processor/lib/schema.ts.${this.opts.dbDialect}.hbs`,
       outputPath: "lib/schema.ts",
     });

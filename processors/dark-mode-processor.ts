@@ -1,13 +1,12 @@
 import { log } from "../lib/log";
 import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
-import { renderTemplate } from "../lib/utils";
+import {
+  insertTextAfterIfNotExists,
+  insertTextBeforeIfNotExists,
+  prependToFileIfNotExists,
+  renderTemplate,
+} from "../lib/utils";
 
-/**
- * previously only for dark mode.
- * now responsible for variety of root layout changes
- * - dark mode support
- * - toast
- */
 export class DarkModeProcessor implements ShadrizProcessor {
   constructor(public opts: ShadrizConfig) {}
 
@@ -24,7 +23,7 @@ export class DarkModeProcessor implements ShadrizProcessor {
 
   async render() {
     await this.addThemeProvider();
-    await this.addRootLayout();
+    await this.addThemeProviderToRootLayout();
     await this.addModeToggle();
   }
 
@@ -35,18 +34,33 @@ export class DarkModeProcessor implements ShadrizProcessor {
     });
   }
 
-  async addRootLayout() {
-    renderTemplate({
-      inputPath: "dark-mode-processor/app/layout.tsx.hbs",
-      outputPath: "app/layout.tsx",
-    });
-  }
-
   async addModeToggle() {
     renderTemplate({
       inputPath: "dark-mode-processor/components/mode-toggle.tsx.hbs",
       outputPath: "components/mode-toggle.tsx",
     });
+  }
+
+  async addThemeProviderToRootLayout() {
+    prependToFileIfNotExists(
+      "app/layout.tsx",
+      `import { ThemeProvider } from "@/components/theme-provider";`
+    );
+
+    const code = `<ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >\n          `;
+
+    insertTextBeforeIfNotExists("app/layout.tsx", "{children}", code);
+
+    insertTextAfterIfNotExists(
+      "app/layout.tsx",
+      "{children}",
+      "\n        </ ThemeProvider>\n"
+    );
   }
 
   printCompletionMessage() {}
