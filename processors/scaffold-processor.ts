@@ -619,7 +619,7 @@ export class ScaffoldProcessor {
     insertTextAfterIfNotExists(
       "components/admin/admin-sidebar.tsx",
       "const SIDEBAR_LINKS = [",
-      `\n  { href: "/admin/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <DashboardIcon /> },`
+      `\n  { href: "/admin/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <TableIcon /> },`
     );
   }
   addLinkToDashboardSidebar() {
@@ -627,7 +627,7 @@ export class ScaffoldProcessor {
     insertTextAfterIfNotExists(
       "components/private/dashboard-sidebar.tsx",
       "const SIDEBAR_LINKS = [",
-      `\n  { href: "/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <DashboardIcon /> },`
+      `\n  { href: "/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <TableIcon /> },`
     );
   }
   printCompletionMessage() {

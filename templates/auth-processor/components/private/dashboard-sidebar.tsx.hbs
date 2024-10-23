@@ -6,6 +6,7 @@ import {
   ExitIcon,
   GearIcon,
   PersonIcon,
+  TableIcon,
 } from "@radix-ui/react-icons";
 import Link from "next/link";
 
@@ -21,7 +22,7 @@ const SIDEBAR_LINKS = [
 
 export default function DashboardSidebar() {
   return (
-    <aside className="py-8 min-w-40 max-w-sm px-5 border-r min-h-screen flex flex-col gap-2">
+    <aside className="flex flex-col gap-2 flex-shrink-0 p-5 border-r min-h-screen">
       {SIDEBAR_LINKS.map((link) => (
         <Link
           key={link.href}

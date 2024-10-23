@@ -120,6 +120,11 @@ export class NewProjectProcessor implements ShadrizProcessor {
       outputPath: "components/generic-select.tsx",
     });
 
+    renderTemplate({
+      inputPath: "new-project-processor/components/search-input.tsx.hbs",
+      outputPath: "components/search-input.tsx",
+    });
+
     // TODO: remove when next.js and shadcn/ui init works with dark mode
     // prettier-ignore
     removeTextFromFile("app/globals.css", `:root {

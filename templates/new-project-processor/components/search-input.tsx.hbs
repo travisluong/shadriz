@@ -1,0 +1,38 @@
+"use client";
+
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
+export default function SearchInput({ placeholder }: { placeholder?: string }) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const [text, setText] = useState("");
+
+  function handleSearch(e: any) {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams);
+    params.set("search", text);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
+  return (
+    <div>
+      <form className="flex items-center gap-2" onSubmit={handleSearch}>
+        <Input
+          type="text"
+          placeholder={placeholder ?? "Search"}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <Button type="submit">
+          <MagnifyingGlassIcon />
+        </Button>
+      </form>
+    </div>
+  );
+}

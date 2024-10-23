@@ -5,11 +5,13 @@ import {{tableObj.singularPascalCase}}Table from "@/components/{{authorizationLe
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import SearchInput from "@/components/search-input";
+import { like } from "drizzle-orm";
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { page: string; pageSize: string };
+  searchParams: { page: string; pageSize: string, search: string };
 }) {
   const page = parseInt(searchParams.page) || 1;
   const pageIndex = page - 1;
@@ -19,19 +21,25 @@ export default async function Page({
   const {{tableObj.singularCamelCase}}List = await db.query.{{tableObj.pluralCamelCase}}.findMany({
     limit: pageSize,
     offset: pageIndex * pageSize,
+    where: searchParams.search ? like({{tableObj.pluralCamelCase}}.id, `%${searchParams.search}%`) : undefined,
   });
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">{{tableObj.pluralCapitalCase}}</h1>
-      <div className="text-right mr-2">
-        <Link href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
-          <Button>
-            <PlusIcon className="mr-2" /> New
-          </Button>
-        </Link>
+    <div className="flex flex-col gap-5">
+      <h1 className="text-xl font-bold">{{tableObj.pluralCapitalCase}}</h1>
+      <div className="flex justify-between">
+        <div>
+          <SearchInput placeholder="Search {{tableObj.pluralCapitalCase}}" />
+        </div>
+        <div className="text-right mr-2">
+          <Link href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
+            <Button>
+              <PlusIcon className="mr-2" /> New
+            </Button>
+          </Link>
+        </div>
       </div>
-      <div className="mb-5">
+      <div>
         <{{tableObj.singularPascalCase}}Table {{tableObj.singularCamelCase}}List={ {{tableObj.singularCamelCase}}List } />
       </div>
       <div>
