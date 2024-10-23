@@ -14,7 +14,7 @@ export class DarkModeProcessor implements ShadrizProcessor {
 
   devDependencies = [];
 
-  shadcnComponents: string[] = ["dropdown-menu", "toast"];
+  shadcnComponents: string[] = ["dropdown-menu"];
 
   async init() {
     log.init("initializing dark mode...");

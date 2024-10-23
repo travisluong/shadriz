@@ -27,6 +27,7 @@ export class NewProjectProcessor implements ShadrizProcessor {
     "select",
     "popover",
     "command",
+    "alert",
   ];
 
   constructor(opts: ShadrizConfig) {

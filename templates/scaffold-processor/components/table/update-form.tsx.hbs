@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
 import { update{{tableObj.singularPascalCase}}, Update{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/update-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 {{formControlsImports}}
 import { cn } from "@/lib/utils";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
@@ -28,16 +27,6 @@ export default function {{tableObj.singularPascalCase}}UpdateForm({
 }) {
   const initialState: Update{{tableObj.singularPascalCase}}State = {};
   const [state, dispatch] = useFormState(update{{tableObj.singularPascalCase}}, initialState);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if (state.message) {
-      toast({
-        description: state.message,
-        variant: state.status === "error" ? "destructive" : "default",
-      });
-    }
-  }, [state, toast]);
 
   return (
     <div>
@@ -46,6 +35,23 @@ export default function {{tableObj.singularPascalCase}}UpdateForm({
         <div>
           <Button type="submit">Submit</Button>
         </div>
+        {state.message && state.status === "success" && (
+          <Alert>
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>{state.message}</AlertDescription>
+          </Alert>
+        )}
+        {state.message && state.status === "error" && (
+          <Alert variant="destructive">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{state.message}</AlertDescription>
+          </Alert>
+        )}
+        {state.message && state.status === undefined && (
+          <Alert>
+            <AlertDescription>{state.message}</AlertDescription>
+          </Alert>
+        )}
       </form>
     </div>
   );

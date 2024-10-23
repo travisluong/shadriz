@@ -47,7 +47,7 @@ export class StripeProcessor implements ShadrizProcessor {
 
   devDependencies = [];
 
-  shadcnComponents: string[] = ["card", "badge", "alert"];
+  shadcnComponents: string[] = ["card", "badge"];
 
   dbDialectStrategy: DbDialectStrategy;
 
