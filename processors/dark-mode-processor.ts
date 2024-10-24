@@ -44,7 +44,7 @@ export class DarkModeProcessor implements ShadrizProcessor {
   async addThemeProviderToRootLayout() {
     prependToFileIfNotExists(
       "app/layout.tsx",
-      `import { ThemeProvider } from "@/components/theme-provider";`
+      `import { ThemeProvider } from "@/components/theme-provider";\n`
     );
 
     const code = `<ThemeProvider
