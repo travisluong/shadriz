@@ -5,6 +5,7 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createInsertSchema } from "drizzle-zod";
+import { BaseFormState } from "@/lib/types";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -28,14 +29,12 @@ const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableOb
 const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}});
 {{/if}}
 
-export interface Create{{tableObj.singularPascalCase}}State {
+export interface Create{{tableObj.singularPascalCase}}State extends BaseFormState {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
     {{/each}}
   };
-  message?: string;
-  status?: "success" | "error";
 }
 
 export async function create{{tableObj.singularPascalCase}}(

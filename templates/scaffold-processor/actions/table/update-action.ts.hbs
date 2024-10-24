@@ -5,6 +5,7 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { createSelectSchema } from "drizzle-zod";
+import { BaseFormState } from "@/lib/types";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -30,14 +31,12 @@ const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableOb
 const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).partial().required({ id: true });
 {{/if}}
 
-export interface Update{{tableObj.singularPascalCase}}State {
+export interface Update{{tableObj.singularPascalCase}}State extends BaseFormState {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
     {{/each}}
   };
-  message?: string;
-  status?: "success" | "error";
 }
 
 export async function update{{tableObj.singularPascalCase}}(

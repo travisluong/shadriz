@@ -4,9 +4,8 @@ import { useFormState } from "react-dom";
 import { create{{tableObj.singularPascalCase}}, Create{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/create-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { FormAlert } from "@/components/form-alert";
 {{formControlsImports}}
-import { cn } from "@/lib/utils";
 {{#each referencesColumnList}}
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
 {{/each}}
@@ -30,23 +29,7 @@ export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasRefer
         <div>
           <Button type="submit">Submit</Button>
         </div>
-        {state.message && state.status === "success" && (
-          <Alert>
-            <AlertTitle>Success</AlertTitle>
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
-        {state.message && state.status === "error" && (
-          <Alert variant="destructive">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
-        {state.message && state.status === undefined && (
-          <Alert>
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}  
+        <FormAlert state={state} />
       </form>
     </div>
   );

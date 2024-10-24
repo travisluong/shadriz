@@ -2,9 +2,9 @@
 
 import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/delete-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
+import { FormAlert } from "@/components/form-alert";
 import { useFormState } from "react-dom";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
-import { cn } from "@/lib/utils";
 
 export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.singularCamelCase}} }: { {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}} }) {
   const initialState: Delete{{tableObj.singularPascalCase}}State = {};
@@ -22,16 +22,7 @@ export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.s
             Delete
           </Button>
         </div>
-        <div>
-          <p
-            className={cn(
-              state.status === "success" && "text-green-500",
-              state.status === "error" && "text-red-500"
-            )}
-          >
-            {state.message}
-          </p>
-        </div>
+        <FormAlert state={state} />
       </form>
     </div>
   );

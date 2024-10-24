@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSelectSchema } from "drizzle-zod";
+import { BaseFormState } from "@/lib/types";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
@@ -15,12 +16,10 @@ import { hasAdminRole } from "@/lib/authorization";
 
 const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).pick({ id: true });
 
-export interface Delete{{tableObj.singularPascalCase}}State {
+export interface Delete{{tableObj.singularPascalCase}}State extends BaseFormState {
   errors?: {
     id?: string[];
   };
-  message?: string;
-  status?: "success" | "error";
 }
 
 export async function delete{{tableObj.singularPascalCase}}(
