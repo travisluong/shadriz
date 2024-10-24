@@ -99,11 +99,11 @@ program
     try {
       if (packageManager === "pnpm") {
         await spawnCommand(
-          `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
+          `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`
         );
       } else {
         await spawnCommand(
-          `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias`
+          `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`
         );
       }
     } catch (error) {}

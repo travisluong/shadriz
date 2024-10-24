@@ -6,11 +6,13 @@ import { Label } from "@/components/ui/label";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { error: string };
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function Page(props: {
+  searchParams: SearchParams;
 }) {
+  const searchParams = await props.searchParams;
+
   return (
     <div className="flex min-h-screen justify-center items-center">
       <Card>

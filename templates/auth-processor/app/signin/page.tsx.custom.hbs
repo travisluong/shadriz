@@ -6,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
-export default async function SignInPage({
-  searchParams,
-}: {
-  searchParams: { error: string };
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function SignInPage(props: {
+  searchParams: SearchParams;
 }) {
+  const searchParams = await props.searchParams;
+
   return (
     <div className="flex min-h-screen justify-center items-center">
       <div className="flex flex-col gap-2 items-center border rounded p-5 max-w-xs">

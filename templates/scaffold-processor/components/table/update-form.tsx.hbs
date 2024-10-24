@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { update{{tableObj.singularPascalCase}}, Update{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/update-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -25,7 +25,7 @@ export default function {{tableObj.singularPascalCase}}UpdateForm({
   {{/each}}
 }) {
   const initialState: Update{{tableObj.singularPascalCase}}State = {};
-  const [state, dispatch] = useFormState(update{{tableObj.singularPascalCase}}, initialState);
+  const [state, dispatch] = useActionState(update{{tableObj.singularPascalCase}}, initialState);
 
   return (
     <div>

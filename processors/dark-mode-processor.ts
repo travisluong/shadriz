@@ -61,6 +61,12 @@ export class DarkModeProcessor implements ShadrizProcessor {
       "{children}",
       "\n        </ ThemeProvider>\n"
     );
+
+    insertTextAfterIfNotExists(
+      "app/layout.tsx",
+      "<html",
+      " suppressHydrationWarning"
+    );
   }
 
   printCompletionMessage() {}

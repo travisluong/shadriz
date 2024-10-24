@@ -3,12 +3,12 @@
 import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/delete-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { FormAlert } from "@/components/form-alert";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
 export default function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.singularCamelCase}} }: { {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}} }) {
   const initialState: Delete{{tableObj.singularPascalCase}}State = {};
-  const [state, dispatch] = useFormState(delete{{tableObj.singularPascalCase}}, initialState);
+  const [state, dispatch] = useActionState(delete{{tableObj.singularPascalCase}}, initialState);
 
   return (
     <div>

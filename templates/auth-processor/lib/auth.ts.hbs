@@ -67,9 +67,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/signin",
   },
   jwt: {
-    encode: (params) => {
+    encode: async (params) => {
       if ((SESSION_STRATEGY as SessionStrategy) === "database") {
-        const cookie = cookies().get("next-auth.session-token");
+        const cookieStore = await cookies();
+        const cookie = cookieStore.get("next-auth.session-token");
         if (cookie) {
           return cookie.value;
         } else {

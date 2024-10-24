@@ -8,14 +8,19 @@ import Link from "next/link";
 import SearchInput from "@/components/search-input";
 import { like } from "drizzle-orm";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { page: string; pageSize: string, search: string };
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function Page(props: {
+  searchParams: SearchParams;
 }) {
-  const page = parseInt(searchParams.page) || 1;
+  const searchParams = await props.searchParams;
+  const page =
+    typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1;
   const pageIndex = page - 1;
-  const pageSize = parseInt(searchParams.pageSize) || 10;
+  const pageSize =
+    typeof searchParams.pageSize === "string"
+      ? parseInt(searchParams.pageSize)
+      : 10;
   const count = await db.$count({{tableObj.pluralCamelCase}});
   const totalPages = Math.ceil(count / pageSize);
   const {{tableObj.singularCamelCase}}List = await db.query.{{tableObj.pluralCamelCase}}.findMany({

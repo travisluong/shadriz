@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { create{{tableObj.singularPascalCase}}, Create{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/create-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasRefer
   {{/each}}
 }{{/if}}) {
   const initialState: Create{{tableObj.singularPascalCase}}State = {};
-  const [state, dispatch] = useFormState(create{{tableObj.singularPascalCase}}, initialState);
+  const [state, dispatch] = useActionState(create{{tableObj.singularPascalCase}}, initialState);
 
   return (
     <div>
