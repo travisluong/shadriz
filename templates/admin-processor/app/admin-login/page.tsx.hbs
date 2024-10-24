@@ -49,8 +49,8 @@ export default function Page({
               <span>Sign in</span>
             </Button>
           </form>
-          {searchParams.error === "Unauthorized" && (
-            <div className="text-red-500">Unauthorized</div>
+          {searchParams.error && (
+            <div className="text-red-500">Login failed</div>
           )}
         </CardContent>
       </Card>

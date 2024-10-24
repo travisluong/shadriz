@@ -134,8 +134,8 @@ export default async function SignInPage({
             </form>
             <Separator className="my-4" />
         {{/if}}
-        {searchParams.error === "CallbackRouteError" && (
-          <div className="text-red-500">Sign in failed</div>
+        {searchParams.error && (
+          <div className="text-red-500">Login failed</div>
         )}
       </div>
     </div>
