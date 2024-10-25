@@ -7,7 +7,6 @@ import {
 import {
   compileTemplate,
   renderTemplate,
-  insertTextAfterIfNotExists,
   insertSchemaToSchemaIndex,
   insertTextBeforeIfNotExists,
 } from "../lib/utils";
