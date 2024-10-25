@@ -7,7 +7,7 @@ import {
   text,
   date,
 } from "drizzle-orm/mysql-core";
-import { users } from "@/schema/auth-tables";
+import { users } from "@/schema/users";
 {{pkStrategyImport}}
 
 export const stripeWebhooks = mysqlTable("stripe_webhooks", {

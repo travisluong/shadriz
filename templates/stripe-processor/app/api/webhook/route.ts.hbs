@@ -6,7 +6,7 @@ import {
   stripeWebhooks,
   subscriptions,
 } from "@/schema/stripe-tables";
-import { users } from "@/schema/auth-tables";
+import { users } from "@/schema/users";
 import { and, eq } from "drizzle-orm";
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);

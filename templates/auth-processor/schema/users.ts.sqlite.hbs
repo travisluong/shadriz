@@ -1,0 +1,15 @@
+import { sql } from "drizzle-orm";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
+{{pkStrategyImport}}
+
+export const users = sqliteTable("users", {
+  {{pkText}}
+  name: text(),
+  email: text().notNull(),
+  emailVerified: integer({ mode: "timestamp_ms" }),
+  image: text(),
+  password: text(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
+})
+

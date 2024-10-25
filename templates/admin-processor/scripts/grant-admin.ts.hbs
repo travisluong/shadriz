@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
 import { openConnection } from "./sdb";
-import { users } from "@/schema/auth-tables";
-import { roles, usersRoles } from "@/schema/role-tables";
+import { users } from "@/schema/users";
+import { roles } from "@/schema/roles";
+import { usersRoles } from "@/schema/users-roles";
 
 async function main() {
   const { sdb, closeConnection } = await openConnection();

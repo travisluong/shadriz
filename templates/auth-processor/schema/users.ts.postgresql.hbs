@@ -1,0 +1,18 @@
+import {
+  timestamp,
+  pgTable,
+  text,
+} from "drizzle-orm/pg-core"
+{{pkStrategyImport}}
+
+export const users = pgTable("users", {
+  {{pkText}}
+  name: text(),
+  email: text().notNull(),
+  emailVerified: timestamp({ mode: "date" }),
+  image: text(),
+  password: text(),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
+})
+ 

@@ -8,17 +8,7 @@ import {
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 {{pkStrategyImport}}
-
-export const users = pgTable("users", {
-  {{pkText}}
-  name: text(),
-  email: text().notNull(),
-  emailVerified: timestamp({ mode: "date" }),
-  image: text(),
-  password: text(),
-  {{createdAtTemplate}}
-  {{updatedAtTemplate}}
-})
+import { users } from "@/schema/users"
  
 export const accounts = pgTable(
   "accounts",

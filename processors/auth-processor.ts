@@ -1,6 +1,5 @@
 import {
   appendToEnvLocal,
-  appendToFileIfTextNotExists,
   compileTemplate,
   insertSchemaToSchemaIndex,
   renderTemplate,
@@ -183,6 +182,7 @@ export class AuthProcessor implements ShadrizProcessor {
     this.appendAuthSecretToEnv();
     this.addSignOutPage();
     this.addDashboardSidebar();
+    this.addUserSchema();
   }
 
   validateOptions() {
@@ -340,6 +340,27 @@ export class AuthProcessor implements ShadrizProcessor {
 
   addAuthTrustHostToEnv() {
     appendToEnvLocal("AUTH_TRUST_HOST", "http://localhost:3000");
+  }
+
+  addUserSchema() {
+    const userSchemaStrategy: Record<DbDialect, string> = {
+      postgresql: "auth-processor/schema/users.ts.postgresql.hbs",
+      mysql: "auth-processor/schema/users.ts.mysql.hbs",
+      sqlite: "auth-processor/schema/users.ts.sqlite.hbs",
+    };
+    const pkText =
+      this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
+    const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
+    renderTemplate({
+      inputPath: userSchemaStrategy[this.opts.dbDialect],
+      outputPath: "schema/users.ts",
+      data: {
+        pkText: pkText,
+        pkStrategyImport: pkStrategyImport,
+        createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
+        updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
+      },
+    });
   }
 
   printCompletionMessage() {

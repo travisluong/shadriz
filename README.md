@@ -59,7 +59,6 @@ You will be asked a few questions to configure the app.
 ? Which session strategy would you like to use? database
 ? Do you want to add an admin dashboard with role-based authorization? yes
 ? Do you want to add Stripe for payments? yes
-? Do you want to add a dark mode toggle? yes
 ```
 
 Alternatively, you can also run the command non-interactively:

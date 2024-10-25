@@ -1,0 +1,20 @@
+import {
+  timestamp,
+  mysqlTable,
+  varchar,
+} from "drizzle-orm/mysql-core"
+{{pkStrategyImport}}
+
+export const users = mysqlTable("users", {
+  {{pkText}}
+  name: varchar({ length: 255 }),
+  email: varchar({ length: 255 }).notNull(),
+  emailVerified: timestamp({
+    mode: "date",
+    fsp: 3,
+  }),
+  image: varchar({ length: 255 }),
+  password: varchar({ length: 255 }),
+  {{createdAtTemplate}}
+  {{updatedAtTemplate}}
+})
