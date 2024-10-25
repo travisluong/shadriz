@@ -6,7 +6,7 @@ import {
   ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
-import { renderTemplate } from "../lib/utils";
+import { appendToFileIfTextNotExists, renderTemplate } from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { ScaffoldProcessor } from "./scaffold-processor";
 
@@ -14,7 +14,7 @@ export class AdminProcessor implements ShadrizProcessor {
   opts: ShadrizConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
-  shadcnComponents: string[] = ["card"];
+  shadcnComponents: string[] = ["card", "sidebar"];
   dbDialectStrategy: DbDialectStrategy;
 
   constructor(opts: ShadrizConfig) {
@@ -132,6 +132,35 @@ export class AdminProcessor implements ShadrizProcessor {
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
     });
+  }
+
+  appendSidebarStylesToGlobalCSS() {
+    const css = `\n@layer base {
+  :root {
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+`;
+
+    appendToFileIfTextNotExists("app/globals.css", css, css);
   }
 
   printCompletionMessage() {

@@ -13,3 +13,4 @@ export const users = sqliteTable("users", {
   {{updatedAtTemplate}}
 })
 
+export type User = typeof users.$inferSelect;

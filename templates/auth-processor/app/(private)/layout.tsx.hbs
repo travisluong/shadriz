@@ -1,9 +1,10 @@
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { AvatarIcon } from "@radix-ui/react-icons";
 import { redirect } from "next/navigation";
-import DashboardSidebar from "@/components/private/dashboard-sidebar";
-import Link from "next/link";
+import { PrivateSidebar } from "@/components/private/private-sidebar";
+import { db } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { users } from "@/schema/users";
 
 export default async function Layout({
   children,
@@ -11,31 +12,28 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  if (!session) {
+
+  if (!session?.user?.id) {
     redirect("/signin");
   }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+  });
+
+  if (!user) {
+    redirect("/signin");
+  }
+
   return (
     <div>
-      <header className="border-b">
-        <div className="mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="font-bold flex items-center">
-            <Link href="/">shadriz</Link>
-          </div>
-          <div>
-            <Avatar>
-              <AvatarImage src={session.user?.image ?? undefined} />
-              <AvatarFallback>
-                <AvatarIcon className="w-8 h-8" />
-              </AvatarFallback>
-            </Avatar>
-          </div>
-        </div>
-      </header>
-
-      <div className="flex">
-        <DashboardSidebar />
-        <main className="p-5 w-full">{children}</main>
-      </div>
+      <SidebarProvider>
+        <PrivateSidebar user={user} />
+        <main className="p-5 w-full">
+          <SidebarTrigger />
+          {children}
+        </main>
+      </SidebarProvider>
     </div>
   );
 }

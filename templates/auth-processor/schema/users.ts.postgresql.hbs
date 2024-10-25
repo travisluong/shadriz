@@ -16,3 +16,4 @@ export const users = pgTable("users", {
   {{updatedAtTemplate}}
 })
  
+export type User = typeof users.$inferSelect;

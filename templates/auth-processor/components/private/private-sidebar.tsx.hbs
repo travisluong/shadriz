@@ -5,6 +5,8 @@ import {
   User2,
   LogOut,
   Table2,
+  Keyboard,
+  User as UserIcon,
 } from "lucide-react";
 
 import {
@@ -31,16 +33,18 @@ import Link from "next/link";
 
 const items = [
   { title: "Home", url: "/", icon: Home },
-  // [CODE_MARK admin-sidebar-items]
-  { title: "Settings", url: "#", icon: Settings },
+  { title: "Dashboard", "url": "/dashboard", icon: Keyboard },
+  { title: "Profile", "url": "/profile", icon: UserIcon },
+  // [CODE_MARK private-sidebar-items]
+  { title: "Settings", url: "/settings", icon: Settings },
 ];
 
-export function AdminSidebar({ user }: { user: User }) {
+export function PrivateSidebar({ user }: { user: User }) {
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

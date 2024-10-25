@@ -246,7 +246,7 @@ If auth was enabled, users will be able to sign in and access a user dashboard a
 
 Any pages scaffolded with a `private` authorization level will be placed into the the `(private)` route group.
 
-After running a private scaffold, a new link to the resource list page will be added to `dashboard-sidebar.tsx`.
+After running a private scaffold, a new link to the resource list page will be added to `private-sidebar.tsx`.
 
 Users can sign in at `/signin`.
 

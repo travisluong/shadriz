@@ -9,12 +9,14 @@ import {
   renderTemplate,
   insertTextAfterIfNotExists,
   insertSchemaToSchemaIndex,
+  insertTextBeforeIfNotExists,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { caseFactory, Cases } from "../lib/case-utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 
+// schema/posts.ts
 // lib/schema.ts
 // app/post/page.tsx
 // app/post/[id]/page.tsx
@@ -24,7 +26,6 @@ import { dialectStrategyFactory } from "../lib/strategy-factory";
 // actions/post/create-post.ts
 // actions/post/update-post.ts
 // actions/post/delete-post.ts
-// components/post/post-columns.tsx
 // components/post/post-create-form.tsx
 // components/post/post-update-form.tsx
 // components/post/post-delete-form.tsx
@@ -108,7 +109,7 @@ export class ScaffoldProcessor {
       this.addLinkToAdminSidebar();
     }
     if (this.opts.authorizationLevel === "private") {
-      this.addLinkToDashboardSidebar();
+      this.addLinkToPrivateSidebar();
     }
     this.printCompletionMessage();
   }
@@ -616,18 +617,18 @@ export class ScaffoldProcessor {
   }
   addLinkToAdminSidebar() {
     const tableObj = caseFactory(this.opts.table);
-    insertTextAfterIfNotExists(
+    insertTextBeforeIfNotExists(
       "components/admin/admin-sidebar.tsx",
-      "const SIDEBAR_LINKS = [",
-      `\n  { href: "/admin/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <TableIcon /> },`
+      "// [CODE_MARK admin-sidebar-items]",
+      `  { title: "${tableObj.pluralCapitalCase}", url: "/admin/${tableObj.pluralKebabCase}", icon: Table2 },\n`
     );
   }
-  addLinkToDashboardSidebar() {
+  addLinkToPrivateSidebar() {
     const tableObj = caseFactory(this.opts.table);
-    insertTextAfterIfNotExists(
-      "components/private/dashboard-sidebar.tsx",
-      "const SIDEBAR_LINKS = [",
-      `\n  { href: "/${tableObj.pluralKebabCase}", display: "${tableObj.pluralCapitalCase}", icon: <TableIcon /> },`
+    insertTextBeforeIfNotExists(
+      "components/private/private-sidebar.tsx",
+      "// [CODE_MARK private-sidebar-items]",
+      `  { title: "${tableObj.pluralCapitalCase}", url: "/${tableObj.pluralKebabCase}", icon: Table2 },\n`
     );
   }
   printCompletionMessage() {
