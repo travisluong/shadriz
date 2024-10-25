@@ -6,7 +6,7 @@ import {
   ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
-import { renderTemplate, renderTemplateIfNotExists } from "../lib/utils";
+import { renderTemplate } from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { ScaffoldProcessor } from "./scaffold-processor";
 
