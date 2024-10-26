@@ -35,7 +35,7 @@ export default function {{tableObj.singularPascalCase}}UpdateForm({
 
   return (
     <div>
-      <form action={dispatch} className="flex flex-col gap-2">
+      <form action={dispatch} onSubmit={handleSubmit} className="flex flex-col gap-2">
 {{formControls}}
         <div>
           <Button type="submit">Submit</Button>
