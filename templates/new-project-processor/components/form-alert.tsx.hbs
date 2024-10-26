@@ -1,25 +1,40 @@
 import { BaseActionState } from "@/lib/types";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { CircleAlertIcon, RocketIcon, TriangleAlertIcon } from "lucide-react";
 
 export function FormAlert({ state }: { state: BaseActionState }) {
   return (
     <div>
-      {state.message && state.status === "success" && (
-        <Alert>
-          <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{state.message}</AlertDescription>
-        </Alert>
-      )}
-      {state.message && state.status === "error" && (
-        <Alert variant="destructive">
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{state.message}</AlertDescription>
-        </Alert>
-      )}
-      {state.message && state.status === undefined && (
-        <Alert>
-          <AlertDescription>{state.message}</AlertDescription>
-        </Alert>
+      {state.status && (
+        <div>
+          {state.status === "success" && (
+            <Alert className="border-green-500 text-green-500">
+              <RocketIcon color="green" />
+              <AlertTitle>Success</AlertTitle>
+              <AlertDescription>
+                {state.message ?? "Request completed successfully."}
+              </AlertDescription>
+            </Alert>
+          )}
+          {state.status === "invalid" && (
+            <Alert className="border-orange-500 text-orange-500">
+              <CircleAlertIcon color="orange" />
+              <AlertTitle>Invalid Request</AlertTitle>
+              <AlertDescription>
+                {state.message ?? "Please check input and try again."}
+              </AlertDescription>
+            </Alert>
+          )}
+          {state.status === "error" && (
+            <Alert className="border-red-500 text-red-500">
+              <TriangleAlertIcon color="red" />
+              <AlertTitle>Server Error</AlertTitle>
+              <AlertDescription>
+                {state.message ?? "Something went wrong."}
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
       )}
     </div>
   );
