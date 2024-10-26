@@ -1,4 +1,4 @@
-import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/table";
 import { EyeOpenIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { {{tableObj.pluralPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
-export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.singularPascalCase}}[] }) {
+export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelations }) {
   return (
     <Table>
       <TableHeader>

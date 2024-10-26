@@ -1,0 +1,35 @@
+import { eq, like } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+
+export type {{tableObj.pluralPascalCase}}WithRelations = Awaited<
+  ReturnType<typeof get{{tableObj.pluralPascalCase}}WithRelations>
+>;
+
+export type {{tableObj.singularPascalCase}}WithRelations = Awaited<
+  ReturnType<typeof get{{tableObj.singularPascalCase}}WithRelations>
+>;
+
+export async function get{{tableObj.pluralPascalCase}}WithRelations({
+  limit,
+  offset,
+  search,
+}: {
+  limit: number;
+  offset: number;
+  search?: string;
+}) {
+  return await db.query.{{tableObj.pluralCamelCase}}.findMany({
+    limit: limit,
+    offset: offset,
+    where: search ? like({{tableObj.pluralCamelCase}}.id, `%${search}%`) : undefined,
+    with: undefined
+  });
+}
+
+export async function get{{tableObj.singularPascalCase}}WithRelations(id: string) {
+  return await db.query.{{tableObj.pluralCamelCase}}.findFirst({
+    where: eq({{tableObj.pluralCamelCase}}.id, id),
+    with: undefined,
+  });
+}

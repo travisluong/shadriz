@@ -1,15 +1,14 @@
-import {{tableObj.singularPascalCase}}UpdateForm from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-update-form";
-import { db } from "@/lib/db";
-import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { db } from "@/lib/db";
+import {{tableObj.singularPascalCase}}UpdateForm from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-update-form";
+import { get{{tableObj.singularPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 type Params = Promise<{ id: string }>;
 
 export default async function Page(props: { params: Params }) {
   const params = await props.params;
   const { id } = params;
-  const {{tableObj.singularCamelCase}} = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
+  const {{tableObj.singularCamelCase}} = await get{{tableObj.singularPascalCase}}WithRelations(id);
 
   if (!{{tableObj.singularCamelCase}}) {
     notFound();

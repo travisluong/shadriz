@@ -1,14 +1,14 @@
 import { relations } from "drizzle-orm";
 {{imports}}
 
+export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
+
 export const {{tableObj.pluralCamelCase}} = pgTable(
   "{{tableObj.pluralSnakeCase}}",
   {
 {{columns}}
   }
 )
-
-export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
 
 export const {{tableObj.pluralCamelCase}}Relations = relations({{tableObj.pluralCamelCase}}, ({ one, many }) => ({
   {{#each referencesColumnList}}

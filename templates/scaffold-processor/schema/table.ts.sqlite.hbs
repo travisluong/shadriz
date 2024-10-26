@@ -1,14 +1,14 @@
 import { sql, relations } from "drizzle-orm";
 {{imports}}
 
+export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
+
 export const {{tableObj.pluralCamelCase}} = sqliteTable(
   "{{tableObj.pluralSnakeCase}}",
   {
 {{columns}}
   }
 )
-
-export type {{tableObj.singularPascalCase}} = typeof {{tableObj.pluralCamelCase}}.$inferSelect;
 
 export const {{tableObj.pluralCamelCase}}Relations = relations({{tableObj.pluralCamelCase}}, ({ one, many }) => ({
   {{#each referencesColumnList}}

@@ -5,7 +5,7 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { createSelectSchema } from "drizzle-zod";
-import { BaseFormState } from "@/lib/types";
+import { BaseActionState } from "@/lib/types";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -31,7 +31,7 @@ const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableOb
 const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).partial().required({ id: true });
 {{/if}}
 
-export interface Update{{tableObj.singularPascalCase}}State extends BaseFormState {
+export interface Update{{tableObj.singularPascalCase}}State extends BaseActionState {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
@@ -44,51 +44,60 @@ export async function update{{tableObj.singularPascalCase}}(
   formData: FormData
 ): Promise<Update{{tableObj.singularPascalCase}}State> {
 {{#if isNotPublic}}
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    throw new Error("access denied");
-  }
-{{/if}}
-
-{{#if isAdmin}}
-  const isAdmin = await hasAdminRole(session.user.id);
-
-  if (!isAdmin) {
-    throw new Error("unauthorized");
-  }
-{{/if}}
-
-{{#each uploadColumnNames}}
-  const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
-
-  let {{this.singularCamelCase}}Uri;
-
-  if ({{this.singularCamelCase}}File.size) {
-    {{this.singularCamelCase}}Uri = await uploadFile({
-      file: {{this.singularCamelCase}}File,
-      dir: "{{../tableObj.pluralKebabCase}}"
-    })
-  }
-{{/each}}
-
-  const validatedFields = update{{tableObj.singularPascalCase}}Schema.safeParse({
-{{formDataKeyVal}}
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Invalid data",
-      status: "error",
-    };
-  }
-
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      throw new Error("unauthenticated");
+    }
+  {{/if}}
+
+  {{#if isAdmin}}
+    const isAdmin = await hasAdminRole(session.user.id);
+
+    if (!isAdmin) {
+      throw new Error("unauthorized");
+    }
+  {{/if}}
+
+  {{#each uploadColumnNames}}
+    const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
+
+    let {{this.singularCamelCase}}Uri;
+
+    if ({{this.singularCamelCase}}File.size) {
+      {{this.singularCamelCase}}Uri = await uploadFile({
+        file: {{this.singularCamelCase}}File,
+        dir: "{{../tableObj.pluralKebabCase}}"
+      })
+    }
+  {{/each}}
+
+    const validatedFields = update{{tableObj.singularPascalCase}}Schema.safeParse({
+{{formDataKeyVal}}
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Invalid data",
+        status: "invalid",
+      };
+    }
+
     await db
       .update({{tableObj.pluralCamelCase}})
       .set(validatedFields.data)
       .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+
+    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
+    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
+    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
+
+    return {
+      message: "Update success",
+      status: "success",
+    };
   } catch (error) {
     console.error(error);
     return {
@@ -96,13 +105,4 @@ export async function update{{tableObj.singularPascalCase}}(
       status: "error",
     }
   }
-
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
-
-  return {
-    message: "Update success",
-    status: "success",
-  };
 }

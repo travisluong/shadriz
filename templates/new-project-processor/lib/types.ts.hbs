@@ -1,5 +1,5 @@
-export interface BaseFormState {
+export interface BaseActionState {
   errors?: { [key: string]: string[] };
   message?: string;
-  status?: "success" | "error";
+  status?: "success" | "invalid" | "error";
 }

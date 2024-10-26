@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSelectSchema } from "drizzle-zod";
-import { BaseFormState } from "@/lib/types";
+import { BaseActionState } from "@/lib/types";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
@@ -16,7 +16,7 @@ import { hasAdminRole } from "@/lib/authorization";
 
 const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).pick({ id: true });
 
-export interface Delete{{tableObj.singularPascalCase}}State extends BaseFormState {
+export interface Delete{{tableObj.singularPascalCase}}State extends BaseActionState {
   errors?: {
     id?: string[];
   };
@@ -26,36 +26,38 @@ export async function delete{{tableObj.singularPascalCase}}(
   prevState: Delete{{tableObj.singularPascalCase}}State,
   formData: FormData
 ): Promise<Delete{{tableObj.singularPascalCase}}State> {
-{{#if isNotPublic}}
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    throw new Error("access denied");
-  }
-{{/if}}
-
-{{#if isAdmin}}
-  const isAdmin = await hasAdminRole(session.user.id);
-
-  if (!isAdmin) {
-    throw new Error("unauthorized");
-  }
-{{/if}}
-
-  const validatedFields = delete{{tableObj.singularPascalCase}}Schema.safeParse({
-    id: formData.get("id") as string,
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Invalid data",
-      status: "error",
-    };
-  }
-
   try {
+  {{#if isNotPublic}}
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      throw new Error("access denied");
+    }
+  {{/if}}
+
+  {{#if isAdmin}}
+    const isAdmin = await hasAdminRole(session.user.id);
+
+    if (!isAdmin) {
+      throw new Error("unauthorized");
+    }
+  {{/if}}
+
+    const validatedFields = delete{{tableObj.singularPascalCase}}Schema.safeParse({
+      id: formData.get("id") as string,
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Invalid data",
+        status: "invalid",
+      };
+    }
+
     await db.delete({{tableObj.pluralCamelCase}}).where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
+    
+    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   } catch (error) {
     console.log(error);
     return {
@@ -63,7 +65,6 @@ export async function delete{{tableObj.singularPascalCase}}(
       status: "error",
     }
   }
-  
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
+
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }

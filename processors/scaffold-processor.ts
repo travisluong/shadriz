@@ -103,6 +103,7 @@ export class ScaffoldProcessor {
     this.addUpdateForm();
     this.addDeleteForm();
     this.addTableComponent();
+    this.addRepository();
     insertSchemaToSchemaIndex(this.opts.table);
     if (this.opts.authorizationLevel === "admin") {
       this.addLinkToAdminSidebar();
@@ -649,5 +650,15 @@ export class ScaffoldProcessor {
           "invalid authorization level " + this.opts.authorizationLevel
         );
     }
+  }
+  addRepository() {
+    const tableObj = caseFactory(this.opts.table);
+    renderTemplate({
+      inputPath: "scaffold-processor/repositories/table-repository.ts.hbs",
+      outputPath: `repositories/${tableObj.singularKebabCase}-repository.ts`,
+      data: {
+        tableObj,
+      },
+    });
   }
 }

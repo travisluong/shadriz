@@ -1,12 +1,14 @@
-import { db } from "@/lib/db";
-import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
-import Pagination from "@/components/pagination";
-import {{tableObj.singularPascalCase}}Table from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-table";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import SearchInput from "@/components/search-input";
 import { like } from "drizzle-orm";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { db } from "@/lib/db";
+import Pagination from "@/components/pagination";
+import { Button } from "@/components/ui/button";
+import { SearchInput } from "@/components/search-input";
+import { parseSearchParams } from "@/lib/search-params-utils";
+import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
+import {{tableObj.singularPascalCase}}Table from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-table";
+import { get{{tableObj.pluralPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -14,19 +16,13 @@ export default async function Page(props: {
   searchParams: SearchParams;
 }) {
   const searchParams = await props.searchParams;
-  const page =
-    typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1;
-  const pageIndex = page - 1;
-  const pageSize =
-    typeof searchParams.pageSize === "string"
-      ? parseInt(searchParams.pageSize)
-      : 10;
+  const { page, pageIndex, pageSize, search } = parseSearchParams(searchParams);
   const count = await db.$count({{tableObj.pluralCamelCase}});
   const totalPages = Math.ceil(count / pageSize);
-  const {{tableObj.singularCamelCase}}List = await db.query.{{tableObj.pluralCamelCase}}.findMany({
+  const {{tableObj.singularCamelCase}}List = await get{{tableObj.pluralPascalCase}}WithRelations({
     limit: pageSize,
     offset: pageIndex * pageSize,
-    where: searchParams.search ? like({{tableObj.pluralCamelCase}}.id, `%${searchParams.search}%`) : undefined,
+    search: search,
   });
 
   return (

@@ -5,7 +5,7 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createInsertSchema } from "drizzle-zod";
-import { BaseFormState } from "@/lib/types";
+import { BaseActionState } from "@/lib/types";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -29,7 +29,7 @@ const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableOb
 const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}});
 {{/if}}
 
-export interface Create{{tableObj.singularPascalCase}}State extends BaseFormState {
+export interface Create{{tableObj.singularPascalCase}}State extends BaseActionState {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
@@ -41,49 +41,51 @@ export async function create{{tableObj.singularPascalCase}}(
   prevState: Create{{tableObj.singularPascalCase}}State,
   formData: FormData
 ): Promise<Create{{tableObj.singularPascalCase}}State> {
-{{#if isNotPublic}}
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    throw new Error("access denied");
-  }
-{{/if}}
-
-{{#if isAdmin}}
-  const isAdmin = await hasAdminRole(session.user.id);
-
-  if (!isAdmin) {
-    throw new Error("unauthorized");
-  }
-{{/if}}
-
-{{#each uploadColumnNames}}
-  const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
-
-  let {{this.singularCamelCase}}Uri;
-
-  if ({{this.singularCamelCase}}File.size) {
-    {{this.singularCamelCase}}Uri = await uploadFile({
-      file: {{this.singularCamelCase}}File,
-      dir: "{{../tableObj.pluralKebabCase}}"
-    })
-  }
-{{/each}}
-
-  const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
-{{formDataKeyVal}}
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Invalid data",
-      status: "error",
-    };
-  }
-
   try {
+  {{#if isNotPublic}}
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      throw new Error("access denied");
+    }
+  {{/if}}
+
+  {{#if isAdmin}}
+    const isAdmin = await hasAdminRole(session.user.id);
+
+    if (!isAdmin) {
+      throw new Error("unauthorized");
+    }
+  {{/if}}
+
+  {{#each uploadColumnNames}}
+    const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
+
+    let {{this.singularCamelCase}}Uri;
+
+    if ({{this.singularCamelCase}}File.size) {
+      {{this.singularCamelCase}}Uri = await uploadFile({
+        file: {{this.singularCamelCase}}File,
+        dir: "{{../tableObj.pluralKebabCase}}"
+      })
+    }
+  {{/each}}
+
+    const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
+{{formDataKeyVal}}
+    });
+
+    if (!validatedFields.success) {
+      return {
+        errors: validatedFields.error.flatten().fieldErrors,
+        message: "Invalid data",
+        status: "invalid",
+      };
+    }
+
     await db.insert({{tableObj.pluralCamelCase}}).values(validatedFields.data);
+    
+    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   } catch (error) {
     console.error(error);
     return {
@@ -92,6 +94,5 @@ export async function create{{tableObj.singularPascalCase}}(
     }
   }
 
-  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
   redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
 }

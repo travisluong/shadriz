@@ -1,7 +1,7 @@
-import { BaseFormState } from "@/lib/types";
+import { BaseActionState } from "@/lib/types";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
-export function FormAlert({ state }: { state: BaseFormState }) {
+export function FormAlert({ state }: { state: BaseActionState }) {
   return (
     <div>
       {state.message && state.status === "success" && (
