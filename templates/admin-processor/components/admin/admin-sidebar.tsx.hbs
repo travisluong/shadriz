@@ -1,10 +1,10 @@
 import {
-  ChevronUp,
-  Home,
-  Settings,
-  User2,
-  LogOut,
-  Table2,
+  ChevronUpIcon,
+  HomeIcon,
+  SettingsIcon,
+  User2Icon,
+  LogOutIcon,
+  Table2Icon,
 } from "lucide-react";
 
 import {
@@ -30,9 +30,9 @@ import { User } from "@/schema/users";
 import Link from "next/link";
 
 const items = [
-  { title: "Home", url: "/", icon: Home },
+  { title: "Home", url: "/", icon: HomeIcon },
   // [CODE_MARK admin-sidebar-items]
-  { title: "Settings", url: "#", icon: Settings },
+  { title: "Settings", url: "#", icon: SettingsIcon },
 ];
 
 export function AdminSidebar({ user }: { user: User }) {
@@ -64,11 +64,11 @@ export function AdminSidebar({ user }: { user: User }) {
               <Avatar className="w-6 h-6">
                 <AvatarImage src={user.image ?? undefined} />
                 <AvatarFallback>
-                  <User2 />
+                  <User2Icon />
                 </AvatarFallback>
               </Avatar>
               {user.name}
-              <ChevronUp className="ml-auto" />
+              <ChevronUpIcon className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -76,7 +76,7 @@ export function AdminSidebar({ user }: { user: User }) {
             className="w-[--radix-popper-anchor-width]"
           >
             <DropdownMenuItem>
-              <LogOut />
+              <LogOutIcon />
               <Link href="/signout" className="w-full">Sign out</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

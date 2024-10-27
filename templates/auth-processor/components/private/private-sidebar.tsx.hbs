@@ -1,12 +1,12 @@
 import {
-  ChevronUp,
-  Home,
-  Settings,
-  User2,
-  LogOut,
-  Table2,
-  Keyboard,
-  User as UserIcon,
+  ChevronUpIcon,
+  HomeIcon,
+  SettingsIcon,
+  User2Icon,
+  LogOutIcon,
+  Table2Icon,
+  KeyboardIcon,
+  UserIcon,
 } from "lucide-react";
 
 import {
@@ -32,11 +32,11 @@ import { User } from "@/schema/users";
 import Link from "next/link";
 
 const items = [
-  { title: "Home", url: "/", icon: Home },
-  { title: "Dashboard", "url": "/dashboard", icon: Keyboard },
+  { title: "Home", url: "/", icon: HomeIcon },
+  { title: "Dashboard", "url": "/dashboard", icon: KeyboardIcon },
   { title: "Profile", "url": "/profile", icon: UserIcon },
   // [CODE_MARK private-sidebar-items]
-  { title: "Settings", url: "/settings", icon: Settings },
+  { title: "Settings", url: "/settings", icon: SettingsIcon },
 ];
 
 export function PrivateSidebar({ user }: { user: User }) {
@@ -68,11 +68,11 @@ export function PrivateSidebar({ user }: { user: User }) {
               <Avatar className="w-6 h-6">
                 <AvatarImage src={user.image ?? undefined} />
                 <AvatarFallback>
-                  <User2 />
+                  <User2Icon />
                 </AvatarFallback>
               </Avatar>
               {user.name}
-              <ChevronUp className="ml-auto" />
+              <ChevronUpIcon className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -80,7 +80,7 @@ export function PrivateSidebar({ user }: { user: User }) {
             className="w-[--radix-popper-anchor-width]"
           >
             <DropdownMenuItem>
-              <LogOut />
+              <LogOutIcon />
               <Link href="/signout" className="w-full">Sign out</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

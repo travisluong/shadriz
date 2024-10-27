@@ -620,7 +620,7 @@ export class ScaffoldProcessor {
     insertTextBeforeIfNotExists(
       "components/admin/admin-sidebar.tsx",
       "// [CODE_MARK admin-sidebar-items]",
-      `  { title: "${tableObj.pluralCapitalCase}", url: "/admin/${tableObj.pluralKebabCase}", icon: Table2 },\n`
+      `  { title: "${tableObj.pluralCapitalCase}", url: "/admin/${tableObj.pluralKebabCase}", icon: Table2Icon },\n`
     );
   }
   addLinkToPrivateSidebar() {
@@ -628,7 +628,7 @@ export class ScaffoldProcessor {
     insertTextBeforeIfNotExists(
       "components/private/private-sidebar.tsx",
       "// [CODE_MARK private-sidebar-items]",
-      `  { title: "${tableObj.pluralCapitalCase}", url: "/${tableObj.pluralKebabCase}", icon: Table2 },\n`
+      `  { title: "${tableObj.pluralCapitalCase}", url: "/${tableObj.pluralKebabCase}", icon: Table2Icon },\n`
     );
   }
   printCompletionMessage() {
