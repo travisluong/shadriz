@@ -1,16 +1,17 @@
-import {
-  FontBoldIcon,
-  FontItalicIcon,
-  HeadingIcon,
-  TextAlignCenterIcon,
-  TextAlignLeftIcon,
-  TextAlignRightIcon,
-} from "@radix-ui/react-icons";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
-
 import { useEffect, useState } from "react";
+import {
+  AlignCenterIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  BoldIcon,
+  Heading1Icon,
+  Heading2Icon,
+  Heading3Icon,
+  ItalicIcon,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import "@/styles/tiptap-editor.css";
 
@@ -54,7 +55,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className={editor.isActive("bold") ? "is-active" : ""}
         >
-          <FontBoldIcon />
+          <BoldIcon />
         </Button>
         <Button
           type="button"
@@ -63,7 +64,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className={editor.isActive("italic") ? "is-active" : ""}
         >
-          <FontItalicIcon />
+          <ItalicIcon />
         </Button>
         <Button
           type="button"
@@ -76,7 +77,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
           }
           className={editor.isActive("heading") ? "is-active" : ""}
         >
-          <HeadingIcon />1
+          <Heading1Icon />
         </Button>
         <Button
           type="button"
@@ -89,7 +90,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
           }
           className={editor.isActive("heading") ? "is-active" : ""}
         >
-          <HeadingIcon />2
+          <Heading2Icon />
         </Button>
         <Button
           type="button"
@@ -102,7 +103,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
           }
           className={editor.isActive("heading") ? "is-active" : ""}
         >
-          <HeadingIcon /> 3
+          <Heading3Icon />
         </Button>
         <Button
           type="button"
@@ -110,7 +111,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
           className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
         >
-          <TextAlignLeftIcon />
+          <AlignLeftIcon />
         </Button>
         <Button
           type="button"
@@ -120,7 +121,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
             editor.isActive({ textAlign: "center" }) ? "is-active" : ""
           }
         >
-          <TextAlignCenterIcon />
+          <AlignCenterIcon />
         </Button>
         <Button
           type="button"
@@ -130,7 +131,7 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
             editor.isActive({ textAlign: "center" }) ? "is-active" : ""
           }
         >
-          <TextAlignRightIcon />
+          <AlignRightIcon />
         </Button>
       </div>
 
