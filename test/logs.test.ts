@@ -12,7 +12,6 @@ const shadrizConfig: ShadrizConfig = {
   sessionStrategy: "jwt",
   install: false,
   packageManager: "npm",
-  stripeEnabled: true,
   dbDialect: "sqlite",
   latest: true,
   pkStrategy: "uuidv4",

@@ -9,7 +9,6 @@ export interface ShadrizConfig {
   authSolution: AuthSolution;
   authProviders: AuthProvider[];
   adminEnabled: boolean;
-  stripeEnabled: boolean;
   sessionStrategy: SessionStrategy;
   install: boolean;
 }

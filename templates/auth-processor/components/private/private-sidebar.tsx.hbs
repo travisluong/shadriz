@@ -75,14 +75,18 @@ export function PrivateSidebar({ user }: { user: User }) {
             side="top"
             className="w-[--radix-popper-anchor-width]"
           >
-            <DropdownMenuItem>
-              <User2Icon />
-              <Link href="/profile" className="w-full">Profile</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <LogOutIcon />
-              <Link href="/signout" className="w-full">Sign out</Link>
-            </DropdownMenuItem>
+            <Link href="/profile">
+              <DropdownMenuItem>
+                <User2Icon />
+                Profile
+              </DropdownMenuItem>
+            </Link>
+            <Link href="/signout">
+              <DropdownMenuItem>
+                <LogOutIcon />
+                Sign out
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>

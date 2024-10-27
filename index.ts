@@ -181,8 +181,6 @@ program
   )
   .option("-ad, --admin", "admin dashboard with role-based authorization")
   .option("--no-admin", "no admin dashboard")
-  .option("-sp, --stripe", "stripe payment processing")
-  .option("--no-stripe", "no stripe")
   .action(async (options) => {
     try {
       // inquire
@@ -314,13 +312,6 @@ program
             default: true,
           }));
       }
-      if (partialConfig.authSolution !== "none") {
-        partialConfig.stripeEnabled =
-          options.stripe ??
-          (await confirm({
-            message: "Do you want to add Stripe for payments?",
-          }));
-      }
 
       // process
 
@@ -355,10 +346,6 @@ program
       if (completeConfig.authSolution !== "none") {
         adminProcessor = new AdminProcessor(completeConfig);
         processors.push(adminProcessor);
-      }
-      if (completeConfig.stripeEnabled) {
-        stripeProcessor = new StripeProcessor(completeConfig);
-        processors.push(stripeProcessor);
       }
 
       const dependencies = [];
