@@ -1,3 +1,4 @@
+import { EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import {
   Table,
@@ -7,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { EyeOpenIcon, Pencil1Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { {{tableObj.pluralPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
@@ -33,12 +33,12 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singul
             <TableCell className="justify-end flex gap-2">
               <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
                 <Button size="icon" variant="outline">
-                  <EyeOpenIcon />
+                  <EyeIcon />
                 </Button>
               </Link>
               <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/edit`}>
                 <Button size="icon" variant="outline">
-                  <Pencil1Icon />
+                  <PencilIcon />
                 </Button>
               </Link>
               <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/delete`}>
