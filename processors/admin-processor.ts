@@ -58,6 +58,11 @@ export class AdminProcessor implements ShadrizProcessor {
       outputPath: `components/admin/admin-sidebar.tsx`,
     });
 
+    renderTemplate({
+      inputPath: "admin-processor/app/(admin)/admin/settings/page.tsx.hbs",
+      outputPath: "app/(admin)/admin/settings/page.tsx",
+    });
+
     const strategies: Record<DbDialect, string[]> = {
       postgresql: [
         "name:text",

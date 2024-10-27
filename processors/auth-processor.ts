@@ -176,7 +176,6 @@ export class AuthProcessor implements ShadrizProcessor {
     this.addPrivateDashboard();
     this.addCustomSignInPage();
     this.addProfilePage();
-    this.addSettingsPage();
     this.addAuthSchema();
     this.addAuthTrustHostToEnv();
     this.appendAuthSecretToEnv();
@@ -310,13 +309,6 @@ export class AuthProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "auth-processor/app/(private)/profile/page.tsx.hbs",
       outputPath: "app/(private)/profile/page.tsx",
-    });
-  }
-
-  addSettingsPage() {
-    renderTemplate({
-      inputPath: "auth-processor/app/(private)/settings/page.tsx.hbs",
-      outputPath: "app/(private)/settings/page.tsx",
     });
   }
 

@@ -5,6 +5,7 @@ import {
   User2Icon,
   LogOutIcon,
   Table2Icon,
+  GaugeIcon,
 } from "lucide-react";
 
 import {
@@ -31,8 +32,8 @@ import Link from "next/link";
 
 const items = [
   { title: "Home", url: "/", icon: HomeIcon },
+  { title: "Admin", url: "/admin", icon: GaugeIcon },
   // [CODE_MARK admin-sidebar-items]
-  { title: "Settings", url: "#", icon: SettingsIcon },
 ];
 
 export function AdminSidebar({ user }: { user: User }) {
@@ -75,6 +76,10 @@ export function AdminSidebar({ user }: { user: User }) {
             side="top"
             className="w-[--radix-popper-anchor-width]"
           >
+            <DropdownMenuItem>
+              <SettingsIcon />
+              <Link href="/admin/settings" className="w-full">Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <LogOutIcon />
               <Link href="/signout" className="w-full">Sign out</Link>
