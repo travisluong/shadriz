@@ -16,7 +16,7 @@ export default async function Page(props: { params: Params }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">{{tableObj.originalCapitalCase}}</h1>
+      <h1 className="text-xl font-bold mb-6">{{tableObj.originalCapitalCase}}</h1>
       <div>
         <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}.id }</p>
         {{#each columnCases}}

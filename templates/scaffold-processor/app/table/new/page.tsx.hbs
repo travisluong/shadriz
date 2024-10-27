@@ -8,7 +8,7 @@ export default async function Page() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Create {{tableObj.singularCapitalCase}}</h1>
+      <h1 className="text-xl font-bold mb-6">Create {{tableObj.singularCapitalCase}}</h1>
       <{{tableObj.singularPascalCase}}CreateForm 
         {{#each referencesColumnList}}
         {{this.singularCamelCase}}List={ {{this.singularCamelCase}}List }
