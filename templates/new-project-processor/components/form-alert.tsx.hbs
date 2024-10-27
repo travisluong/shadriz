@@ -1,6 +1,6 @@
 import { BaseActionState } from "@/lib/types";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { CircleAlertIcon, RocketIcon, TriangleAlertIcon } from "lucide-react";
+import { CheckIcon, CircleAlertIcon, TriangleAlertIcon } from "lucide-react";
 
 export function FormAlert({ state }: { state: BaseActionState }) {
   return (
@@ -9,7 +9,7 @@ export function FormAlert({ state }: { state: BaseActionState }) {
         <div>
           {state.status === "success" && (
             <Alert className="border-green-500 text-green-500">
-              <RocketIcon color="green" />
+              <CheckIcon color="green" />
               <AlertTitle>Success</AlertTitle>
               <AlertDescription>
                 {state.message ?? "Request completed successfully."}

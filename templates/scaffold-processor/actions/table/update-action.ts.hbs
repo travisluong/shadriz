@@ -80,7 +80,6 @@ export async function update{{tableObj.singularPascalCase}}(
     if (!validatedFields.success) {
       return {
         errors: validatedFields.error.flatten().fieldErrors,
-        message: "Invalid data",
         status: "invalid",
       };
     }
@@ -95,13 +94,11 @@ export async function update{{tableObj.singularPascalCase}}(
     revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
 
     return {
-      message: "Update success",
       status: "success",
     };
   } catch (error) {
     console.error(error);
     return {
-      message: "Server error",
       status: "error",
     }
   }

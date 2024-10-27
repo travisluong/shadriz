@@ -50,7 +50,6 @@ export async function delete{{tableObj.singularPascalCase}}(
     if (!validatedFields.success) {
       return {
         errors: validatedFields.error.flatten().fieldErrors,
-        message: "Invalid data",
         status: "invalid",
       };
     }
@@ -61,7 +60,6 @@ export async function delete{{tableObj.singularPascalCase}}(
   } catch (error) {
     console.log(error);
     return {
-      message: "Server error",
       status: "error",
     }
   }
