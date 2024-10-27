@@ -31,7 +31,7 @@ export async function delete{{tableObj.singularPascalCase}}(
     const session = await auth();
 
     if (!session?.user?.id) {
-      throw new Error("access denied");
+      throw new Error("unauthenticated");
     }
   {{/if}}
 
