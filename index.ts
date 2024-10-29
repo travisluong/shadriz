@@ -22,7 +22,6 @@ import { packageStrategyFactory } from "./lib/strategy-factory";
 import { AuthProcessor, authStrategyMap } from "./processors/auth-processor";
 import { NewProjectProcessor } from "./processors/new-project-processor";
 import { DarkModeProcessor } from "./processors/dark-mode-processor";
-import { StripeProcessor } from "./processors/stripe-processor";
 import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
@@ -321,7 +320,6 @@ program
 
       let authProcessor;
       let adminProcessor;
-      let stripeProcessor;
 
       if (completeConfig.authSolution !== "none") {
         authProcessor = new AuthProcessor(completeConfig);
