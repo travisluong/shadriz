@@ -9,7 +9,7 @@ Build Next.js Apps Using Ruby on Rails Inspired Scaffolding Automations
 
 ## Introduction
 
-shadriz is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code that is typically used in full stack projects. You can also scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
+shadriz is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code for full stack projects. You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
 ## Tech stack
 
@@ -56,14 +56,13 @@ You will be asked a few questions to configure the app.
 ? Which primary key generation strategy would you like to use? cuid2
 ? Which authentication solution do you want to use? authjs
 ? Which auth providers would you like to use? github, google, credentials
-? Which session strategy would you like to use? database
 ? Do you want to add an admin dashboard with role-based authorization? yes
 ```
 
 Alternatively, you can also run the command non-interactively:
 
 ```
-npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin
+npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --admin
 ```
 
 ### Step 4: Project checklist
@@ -232,7 +231,7 @@ If auth was enabled during initialization, you will be able to scaffold using a 
 
 shadriz provides a `create-user.ts` script to create test users.
 
-shadriz generates auth using the `jwt` strategy of Auth.js. If you need `database` sessions, you will have to provide the implementation. Note: the `credentials` provider only supports the `jwt` strategy.
+shadriz uses the `jwt` strategy of Auth.js. If you need `database` sessions, you will have to provide the implementation. Note: the `credentials` provider only supports the `jwt` strategy.
 
 ### Private Dashboard
 
@@ -280,7 +279,7 @@ A pricing page will be generated. The buttons will initiate a stripe checkout if
 
 A `create-price.ts` script is provided to create the initial products on Stripe and on the local database. This is required before using the one-time purchase and subscription plan.
 
-The dynamic pricing does not require creating and mapping to products on Stripe. Dynamic pricing is useful if you need to generate a custom price in the application.
+The dynamic pricing does not require creating and mapping to products on Stripe. Dynamic pricing is useful if you need to generate a custom price, manage products, and manage and orders in the application.
 
 The file `access.ts` contain utility functions to check user access to products and subscriptions. You can use this as you build out the paywall for the paid features.
 
@@ -333,7 +332,7 @@ Many decisions happen at the beginnings of projects. A developer must decide on:
 
 ### Configuration automation
 
-Typically, once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is installed, and that integrations with external services are working.
+Once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is installed, and that integrations with external services are working.
 
 Developers will often use libraries to add capabilities such as authentication, data validations, and payments. However, setting these up can be time consuming. shadriz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadriz will write all the code necessary for the selected features.
 
