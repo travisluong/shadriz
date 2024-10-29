@@ -58,13 +58,12 @@ You will be asked a few questions to configure the app.
 ? Which auth providers would you like to use? github, google, credentials
 ? Which session strategy would you like to use? database
 ? Do you want to add an admin dashboard with role-based authorization? yes
-? Do you want to add Stripe for payments? yes
 ```
 
 Alternatively, you can also run the command non-interactively:
 
 ```
-npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin --stripe
+npx shadriz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --session-strategy database --admin
 ```
 
 ### Step 4: Project checklist
@@ -76,7 +75,6 @@ After initialization, you will be prompted to complete a few additional checklis
 - Set up the auth providers.
 - Create a test user.
 - Grant admin privilege.
-- Set up Stripe.
 
 ## Scaffold
 
@@ -232,13 +230,9 @@ Tip: The Next.js `Image` component performs automatic resizing of images. This w
 
 If auth was enabled during initialization, you will be able to scaffold using a `private` authorization level. These pages along with the server actions will require a user to be authenticated to access.
 
-shadriz provides a `create-user.ts` script to create test users. This script is only generated if `credentials` is chosen as a provider.
+shadriz provides a `create-user.ts` script to create test users.
 
-In addition, shadriz provides a `SESSION_STRATEGY` variable in `auth.ts` that allows you to use either the `jwt` or `database` session strategy with any auth provider.
-
-You can easily switch strategy with one line of code.
-
-Warning: if you only use `credentials`, Auth.js will limit you to the `jwt` strategy.
+shadriz generates auth using the `jwt` strategy of Auth.js. If you need `database` sessions, you will have to provide the implementation. Note: the `credentials` provider only supports the `jwt` strategy.
 
 ### Private Dashboard
 
