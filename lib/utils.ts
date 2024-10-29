@@ -425,7 +425,6 @@ export function completeShadrizConfig(
     authSolution: partialConfig.authSolution ?? "none",
     authProviders: partialConfig.authProviders ?? ["credentials", "github"],
     adminEnabled: partialConfig.adminEnabled ?? false,
-    sessionStrategy: partialConfig.sessionStrategy ?? "database",
     install: partialConfig.install ?? true,
   };
   return completeConfig;

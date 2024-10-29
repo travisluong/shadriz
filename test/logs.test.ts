@@ -9,7 +9,6 @@ import { Mysql2PackageStrategy } from "../db-packages/mysql2-package-strategy";
 
 const shadrizConfig: ShadrizConfig = {
   authProviders: ["google", "github", "credentials", "nodemailer", "postmark"],
-  sessionStrategy: "jwt",
   install: false,
   packageManager: "npm",
   dbDialect: "sqlite",

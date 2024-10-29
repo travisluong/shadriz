@@ -5,15 +5,9 @@ import type { Provider } from "next-auth/providers";
 import { eq } from "drizzle-orm";
 import { users } from "@/schema/users";
 import { accounts, sessions, verificationTokens } from "@/schema/auth-tables";
-import { cookies } from "next/headers";
 import { encode, decode } from "next-auth/jwt";
-import { AdapterUser } from "next-auth/adapters";
 {{pkStrategyImport}}
 {{importsCode}}
-
-type SessionStrategy = "jwt" | "database";
-
-const SESSION_STRATEGY: SessionStrategy = "{{sessionStrategy}}";
 
 const adapter = {
   ...DrizzleAdapter(db, {
@@ -36,32 +30,14 @@ const adapter = {
   },
 };
 
-if ((SESSION_STRATEGY as SessionStrategy) === "database") {
-  adapter.getSessionAndUser = async (sessionToken: string) => {
-    const session = await db.query.sessions.findFirst({
-      where: eq(sessions.sessionToken, sessionToken),
-    });
-    if (!session) return null;
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, session.userId),
-    });
-    return { user: user as AdapterUser, session: session };
-  };
-}
-
-const fromDate = (time: number, date = Date.now()) => {
-  return new Date(date + time * 1000);
-};
-
 const providers: Provider[] = [
 {{providersCode}}
 ]
 
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: adapter,
   session: {
-    strategy: SESSION_STRATEGY,
+    strategy: "jwt",
   },
   providers,
   pages: {
@@ -69,15 +45,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   jwt: {
     encode: async (params) => {
-      if ((SESSION_STRATEGY as SessionStrategy) === "database") {
-        const cookieStore = await cookies();
-        const cookie = cookieStore.get("next-auth.session-token");
-        if (cookie) {
-          return cookie.value;
-        } else {
-          return "";
-        }
-      }
       return encode(params);
     },
     decode: (params) => {
@@ -91,17 +58,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    session({ session, token, user }) {
-      switch (SESSION_STRATEGY as SessionStrategy) {
-        case "database":
-          session.user.id = user.id;
-          break;
-        case "jwt":
-          session.user.id = token.id as string;
-          break;
-        default:
-          break;
-      }
+    session({ session, token }) {
+      session.user.id = token.id as string;
       return session;
     },
   },

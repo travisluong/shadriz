@@ -173,12 +173,6 @@ program
       return authProviders;
     }
   )
-  .addOption(
-    new Option(
-      "-s, --session-strategy <sessionStrategy>",
-      "session strategy"
-    ).choices(["database", "jwt"])
-  )
   .option("-ad, --admin", "admin dashboard with role-based authorization")
   .option("--no-admin", "no admin dashboard")
   .action(async (options) => {
@@ -290,16 +284,6 @@ program
               { name: "postmark", value: "postmark" },
               { name: "nodemailer", value: "nodemailer" },
               { name: "credentials", value: "credentials" },
-            ],
-          }));
-
-        partialConfig.sessionStrategy =
-          options.sessionStrategy ||
-          (await select({
-            message: "Which session strategy would you like to use?",
-            choices: [
-              { name: "database", value: "database" },
-              { name: "jwt", value: "jwt" },
             ],
           }));
       }

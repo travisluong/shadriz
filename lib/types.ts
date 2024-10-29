@@ -9,7 +9,6 @@ export interface ShadrizConfig {
   authSolution: AuthSolution;
   authProviders: AuthProvider[];
   adminEnabled: boolean;
-  sessionStrategy: SessionStrategy;
   install: boolean;
 }
 
@@ -99,7 +98,5 @@ export type AuthProvider =
   | "credentials"
   | "postmark"
   | "nodemailer";
-
-export type SessionStrategy = "jwt" | "database";
 
 export type DbPackage = "pg" | "mysql2" | "better-sqlite3";

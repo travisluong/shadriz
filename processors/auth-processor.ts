@@ -190,17 +190,6 @@ export class AuthProcessor implements ShadrizProcessor {
         throw new Error("invalid provider: " + provider);
       }
     }
-
-    if (!["jwt", "database"].includes(this.opts.sessionStrategy)) {
-      throw new Error("invalid session strategy: " + this.opts.sessionStrategy);
-    }
-
-    // if (
-    //   this.opts.providers.includes("credentials") &&
-    //   this.opts.sessionStrategy === "database"
-    // ) {
-    //   throw new Error("credentials provider must use jwt");
-    // }
   }
 
   appendAuthSecretToEnv() {
@@ -243,7 +232,6 @@ export class AuthProcessor implements ShadrizProcessor {
       data: {
         importsCode: importsCode,
         providersCode: providersCode,
-        sessionStrategy: this.opts.sessionStrategy,
         pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
         pkKeyValTemplate: pkKeyValTemplates[this.opts.pkStrategy],
       },
