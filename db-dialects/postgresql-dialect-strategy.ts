@@ -263,7 +263,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     sqlType: "date",
     formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
     updateFormTemplate:
-      "scaffold-processor/components/table/update-input.tsx.hbs",
+      "scaffold-processor/components/table/update-input-date.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: date({ mode: "date" })`;
     },

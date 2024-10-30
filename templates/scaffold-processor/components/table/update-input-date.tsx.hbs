@@ -1,6 +1,6 @@
         <div>
           <Label>{{validatedColumn.caseVariants.originalCapitalCase}}</Label>
-          <Input name="{{validatedColumn.caseVariants.originalCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}}?.toLocaleString() ?? "" } />
+          <Input name="{{validatedColumn.caseVariants.originalCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}}?.toLocaleDateString() ?? "" } />
           {state.errors?.{{validatedColumn.caseVariants.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
