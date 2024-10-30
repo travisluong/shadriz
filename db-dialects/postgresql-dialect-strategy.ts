@@ -265,10 +265,10 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: date()`;
+      return `${opts.keyName}: date({ mode: "date" })`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
+      return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
   },

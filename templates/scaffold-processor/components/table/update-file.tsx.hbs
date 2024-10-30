@@ -1,12 +1,12 @@
         <div>
-          <Label>{{columnCases.originalCapitalCase}}</Label>
-          { {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}}  && (
+          <Label>{{validatedColumn.caseVariants.originalCapitalCase}}</Label>
+          { {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}}  && (
             <div>
-              <Link href={config.NEXT_PUBLIC_UPLOAD_BASE_URL +  {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} }>{ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} }</Link>
+              <Link href={config.NEXT_PUBLIC_UPLOAD_BASE_URL +  {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}} }>{ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}} }</Link>
             </div>
           )}
-          <Input type="file" name="{{columnCases.originalCamelCase}}" />
-          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
+          <Input type="file" name="{{validatedColumn.caseVariants.originalCamelCase}}" />
+          {state.errors?.{{validatedColumn.caseVariants.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

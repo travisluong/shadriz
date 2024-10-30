@@ -1,7 +1,7 @@
         <div>
-          <Label className="mr-2">{{columnCases.originalCapitalCase}}</Label>
-          <Checkbox name="{{columnCases.originalCamelCase}}" />
-          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
+          <Label className="mr-2">{{validatedColumn.caseVariants.originalCapitalCase}}</Label>
+          <Checkbox name="{{validatedColumn.caseVariants.originalCamelCase}}" />
+          {state.errors?.{{validatedColumn.caseVariants.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

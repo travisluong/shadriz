@@ -1,7 +1,7 @@
         <div>
-          <Label>{{columnCases.originalCapitalCase}}</Label>
-          <Input name="{{columnCases.originalCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}}?.toISOString() ?? "" } />
-          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
+          <Label>{{validatedColumn.caseVariants.originalCapitalCase}}</Label>
+          <Input name="{{validatedColumn.caseVariants.originalCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}}?.toISOString() ?? "" } />
+          {state.errors?.{{validatedColumn.caseVariants.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

@@ -502,13 +502,12 @@ export class ScaffoldProcessor {
   getFormControlsHtml(): string {
     let html = "";
     for (const [index, validatedColumn] of this.validatedColumns.entries()) {
-      const { columnName, dataType } = validatedColumn;
+      const { dataType } = validatedColumn;
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
-      const columnCases = caseFactory(columnName);
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
-        data: { columnCases: columnCases },
+        data: { validatedColumn: validatedColumn },
       });
       if (index !== this.opts.columns.length - 1) html += "\n";
     }
@@ -594,18 +593,16 @@ export class ScaffoldProcessor {
     html += "\n";
 
     for (const [index, validatedColumn] of this.validatedColumns.entries()) {
-      const { columnName, dataType } = validatedColumn;
+      const { dataType } = validatedColumn;
 
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
       const updateFormTemplate = dataTypeStrategy.updateFormTemplate;
 
-      const columnCases = caseFactory(columnName);
-
       html += compileTemplate({
         inputPath: updateFormTemplate,
-        data: { columnCases: columnCases, tableObj: tableObj },
+        data: { validatedColumn: validatedColumn, tableObj: tableObj },
       });
 
       if (index !== this.opts.columns.length - 1) html += "\n";

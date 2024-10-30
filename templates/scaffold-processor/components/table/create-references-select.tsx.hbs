@@ -1,9 +1,9 @@
         <div className="flex flex-col gap-2">
-          <Label>{{columnCases.singularCapitalCase}} Id</Label>
+          <Label>{{validatedColumn.caseVariants.singularCapitalCase}} Id</Label>
           <GenericSelect
-            list={ {{columnCases.singularCamelCase}}List }
-            name="{{columnCases.singularCamelCase}}Id"
-            placeholder="Select {{columnCases.singularCapitalCase}}"
+            list={ {{validatedColumn.caseVariants.singularCamelCase}}List }
+            name="{{validatedColumn.caseVariants.singularCamelCase}}Id"
+            placeholder="Select {{validatedColumn.caseVariants.singularCapitalCase}}"
             valueField="id"
             labelField="id"
           />

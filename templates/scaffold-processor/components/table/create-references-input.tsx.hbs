@@ -1,7 +1,7 @@
         <div>
-          <Label>{{columnCases.originalCapitalCase}} Id</Label>
-          <Input name="{{columnCases.singularCamelCase}}Id" />
-          {state.errors?.{{columnCases.singularCamelCase}}Id?.map((error) => (
+          <Label>{{validatedColumn.caseVariants.originalCapitalCase}} Id</Label>
+          <Input name="{{validatedColumn.caseVariants.singularCamelCase}}Id" />
+          {state.errors?.{{validatedColumn.caseVariants.singularCamelCase}}Id?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>
