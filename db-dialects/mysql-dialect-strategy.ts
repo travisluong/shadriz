@@ -272,16 +272,17 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
   },
   year: {
     jsType: "string",
-    sqlType: "",
-    formTemplate: "",
-    updateFormTemplate: "",
+    sqlType: "year",
+    formTemplate: "scaffold-processor/components/table/create-input.tsx.hbs",
+    updateFormTemplate:
+      "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      throw new Error("Function not implemented.");
+      return `${opts.keyName}: year()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      throw new Error("Function not implemented.");
+      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
-    formComponents: [],
+    formComponents: ["input"],
   },
   timestamp: {
     jsType: "string",

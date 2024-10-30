@@ -123,7 +123,7 @@ int, tinyint, smallint, mediumint, bigint, real, decimal, double, float, serial,
 
 **sqlite data types**
 
-integer, real, text, boolean, bigint
+integer, real, text, boolean, bigint, timestamp
 
 ## Primary key generation strategy
 

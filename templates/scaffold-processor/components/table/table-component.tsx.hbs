@@ -17,8 +17,8 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singul
       <TableHeader>
         <TableRow>
           <TableHead>Id</TableHead>
-          {{#each columnCases}}
-          <TableHead>{{this.originalCapitalCase}}</TableHead>
+          {{#each validatedColumns}}
+          <TableHead>{{this.caseVariants.originalCapitalCase}}</TableHead>
           {{/each}}
           <TableHead></TableHead>
         </TableRow>
@@ -27,8 +27,33 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singul
         { {{tableObj.singularCamelCase}}List.map(({{tableObj.singularCamelCase}}) => (
           <TableRow key={ {{tableObj.singularCamelCase}}.id }>
             <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
-            {{#each columnCases}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.originalCamelCase}}?.toString() }</TableCell>
+            {{#each validatedColumns}}
+              {{#switch this.dataType}}
+                {{#case "boolean"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} ? "true" : "false" }</TableCell>
+                {{/case}}
+                {{#case "date"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleDateString() }</TableCell>
+                {{/case}}
+                {{#case "datetime"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</TableCell>
+                {{/case}}
+                {{#case "timestamp"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</TableCell>
+                {{/case}}
+                {{#case "json"}}
+            <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</TableCell>
+                {{/case}}
+                {{#case "jsonb"}}
+            <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</TableCell>
+                {{/case}}
+                {{#case "file"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</TableCell>
+                {{/case}}
+                {{#default}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</TableCell>
+                {{/default}}
+              {{/switch}}
             {{/each}}
             <TableCell className="justify-end flex gap-2">
               <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>

@@ -6,6 +6,9 @@ import { log } from "./log";
 import packageShadrizJson from "../package-shadriz.json";
 import { PackageManager, ShadrizConfig } from "./types";
 import { caseFactory } from "./case-utils";
+import { registerHandlebarsHelpers } from "./handlebars-helpers";
+
+registerHandlebarsHelpers();
 
 export function renderTemplateIfNotExists({
   inputPath,

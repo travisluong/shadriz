@@ -61,6 +61,7 @@ const formComponentImports: Record<FormComponent, string> = {
 interface ValidatedColumn {
   columnName: string;
   dataType: string;
+  caseVariants: Cases;
 }
 
 export class ScaffoldProcessor {
@@ -84,9 +85,22 @@ export class ScaffoldProcessor {
       if (!(dataType in dataTypeStrategyMap)) {
         throw new Error(`invalid data type ${dataType}`);
       }
-      validatedColumns.push({ columnName, dataType });
+      validatedColumns.push({
+        columnName,
+        dataType,
+        caseVariants: this.getColumnCaseVariants(columnName, dataType),
+      });
     }
     return validatedColumns;
+  }
+
+  getColumnCaseVariants(columnName: string, dataType: string): Cases {
+    if (dataType.startsWith("references")) {
+      const fkColumn = caseFactory(columnName);
+      return caseFactory(fkColumn.singularSnakeCase + "_id");
+    } else {
+      return caseFactory(columnName);
+    }
   }
 
   process(): void {
@@ -159,7 +173,7 @@ export class ScaffoldProcessor {
     let isDecimalTypePresent = false;
     for (const validatedColumn of this.validatedColumns) {
       const { columnName, dataType } = validatedColumn;
-      const tableObj = caseFactory(columnName);
+      const caseVariants = caseFactory(columnName);
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       if (dataTypeStrategy.sqlType) {
@@ -170,7 +184,7 @@ export class ScaffoldProcessor {
 
       // references
       if (dataType.startsWith("references")) {
-        referenceImportsCode += `import { ${tableObj.pluralCamelCase} } from "./${tableObj.pluralKebabCase}";\n`;
+        referenceImportsCode += `import { ${caseVariants.pluralCamelCase} } from "./${caseVariants.pluralKebabCase}";\n`;
       }
 
       // decimal types
@@ -245,13 +259,12 @@ export class ScaffoldProcessor {
   }
   addDetailView(): void {
     const tableObj = caseFactory(this.opts.table);
-    const columnCases = this.getColumnCaseVariants();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
         tableObj.pluralKebabCase
       }/[id]/page.tsx`,
-      data: { tableObj: tableObj, columnCases: columnCases },
+      data: { tableObj: tableObj, validatedColumns: this.validatedColumns },
     });
   }
   addEditView(): void {
@@ -554,31 +567,15 @@ export class ScaffoldProcessor {
       },
     });
   }
-  getColumnCaseVariants(): Cases[] {
-    const arr = [];
-    for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType } = validatedColumn;
-      if (dataType.startsWith("references")) {
-        const fkColumn = caseFactory(columnName);
-        const columnCases = caseFactory(fkColumn.singularSnakeCase + "_id");
-        arr.push(columnCases);
-      } else {
-        const columnCases = caseFactory(columnName);
-        arr.push(columnCases);
-      }
-    }
-    return arr;
-  }
   addTableComponent(): void {
     const tableObj = caseFactory(this.opts.table);
-    const columnCases = this.getColumnCaseVariants();
 
     renderTemplate({
       inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-table.tsx`,
       data: {
         tableObj: tableObj,
-        columnCases: columnCases,
+        validatedColumns: this.validatedColumns,
         isAdmin: this.opts.authorizationLevel === "admin",
       },
     });

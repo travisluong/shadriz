@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { config } from "@/lib/config";
 import { get{{tableObj.singularPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 type Params = Promise<{ id: string }>;
@@ -18,8 +20,33 @@ export default async function Page(props: { params: Params }) {
       <h1 className="text-xl font-bold mb-6">{{tableObj.originalCapitalCase}}</h1>
       <div>
         <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}.id }</p>
-        {{#each columnCases}}
-        <p><strong>{{this.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.originalCamelCase}}?.toString() }</p>
+        {{#each validatedColumns}}
+          {{#switch this.dataType}}
+            {{#case "boolean"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} ? "true": "false" }</p>
+            {{/case}}
+            {{#case "date"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleDateString() }</p>
+            {{/case}}
+            {{#case "datetime"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</p>
+            {{/case}}   
+            {{#case "timestamp"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</p>
+            {{/case}}
+            {{#case "json"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</p>
+            {{/case}}
+            {{#case "jsonb"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</p>
+            {{/case}}
+            {{#case "file"}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> <Link href={`${config.NEXT_PUBLIC_UPLOAD_BASE_URL}/${ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }`}>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</Link></p>
+            {{/case}}
+            {{#default}}
+        <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</p>
+            {{/default}}
+          {{/switch}}
         {{/each}}
       </div>
     </div>
