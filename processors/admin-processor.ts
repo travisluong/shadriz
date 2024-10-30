@@ -6,7 +6,11 @@ import {
   ShadrizConfig,
   ShadrizProcessor,
 } from "../lib/types";
-import { appendToFileIfTextNotExists, renderTemplate } from "../lib/utils";
+import {
+  appendToFileIfTextNotExists,
+  renderTemplate,
+  renderTemplateIfNotExists,
+} from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { ScaffoldProcessor } from "./scaffold-processor";
 
@@ -48,7 +52,7 @@ export class AdminProcessor implements ShadrizProcessor {
       outputPath: "scripts/grant-admin.ts",
     });
 
-    renderTemplate({
+    renderTemplateIfNotExists({
       inputPath: `admin-processor/components/admin/admin-sidebar.tsx.hbs`,
       outputPath: `components/admin/admin-sidebar.tsx`,
     });

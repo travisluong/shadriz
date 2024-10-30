@@ -7,7 +7,6 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-{{pkStrategyImport}}
 import { users } from "@/schema/users"
 
 export const accounts = mysqlTable(

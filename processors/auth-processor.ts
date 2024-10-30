@@ -3,6 +3,7 @@ import {
   compileTemplate,
   insertSchemaToSchemaIndex,
   renderTemplate,
+  renderTemplateIfNotExists,
 } from "../lib/utils";
 import { log } from "../lib/log";
 import {
@@ -205,7 +206,7 @@ export class AuthProcessor implements ShadrizProcessor {
   }
 
   addPrivateSidebar() {
-    renderTemplate({
+    renderTemplateIfNotExists({
       inputPath: "auth-processor/components/private/private-sidebar.tsx.hbs",
       outputPath: "components/private/private-sidebar.tsx",
     });
