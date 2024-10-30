@@ -14,6 +14,7 @@ export const users = mysqlTable("users", {
     fsp: 3,
   }),
   image: varchar({ length: 255 }),
+  role: varchar({ length: 255 }).notNull(),
   password: varchar({ length: 255 }),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}

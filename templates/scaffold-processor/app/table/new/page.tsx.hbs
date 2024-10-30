@@ -1,4 +1,6 @@
+{{#if referencesColumnList.length}}
 import { db } from "@/lib/db";
+{{/if}}
 import {{tableObj.singularPascalCase}}CreateForm from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-create-form";
 
 export default async function Page() {

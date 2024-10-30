@@ -1,8 +1,7 @@
 import { eq } from "drizzle-orm";
 import { openConnection } from "./sdb";
 import { users } from "@/schema/users";
-import { roles } from "@/schema/roles";
-import { usersRoles } from "@/schema/users-roles";
+import { db } from "@/lib/db";
 
 async function main() {
   const { sdb, closeConnection } = await openConnection();
@@ -17,25 +16,7 @@ async function main() {
     throw new Error("user not found " + email);
   }
 
-  let role = await sdb.query.roles.findFirst({
-    where: eq(roles.name, "admin"),
-  });
-
-  if (!role) {
-    await sdb.insert(roles).values({ name: "admin" });
-  }
-
-  role = await sdb.query.roles.findFirst({
-    where: eq(roles.name, "admin"),
-  });
-
-  if (!role) {
-    throw new Error("role not found");
-  }
-
-  await sdb
-    .insert(usersRoles)
-    .values({ userId: user.id, roleId: role.id });
+  await db.update(users).set({ role: "admin" }).where(eq(users.email, email));
 
   await closeConnection();
 }

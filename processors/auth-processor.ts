@@ -182,6 +182,7 @@ export class AuthProcessor implements ShadrizProcessor {
     this.addSignOutPage();
     this.addPrivateSidebar();
     this.addUserSchema();
+    this.addNextAuthModuleAugmentation();
   }
 
   validateOptions() {
@@ -337,6 +338,13 @@ export class AuthProcessor implements ShadrizProcessor {
         createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
+    });
+  }
+
+  addNextAuthModuleAugmentation() {
+    renderTemplate({
+      inputPath: "auth-processor/types/next-auth.d.ts.hbs",
+      outputPath: "types/next-auth.d.ts",
     });
   }
 

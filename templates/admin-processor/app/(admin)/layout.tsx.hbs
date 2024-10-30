@@ -1,6 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
-import { hasAdminRole } from "@/lib/authorization";
 import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { db } from "@/lib/db";
@@ -14,14 +13,8 @@ export default async function Layout({
 }) {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (session?.user?.role !== "admin") {
     redirect("/admin-login");
-  }
-
-  const isAdmin = await hasAdminRole(session.user.id);
-
-  if (!isAdmin) {
-    redirect("/admin-login?error=Unauthorized");
   }
 
   const user = await db.query.users.findFirst({

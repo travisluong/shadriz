@@ -12,9 +12,6 @@ import { uploadFile } from "@/lib/file-utils";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
-{{#if isAdmin}}
-import { hasAdminRole } from "@/lib/authorization";
-{{/if}}
 {{#if hasDecimalColumn}}
 import { z } from "zod";
 {{/if}}
@@ -51,9 +48,7 @@ export async function create{{tableObj.singularPascalCase}}(
   {{/if}}
 
   {{#if isAdmin}}
-    const isAdmin = await hasAdminRole(session.user.id);
-
-    if (!isAdmin) {
+    if (session?.user?.role !== "admin") {
       throw new Error("unauthorized");
     }
   {{/if}}
