@@ -1,6 +1,7 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "./db";
-import { orders, subscriptions } from "@/schema/stripe-tables";
+import { orders } from "@/schema/orders";
+import { subscriptions } from "@/schema/subscriptions";
 
 export async function hasProduct(userId: string, productId: string) {
   const order = await db.query.orders.findFirst({

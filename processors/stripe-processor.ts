@@ -6,34 +6,12 @@ import {
   ShadrizConfig,
   DbDialectStrategy,
 } from "../lib/types";
-import {
-  appendToEnvLocal,
-  insertSchemaToSchemaIndex,
-  renderTemplate,
-} from "../lib/utils";
+import { appendToEnvLocal, renderTemplate } from "../lib/utils";
 import {
   pkFunctionInvoke,
   pkStrategyImportTemplates,
 } from "../lib/pk-strategy";
-
-interface StripeDbDialectStrategy {
-  stripeSchemaTemplatePath: string;
-}
-
-const stripeDbDialectStrategy: Record<DbDialect, StripeDbDialectStrategy> = {
-  postgresql: {
-    stripeSchemaTemplatePath:
-      "stripe-processor/schema/stripe-tables.ts.postgresql.hbs",
-  },
-  mysql: {
-    stripeSchemaTemplatePath:
-      "stripe-processor/schema/stripe-tables.ts.mysql.hbs",
-  },
-  sqlite: {
-    stripeSchemaTemplatePath:
-      "stripe-processor/schema/stripe-tables.ts.sqlite.hbs",
-  },
-};
+import { ScaffoldProcessor } from "./scaffold-processor";
 
 export class StripeProcessor implements ShadrizProcessor {
   opts: ShadrizConfig;
@@ -60,14 +38,13 @@ export class StripeProcessor implements ShadrizProcessor {
     this.addAccountPage();
     this.addPricingPage();
     this.addAccessUtil();
-    this.addStripeSchema();
     this.appendStripeSecretsToEnvLocal();
     this.addCheckOutSessionsApiRoute();
     this.addCustomerPortalApiRoute();
     this.addWebhookApiRoute();
     this.addConfirmationPage();
     this.addCreatePriceScript();
-    insertSchemaToSchemaIndex("stripe_tables");
+    this.scaffold();
   }
 
   addAccountPage() {
@@ -88,23 +65,6 @@ export class StripeProcessor implements ShadrizProcessor {
     renderTemplate({
       inputPath: "stripe-processor/lib/access.ts.hbs",
       outputPath: "lib/access.ts",
-    });
-  }
-
-  addStripeSchema() {
-    const pkText =
-      this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
-    const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
-    renderTemplate({
-      inputPath:
-        stripeDbDialectStrategy[this.opts.dbDialect].stripeSchemaTemplatePath,
-      outputPath: "schema/stripe-tables.ts",
-      data: {
-        pkText: pkText,
-        pkStrategyImport: pkStrategyImport,
-        createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
-        updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
-      },
     });
   }
 
@@ -154,6 +114,117 @@ export class StripeProcessor implements ShadrizProcessor {
       inputPath: "stripe-processor/scripts/create-price.ts.hbs",
       outputPath: "scripts/create-price.ts",
     });
+  }
+
+  scaffold() {
+    const stripeWebhooksColumns: Record<DbDialect, string[]> = {
+      postgresql: ["payload:text"],
+      mysql: ["payload:text"],
+      sqlite: ["payload:text"],
+    };
+    const stripeWebhooksProcessor = new ScaffoldProcessor({
+      ...this.opts,
+      authorizationLevel: "admin",
+      columns: stripeWebhooksColumns[this.opts.dbDialect],
+      table: "stripe_webhooks",
+    });
+    stripeWebhooksProcessor.process();
+
+    const productsColumns: Record<DbDialect, string[]> = {
+      postgresql: [
+        "slug:text",
+        "stripe_product_id:text",
+        "stripe_price_id:text",
+        "name:text",
+        "price:integer",
+        "description:text",
+        "mode:text",
+      ],
+      mysql: [
+        "slug:varchar",
+        "stripe_product_id:varchar",
+        "stripe_price_id:varchar",
+        "name:varchar",
+        "price:int",
+        "description:text",
+        "mode:varchar",
+      ],
+      sqlite: [
+        "slug:text",
+        "stripe_product_id:text",
+        "stripe_price_id:text",
+        "name:text",
+        "price:integer",
+        "description:text",
+        "mode:text",
+      ],
+    };
+    const productsProcessor = new ScaffoldProcessor({
+      ...this.opts,
+      authorizationLevel: "admin",
+      columns: productsColumns[this.opts.dbDialect],
+      table: "products",
+    });
+    productsProcessor.process();
+
+    const ordersColumns: Record<DbDialect, string[]> = {
+      postgresql: [
+        "user:references",
+        "product:references",
+        "note:text",
+        "amount_total:integer",
+      ],
+      mysql: [
+        "user:references",
+        "product:references",
+        "note:text",
+        "amount_total:integer",
+      ],
+      sqlite: [
+        "user:references",
+        "product:references",
+        "note:text",
+        "amount_total:integer",
+      ],
+    };
+    const ordersProcessor = new ScaffoldProcessor({
+      ...this.opts,
+      authorizationLevel: "admin",
+      columns: ordersColumns[this.opts.dbDialect],
+      table: "orders",
+    });
+    ordersProcessor.process();
+
+    const subscriptionsColumns: Record<DbDialect, string[]> = {
+      postgresql: [
+        "user:references",
+        "stripe_customer_id:text",
+        "product:references",
+        "start_date:date",
+        "end_date:date",
+      ],
+      mysql: [
+        "user:references",
+        "stripe_customer_id:varchar",
+        "product:references",
+        "start_date:date",
+        "end_date:date",
+      ],
+      sqlite: [
+        "user:references",
+        "stripe_customer_id:text",
+        "product:references",
+        "start_date:timestamp",
+        "end_date:timestamp",
+      ],
+    };
+    const subscriptionsProcessor = new ScaffoldProcessor({
+      ...this.opts,
+      authorizationLevel: "admin",
+      columns: subscriptionsColumns[this.opts.dbDialect],
+      table: "subscriptions",
+    });
+    subscriptionsProcessor.process();
   }
 
   printCompletionMessage() {

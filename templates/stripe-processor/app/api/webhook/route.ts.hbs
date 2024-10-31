@@ -1,11 +1,9 @@
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
-import {
-  orders,
-  products,
-  stripeWebhooks,
-  subscriptions,
-} from "@/schema/stripe-tables";
+import { orders } from "@/schema/orders";
+import { products } from "@/schema/products";
+import { stripeWebhooks } from "@/schema/stripe-webhooks";
+import { subscriptions } from "@/schema/subscriptions";
 import { users } from "@/schema/users";
 import { and, eq } from "drizzle-orm";
 
