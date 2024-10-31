@@ -3,6 +3,7 @@ import { PackageManager, ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
   appendToEnvLocal,
   appendToFileIfTextNotExists,
+  insertTextAfterIfNotExists,
   removeTextFromFile,
   renderTemplate,
   renderTemplateIfNotExists,
@@ -162,6 +163,12 @@ export class NewProjectProcessor implements ShadrizProcessor {
     appendToEnvLocal(
       "NEXT_PUBLIC_UPLOAD_BASE_URL",
       "http://localhost:3000/uploads"
+    );
+
+    insertTextAfterIfNotExists(
+      "package.json",
+      `"scripts": {`,
+      `\n    "generate": "drizzle-kit generate",\n    "migrate": "drizzle-kit migrate",`
     );
   }
 

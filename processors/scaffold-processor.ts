@@ -635,8 +635,8 @@ export class ScaffoldProcessor {
   printCompletionMessage() {
     log.success("scaffold success: " + this.opts.table);
     log.checklist("scaffold checklist");
-    log.cmdtask("npx drizzle-kit generate");
-    log.cmdtask("npx drizzle-kit migrate");
+    log.cmdtask("npm run generate");
+    log.cmdtask("npm run migrate");
   }
   authorizationRouteGroup() {
     switch (this.opts.authorizationLevel) {
