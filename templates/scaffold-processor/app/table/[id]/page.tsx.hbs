@@ -40,6 +40,15 @@ export default async function Page(props: { params: Params }) {
             {{#case "jsonb"}}
         <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</p>
             {{/case}}
+            {{#case "references"}}
+        <p><strong>{{this.caseVariantsWithId.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</p>
+            {{/case}}
+            {{#case "references_select"}}
+        <p><strong>{{this.caseVariantsWithId.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</p>
+            {{/case}}
+            {{#case "references_combobox"}}
+        <p><strong>{{this.caseVariantsWithId.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</p>
+            {{/case}}
             {{#case "file"}}
         <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> <Link href={`${config.NEXT_PUBLIC_UPLOAD_BASE_URL}/${ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }`}>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</Link></p>
             {{/case}}

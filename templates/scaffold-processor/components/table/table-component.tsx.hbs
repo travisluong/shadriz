@@ -47,6 +47,15 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singul
                 {{#case "jsonb"}}
             <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</TableCell>
                 {{/case}}
+                {{#case "references"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</TableCell>
+                {{/case}}
+                {{#case "references_select"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</TableCell>
+                {{/case}}
+                {{#case "references_combobox"}}
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</TableCell>
+                {{/case}}
                 {{#case "file"}}
             <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</TableCell>
                 {{/case}}
