@@ -23,6 +23,10 @@ export async function hasActiveSubscription(userId: string) {
     return false;
   }
 
+  if (!subscription.endDate) {
+    throw new Error("end date not found");
+  }
+
   const expireDate = new Date(subscription.endDate);
   expireDate.setDate(expireDate.getDate() + 2);
   const now = new Date();

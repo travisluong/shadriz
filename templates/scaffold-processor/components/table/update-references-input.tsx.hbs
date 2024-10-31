@@ -1,7 +1,7 @@
         <div>
-          <Label>{{validatedColumn.caseVariants.originalCapitalCase}} Id</Label>
-          <Input name="{{validatedColumn.caseVariants.singularCamelCase}}Id" defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.singularCamelCase}}Id ?? "" } />
-          {state.errors?.{{validatedColumn.caseVariants.singularCamelCase}}Id?.map((error) => (
+          <Label>{{validatedColumn.caseVariantsWithId.originalCapitalCase}}</Label>
+          <Input name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariantsWithId.singularCamelCase}} ?? "" } />
+          {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

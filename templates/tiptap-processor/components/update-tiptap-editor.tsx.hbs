@@ -1,7 +1,7 @@
         <div>
-          <Label>{{columnCases.originalCapitalCase}}</Label>
-          <TiptapEditor html={ {{tableObj.singularCamelCase}}.{{columnCases.originalCamelCase}} ?? ""} name="{{columnCases.originalCamelCase}}" />
-          {state.errors?.{{columnCases.originalCamelCase}}?.map((error) => (
+          <Label>{{validatedColumn.caseVariants.originalCapitalCase}}</Label>
+          <TiptapEditor html={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.originalCamelCase}} ?? ""} name="{{validatedColumn.caseVariants.originalCamelCase}}" />
+          {state.errors?.{{validatedColumn.caseVariants.originalCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>{error}</p>
           ))}
         </div>

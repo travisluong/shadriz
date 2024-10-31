@@ -184,7 +184,7 @@ export class StripeProcessor implements ShadrizProcessor {
         "user:references",
         "product:references",
         "note:text",
-        "amount_total:integer",
+        "amount_total:int",
       ],
       sqlite: [
         "user:references",

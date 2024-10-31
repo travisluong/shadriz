@@ -62,6 +62,7 @@ interface ValidatedColumn {
   columnName: string;
   dataType: string;
   caseVariants: Cases;
+  caseVariantsWithId: Cases;
 }
 
 export class ScaffoldProcessor {
@@ -88,19 +89,11 @@ export class ScaffoldProcessor {
       validatedColumns.push({
         columnName,
         dataType,
-        caseVariants: this.getColumnCaseVariants(columnName, dataType),
+        caseVariants: caseFactory(columnName),
+        caseVariantsWithId: caseFactory(columnName + "_id"),
       });
     }
     return validatedColumns;
-  }
-
-  getColumnCaseVariants(columnName: string, dataType: string): Cases {
-    if (dataType.startsWith("references")) {
-      const fkColumn = caseFactory(columnName);
-      return caseFactory(fkColumn.singularSnakeCase + "_id");
-    } else {
-      return caseFactory(columnName);
-    }
   }
 
   process(): void {
@@ -221,16 +214,16 @@ export class ScaffoldProcessor {
   }
   getKeyValueStrForSchema(validatedColumn: ValidatedColumn): string {
     const { dataTypeStrategyMap } = this.dbDialectStrategy;
-    let { columnName, dataType } = validatedColumn;
+    let { columnName, dataType, caseVariants, caseVariantsWithId } =
+      validatedColumn;
     const strategy = dataTypeStrategyMap[dataType];
-    const columnNameCases = caseFactory(columnName);
 
-    let keyName = columnNameCases.originalCamelCase;
+    let keyName = caseVariants.originalCamelCase;
     let referencesTable;
     if (dataType.startsWith("references")) {
-      referencesTable = columnNameCases.pluralCamelCase;
-      columnName = columnNameCases.singularSnakeCase + "_id";
-      keyName = columnNameCases.singularCamelCase + "Id";
+      referencesTable = caseVariants.pluralCamelCase;
+      columnName = caseVariantsWithId.singularSnakeCase;
+      keyName = caseVariantsWithId.singularCamelCase;
     }
 
     let str =
@@ -313,30 +306,31 @@ export class ScaffoldProcessor {
   addCreateAction(): void {
     const columns = ["id"];
     for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType } = validatedColumn;
+      const { columnName, dataType, caseVariants, caseVariantsWithId } =
+        validatedColumn;
       const columnCases = caseFactory(columnName);
       if (dataType.startsWith("references")) {
-        columns.push(columnCases.singularCamelCase + "Id");
+        columns.push(caseVariantsWithId.singularCamelCase);
       } else {
-        columns.push(columnCases.originalCamelCase);
+        columns.push(caseVariants.originalCamelCase);
       }
     }
 
     const formDataKeyVal = this.validatedColumns
       .map((validatedColumn) => {
-        const { columnName, dataType } = validatedColumn;
+        const { columnName, dataType, caseVariants, caseVariantsWithId } =
+          validatedColumn;
         const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-        const columnCases = caseFactory(columnName);
         let keyName;
         let colName;
 
         if (dataType.startsWith("references")) {
-          keyName = columnCases.singularCamelCase + "Id";
-          colName = columnCases.singularCamelCase + "Id";
+          keyName = caseVariantsWithId.singularCamelCase;
+          colName = caseVariantsWithId.singularCamelCase;
         } else {
-          keyName = columnCases.originalCamelCase;
-          colName = columnCases.originalCamelCase;
+          keyName = caseVariants.originalCamelCase;
+          colName = caseVariants.originalCamelCase;
         }
 
         return strategy.getKeyValStrForFormData({
@@ -380,12 +374,13 @@ export class ScaffoldProcessor {
   addUpdateAction(): void {
     const columns = ["id"];
     for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType } = validatedColumn;
+      const { columnName, dataType, caseVariants, caseVariantsWithId } =
+        validatedColumn;
       const columnCases = caseFactory(columnName);
       if (dataType.startsWith("references")) {
-        columns.push(columnCases.singularCamelCase + "Id");
+        columns.push(caseVariantsWithId.singularCamelCase);
       } else {
-        columns.push(columnCases.originalCamelCase);
+        columns.push(caseVariants.originalCamelCase);
       }
     }
 
@@ -395,19 +390,18 @@ export class ScaffoldProcessor {
       ];
 
     const formDataKeyValArr = this.validatedColumns.map((validatedColumn) => {
-      const { columnName, dataType } = validatedColumn;
+      const { dataType, caseVariants, caseVariantsWithId } = validatedColumn;
       const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-      const columnCases = caseFactory(columnName);
       let keyName;
       let colName;
 
       if (dataType.startsWith("references")) {
-        keyName = columnCases.singularCamelCase + "Id";
-        colName = columnCases.singularCamelCase + "Id";
+        keyName = caseVariantsWithId.singularCamelCase;
+        colName = caseVariantsWithId.singularCamelCase;
       } else {
-        keyName = columnCases.originalCamelCase;
-        colName = columnCases.originalCamelCase;
+        keyName = caseVariants.originalCamelCase;
+        colName = caseVariants.originalCamelCase;
       }
 
       return strategy.getKeyValStrForFormData({
@@ -534,8 +528,7 @@ export class ScaffoldProcessor {
       .filter((validatedColumn) =>
         validatedColumn.dataType.startsWith(startsWith)
       )
-      .map((validatedColumn) => validatedColumn.columnName)
-      .map((str) => caseFactory(str));
+      .map((validatedColumn) => validatedColumn.caseVariants);
     return referencesColumnList;
   }
   addUpdateForm(): void {

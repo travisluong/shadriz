@@ -1,16 +1,16 @@
         <div className="flex flex-col gap-2">
-          <Label>{{validatedColumn.caseVariants.singularCapitalCase}} Id</Label>
+          <Label>{{validatedColumn.caseVariantsWithId.singularCapitalCase}}</Label>
           <GenericCombobox
             list={ {{validatedColumn.caseVariants.singularCamelCase}}List }
-            name="{{validatedColumn.caseVariants.singularCamelCase}}Id"
+            name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}"
             valueField="id"
             labelField="id"
-            defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.singularCamelCase}}Id }
+            defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariantsWithId.singularCamelCase}} }
             searchPlaceholder="Search {{validatedColumn.caseVariants.pluralCapitalCase}}..."
             selectPlaceholder="Select {{validatedColumn.caseVariants.singularCapitalCase}}..."
             emptyText="No {{validatedColumn.caseVariants.singularCamelCase}} found"
           />
-          {state.errors?.{{validatedColumn.caseVariants.singularCamelCase}}Id?.map((error) => (
+          {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>
               {error}
             </p>
