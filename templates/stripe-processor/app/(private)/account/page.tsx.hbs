@@ -52,10 +52,10 @@ export default async function Page() {
 
   return (
     <div className="max-w-4xl m-auto p-5 flex flex-col gap-5">
-      <h1 className="font-retro uppercase">Subscription</h1>
+      <h1 className="font-bold text-xl">Subscription</h1>
       <Card>
         <CardHeader>
-          <CardTitle className="font-retro uppercase text-sm">
+          <CardTitle>
             Subscription Status
           </CardTitle>
         </CardHeader>
@@ -77,7 +77,7 @@ export default async function Page() {
       {subscription && (
         <Card>
           <CardHeader>
-            <CardTitle className="font-retro uppercase text-sm">
+            <CardTitle>
               Manage Subscription
             </CardTitle>
           </CardHeader>
@@ -90,7 +90,7 @@ export default async function Page() {
       )}
       <Card>
         <CardHeader>
-          <CardTitle className="font-retro uppercase text-sm">
+          <CardTitle>
             Order History
           </CardTitle>
         </CardHeader>
