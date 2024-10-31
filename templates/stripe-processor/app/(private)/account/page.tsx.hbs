@@ -63,7 +63,7 @@ export default async function Page() {
           {activeSubscription && (
             <div className="flex gap-5">
               <Badge className="bg-green-400">Subscription Active</Badge>
-              <div>Expires: {subscription?.endDate.toLocaleDateString()}</div>
+              <div>Expires: {subscription?.endDate?.toLocaleDateString()}</div>
             </div>
           )}
           {subscription && !activeSubscription && (

@@ -6,7 +6,12 @@ import {
   ShadrizConfig,
   DbDialectStrategy,
 } from "../lib/types";
-import { appendToEnvLocal, renderTemplate } from "../lib/utils";
+import {
+  appendToEnvLocal,
+  insertTextBeforeIfNotExists,
+  prependToFileIfNotExists,
+  renderTemplate,
+} from "../lib/utils";
 import {
   pkFunctionInvoke,
   pkStrategyImportTemplates,
@@ -45,6 +50,7 @@ export class StripeProcessor implements ShadrizProcessor {
     this.addConfirmationPage();
     this.addCreatePriceScript();
     this.scaffold();
+    this.addLinkToPrivateSidebar();
   }
 
   addAccountPage() {
@@ -225,6 +231,19 @@ export class StripeProcessor implements ShadrizProcessor {
       table: "subscriptions",
     });
     subscriptionsProcessor.process();
+  }
+
+  addLinkToPrivateSidebar() {
+    prependToFileIfNotExists(
+      "components/private/private-sidebar.tsx",
+      `import { CreditCardIcon } from "lucide-react";`
+    );
+
+    insertTextBeforeIfNotExists(
+      "components/private/private-sidebar.tsx",
+      "// [CODE_MARK private-sidebar-items]",
+      `  { title: "Account", url: "/account", icon: CreditCardIcon }`
+    );
   }
 
   printCompletionMessage() {
