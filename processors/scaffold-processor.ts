@@ -252,13 +252,25 @@ export class ScaffoldProcessor {
   }
   addDetailView(): void {
     const tableObj = caseFactory(this.opts.table);
+    const hasFileDataType = this.hasFileDataType();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
         tableObj.pluralKebabCase
       }/[id]/page.tsx`,
-      data: { tableObj: tableObj, validatedColumns: this.validatedColumns },
+      data: {
+        tableObj: tableObj,
+        validatedColumns: this.validatedColumns,
+        hasFileDataType,
+      },
     });
+  }
+  hasFileDataType() {
+    return (
+      this.validatedColumns.filter((validatedColumn) =>
+        validatedColumn.dataType.startsWith("file")
+      ).length > 0
+    );
   }
   addEditView(): void {
     const tableObj = caseFactory(this.opts.table);
@@ -536,6 +548,7 @@ export class ScaffoldProcessor {
     const formControlsImports = this.getFormControlsImports();
     const formControlsHtml = this.getUpdateFormControlsHtml();
     const referencesColumnList = this.getReferencesColumnList("references_");
+    const hasFileDataType = this.hasFileDataType();
     renderTemplate({
       inputPath: "scaffold-processor/components/table/update-form.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-update-form.tsx`,
@@ -545,6 +558,7 @@ export class ScaffoldProcessor {
         formControls: formControlsHtml,
         authorizationLevel: this.opts.authorizationLevel,
         referencesColumnList: referencesColumnList,
+        hasFileDataType: hasFileDataType,
       },
     });
   }

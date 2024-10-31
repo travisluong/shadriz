@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+{{#if hasFileDataType}}
+import Link from "next/link";
 import { config } from "@/lib/config";
+{{/if}}
 import { get{{tableObj.singularPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 type Params = Promise<{ id: string }>;

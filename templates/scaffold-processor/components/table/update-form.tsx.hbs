@@ -1,13 +1,17 @@
 "use client";
 
+{{#if hasFileDataType}}
 import Link from "next/link";
+{{/if}}
 import { startTransition, useActionState } from "react";
 import { update{{tableObj.singularPascalCase}}, Update{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/update-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { FormAlert } from "@/components/form-alert";
 {{formControlsImports}}
+{{#if hasFileDataType}}
 import { config } from "@/lib/config";
+{{/if}}
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 {{#each referencesColumnList}}
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
