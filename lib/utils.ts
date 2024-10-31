@@ -333,11 +333,16 @@ export async function installDependencies(opts: {
   if (collectDependencies.length === 0) {
     return;
   }
-  if (opts.packageManager === "pnpm") {
-    await runCommand(`pnpm add ${collectDependencies.join(" ")}`);
-  } else {
-    await runCommand(`npm install ${collectDependencies.join(" ")}`);
-  }
+
+  const packageManagerRecords: Record<PackageManager, string> = {
+    npm: `npm install ${collectDependencies.join(" ")}`,
+    pnpm: `pnpm add ${collectDependencies.join(" ")}`,
+    bun: `bun add ${collectDependencies.join(" ")}`,
+  };
+
+  const cmd = packageManagerRecords[opts.packageManager];
+
+  await runCommand(cmd);
 }
 
 export async function installDevDependencies(opts: {
@@ -370,11 +375,16 @@ export async function installDevDependencies(opts: {
   if (collectDevDependencies.length === 0) {
     return;
   }
-  if (opts.packageManager === "pnpm") {
-    await runCommand(`pnpm add -D ${collectDevDependencies.join(" ")}`);
-  } else if (opts.packageManager === "npm") {
-    await runCommand(`npm install -D ${collectDevDependencies.join(" ")}`);
-  }
+
+  const packageManagerRecords: Record<PackageManager, string> = {
+    npm: `npm install -D ${collectDevDependencies.join(" ")}`,
+    pnpm: `pnpm add -D ${collectDevDependencies.join(" ")}`,
+    bun: `bun add -D ${collectDevDependencies.join(" ")}`,
+  };
+
+  const cmd = packageManagerRecords[opts.packageManager];
+
+  await runCommand(cmd);
 }
 
 export async function addShadcnComponents(opts: {
@@ -395,15 +405,16 @@ export async function addShadcnComponents(opts: {
   if (opts.shadcnComponents.length === 0) {
     return;
   }
-  if (opts.packageManager === "pnpm") {
-    await runCommand(
-      `pnpm dlx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`
-    );
-  } else if (opts.packageManager === "npm") {
-    await runCommand(
-      `npx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`
-    );
-  }
+
+  const packageManagerRecords: Record<PackageManager, string> = {
+    npm: `npx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`,
+    pnpm: `pnpm dlx shadcn@${version} add -y -o ${opts.shadcnComponents.join(
+      " "
+    )}`,
+    bun: `bunx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`,
+  };
+
+  await runCommand(packageManagerRecords[opts.packageManager]);
 }
 
 export function loadShadrizConfig(): ShadrizConfig {

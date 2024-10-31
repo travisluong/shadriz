@@ -1,5 +1,5 @@
 import { log } from "../lib/log";
-import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
+import { PackageManager, ShadrizConfig, ShadrizProcessor } from "../lib/types";
 import {
   appendToEnvLocal,
   appendToFileIfTextNotExists,
@@ -55,11 +55,13 @@ export class NewProjectProcessor implements ShadrizProcessor {
       version = pinnedVersion;
     }
 
-    if (this.opts.packageManager === "pnpm") {
-      await runCommand(`pnpm dlx shadcn@${version} init -y -d`);
-    } else if (this.opts.packageManager === "npm") {
-      await runCommand(`npx shadcn@${version} init -y -d`);
-    }
+    const packageManagerRecords: Record<PackageManager, string> = {
+      npm: `npx shadcn@${version} init -y -d`,
+      pnpm: `pnpm dlx shadcn@${version} init -y -d`,
+      bun: `bunx shadcn@${version} init -y -d`,
+    };
+
+    await runCommand(packageManagerRecords[this.opts.packageManager]);
   }
 
   async render() {

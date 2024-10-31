@@ -4,6 +4,7 @@ import { Command, Option } from "commander";
 import { log } from "./lib/log";
 import {
   AuthorizationLevel,
+  PackageManager,
   ShadrizConfig,
   ShadrizProcessor,
 } from "./lib/types";
@@ -53,7 +54,7 @@ program
     new Option(
       "-p, --package-manager <packageManager>",
       "the package manager to initialize next.js with"
-    ).choices(["npm", "pnpm"])
+    ).choices(["npm", "pnpm", "bun"])
   )
   .addOption(new Option("-l, --latest", "install the latest next.js version"))
   .option(
@@ -67,7 +68,7 @@ program
       options.packageManager ||
       (await select({
         message: "Which package manager do you want to use?",
-        choices: [{ value: "npm" }, { value: "pnpm" }],
+        choices: [{ value: "npm" }, { value: "pnpm" }, { value: "bun" }],
       }));
 
     const latest =
@@ -95,17 +96,19 @@ program
       version = PINNED_NEXTJS_VERSION;
     }
 
+    const packageManagerRecords: Record<PackageManager, string> = {
+      npm: `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`,
+      pnpm: `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`,
+      bun: `bun create next-app@${version} ${name}  --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`,
+    };
+
+    const cmd = packageManagerRecords[packageManager as PackageManager];
+
     try {
-      if (packageManager === "pnpm") {
-        await spawnCommand(
-          `pnpm create next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`
-        );
-      } else {
-        await spawnCommand(
-          `npx create-next-app@${version} ${name} --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack`
-        );
-      }
-    } catch (error) {}
+      await spawnCommand(cmd);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
 program
@@ -119,7 +122,7 @@ program
     new Option(
       "-p, --package-manager <packageManager>",
       "the package manager for this project"
-    ).choices(["npm", "pnpm"])
+    ).choices(["npm", "pnpm", "bun"])
   )
   .addOption(
     new Option(
@@ -184,7 +187,7 @@ program
         options.packageManager ||
         (await select({
           message: "Which package manager do you want to use?",
-          choices: [{ value: "npm" }, { value: "pnpm" }],
+          choices: [{ value: "npm" }, { value: "pnpm" }, { value: "bun" }],
         }));
 
       partialConfig.install = options.install;

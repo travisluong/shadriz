@@ -14,7 +14,7 @@ export interface ShadrizConfig {
 
 export type AuthSolution = "authjs" | "none";
 
-export type PackageManager = "npm" | "pnpm";
+export type PackageManager = "npm" | "pnpm" | "bun";
 
 export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "nanoid";
 
