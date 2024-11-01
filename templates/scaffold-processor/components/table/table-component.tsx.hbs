@@ -1,4 +1,4 @@
-import { EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { EyeIcon, PencilIcon, TrashIcon, ListTodoIcon } from "lucide-react";
 import Link from "next/link";
 import {
   Table,
@@ -65,6 +65,7 @@ export default function {{tableObj.singularPascalCase}}Table({ {{tableObj.singul
               {{/switch}}
             {{/each}}
             <TableCell className="justify-end flex gap-2">
+              {/* [CODE_MARK table-actions] */}
               <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
                 <Button size="icon" variant="outline">
                   <EyeIcon />

@@ -125,6 +125,12 @@ export class NewProjectProcessor implements ShadrizProcessor {
     });
 
     renderTemplate({
+      inputPath:
+        "new-project-processor/components/generic-checkbox-list.tsx.hbs",
+      outputPath: "components/generic-checkbox-list.tsx",
+    });
+
+    renderTemplate({
       inputPath: "new-project-processor/components/form-alert.tsx.hbs",
       outputPath: "components/form-alert.tsx",
     });
