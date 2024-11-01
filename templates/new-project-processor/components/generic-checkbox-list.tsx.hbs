@@ -43,7 +43,7 @@ export function GenericCheckboxList<Type extends GenericType>({
         onChange={(e) => setSearch(e.target.value)}
         placeholder={searchPlaceholder}
       />
-      <div className="max-h-40 overflow-y-scroll">
+      <div className="max-h-48 overflow-y-scroll">
         {filteredList.map((item) => (
           <div key={item.id} className="flex items-center gap-2 py-1">
             <Checkbox
