@@ -1,5 +1,7 @@
+import Handlebars from "handlebars";
+import path from "path";
+import fs from "fs";
 import { getReadme, getTableOfContents } from "../lib/markdown";
-import { renderTemplate } from "../lib/utils";
 import packageJson from "../package.json";
 
 async function main() {
@@ -8,12 +10,12 @@ async function main() {
   const version = packageJson["version"];
 
   renderTemplate({
-    inputPath: "docs/index.html.hbs",
-    outputPath: "docs/index.html",
+    inputPath: "index.html.hbs",
+    outputPath: "docs/dist/index.html",
   });
   renderTemplate({
-    inputPath: "docs/docs.html.hbs",
-    outputPath: "docs/docs.html",
+    inputPath: "docs.html.hbs",
+    outputPath: "docs/dist/docs.html",
     data: {
       readme: readme,
       toc: toc,
@@ -21,13 +23,52 @@ async function main() {
     },
   });
   renderTemplate({
-    inputPath: "docs/style.css",
-    outputPath: "docs/style.css",
+    inputPath: "style.css",
+    outputPath: "docs/dist/style.css",
   });
   renderTemplate({
-    inputPath: "docs/app.js",
-    outputPath: "docs/app.js",
+    inputPath: "app.js",
+    outputPath: "docs/dist/app.js",
   });
+}
+
+export function renderTemplate({
+  inputPath,
+  outputPath,
+  data,
+}: {
+  inputPath: string;
+  outputPath: string;
+  data?: any;
+}) {
+  const content = compileTemplate({ inputPath, data });
+  const joinedOutputPath = path.join(process.cwd(), outputPath);
+  const resolvedPath = path.resolve(joinedOutputPath);
+  const dir = path.dirname(resolvedPath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(resolvedPath, content);
+}
+
+export function compileTemplate({
+  inputPath,
+  data,
+}: {
+  inputPath: string;
+  data?: any;
+}): string {
+  const templatePath = path.join(
+    __dirname,
+    "..",
+    "docs",
+    "templates",
+    inputPath
+  );
+  const templateContent = fs.readFileSync(templatePath, "utf-8");
+  const compiled = Handlebars.compile(templateContent, { noEscape: true });
+  const content = compiled(data);
+  return content;
 }
 
 main();
