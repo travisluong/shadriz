@@ -9,7 +9,8 @@
     "test": "vitest",
     "build": "tsc && cp -R templates dist && cp -R README.md dist/",
     "start": "node dist/index.js",
-    "build-docs": "tsx scripts/build-docs"
+    "docs:build": "tsx docs/scripts/build",
+    "docs:dev": "nodemon --exec \"tsx docs/scripts/build && npx serve docs/dist\" --ignore ./docs/dist/ --ext hbs,js,css,md --watch ./docs"
   },
   "author": "travisluong",
   "license": "MIT",
@@ -26,5 +27,8 @@
     "tsx": "^4.19.0",
     "typescript": "^5.5.2",
     "vitest": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }

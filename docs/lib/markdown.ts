@@ -3,7 +3,7 @@ import fs from "fs";
 import { marked } from "marked";
 
 export function getMarkdown() {
-  const fullPath = path.join(__dirname, "..", "README.md");
+  const fullPath = path.join(__dirname, "../..", "README.md");
   const fileContents = fs.readFileSync(fullPath, "utf8");
   return fileContents;
 }
