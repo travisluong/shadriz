@@ -4,8 +4,8 @@
 }
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #fafafa;
-  color: #18181b;
+  background-color: white;
+  color: black;
 }
 a {
   text-decoration: none;
@@ -27,20 +27,20 @@ a {
   list-style-type: none;
 }
 .shadriz-sidebar ul li a {
-  color: #18181b;
+  color: black;
   &:hover {
     text-decoration: underline;
   }
 }
 .shadriz-sidebar ul li.level-1 a {
   font-weight: bold;
-  color: #18181b;
+  color: black;
 }
 .shadriz-sidebar ul li.level-2 {
   margin-top: 20px;
 }
 .shadriz-sidebar ul li.level-2 a {
-  color: #18181b;
+  color: black;
 }
 .shadriz-sidebar ul li.level-3 a {
   color: #71717a;
@@ -51,7 +51,7 @@ a {
   height: 100%;
 }
 .shadriz-docs a {
-  color: #18181b;
+  color: black;
 }
 .shadriz-docs h1 {
   font-weight: bold;
@@ -116,8 +116,8 @@ a {
   gap: 5px;
 }
 .shadriz-menu button {
-  background-color: #18181b;
-  color: #fafafa;
+  background-color: black;
+  color: white;
   padding: 5px;
   border: 0;
   border-radius: 5px;
@@ -140,7 +140,7 @@ a {
   }
   .shadriz-sidebar {
     display: none;
-    background-color: #fafafa;
+    background-color: white;
     position: fixed;
     top: 0;
     width: 100%;
@@ -152,7 +152,7 @@ a {
 
 @media (prefers-color-scheme: dark) {
   .shadriz-sidebar {
-    background-color: #18181b;
+    background-color: black;
   }
   .shadriz-docs pre {
     background-color: #334155;
@@ -161,27 +161,27 @@ a {
     background-color: #334155;
   }
   .shadriz-sidebar ul li a {
-    color: #fafafa;
+    color: white;
   }
   .shadriz-sidebar ul li.level-3 a {
     color: dark#71717a;
   }
   body {
-    background-color: #18181b;
-    color: #fafafa;
+    background-color: black;
+    color: white;
   }
   .shadriz-menu button {
-    color: #18181b;
-    background-color: #fafafa;
+    color: black;
+    background-color: white;
   }
   .shadriz-docs a {
-    color: #fafafa;
+    color: white;
   }
   .shadriz-sidebar ul li.level-1 a {
-    color: #fafafa;
+    color: white;
   }
   .shadriz-sidebar ul li.level-2 a {
-    color: #fafafa;
+    color: white;
   }
   .shadriz-sidebar ul li.level-3 a {
     color: #94a3b8;
