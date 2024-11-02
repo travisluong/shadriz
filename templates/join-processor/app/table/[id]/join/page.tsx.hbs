@@ -24,7 +24,8 @@ export default async function Page(props: { params: Params }) {
 
   return (
     <div>
-      <h1 className="font-bold text-xl mb-6">Update {{rightCaseVariants.pluralCapitalCase}}</h1>
+      <h1 className="font-bold text-xl mb-6">Edit {{rightCaseVariants.pluralCapitalCase}}</h1>
+      <p><strong>{{leftCaseVariants.singularCapitalCase}}:</strong> { {{leftCaseVariants.singularCamelCase}}.id }</p>
       <{{joinCaseVariants.pluralPascalCase}}UpdateForm
         id={ {{leftCaseVariants.singularCamelCase}}.id }
         {{rightCaseVariants.singularCamelCase}}List={ {{rightCaseVariants.singularCamelCase}}List }

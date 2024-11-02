@@ -4,11 +4,12 @@
             list={ {{validatedColumn.caseVariants.singularCamelCase}}List }
             name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}"
             valueField="id"
-            labelField="id"
             defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariantsWithId.singularCamelCase}} }
             searchPlaceholder="Search {{validatedColumn.caseVariants.pluralCapitalCase}}..."
             selectPlaceholder="Select {{validatedColumn.caseVariants.singularCapitalCase}}..."
             emptyText="No {{validatedColumn.caseVariants.singularCamelCase}} found"
+            keywordFields=["id"]
+            template={(item) => <div>{item.title}</div>}
           />
           {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
             <p className="text-red-500" key={error}>

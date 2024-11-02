@@ -172,37 +172,27 @@ The `references_combobox` data type will use a Generic Combobox component where 
 npx shadriz@latest scaffold post -c category:references_combobox title:text
 ```
 
+You can add additional fields to search using the `keywordFields` prop. You can also change the template of the rendered items. For example:
+
+```tsx
+<GenericCombobox
+  list={categoryList}
+  name="categoryId"
+  valueField="id"
+  searchPlaceholder="Search Categories..."
+  selectPlaceholder="Select Category..."
+  emptyText="No category found"
+  keywordFields={["id", "title"]}
+  template={(item) => <div>{item.title}</div>}
+/>
+```
+
 ### References Select
 
 The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items.
 
 ```bash
 npx shadriz@latest scaffold post -c category:references_select title:text
-```
-
-### Labels
-
-For the `references_combobox` and `references_select` components, the `id` column will be used as the label. This can be changed in the code by passing in a different value for the `labelField` prop. Both components search on the `labelField`.
-
-With the combobox, you can add additional fields to search using the `keywordFields` prop. You can also change the template of the rendered items. For example:
-
-```
-<GenericCombobox
-   list={categoryList}
-   name="categoryId"
-   valueField="id"
-   labelField="title"
-   defaultValue={fooBar.categoryId}
-   searchPlaceholder="Search Categories..."
-   selectPlaceholder="Select Category..."
-   emptyText="No category found"
-   keywordFields={["title"]}
-   template={(item: Category) => (
-      <div>
-         id: {item.title} title: {item.title}
-      </div>
-   )}
-/>
 ```
 
 ## File uploads
