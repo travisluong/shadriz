@@ -55,7 +55,7 @@ const formComponentImports: Record<FormComponent, string> = {
   checkbox: `import { Checkbox } from "@/components/ui/checkbox";`,
   "generic-combobox": `import { GenericCombobox } from "@/components/generic-combobox";`,
   "generic-select": `import { GenericSelect } from "@/components/generic-select";`,
-  "tiptap-editor": `import TiptapEditor from "@/components/tiptap-editor";`,
+  "tiptap-editor": `import { TiptapEditor } from "@/components/tiptap-editor";`,
 };
 
 interface ValidatedColumn {

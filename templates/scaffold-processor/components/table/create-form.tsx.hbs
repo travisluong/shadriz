@@ -10,7 +10,7 @@ import { FormAlert } from "@/components/form-alert";
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
 {{/each}}
 
-export default function {{tableObj.singularPascalCase}}CreateForm({{#if hasReferences}}{
+export function {{tableObj.singularPascalCase}}CreateForm({{#if hasReferences}}{
   {{#each referencesColumnList}}
   {{this.singularCamelCase}}List,
   {{/each}}

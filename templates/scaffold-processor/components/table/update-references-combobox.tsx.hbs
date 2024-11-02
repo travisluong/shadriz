@@ -8,7 +8,7 @@
             searchPlaceholder="Search {{validatedColumn.caseVariants.pluralCapitalCase}}..."
             selectPlaceholder="Select {{validatedColumn.caseVariants.singularCapitalCase}}..."
             emptyText="No {{validatedColumn.caseVariants.singularCamelCase}} found"
-            keywordFields=["id"]
+            keywordFields={["id"]}
             template={(item) => <div>{item.title}</div>}
           />
           {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (

@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
-export default async function SignInPage(props: {
+export default async function Page(props: {
   searchParams: SearchParams;
 }) {
   const searchParams = await props.searchParams;

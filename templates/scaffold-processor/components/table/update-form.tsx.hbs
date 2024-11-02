@@ -17,7 +17,7 @@ import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebab
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
 {{/each}}
 
-export default function {{tableObj.singularPascalCase}}UpdateForm({ 
+export function {{tableObj.singularPascalCase}}UpdateForm({ 
   {{tableObj.singularCamelCase}},
   {{#each referencesColumnList}}
   {{this.singularCamelCase}}List,

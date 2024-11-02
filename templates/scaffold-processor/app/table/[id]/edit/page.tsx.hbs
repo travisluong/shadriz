@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 {{#if referencesColumnList.length}}
 import { db } from "@/lib/db";
 {{/if}}
-import {{tableObj.singularPascalCase}}UpdateForm from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-update-form";
+import { {{tableObj.singularPascalCase}}UpdateForm } from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-update-form";
 import { get{{tableObj.singularPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 type Params = Promise<{ id: string }>;

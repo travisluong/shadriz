@@ -15,7 +15,13 @@ import {
 import { Button } from "./ui/button";
 import "@/styles/tiptap-editor.css";
 
-const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
+export const TiptapEditor = ({
+  html,
+  name,
+}: {
+  html: string;
+  name: string;
+}) => {
   const [editorContent, setEditorContent] = useState(html);
 
   const editor = useEditor({
@@ -141,5 +147,3 @@ const TiptapEditor = ({ html, name }: { html: string; name: string }) => {
     </div>
   );
 };
-
-export default TiptapEditor;
