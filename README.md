@@ -45,27 +45,17 @@ You will be asked a few questions to configure the app:
 
 After initialization, you will be prompted to complete a few additional checklist items.
 
-Generate the drizzle migrations:
+Generate and run the drizzle migrations:
 
 ```bash
 npm run generate
-```
-
-Run the migrations:
-
-```bash
 npm run migrate
 ```
 
-Create a test user:
+Create a test user and grant admin role:
 
 ```bash
 npx tsx scripts/create-user.ts user@example.com password123
-```
-
-Grant admin role to user:
-
-```bash
 npx tsx scripts/grant-admin.ts user@example.com
 ```
 
