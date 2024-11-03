@@ -3,8 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
 import { log } from "./log";
-import packageShadrizJson from "../package-shadriz.json";
-import { PackageManager, ShadrizConfig } from "./types";
+import packageShadjsJson from "../package-shadjs.json";
+import { PackageManager, ShadjsConfig } from "./types";
 import { caseFactory } from "./case-utils";
 import { registerHandlebarsHelpers } from "./handlebars-helpers";
 
@@ -326,8 +326,8 @@ export async function installDependencies(opts: {
   const collectDependencies = [];
   for (const str of opts.dependencies) {
     const pinnedVersion =
-      packageShadrizJson.dependencies[
-        str as keyof typeof packageShadrizJson.dependencies
+      packageShadjsJson.dependencies[
+        str as keyof typeof packageShadjsJson.dependencies
       ];
     if (!pinnedVersion) {
       throw new Error("pinned version not found for dependency " + str);
@@ -368,8 +368,8 @@ export async function installDevDependencies(opts: {
   const collectDevDependencies = [];
   for (const str of opts.devDependencies) {
     const pinnedVersion =
-      packageShadrizJson.devDependencies[
-        str as keyof typeof packageShadrizJson.devDependencies
+      packageShadjsJson.devDependencies[
+        str as keyof typeof packageShadjsJson.devDependencies
       ];
     if (!pinnedVersion) {
       throw new Error("pinned version not found for dev dependency " + str);
@@ -407,7 +407,7 @@ export async function addShadcnComponents(opts: {
   packageManager: PackageManager;
   latest: boolean;
 }) {
-  const pinnedVersion = packageShadrizJson.dependencies["shadcn"];
+  const pinnedVersion = packageShadjsJson.dependencies["shadcn"];
   if (!pinnedVersion) {
     throw new Error("pinned version not found for shadcn");
   }
@@ -432,18 +432,18 @@ export async function addShadcnComponents(opts: {
   spawnSyncCommand(packageManagerRecords[opts.packageManager]);
 }
 
-export function loadShadrizConfig(): ShadrizConfig {
+export function loadShadjsConfig(): ShadjsConfig {
   const json = fs.readFileSync(
-    path.join(process.cwd(), "shadriz.config.json"),
+    path.join(process.cwd(), "shadjs.config.json"),
     "utf-8"
   );
   return JSON.parse(json);
 }
 
-export function completeShadrizConfig(
-  partialConfig: Partial<ShadrizConfig>
-): ShadrizConfig {
-  const completeConfig: ShadrizConfig = {
+export function completeShadjsConfig(
+  partialConfig: Partial<ShadjsConfig>
+): ShadjsConfig {
+  const completeConfig: ShadjsConfig = {
     version: partialConfig.version ?? "",
     packageManager: partialConfig.packageManager ?? "npm",
     latest: partialConfig.latest ?? false,

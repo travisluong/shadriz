@@ -1,9 +1,9 @@
 {
-  "name": "shadriz",
+  "name": "shadjs",
   "version": "5.0.1",
   "main": "dist/index.js",
   "bin": {
-    "shadriz": "./dist/index.js"
+    "shadjs": "./dist/index.js"
   },
   "scripts": {
     "test": "vitest",

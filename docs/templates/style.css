@@ -14,126 +14,126 @@ body {
 a {
   text-decoration: none;
 }
-.shadriz-sidebar ul li {
+.shadjs-sidebar ul li {
   list-style-type: none;
 }
-.shadriz-sidebar ul li a {
+.shadjs-sidebar ul li a {
   color: black;
   &:hover {
     text-decoration: underline;
   }
 }
-.shadriz-sidebar ul li.level-1 a {
+.shadjs-sidebar ul li.level-1 a {
   font-weight: bold;
   color: black;
 }
-.shadriz-sidebar ul li.level-2 {
+.shadjs-sidebar ul li.level-2 {
   margin-top: 20px;
 }
-.shadriz-sidebar ul li.level-2 a {
+.shadjs-sidebar ul li.level-2 a {
   color: black;
 }
-.shadriz-sidebar ul li.level-3 a {
+.shadjs-sidebar ul li.level-3 a {
   color: #71717a;
 }
-.shadriz-docs {
+.shadjs-docs {
   min-width: 0px;
   padding: 20px;
   height: 100%;
 }
-.shadriz-docs a {
+.shadjs-docs a {
   color: black;
 }
-.shadriz-docs h1 {
+.shadjs-docs h1 {
   font-weight: bold;
   font-size: 48px;
   margin-bottom: 20px;
 }
-.shadriz-docs h2 {
+.shadjs-docs h2 {
   font-weight: bold;
   font-size: 36px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
-.shadriz-docs h3 {
+.shadjs-docs h3 {
   font-weight: bold;
   font-size: 24px;
   margin-bottom: 20px;
 }
-.shadriz-docs p {
+.shadjs-docs p {
   margin-bottom: 20px;
 }
-.shadriz-docs pre {
+.shadjs-docs pre {
   background-color: #d4d4d8;
   padding: 20px;
   margin-bottom: 20px;
   overflow: auto;
   border-radius: 5px;
 }
-.shadriz-docs code {
+.shadjs-docs code {
   background-color: #d4d4d8;
 }
-.shadriz-docs ul {
+.shadjs-docs ul {
   margin-bottom: 20px;
 }
-.shadriz-docs ul li {
+.shadjs-docs ul li {
   list-style-type: disc;
   margin-left: 20px;
 }
-.shadriz-docs a {
+.shadjs-docs a {
   text-decoration: underline;
   font-weight: bold;
 }
-.shadriz-docs table {
+.shadjs-docs table {
   border-spacing: 0;
   border-collapse: collapse;
 }
-.shadriz-docs table th {
+.shadjs-docs table th {
   padding: 5px;
   border: 1px solid #71717a;
 }
-.shadriz-docs table td {
+.shadjs-docs table td {
   padding: 5px;
   border: 1px solid #71717a;
 }
-.shadriz-logo {
+.shadjs-logo {
   margin-bottom: 20px;
 }
 
 @media (prefers-color-scheme: dark) {
-  .shadriz-sidebar {
+  .shadjs-sidebar {
     background-color: black;
   }
-  .shadriz-docs pre {
+  .shadjs-docs pre {
     background-color: #333333;
   }
-  .shadriz-docs code {
+  .shadjs-docs code {
     background-color: #333333;
   }
-  .shadriz-sidebar ul li a {
+  .shadjs-sidebar ul li a {
     color: white;
   }
-  .shadriz-sidebar ul li.level-3 a {
+  .shadjs-sidebar ul li.level-3 a {
     color: dark#71717a;
   }
   body {
     background-color: black;
     color: white;
   }
-  .shadriz-menu button {
+  .shadjs-menu button {
     color: black;
     background-color: white;
   }
-  .shadriz-docs a {
+  .shadjs-docs a {
     color: white;
   }
-  .shadriz-sidebar ul li.level-1 a {
+  .shadjs-sidebar ul li.level-1 a {
     color: white;
   }
-  .shadriz-sidebar ul li.level-2 a {
+  .shadjs-sidebar ul li.level-2 a {
     color: white;
   }
-  .shadriz-sidebar ul li.level-3 a {
+  .shadjs-sidebar ul li.level-3 a {
     color: #94a3b8;
   }
 }

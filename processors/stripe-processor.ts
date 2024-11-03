@@ -2,8 +2,8 @@ import { log } from "../lib/log";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 import {
   DbDialect,
-  ShadrizProcessor,
-  ShadrizConfig,
+  ShadjsProcessor,
+  ShadjsConfig,
   DbDialectStrategy,
 } from "../lib/types";
 import {
@@ -18,10 +18,10 @@ import {
 } from "../lib/pk-strategy";
 import { ScaffoldProcessor } from "./scaffold-processor";
 
-export class StripeProcessor implements ShadrizProcessor {
-  opts: ShadrizConfig;
+export class StripeProcessor implements ShadjsProcessor {
+  opts: ShadjsConfig;
 
-  constructor(opts: ShadrizConfig) {
+  constructor(opts: ShadjsConfig) {
     this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
   }

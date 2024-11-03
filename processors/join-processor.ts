@@ -4,8 +4,8 @@ import { dialectStrategyFactory } from "../lib/strategy-factory";
 import {
   AuthorizationLevel,
   DbDialectStrategy,
-  ShadrizConfig,
-  ShadrizProcessor,
+  ShadjsConfig,
+  ShadjsProcessor,
 } from "../lib/types";
 import { insertTextAfterIfNotExists, renderTemplate } from "../lib/utils";
 
@@ -16,8 +16,8 @@ interface JoinOpts {
   authorizationLevel: AuthorizationLevel;
 }
 
-export class JoinProcessor implements ShadrizProcessor {
-  opts: ShadrizConfig;
+export class JoinProcessor implements ShadjsProcessor {
+  opts: ShadjsConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = [];
@@ -27,7 +27,7 @@ export class JoinProcessor implements ShadrizProcessor {
   joinCaseVariants: Cases;
   rightCaseVariants: Cases;
 
-  constructor(opts: ShadrizConfig, joinOpts: JoinOpts) {
+  constructor(opts: ShadjsConfig, joinOpts: JoinOpts) {
     this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
     this.joinOpts = joinOpts;

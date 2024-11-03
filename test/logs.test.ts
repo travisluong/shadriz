@@ -4,10 +4,10 @@ import { AdminProcessor } from "../processors/admin-processor";
 import { StripeProcessor } from "../processors/stripe-processor";
 import { BetterSqlite3PackageStrategy } from "../db-packages/better-sqlite3-package-strategy";
 import { PgPackageStrategy } from "../db-packages/pg-package-strategy";
-import { ShadrizConfig } from "../lib/types";
+import { ShadjsConfig } from "../lib/types";
 import { Mysql2PackageStrategy } from "../db-packages/mysql2-package-strategy";
 
-const shadrizConfig: ShadrizConfig = {
+const shadjsConfig: ShadjsConfig = {
   authProviders: ["google", "github", "credentials", "nodemailer", "postmark"],
   install: false,
   packageManager: "npm",
@@ -22,31 +22,31 @@ const shadrizConfig: ShadrizConfig = {
 };
 
 test("better sqlite3 package strategy", () => {
-  const s = new BetterSqlite3PackageStrategy(shadrizConfig);
+  const s = new BetterSqlite3PackageStrategy(shadjsConfig);
   s.printCompletionMessage();
 });
 
 test("pg package strategy", () => {
-  const s = new PgPackageStrategy(shadrizConfig);
+  const s = new PgPackageStrategy(shadjsConfig);
   s.printCompletionMessage();
 });
 
 test("mysql2 package strategy", () => {
-  const s = new Mysql2PackageStrategy(shadrizConfig);
+  const s = new Mysql2PackageStrategy(shadjsConfig);
   s.printCompletionMessage();
 });
 
 test("auth processor", () => {
-  const a = new AuthProcessor(shadrizConfig);
+  const a = new AuthProcessor(shadjsConfig);
   a.printCompletionMessage();
 });
 
 test("admin processor", () => {
-  const a = new AdminProcessor(shadrizConfig);
+  const a = new AdminProcessor(shadjsConfig);
   a.printCompletionMessage();
 });
 
 test("stripe processor", () => {
-  const p = new StripeProcessor(shadrizConfig);
+  const p = new StripeProcessor(shadjsConfig);
   p.printCompletionMessage();
 });

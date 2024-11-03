@@ -5,17 +5,17 @@ import { log } from "./lib/log";
 import {
   AuthorizationLevel,
   PackageManager,
-  ShadrizConfig,
-  ShadrizProcessor,
+  ShadjsConfig,
+  ShadjsProcessor,
 } from "./lib/types";
 import { ScaffoldProcessor } from "./processors/scaffold-processor";
 import { checkbox, select, confirm } from "@inquirer/prompts";
 import {
   addShadcnComponents,
-  completeShadrizConfig,
+  completeShadjsConfig,
   installDependencies,
   installDevDependencies,
-  loadShadrizConfig,
+  loadShadjsConfig,
   spawnCommand,
   spawnSyncCommand,
   writeToFile,
@@ -27,29 +27,29 @@ import { DarkModeProcessor } from "./processors/dark-mode-processor";
 import { AdminProcessor } from "./processors/admin-processor";
 import fs from "fs";
 import { DbDialectProcessor } from "./processors/db-dialect-processor";
-import packageShadrizJson from "./package-shadriz.json";
+import packageShadjsJson from "./package-shadjs.json";
 import packageJson from "./package.json";
 import { pkDependencies } from "./lib/pk-strategy";
 import { ADD_ON_REGISTRY, getAddOnHelpText } from "./lib/add-on-registry";
 import { JoinProcessor } from "./processors/join-processor";
 
-const PINNED_NEXTJS_VERSION = packageShadrizJson.dependencies["next"];
+const PINNED_NEXTJS_VERSION = packageShadjsJson.dependencies["next"];
 
 const VERSION = packageJson["version"];
 
 const program = new Command();
 
 program
-  .name("shadriz")
+  .name("shadjs")
   .description(
-    "shadriz - full stack framework next.js shadcn/ui and drizzle orm"
+    "shadjs - full stack framework next.js shadcn/ui and drizzle orm"
   )
   .version(VERSION);
 
 program
   .command("new")
   .description(
-    "initialize a new next.js project using recommended settings for shadriz"
+    "initialize a new next.js project using recommended settings for shadjs"
   )
   .argument("<name>", "name of project")
   .addOption(
@@ -135,7 +135,7 @@ program
   .addOption(
     new Option(
       "--no-latest",
-      "install pinned dependencies and shadcn components specified in package-shadriz.json"
+      "install pinned dependencies and shadcn components specified in package-shadjs.json"
     )
   )
   .addOption(
@@ -183,7 +183,7 @@ program
     try {
       // inquire
 
-      const partialConfig: Partial<ShadrizConfig> = {};
+      const partialConfig: Partial<ShadjsConfig> = {};
       partialConfig.version = VERSION;
 
       partialConfig.packageManager =
@@ -206,7 +206,7 @@ program
                 name: "pinned",
                 value: false,
                 description:
-                  "Installs pinned packages in package-shadriz.json. More stable, but possibly obsolete.",
+                  "Installs pinned packages in package-shadjs.json. More stable, but possibly obsolete.",
               },
               {
                 name: "latest",
@@ -304,12 +304,12 @@ program
 
       // process
 
-      const processors: ShadrizProcessor[] = [];
+      const processors: ShadjsProcessor[] = [];
 
-      const completeConfig = completeShadrizConfig(partialConfig);
+      const completeConfig = completeShadjsConfig(partialConfig);
 
       writeToFile(
-        "shadriz.config.json",
+        "shadjs.config.json",
         JSON.stringify(completeConfig, null, 2)
       );
 
@@ -386,7 +386,7 @@ program
       }
 
       log.log("");
-      log.success("shadriz init success");
+      log.success("shadjs init success");
     } catch (error) {
       log.red(`${error}`);
     }
@@ -399,13 +399,13 @@ program
     `generate crud ui, db schema, db migration, and server actions for a database table
 
 # sqlite example
-npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:text
+npx shadjs@latest scaffold post -c title:text content:text is_draft:boolean published_at:text
 
 # postgresql example
-npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
+npx shadjs@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
 
 # mysql example
-npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean published_at:timestamp
+npx shadjs@latest scaffold post -c title:varchar content:text is_draft:boolean published_at:timestamp
 
 `
   )
@@ -421,7 +421,7 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
     ).choices(["admin", "private", "public"])
   )
   .action(async (table, options) => {
-    const shadrizConfig: ShadrizConfig = loadShadrizConfig();
+    const shadjsConfig: ShadjsConfig = loadShadjsConfig();
     const authorizationLevel: AuthorizationLevel =
       options.authorizationLevel ||
       (await select({
@@ -458,7 +458,7 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
       columns: options.columns,
       authorizationLevel: authorizationLevel,
       enableCompletionMessage: true,
-      ...shadrizConfig,
+      ...shadjsConfig,
     });
     scaffoldProcessor.process();
   });
@@ -483,27 +483,27 @@ program
     const addOn = ADD_ON_REGISTRY[name as keyof typeof ADD_ON_REGISTRY];
     const Processor = addOn.Processor;
 
-    const shadrizConfig: ShadrizConfig = loadShadrizConfig();
+    const shadjsConfig: ShadjsConfig = loadShadjsConfig();
 
-    const processor = new Processor(shadrizConfig);
+    const processor = new Processor(shadjsConfig);
 
     if (options.install) {
       await installDependencies({
         dependencies: processor.dependencies,
-        packageManager: shadrizConfig.packageManager,
-        latest: shadrizConfig.latest,
+        packageManager: shadjsConfig.packageManager,
+        latest: shadjsConfig.latest,
       });
 
       await installDevDependencies({
         devDependencies: processor.devDependencies,
-        packageManager: shadrizConfig.packageManager,
-        latest: shadrizConfig.latest,
+        packageManager: shadjsConfig.packageManager,
+        latest: shadjsConfig.latest,
       });
 
       await addShadcnComponents({
         shadcnComponents: processor.shadcnComponents,
-        packageManager: shadrizConfig.packageManager,
-        latest: shadrizConfig.latest,
+        packageManager: shadjsConfig.packageManager,
+        latest: shadjsConfig.latest,
       });
     }
 
@@ -570,9 +570,9 @@ program
       process.exit(1);
     }
 
-    const shadrizConfig: ShadrizConfig = loadShadrizConfig();
+    const shadjsConfig: ShadjsConfig = loadShadjsConfig();
 
-    const processor = new JoinProcessor(shadrizConfig, {
+    const processor = new JoinProcessor(shadjsConfig, {
       authorizationLevel: authorizationLevel,
       leftTable,
       joinTable,

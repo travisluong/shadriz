@@ -1,4 +1,4 @@
-# shadriz
+# shadjs
 
 Full Stack TypeScript Scaffolding Framework
 
@@ -7,7 +7,7 @@ Build Next.js Apps Faster With:<br>
 ✅ shadcn/ui Inspired Customizable Components<br>
 ✅ Django Inspired Admin Dashboard
 
-[Docs](https://travisluong.github.io/shadriz)
+[Docs](https://travisluong.github.io/shadjs)
 
 ## Quick Start
 
@@ -21,10 +21,10 @@ npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-sr
 
 ### Step 2: Run the CLI
 
-Run the `shadriz init` command to setup your project.
+Run the `shadjs init` command to setup your project.
 
 ```bash
-npx shadriz@latest init
+npx shadjs@latest init
 ```
 
 ### Step 3: Configure project
@@ -78,7 +78,7 @@ npm run dev
 ## Step 6: Scaffold an app
 
 ```bash
-npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
+npx shadjs@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
 ```
 
 ## Author

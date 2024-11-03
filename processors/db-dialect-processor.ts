@@ -1,13 +1,13 @@
 import { log } from "../lib/log";
-import { ShadrizConfig, ShadrizProcessor } from "../lib/types";
+import { ShadjsConfig, ShadjsProcessor } from "../lib/types";
 import { renderTemplate, renderTemplateIfNotExists } from "../lib/utils";
 
-export class DbDialectProcessor implements ShadrizProcessor {
-  opts: ShadrizConfig;
+export class DbDialectProcessor implements ShadjsProcessor {
+  opts: ShadjsConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = [];
-  constructor(opts: ShadrizConfig) {
+  constructor(opts: ShadjsConfig) {
     this.opts = opts;
   }
 
