@@ -582,15 +582,4 @@ program
     await processor.init();
   });
 
-program
-  .command("init-shadcn")
-  .summary("initialize and install shadcn components")
-  .description("installs")
-  .action(async () => {
-    spawnSyncCommand("npx shadcn@latest init -y -d");
-    spawnSyncCommand(
-      "npx shadcn@latest add -y -o card badge sidebar separator avatar dropdown-menu table label input button textarea checkbox select popover command alert"
-    );
-  });
-
 program.parse();

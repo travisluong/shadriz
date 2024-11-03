@@ -1,5 +1,7 @@
 # Changelog
 
+- Remove unused command.
+
 ## v0.1.2
 
 - Minor docs UI fixes.
