@@ -113,9 +113,7 @@ export async function spawnCommand2(command: string) {
     shell: true, // Optional: Use the shell to interpret the command (useful for complex commands)
   });
 
-  child.on("exit", (code) => {
-    console.log(`Child process exited with code ${code}`);
-  });
+  child.on("exit", (code) => {});
 }
 
 export function appendToEnvLocal(key: string, val: string) {
