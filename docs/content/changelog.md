@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.1.3
+
 - Remove unused command.
 
 ## v0.1.2
