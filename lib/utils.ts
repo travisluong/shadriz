@@ -1,4 +1,4 @@
-import { spawn, exec } from "child_process";
+import { spawn, spawnSync, exec } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 import Handlebars from "handlebars";
@@ -82,6 +82,7 @@ export function runCommand(command: string): Promise<void> {
 }
 
 export async function spawnCommand(command: string): Promise<void> {
+  log.blue("> " + command);
   const child = spawn(command, [], { shell: true });
 
   child.stdout.on("data", (data) => {
@@ -107,13 +108,18 @@ export async function spawnCommand(command: string): Promise<void> {
   });
 }
 
-export async function spawnCommand2(command: string) {
-  const child = spawn(command, [], {
+export function spawnSyncCommand(command: string) {
+  log.blue("> " + command);
+  const result = spawnSync(command, [], {
     stdio: "inherit", // Directly inherits stdio from the parent, enabling interaction
     shell: true, // Optional: Use the shell to interpret the command (useful for complex commands)
   });
 
-  child.on("exit", (code) => {});
+  if (result.error) {
+    console.error("Error executing command:", result.error);
+  } else {
+    console.log(`Process exited with code ${result.status}`);
+  }
 }
 
 export function appendToEnvLocal(key: string, val: string) {
@@ -344,7 +350,7 @@ export async function installDependencies(opts: {
   }
 
   const packageManagerRecords: Record<PackageManager, string> = {
-    npm: `npm install ${collectDependencies.join(" ")}`,
+    npm: `npm install ${collectDependencies.join(" ")} --force`,
     pnpm: `pnpm add ${collectDependencies.join(" ")}`,
     bun: `bun add ${collectDependencies.join(" ")}`,
   };
@@ -386,7 +392,7 @@ export async function installDevDependencies(opts: {
   }
 
   const packageManagerRecords: Record<PackageManager, string> = {
-    npm: `npm install -D ${collectDevDependencies.join(" ")}`,
+    npm: `npm install -D ${collectDevDependencies.join(" ")} --force`,
     pnpm: `pnpm add -D ${collectDevDependencies.join(" ")}`,
     bun: `bun add -D ${collectDevDependencies.join(" ")}`,
   };
@@ -423,7 +429,7 @@ export async function addShadcnComponents(opts: {
     bun: `bunx shadcn@${version} add -y -o ${opts.shadcnComponents.join(" ")}`,
   };
 
-  await runCommand(packageManagerRecords[opts.packageManager]);
+  spawnSyncCommand(packageManagerRecords[opts.packageManager]);
 }
 
 export function loadShadrizConfig(): ShadrizConfig {

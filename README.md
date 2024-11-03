@@ -29,10 +29,10 @@ npx shadriz@latest init
 
 ### Step 3: Configure project
 
-You will be asked a few questions to configure the app. For this quickstart tutorial, choose the following options:
+You will be asked a few questions to configure the app:
 
 ```
-? Which package manager do you want to use? bun
+? Which package manager do you want to use? npm
 ? Do you want to install latest packages or pinned packages? pinned
 ? Which database dialect would you like to use? sqlite
 ? Which primary key generation strategy would you like to use? cuid2
@@ -43,13 +43,37 @@ You will be asked a few questions to configure the app. For this quickstart tuto
 
 ### Step 4: Project checklist
 
-After initialization, you will be prompted to complete a few additional checklist items depending on the options you chose. For example:
+After initialization, you will be prompted to complete a few additional checklist items.
 
-- Update secrets in `.env.local`.
-- Run database migrations.
-- Set up the auth providers.
-- Create a test user.
-- Grant admin privilege.
+Generate the drizzle migrations:
+
+```bash
+npm run generate
+```
+
+Run the migrations:
+
+```bash
+npm run migrate
+```
+
+Create a test user:
+
+```bash
+npx tsx scripts/create-user.ts user@example.com password123
+```
+
+Grant admin role to user:
+
+```bash
+npx tsx scripts/grant-admin.ts user@example.com
+```
+
+### Step 5: Run the dev server
+
+```bash
+npm run dev
+```
 
 ## Scaffold an app
 

@@ -17,6 +17,7 @@ import {
   installDevDependencies,
   loadShadrizConfig,
   spawnCommand,
+  spawnSyncCommand,
   writeToFile,
 } from "./lib/utils";
 import { packageStrategyFactory } from "./lib/strategy-factory";
@@ -55,7 +56,7 @@ program
     new Option(
       "-p, --package-manager <packageManager>",
       "the package manager to initialize next.js with"
-    ).choices(["bun", "pnpm", "npm"])
+    ).choices(["npm", "pnpm", "bun"])
   )
   .addOption(new Option("-l, --latest", "install the latest next.js version"))
   .option(
@@ -69,15 +70,7 @@ program
       options.packageManager ||
       (await select({
         message: "Which package manager do you want to use?",
-        choices: [
-          { value: "bun" },
-          { value: "pnpm" },
-          {
-            value: "npm",
-            description:
-              "next 15 + react 19 currently has dependency issues. see https://ui.shadcn.com/docs/react-19",
-          },
-        ],
+        choices: [{ value: "npm" }, { value: "pnpm" }, { value: "bun" }],
       }));
 
     const latest =
@@ -131,7 +124,7 @@ program
     new Option(
       "-p, --package-manager <packageManager>",
       "the package manager for this project"
-    ).choices(["bun", "pnpm", "npm"])
+    ).choices(["npm", "pnpm", "bun"])
   )
   .addOption(
     new Option(
@@ -197,15 +190,7 @@ program
         options.packageManager ||
         (await select({
           message: "Which package manager do you want to use?",
-          choices: [
-            { value: "bun" },
-            { value: "pnpm" },
-            {
-              value: "npm",
-              description:
-                "next 15 + react 19 currently has dependency issues. see https://ui.shadcn.com/docs/react-19",
-            },
-          ],
+          choices: [{ value: "npm" }, { value: "pnpm" }, { value: "bun" }],
         }));
 
       partialConfig.install = options.install;
@@ -595,6 +580,17 @@ program
     });
 
     await processor.init();
+  });
+
+program
+  .command("init-shadcn")
+  .summary("initialize and install shadcn components")
+  .description("installs")
+  .action(async () => {
+    spawnSyncCommand("npx shadcn@latest init -y -d");
+    spawnSyncCommand(
+      "npx shadcn@latest add -y -o card badge sidebar separator avatar dropdown-menu table label input button textarea checkbox select popover command alert"
+    );
   });
 
 program.parse();
