@@ -75,7 +75,7 @@ npx tsx scripts/grant-admin.ts user@example.com
 npm run dev
 ```
 
-## Scaffold an app
+## Step 6: Scaffold an app
 
 ```bash
 npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp

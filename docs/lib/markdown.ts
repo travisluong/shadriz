@@ -2,8 +2,8 @@ import path from "path";
 import fs from "fs";
 import { marked } from "marked";
 
-export function getDocsMarkdown() {
-  const fullPath = path.join(__dirname, "../content", "docs.md");
+export function getMarkdown(filename: string) {
+  const fullPath = path.join(__dirname, "../content", filename);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   return fileContents;
 }
@@ -23,10 +23,10 @@ const renderer = {
   },
 };
 
-export async function getDocsHtml() {
+export async function getHtml(filename: string) {
   // @ts-ignore
   marked.use({ renderer });
-  const md = getDocsMarkdown();
+  const md = getMarkdown(filename);
   const html = await marked(md);
   return html;
 }
@@ -59,7 +59,7 @@ function walkTokens(token: any) {
 export async function getTableOfContents() {
   headings = [];
   marked.use({ walkTokens });
-  const md = getDocsMarkdown();
+  const md = getMarkdown("docs.md");
   const html = await marked(md);
   return headings;
 }

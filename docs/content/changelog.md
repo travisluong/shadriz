@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.0.1
+
+- Improve documentation.
+- Fix init command hanging due to interactive prompts from shadcn.
+- Add changelog.
+
 ## v5.0.0
 
 - Upgrade to Next.js v15.

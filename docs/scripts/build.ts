@@ -1,7 +1,7 @@
 import Handlebars from "handlebars";
 import path from "path";
 import fs from "fs";
-import { getDocsHtml, getTableOfContents } from "../lib/markdown";
+import { getHtml, getTableOfContents } from "../lib/markdown";
 import packageJson from "../../package.json";
 
 const { exec } = require("child_process");
@@ -21,7 +21,8 @@ Handlebars.registerHelper("layout", function (options) {
 });
 
 async function main() {
-  const docsHtml = await getDocsHtml();
+  const docsHtml = await getHtml("docs.md");
+  const changelogHtml = await getHtml("changelog.md");
   const toc = await getTableOfContents();
   const version = packageJson["version"];
 
@@ -36,6 +37,13 @@ async function main() {
       docsHtml: docsHtml,
       toc: toc,
       version: version,
+    },
+  });
+  renderTemplate({
+    inputPath: "page.hbs",
+    outputPath: "docs/dist/changelog.html",
+    data: {
+      content: changelogHtml,
     },
   });
   renderTemplate({
