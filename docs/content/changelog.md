@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.1.1
+
+- Rename project to shadts.
+
+## v0.1.0
+
+- Restart semver.
+
 ## v5.0.1
 
 - Improve documentation.
