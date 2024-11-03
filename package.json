@@ -1,6 +1,6 @@
 {
   "name": "shadjs",
-  "version": "5.0.1",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "bin": {
     "shadjs": "./dist/index.js"
