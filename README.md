@@ -7,7 +7,7 @@ Build Next.js Apps Faster With:<br>
 ✅ shadcn/ui Inspired Customizable Components<br>
 ✅ Django Inspired Admin Dashboard
 
-[Docs](https://travisluong.github.io/shadts)
+[Documentation](https://www.shadts.com)
 
 ## Quick Start
 
