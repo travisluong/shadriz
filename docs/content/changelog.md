@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.2
+
+- Minor docs UI fixes.
+
 ## v0.1.1
 
 - Rename project to shadts.
