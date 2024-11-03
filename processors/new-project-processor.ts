@@ -8,6 +8,7 @@ import {
   renderTemplate,
   renderTemplateIfNotExists,
   runCommand,
+  spawnCommand2,
 } from "../lib/utils";
 import packageShadrizJson from "../package-shadriz.json";
 
@@ -62,7 +63,8 @@ export class NewProjectProcessor implements ShadrizProcessor {
       bun: `bunx shadcn@${version} init -y -d`,
     };
 
-    await runCommand(packageManagerRecords[this.opts.packageManager]);
+    await spawnCommand2(packageManagerRecords[this.opts.packageManager]);
+    // await runCommand(packageManagerRecords[this.opts.packageManager]);
   }
 
   async render() {

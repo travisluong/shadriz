@@ -55,7 +55,7 @@ program
     new Option(
       "-p, --package-manager <packageManager>",
       "the package manager to initialize next.js with"
-    ).choices(["npm", "pnpm", "bun"])
+    ).choices(["bun", "pnpm", "npm"])
   )
   .addOption(new Option("-l, --latest", "install the latest next.js version"))
   .option(
@@ -69,7 +69,15 @@ program
       options.packageManager ||
       (await select({
         message: "Which package manager do you want to use?",
-        choices: [{ value: "npm" }, { value: "pnpm" }, { value: "bun" }],
+        choices: [
+          { value: "bun" },
+          { value: "pnpm" },
+          {
+            value: "npm",
+            description:
+              "next 15 + react 19 currently has dependency issues. see https://ui.shadcn.com/docs/react-19",
+          },
+        ],
       }));
 
     const latest =
@@ -123,7 +131,7 @@ program
     new Option(
       "-p, --package-manager <packageManager>",
       "the package manager for this project"
-    ).choices(["npm", "pnpm", "bun"])
+    ).choices(["bun", "pnpm", "npm"])
   )
   .addOption(
     new Option(
@@ -184,11 +192,20 @@ program
 
       const partialConfig: Partial<ShadrizConfig> = {};
       partialConfig.version = VERSION;
+
       partialConfig.packageManager =
         options.packageManager ||
         (await select({
           message: "Which package manager do you want to use?",
-          choices: [{ value: "npm" }, { value: "pnpm" }, { value: "bun" }],
+          choices: [
+            { value: "bun" },
+            { value: "pnpm" },
+            {
+              value: "npm",
+              description:
+                "next 15 + react 19 currently has dependency issues. see https://ui.shadcn.com/docs/react-19",
+            },
+          ],
         }));
 
       partialConfig.install = options.install;
@@ -282,11 +299,11 @@ program
           (await checkbox({
             message: "Which auth providers would you like to use?",
             choices: [
+              { name: "credentials", value: "credentials", checked: true },
               { name: "github", value: "github" },
               { name: "google", value: "google" },
               { name: "postmark", value: "postmark" },
               { name: "nodemailer", value: "nodemailer" },
-              { name: "credentials", value: "credentials" },
             ],
           }));
       }

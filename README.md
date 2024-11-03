@@ -29,15 +29,15 @@ npx shadriz@latest init
 
 ### Step 3: Configure project
 
-You will be asked a few questions to configure the app.
+You will be asked a few questions to configure the app. For this quickstart tutorial, choose the following options:
 
 ```
-? Which package manager do you want to use? npm
+? Which package manager do you want to use? bun
 ? Do you want to install latest packages or pinned packages? pinned
 ? Which database dialect would you like to use? sqlite
 ? Which primary key generation strategy would you like to use? cuid2
 ? Which authentication solution do you want to use? authjs
-? Which auth providers would you like to use? github, google, credentials
+? Which auth providers would you like to use? credentials
 ? Do you want to add an admin dashboard with role-based authorization? yes
 ```
 
@@ -51,7 +51,7 @@ After initialization, you will be prompted to complete a few additional checklis
 - Create a test user.
 - Grant admin privilege.
 
-## Scaffold
+## Scaffold an app
 
 ```bash
 npx shadriz@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp

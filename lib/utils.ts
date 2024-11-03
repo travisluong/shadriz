@@ -107,6 +107,17 @@ export async function spawnCommand(command: string): Promise<void> {
   });
 }
 
+export async function spawnCommand2(command: string) {
+  const child = spawn(command, [], {
+    stdio: "inherit", // Directly inherits stdio from the parent, enabling interaction
+    shell: true, // Optional: Use the shell to interpret the command (useful for complex commands)
+  });
+
+  child.on("exit", (code) => {
+    console.log(`Child process exited with code ${code}`);
+  });
+}
+
 export function appendToEnvLocal(key: string, val: string) {
   appendToFileIfTextNotExists(".env.local", `${key}=${val}`, `${key}=`);
 }
