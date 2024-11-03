@@ -1,8 +1,10 @@
 import Handlebars from "handlebars";
 import path from "path";
 import fs from "fs";
-import { getReadme, getTableOfContents } from "../lib/markdown";
+import { getDocsHtml, getTableOfContents } from "../lib/markdown";
 import packageJson from "../../package.json";
+
+const { exec } = require("child_process");
 
 Handlebars.registerPartial(
   "layout",
@@ -19,7 +21,7 @@ Handlebars.registerHelper("layout", function (options) {
 });
 
 async function main() {
-  const readme = await getReadme();
+  const docsHtml = await getDocsHtml();
   const toc = await getTableOfContents();
   const version = packageJson["version"];
 
@@ -31,19 +33,31 @@ async function main() {
     inputPath: "docs.hbs",
     outputPath: "docs/dist/docs.html",
     data: {
-      readme: readme,
+      docsHtml: docsHtml,
       toc: toc,
       version: version,
     },
   });
   renderTemplate({
-    inputPath: "style.css",
-    outputPath: "docs/dist/style.css",
-  });
-  renderTemplate({
     inputPath: "app.js",
     outputPath: "docs/dist/app.js",
   });
+
+  exec(
+    "npx tailwindcss -i ./docs/templates/style.css -o ./docs/dist/output.css",
+    // @ts-ignore
+    (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error: ${error.message}`);
+        return;
+      }
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+    }
+  );
 }
 
 export function renderTemplate({

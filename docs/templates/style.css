@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
@@ -9,19 +13,6 @@ body {
 }
 a {
   text-decoration: none;
-}
-.shadriz-container {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.shadriz-sidebar {
-  min-width: 300px;
-  padding: 20px;
-  position: sticky;
-  height: 100vh;
-  overflow: auto;
-  top: 0;
 }
 .shadriz-sidebar ul li {
   list-style-type: none;
@@ -129,7 +120,32 @@ a {
 .shadriz-logo {
   margin-bottom: 20px;
 }
+/* Add these styles in your global CSS file */
+.scrollbar-custom {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgb(102, 102, 102) rgb(66, 66, 66); /* Thumb color, Track color */
+}
 
+/* Webkit browsers (Chrome, Edge, Safari) */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+  height: 8px; /* Scrollbar height for horizontal scrollbar */
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: rgb(76, 76, 76); /* Track color */
+  border-radius: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: rgb(77, 77, 77); /* Thumb color */
+  border-radius: 4px;
+  border: 2px solid rgb(89, 89, 89); /* Space between thumb and track */
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background-color: #111316; /* Darker thumb on hover */
+}
 @media only screen and (max-width: 768px) {
   .shadriz-menu #menu-btn {
     display: block;
