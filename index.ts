@@ -519,15 +519,15 @@ program
     `this command takes 3 required arguments: the left table, join table, and right table. a checkbox list management ui will be added to the left table ui.`
   )
   .argument(
-    "<leftTable>",
+    "<left>",
     "the left table. a new link will be added on the list page of this scaffold."
   )
   .argument(
-    "<joinTable>",
+    "<join>",
     "the join table. setting the foreign keys to not null is recommended."
   )
   .argument(
-    "<rightTable>",
+    "<right>",
     "the right table. the checkbox list will reference ids from this table."
   )
   .addOption(
@@ -536,9 +536,7 @@ program
       "the authorization level of this scaffold"
     ).choices(["admin", "private", "public"])
   )
-  .action(async (leftTable, joinTable, rightTable, options) => {
-    console.log(leftTable, joinTable, rightTable);
-
+  .action(async (left, join, right, options) => {
     const authorizationLevel: AuthorizationLevel =
       options.authorizationLevel ||
       (await select({
@@ -574,9 +572,9 @@ program
 
     const processor = new JoinProcessor(shadtsConfig, {
       authorizationLevel: authorizationLevel,
-      leftTable,
-      joinTable,
-      rightTable,
+      leftTable: left,
+      joinTable: join,
+      rightTable: right,
     });
 
     await processor.init();

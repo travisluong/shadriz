@@ -1,5 +1,7 @@
 # Changelog
 
+- Shorten join command arg names.
+
 ## v0.1.3
 
 - Remove unused command.
