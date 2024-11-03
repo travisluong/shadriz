@@ -3,6 +3,7 @@
 ## v0.1.2
 
 - Minor docs UI fixes.
+- Readme and doc edits.
 
 ## v0.1.1
 
