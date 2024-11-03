@@ -1,11 +1,14 @@
-# shadts
+# shad.ts
 
 Full Stack TypeScript Scaffolding Framework
 
-Build Next.js Apps Faster With:<br>
-✅ Ruby on Rails Inspired Scaffolding Automations<br>
-✅ shadcn/ui Inspired Customizable Components<br>
-✅ Django Inspired Admin Dashboard
+Build Next.js Apps Easier and Faster With:
+
+✅ Automated Scaffolding<br>
+✅ Customizable Full Stack Components<br>
+✅ Authentication and Authorization<br>
+✅ Admin Dashboard<br>
+✅ Type Safety<br>
 
 [Documentation](https://www.shadts.com)
 
