@@ -163,11 +163,11 @@ program
     (value: string, dummyPrevious: any) => {
       const authProviders = value.split(",");
       const validProviders = new Set([
+        "credentials",
         "github",
         "google",
         "postmark",
         "nodemailer",
-        "credentials",
       ]);
       for (const p of authProviders) {
         if (!validProviders.has(p)) {
