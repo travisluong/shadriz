@@ -1,6 +1,7 @@
 # Changelog
 
 - Shorten join command arg names.
+- Fix generic combobox bug.
 
 ## v0.1.3
 
