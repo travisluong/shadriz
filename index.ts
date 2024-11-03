@@ -472,6 +472,7 @@ npx shadriz@latest scaffold post -c title:varchar content:text is_draft:boolean 
       table: table,
       columns: options.columns,
       authorizationLevel: authorizationLevel,
+      enableCompletionMessage: true,
       ...shadrizConfig,
     });
     scaffoldProcessor.process();

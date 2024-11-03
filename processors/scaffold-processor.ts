@@ -118,7 +118,9 @@ export class ScaffoldProcessor {
     if (this.opts.authorizationLevel === "private") {
       this.addLinkToPrivateSidebar();
     }
-    this.printCompletionMessage();
+    if (this.opts.enableCompletionMessage) {
+      this.printCompletionMessage();
+    }
   }
   addSchema(): void {
     const { table } = this.opts;

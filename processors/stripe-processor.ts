@@ -133,6 +133,7 @@ export class StripeProcessor implements ShadrizProcessor {
       authorizationLevel: "admin",
       columns: stripeWebhooksColumns[this.opts.dbDialect],
       table: "stripe_webhooks",
+      enableCompletionMessage: false,
     });
     stripeWebhooksProcessor.process();
 
@@ -170,6 +171,7 @@ export class StripeProcessor implements ShadrizProcessor {
       authorizationLevel: "admin",
       columns: productsColumns[this.opts.dbDialect],
       table: "products",
+      enableCompletionMessage: false,
     });
     productsProcessor.process();
 
@@ -198,6 +200,7 @@ export class StripeProcessor implements ShadrizProcessor {
       authorizationLevel: "admin",
       columns: ordersColumns[this.opts.dbDialect],
       table: "orders",
+      enableCompletionMessage: false,
     });
     ordersProcessor.process();
 
@@ -229,6 +232,7 @@ export class StripeProcessor implements ShadrizProcessor {
       authorizationLevel: "admin",
       columns: subscriptionsColumns[this.opts.dbDialect],
       table: "subscriptions",
+      enableCompletionMessage: false,
     });
     subscriptionsProcessor.process();
   }

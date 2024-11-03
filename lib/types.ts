@@ -41,6 +41,7 @@ export interface ScaffoldProcessorOpts extends ShadrizConfig {
   table: string;
   columns: string[];
   authorizationLevel: AuthorizationLevel;
+  enableCompletionMessage: boolean;
 }
 
 export interface DataTypeStrategyOpts {

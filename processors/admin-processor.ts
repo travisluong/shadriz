@@ -94,6 +94,7 @@ export class AdminProcessor implements ShadrizProcessor {
       authorizationLevel: "admin",
       columns: strategies[this.opts.dbDialect],
       table: "users",
+      enableCompletionMessage: false,
     });
 
     userScaffold.process();
