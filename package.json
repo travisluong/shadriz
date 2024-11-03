@@ -1,9 +1,9 @@
 {
-  "name": "shadjs",
+  "name": "shadts",
   "version": "0.1.0",
   "main": "dist/index.js",
   "bin": {
-    "shadjs": "./dist/index.js"
+    "shadts": "./dist/index.js"
   },
   "scripts": {
     "test": "vitest",

@@ -1,17 +1,17 @@
 import { StripeProcessor } from "../processors/stripe-processor";
 import { TiptapProcessor } from "../processors/tiptap-processor";
-import { ShadjsProcessor } from "./types";
+import { ShadtsProcessor } from "./types";
 
 type ClassType<T> = new (...args: any[]) => T;
 
-interface ShadjsAddOn {
-  Processor: ClassType<ShadjsProcessor>;
+interface ShadtsAddOn {
+  Processor: ClassType<ShadtsProcessor>;
   name: string;
   description: string;
 }
 
 interface ClassMap {
-  [key: string]: ShadjsAddOn;
+  [key: string]: ShadtsAddOn;
 }
 
 export const ADD_ON_REGISTRY: ClassMap = {

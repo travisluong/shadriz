@@ -1,45 +1,37 @@
-import { ModeToggle } from "@/components/mode-toggle";
-import Link from "next/link";
-
-export function Header() {
-  return (
-    <header>
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <Link href="/" className="font-bold">
-            shadjs
-          </Link>
-        </div>
-        <div>
-          <Link href="https://www.shadjs.com" className="mr-4">
-            Docs
-          </Link>
-          {{#if opts.authEnabled}}
-          <Link
-            href="/dashboard"
-            className="mr-4"
-          >
-            Dashboard
-          </Link>
-          {{/if}}
-          {{#if opts.adminEnabled}}
-          <Link
-            href="/admin"
-            className="mr-4"
-          >
-            Admin
-          </Link>
-          {{/if}}
-          {{#if opts.authEnabled}}
-          <Link href="/signin">
-            Sign In
-          </Link>
-          {{/if}}
-          <div className="ml-5 inline-block">
-            <ModeToggle />
-          </div>
-        </div>
+import { ModeToggle } from "@/components/mode-toggle"; import Link from
+"next/link"; export function Header() { return (
+<header>
+  <div
+    className="container mx-auto px-6 py-4 flex justify-between items-center"
+  >
+    <div className="flex items-center">
+      <Link href="/" className="font-bold">
+        shadts
+      </Link>
+    </div>
+    <div>
+      <Link href="https://www.shadts.com" className="mr-4">
+        Docs
+      </Link>
+      {{#if opts.authEnabled}}
+        <Link href="/dashboard" className="mr-4">
+          Dashboard
+        </Link>
+      {{/if}}
+      {{#if opts.adminEnabled}}
+        <Link href="/admin" className="mr-4">
+          Admin
+        </Link>
+      {{/if}}
+      {{#if opts.authEnabled}}
+        <Link href="/signin">
+          Sign In
+        </Link>
+      {{/if}}
+      <div className="ml-5 inline-block">
+        <ModeToggle />
       </div>
-    </header>
-  );
-}
+    </div>
+  </div>
+</header>
+); }

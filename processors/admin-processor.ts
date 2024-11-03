@@ -3,8 +3,8 @@ import { dialectStrategyFactory } from "../lib/strategy-factory";
 import {
   DbDialect,
   DbDialectStrategy,
-  ShadjsConfig,
-  ShadjsProcessor,
+  ShadtsConfig,
+  ShadtsProcessor,
 } from "../lib/types";
 import {
   appendToFileIfTextNotExists,
@@ -14,14 +14,14 @@ import {
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { ScaffoldProcessor } from "./scaffold-processor";
 
-export class AdminProcessor implements ShadjsProcessor {
-  opts: ShadjsConfig;
+export class AdminProcessor implements ShadtsProcessor {
+  opts: ShadtsConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = ["card", "sidebar"];
   dbDialectStrategy: DbDialectStrategy;
 
-  constructor(opts: ShadjsConfig) {
+  constructor(opts: ShadtsConfig) {
     this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
   }
@@ -156,6 +156,6 @@ export class AdminProcessor implements ShadjsProcessor {
   printCompletionMessage() {
     log.checklist("admin checklist");
     log.task("grant admin privilege");
-    log.cmdsubtask("npx tsx scripts/grant-admin.ts shadjs@example.com");
+    log.cmdsubtask("npx tsx scripts/grant-admin.ts shadts@example.com");
   }
 }

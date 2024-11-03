@@ -1,13 +1,13 @@
 import { log } from "../lib/log";
-import { ShadjsConfig, ShadjsProcessor } from "../lib/types";
+import { ShadtsConfig, ShadtsProcessor } from "../lib/types";
 import { renderTemplate, renderTemplateIfNotExists } from "../lib/utils";
 
-export class DbDialectProcessor implements ShadjsProcessor {
-  opts: ShadjsConfig;
+export class DbDialectProcessor implements ShadtsProcessor {
+  opts: ShadtsConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
   shadcnComponents: string[] = [];
-  constructor(opts: ShadjsConfig) {
+  constructor(opts: ShadtsConfig) {
     this.opts = opts;
   }
 

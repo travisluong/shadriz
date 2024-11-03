@@ -14,126 +14,126 @@ body {
 a {
   text-decoration: none;
 }
-.shadjs-sidebar ul li {
+.shadts-sidebar ul li {
   list-style-type: none;
 }
-.shadjs-sidebar ul li a {
+.shadts-sidebar ul li a {
   color: black;
   &:hover {
     text-decoration: underline;
   }
 }
-.shadjs-sidebar ul li.level-1 a {
+.shadts-sidebar ul li.level-1 a {
   font-weight: bold;
   color: black;
 }
-.shadjs-sidebar ul li.level-2 {
+.shadts-sidebar ul li.level-2 {
   margin-top: 20px;
 }
-.shadjs-sidebar ul li.level-2 a {
+.shadts-sidebar ul li.level-2 a {
   color: black;
 }
-.shadjs-sidebar ul li.level-3 a {
+.shadts-sidebar ul li.level-3 a {
   color: #71717a;
 }
-.shadjs-docs {
+.shadts-docs {
   min-width: 0px;
   padding: 20px;
   height: 100%;
 }
-.shadjs-docs a {
+.shadts-docs a {
   color: black;
 }
-.shadjs-docs h1 {
+.shadts-docs h1 {
   font-weight: bold;
   font-size: 48px;
   margin-bottom: 20px;
 }
-.shadjs-docs h2 {
+.shadts-docs h2 {
   font-weight: bold;
   font-size: 36px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
-.shadjs-docs h3 {
+.shadts-docs h3 {
   font-weight: bold;
   font-size: 24px;
   margin-bottom: 20px;
 }
-.shadjs-docs p {
+.shadts-docs p {
   margin-bottom: 20px;
 }
-.shadjs-docs pre {
+.shadts-docs pre {
   background-color: #d4d4d8;
   padding: 20px;
   margin-bottom: 20px;
   overflow: auto;
   border-radius: 5px;
 }
-.shadjs-docs code {
+.shadts-docs code {
   background-color: #d4d4d8;
 }
-.shadjs-docs ul {
+.shadts-docs ul {
   margin-bottom: 20px;
 }
-.shadjs-docs ul li {
+.shadts-docs ul li {
   list-style-type: disc;
   margin-left: 20px;
 }
-.shadjs-docs a {
+.shadts-docs a {
   text-decoration: underline;
   font-weight: bold;
 }
-.shadjs-docs table {
+.shadts-docs table {
   border-spacing: 0;
   border-collapse: collapse;
 }
-.shadjs-docs table th {
+.shadts-docs table th {
   padding: 5px;
   border: 1px solid #71717a;
 }
-.shadjs-docs table td {
+.shadts-docs table td {
   padding: 5px;
   border: 1px solid #71717a;
 }
-.shadjs-logo {
+.shadts-logo {
   margin-bottom: 20px;
 }
 
 @media (prefers-color-scheme: dark) {
-  .shadjs-sidebar {
+  .shadts-sidebar {
     background-color: black;
   }
-  .shadjs-docs pre {
+  .shadts-docs pre {
     background-color: #333333;
   }
-  .shadjs-docs code {
+  .shadts-docs code {
     background-color: #333333;
   }
-  .shadjs-sidebar ul li a {
+  .shadts-sidebar ul li a {
     color: white;
   }
-  .shadjs-sidebar ul li.level-3 a {
+  .shadts-sidebar ul li.level-3 a {
     color: dark#71717a;
   }
   body {
     background-color: black;
     color: white;
   }
-  .shadjs-menu button {
+  .shadts-menu button {
     color: black;
     background-color: white;
   }
-  .shadjs-docs a {
+  .shadts-docs a {
     color: white;
   }
-  .shadjs-sidebar ul li.level-1 a {
+  .shadts-sidebar ul li.level-1 a {
     color: white;
   }
-  .shadjs-sidebar ul li.level-2 a {
+  .shadts-sidebar ul li.level-2 a {
     color: white;
   }
-  .shadjs-sidebar ul li.level-3 a {
+  .shadts-sidebar ul li.level-3 a {
     color: #94a3b8;
   }
 }
