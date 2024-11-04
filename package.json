@@ -12,7 +12,9 @@
     "build-docs": "tsx scripts/build-docs",
     "dev-docs": "nodemon --exec \"tsx scripts/build-docs && npx serve docs/dist\" --ignore ./docs/dist/ --ext hbs,js,css,md,ts --watch ./docs",
     "cypress": "cypress open",
-    "test-postgresql": "sh ./scripts/test-postgresql.sh"
+    "test-postgresql": "sh ./scripts/test-postgresql.sh",
+    "test-sqlite": "sh ./scripts/test-sqlite.sh",
+    "test-mysql": "sh ./scripts/test-mysql.sh"
   },
   "author": "travisluong",
   "license": "MIT",
