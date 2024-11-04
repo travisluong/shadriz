@@ -36,7 +36,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build Docs
-        run: npx tsx docs/scripts/build
+        run: npx tsx scripts/build-docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -1,8 +1,8 @@
 import Handlebars from "handlebars";
 import path from "path";
 import fs from "fs";
-import { getHtml, getTableOfContents } from "../lib/markdown";
-import packageJson from "../../package.json";
+import { getHtml, getTableOfContents } from "../docs/lib/markdown";
+import packageJson from "../package.json";
 
 const { exec } = require("child_process");
 
@@ -94,7 +94,7 @@ export function compileTemplate({
   inputPath: string;
   data?: any;
 }): string {
-  const templatePath = path.join(__dirname, "..", "templates", inputPath);
+  const templatePath = path.join(process.cwd(), "docs", "templates", inputPath);
   const templateContent = fs.readFileSync(templatePath, "utf-8");
   const compiled = Handlebars.compile(templateContent, { noEscape: true });
   const content = compiled(data);
