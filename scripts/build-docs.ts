@@ -39,13 +39,13 @@ async function main() {
       version: version,
     },
   });
-  renderTemplate({
-    inputPath: "page.hbs",
-    outputPath: "docs/dist/changelog.html",
-    data: {
-      content: changelogHtml,
-    },
-  });
+  // renderTemplate({
+  //   inputPath: "page.hbs",
+  //   outputPath: "docs/dist/changelog.html",
+  //   data: {
+  //     content: changelogHtml,
+  //   },
+  // });
   renderTemplate({
     inputPath: "app.js",
     outputPath: "docs/dist/app.js",
