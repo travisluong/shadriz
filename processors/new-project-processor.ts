@@ -1,5 +1,9 @@
 import { log } from "../lib/log";
-import { PackageManager, ShadtsConfig, ShadtsProcessor } from "../lib/types";
+import {
+  PackageManager,
+  ShadrizzConfig,
+  ShadrizzProcessor,
+} from "../lib/types";
 import {
   appendToEnvLocal,
   appendToFileIfTextNotExists,
@@ -9,10 +13,10 @@ import {
   renderTemplateIfNotExists,
   spawnSyncCommand,
 } from "../lib/utils";
-import packageShadtsJson from "../package-shadts.json";
+import packageShadrizzJson from "../package-shadrizz.json";
 
-export class NewProjectProcessor implements ShadtsProcessor {
-  opts: ShadtsConfig;
+export class NewProjectProcessor implements ShadrizzProcessor {
+  opts: ShadrizzConfig;
 
   dependencies = ["drizzle-orm", "dotenv", "zod", "drizzle-zod"];
 
@@ -31,7 +35,7 @@ export class NewProjectProcessor implements ShadtsProcessor {
     "alert",
   ];
 
-  constructor(opts: ShadtsConfig) {
+  constructor(opts: ShadrizzConfig) {
     this.opts = opts;
   }
 
@@ -45,7 +49,7 @@ export class NewProjectProcessor implements ShadtsProcessor {
       return;
     }
 
-    const pinnedVersion = packageShadtsJson.dependencies["shadcn"];
+    const pinnedVersion = packageShadrizzJson.dependencies["shadcn"];
     if (!pinnedVersion) {
       throw new Error("pinned version not found for shadcn");
     }

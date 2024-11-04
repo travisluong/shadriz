@@ -14,125 +14,125 @@ body {
 a {
   text-decoration: none;
 }
-.shadts-sidebar ul li {
+.shadrizz-sidebar ul li {
   list-style-type: none;
 }
-.shadts-sidebar ul li a {
+.shadrizz-sidebar ul li a {
   color: black;
   &:hover {
     text-decoration: underline;
   }
 }
-.shadts-sidebar ul li.level-1 a {
+.shadrizz-sidebar ul li.level-1 a {
   font-weight: bold;
   color: black;
 }
-.shadts-sidebar ul li.level-2 {
+.shadrizz-sidebar ul li.level-2 {
   margin-top: 20px;
 }
-.shadts-sidebar ul li.level-2 a {
+.shadrizz-sidebar ul li.level-2 a {
   color: black;
 }
-.shadts-sidebar ul li.level-3 a {
+.shadrizz-sidebar ul li.level-3 a {
   color: #71717a;
 }
-.shadts-docs {
+.shadrizz-docs {
   min-width: 0px;
   padding: 20px;
 }
-.shadts-docs a {
+.shadrizz-docs a {
   color: black;
 }
-.shadts-docs h1 {
+.shadrizz-docs h1 {
   font-weight: bold;
   font-size: 48px;
   margin-bottom: 20px;
 }
-.shadts-docs h2 {
+.shadrizz-docs h2 {
   font-weight: bold;
   font-size: 36px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
-.shadts-docs h3 {
+.shadrizz-docs h3 {
   font-weight: bold;
   font-size: 24px;
   margin-bottom: 20px;
 }
-.shadts-docs p {
+.shadrizz-docs p {
   margin-bottom: 20px;
 }
-.shadts-docs pre {
+.shadrizz-docs pre {
   background-color: #d4d4d8;
   padding: 20px;
   margin-bottom: 20px;
   overflow: auto;
   border-radius: 5px;
 }
-.shadts-docs code {
+.shadrizz-docs code {
   background-color: #d4d4d8;
 }
-.shadts-docs ul {
+.shadrizz-docs ul {
   margin-bottom: 20px;
 }
-.shadts-docs ul li {
+.shadrizz-docs ul li {
   list-style-type: disc;
   margin-left: 20px;
 }
-.shadts-docs a {
+.shadrizz-docs a {
   text-decoration: underline;
   font-weight: bold;
 }
-.shadts-docs table {
+.shadrizz-docs table {
   border-spacing: 0;
   border-collapse: collapse;
 }
-.shadts-docs table th {
+.shadrizz-docs table th {
   padding: 5px;
   border: 1px solid #71717a;
 }
-.shadts-docs table td {
+.shadrizz-docs table td {
   padding: 5px;
   border: 1px solid #71717a;
 }
-.shadts-logo {
+.shadrizz-logo {
   margin-bottom: 20px;
 }
 
 @media (prefers-color-scheme: dark) {
-  .shadts-sidebar {
+  .shadrizz-sidebar {
     background-color: black;
   }
-  .shadts-docs pre {
+  .shadrizz-docs pre {
     background-color: #333333;
   }
-  .shadts-docs code {
+  .shadrizz-docs code {
     background-color: #333333;
   }
-  .shadts-sidebar ul li a {
+  .shadrizz-sidebar ul li a {
     color: white;
   }
-  .shadts-sidebar ul li.level-3 a {
+  .shadrizz-sidebar ul li.level-3 a {
     color: dark#71717a;
   }
   body {
     background-color: black;
     color: white;
   }
-  .shadts-menu button {
+  .shadrizz-menu button {
     color: black;
     background-color: white;
   }
-  .shadts-docs a {
+  .shadrizz-docs a {
     color: white;
   }
-  .shadts-sidebar ul li.level-1 a {
+  .shadrizz-sidebar ul li.level-1 a {
     color: white;
   }
-  .shadts-sidebar ul li.level-2 a {
+  .shadrizz-sidebar ul li.level-2 a {
     color: white;
   }
-  .shadts-sidebar ul li.level-3 a {
+  .shadrizz-sidebar ul li.level-3 a {
     color: #94a3b8;
   }
 }

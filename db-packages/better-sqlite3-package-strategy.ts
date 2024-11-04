@@ -1,5 +1,5 @@
 import { log } from "../lib/log";
-import { DbDialect, DbPackageStrategy, ShadtsConfig } from "../lib/types";
+import { DbDialect, DbPackageStrategy, ShadrizzConfig } from "../lib/types";
 import {
   appendToEnvLocal,
   appendToFileIfTextNotExists,
@@ -7,13 +7,13 @@ import {
 } from "../lib/utils";
 
 export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
-  opts: ShadtsConfig;
+  opts: ShadrizzConfig;
   shadcnComponents: string[] = [];
   dialect: DbDialect = "sqlite";
   dependencies: string[] = ["better-sqlite3"];
   devDependencies: string[] = [];
 
-  constructor(opts: ShadtsConfig) {
+  constructor(opts: ShadrizzConfig) {
     this.opts = opts;
   }
 

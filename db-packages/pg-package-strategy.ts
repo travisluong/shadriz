@@ -1,15 +1,15 @@
 import { log } from "../lib/log";
-import { DbDialect, DbPackageStrategy, ShadtsConfig } from "../lib/types";
+import { DbDialect, DbPackageStrategy, ShadrizzConfig } from "../lib/types";
 import { appendToEnvLocal, renderTemplate } from "../lib/utils";
 
 export class PgPackageStrategy implements DbPackageStrategy {
-  opts: ShadtsConfig;
+  opts: ShadrizzConfig;
   shadcnComponents: string[] = [];
   dialect: DbDialect = "postgresql";
   dependencies = ["pg"];
   devDependencies = ["@types/pg"];
 
-  constructor(opts: ShadtsConfig) {
+  constructor(opts: ShadrizzConfig) {
     this.opts = opts;
   }
 

@@ -9,8 +9,8 @@ import { log } from "../lib/log";
 import {
   DbDialect,
   DbDialectStrategy,
-  ShadtsConfig,
-  ShadtsProcessor,
+  ShadrizzConfig,
+  ShadrizzProcessor,
 } from "../lib/types";
 import {
   pkKeyValTemplates,
@@ -85,7 +85,7 @@ export const authStrategyMap: AuthStrategyMap = {
     printCompletionMessage: function (): void {
       log.task("create test user for credentials provider");
       log.cmdsubtask(
-        "npx tsx scripts/create-user.ts shadts@example.com password123"
+        "npx tsx scripts/create-user.ts shadrizz@example.com password123"
       );
     },
     textToSearchInEnv: undefined,
@@ -149,8 +149,8 @@ const authDbDialectStrategy: Record<DbDialect, AuthDbDialect> = {
   },
 };
 
-export class AuthProcessor implements ShadtsProcessor {
-  constructor(public opts: ShadtsConfig) {
+export class AuthProcessor implements ShadrizzProcessor {
+  constructor(public opts: ShadrizzConfig) {
     this.dbDialectStrategy = dialectStrategyFactory(this.opts.dbDialect);
   }
 

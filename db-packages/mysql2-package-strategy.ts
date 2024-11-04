@@ -1,15 +1,15 @@
 import { log } from "../lib/log";
-import { DbDialect, DbPackageStrategy, ShadtsConfig } from "../lib/types";
+import { DbDialect, DbPackageStrategy, ShadrizzConfig } from "../lib/types";
 import { appendToEnvLocal, renderTemplate } from "../lib/utils";
 
 export class Mysql2PackageStrategy implements DbPackageStrategy {
-  opts: ShadtsConfig;
+  opts: ShadrizzConfig;
   shadcnComponents: string[] = [];
   dialect: DbDialect = "mysql";
   dependencies = ["mysql2"];
   devDependencies = [];
 
-  constructor(opts: ShadtsConfig) {
+  constructor(opts: ShadrizzConfig) {
     this.opts = opts;
   }
 

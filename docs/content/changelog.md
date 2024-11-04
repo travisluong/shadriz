@@ -22,7 +22,7 @@
 
 ## v0.1.1
 
-- Rename project to shadts.
+- Rename project to shadrizz.
 
 ## v0.1.0
 

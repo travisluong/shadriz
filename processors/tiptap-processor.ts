@@ -1,10 +1,14 @@
 import { log } from "../lib/log";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
-import { DbDialectStrategy, ShadtsConfig, ShadtsProcessor } from "../lib/types";
+import {
+  DbDialectStrategy,
+  ShadrizzConfig,
+  ShadrizzProcessor,
+} from "../lib/types";
 import { renderTemplate } from "../lib/utils";
 
-export class TiptapProcessor implements ShadtsProcessor {
-  opts: ShadtsConfig;
+export class TiptapProcessor implements ShadrizzProcessor {
+  opts: ShadrizzConfig;
   dependencies: string[] = [
     "@tiptap/core",
     "@tiptap/extension-link",
@@ -16,7 +20,7 @@ export class TiptapProcessor implements ShadtsProcessor {
   shadcnComponents: string[] = [];
   dbDialectStrategy?: DbDialectStrategy | undefined;
 
-  constructor(opts: ShadtsConfig) {
+  constructor(opts: ShadrizzConfig) {
     this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.opts = opts;
   }

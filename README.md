@@ -1,4 +1,4 @@
-# shad.ts
+# shadrizz
 
 Full Stack TypeScript Scaffolding Framework
 
@@ -12,11 +12,11 @@ Build Next.js Apps Easier and Faster With:
 
 ## Documentation
 
-https://www.shadts.com/docs
+https://www.shadrizz.com/docs
 
 ## Introduction
 
-shad.ts is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code for full stack projects. You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
+shadrizz is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code for full stack projects. You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
 ## Tech stack
 
@@ -34,35 +34,35 @@ shad.ts is a full stack automation tool for building TypeScript web applications
 New:
 
 ```
-npx shadts@latest new my-app
+npx shadrizz@latest new my-app
 ```
 
 Init:
 
 ```
-npx shadts@latest init
+npx shadrizz@latest init
 ```
 
 Scaffold:
 
 ```
-npx shadts@latest scaffold post -c title:text content:text_tiptap is_draft:boolean published_at:timestamp
+npx shadrizz@latest scaffold post -c title:text content:text_tiptap is_draft:boolean published_at:timestamp
 
-npx shadts@latest scaffold tags -c name:text
+npx shadrizz@latest scaffold tags -c name:text
 
-npx shadts@latest scaffold posts_tags -c post:references tag:references
+npx shadrizz@latest scaffold posts_tags -c post:references tag:references
 ```
 
 Add:
 
 ```
-npx shadts@latest add tiptap
+npx shadrizz@latest add tiptap
 ```
 
 Join:
 
 ```
-npx shadts@latest join posts posts_tags tags
+npx shadrizz@latest join posts posts_tags tags
 ```
 
 ## License

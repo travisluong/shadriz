@@ -1,4 +1,4 @@
-export interface ShadtsConfig {
+export interface ShadrizzConfig {
   version: string;
   packageManager: PackageManager;
   latest: boolean;
@@ -18,8 +18,8 @@ export type PackageManager = "npm" | "pnpm" | "bun";
 
 export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "nanoid";
 
-export interface ShadtsProcessor {
-  opts: ShadtsConfig;
+export interface ShadrizzProcessor {
+  opts: ShadrizzConfig;
   dependencies: string[];
   devDependencies: string[];
   shadcnComponents: string[];
@@ -37,7 +37,7 @@ export interface DataTypeStrategyMap {
 
 export type AuthorizationLevel = "admin" | "private" | "public";
 
-export interface ScaffoldProcessorOpts extends ShadtsConfig {
+export interface ScaffoldProcessorOpts extends ShadrizzConfig {
   table: string;
   columns: string[];
   authorizationLevel: AuthorizationLevel;
@@ -82,8 +82,8 @@ export interface DbDialectStrategy {
   timestampImport: string;
 }
 
-export interface DbPackageStrategy extends ShadtsProcessor {
-  opts: ShadtsConfig;
+export interface DbPackageStrategy extends ShadrizzProcessor {
+  opts: ShadrizzConfig;
   dialect: DbDialect;
   copyCreateUserScript(): void;
   copyMigrateScript(): void;
