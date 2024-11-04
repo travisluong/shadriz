@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.5
+
+- Update readme and docs.
+- Minor design changes to home page.
+
 ## v0.1.4
 
 - Add cypress and scripts for e2e tests.
