@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.1.4
+
 - Add cypress and scripts for e2e tests.
 - Shorten join command arg names.
 - Fix generic combobox bug.
