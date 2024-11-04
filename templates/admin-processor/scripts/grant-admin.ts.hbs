@@ -18,6 +18,8 @@ async function main() {
 
   await db.update(users).set({ role: "admin" }).where(eq(users.email, email));
 
+  console.log("granted admin role to user " + email);
+
   await closeConnection();
 }
 

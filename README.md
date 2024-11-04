@@ -10,73 +10,60 @@ Build Next.js Apps Easier and Faster With:
 ✅ Admin Dashboard<br>
 ✅ Type Safety<br>
 
-[Documentation](https://www.shadts.com)
+## Documentation
 
-## Quick Start
+https://www.shadts.com/docs
 
-### Step 1: Create new project
+## Introduction
 
-Start by creating a new Next.js project using `create-next-app`.
+shad.ts is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code for full stack projects. You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
-```bash
-npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack
+## Tech stack
+
+- [TypeScript](https://www.typescriptlang.org) - JavaScript With Types
+- [Next.js](https://nextjs.org/) - React Framework
+- [shadcn/ui](https://ui.shadcn.com/) - UI Components
+- [Drizzle ORM](https://orm.drizzle.team/) - Object Relational Mapper
+- [TailwindCSS](https://tailwindcss.com/) - CSS Framework
+- [Auth.js](https://authjs.dev/) - Authentication
+- [Stripe](https://www.stripe.com) - Payments
+- [zod](https://zod.dev/) - Validation
+
+## Usage
+
+New:
+
+```
+npx shadts@latest new my-app
 ```
 
-### Step 2: Run the CLI
+Init:
 
-Run the `shadts init` command to setup your project.
-
-```bash
+```
 npx shadts@latest init
 ```
 
-### Step 3: Configure project
-
-You will be asked a few questions to configure the app:
+Scaffold:
 
 ```
-? Which package manager do you want to use? npm
-? Do you want to install latest packages or pinned packages? pinned
-? Which database dialect would you like to use? sqlite
-? Which primary key generation strategy would you like to use? cuid2
-? Which authentication solution do you want to use? authjs
-? Which auth providers would you like to use? credentials
-? Do you want to add an admin dashboard with role-based authorization? yes
+npx shadts@latest scaffold post -c title:text content:text_tiptap is_draft:boolean published_at:timestamp
+
+npx shadts@latest scaffold tags -c name:text
+
+npx shadts@latest scaffold posts_tags -c post:references tag:references
 ```
 
-### Step 4: Project checklist
+Add:
 
-After initialization, you will be prompted to complete a few additional checklist items.
-
-Generate and run the drizzle migrations:
-
-```bash
-npm run generate
-npm run migrate
+```
+npx shadts@latest add tiptap
 ```
 
-Create a test user and grant admin role:
+Join:
 
-```bash
-npx tsx scripts/create-user.ts user@example.com password123
-npx tsx scripts/grant-admin.ts user@example.com
 ```
-
-### Step 5: Run the dev server
-
-```bash
-npm run dev
+npx shadts@latest join posts posts_tags tags
 ```
-
-## Step 6: Scaffold an app
-
-```bash
-npx shadts@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
-```
-
-## Author
-
-Built by [travisluong](https://www.travisluong.com).
 
 ## License
 
