@@ -16,8 +16,8 @@ import {
   installDependencies,
   installDevDependencies,
   loadShadrizzConfig,
+  preflightChecks,
   spawnCommand,
-  spawnSyncCommand,
   writeToFile,
 } from "./lib/utils";
 import { packageStrategyFactory } from "./lib/strategy-factory";
@@ -181,6 +181,8 @@ program
   .option("--no-admin", "no admin dashboard")
   .action(async (options) => {
     try {
+      preflightChecks();
+
       // inquire
 
       const partialConfig: Partial<ShadrizzConfig> = {};

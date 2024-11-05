@@ -485,3 +485,75 @@ export function insertSchemaToSchemaIndex(table: string) {
     `\n  ...${tableObj.pluralCamelCase},`
   );
 }
+
+export function isNextJsApp() {
+  const packageJsonPath = path.join(process.cwd(), "package.json");
+
+  let hasNextDependency = false;
+
+  if (fs.existsSync(packageJsonPath)) {
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+      hasNextDependency =
+        (packageJson.dependencies && packageJson.dependencies.next) ||
+        (packageJson.devDependencies && packageJson.devDependencies.next);
+    } catch (error) {
+      console.error("Error reading package.json:", error);
+    }
+  }
+
+  return hasNextDependency;
+}
+
+export function isAppDirectoryAtRoot() {
+  const appDirectoryPath = path.join(process.cwd(), "app");
+
+  return (
+    fs.existsSync(appDirectoryPath) &&
+    fs.lstatSync(appDirectoryPath).isDirectory()
+  );
+}
+
+export function hasTailwindCSS() {
+  const packageJsonPath = path.join(process.cwd(), "package.json");
+
+  if (!fs.existsSync(packageJsonPath)) return false;
+
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+    return (
+      (packageJson.dependencies && packageJson.dependencies.tailwindcss) ||
+      (packageJson.devDependencies && packageJson.devDependencies.tailwindcss)
+    );
+  } catch (error) {
+    console.error("Error reading package.json:", error);
+    return false;
+  }
+}
+
+export function hasTsConfig() {
+  const tsConfigPath = path.join(process.cwd(), "tsconfig.json");
+  return fs.existsSync(tsConfigPath);
+}
+
+export function preflightChecks() {
+  if (!isNextJsApp()) {
+    log.red("nextjs is required");
+    process.exit(1);
+  }
+
+  if (!isAppDirectoryAtRoot()) {
+    log.red("app directory at project root is required");
+    process.exit(1);
+  }
+
+  if (!hasTailwindCSS()) {
+    log.red("tailwindcss is required");
+    process.exit(1);
+  }
+
+  if (!hasTsConfig()) {
+    log.red("typescript is required");
+    process.exit(1);
+  }
+}
