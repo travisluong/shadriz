@@ -16,7 +16,6 @@ import { orders } from "@/schema/orders";
 import { products } from "@/schema/products";
 import { subscriptions } from "@/schema/subscriptions";
 import { users } from "@/schema/users";
-import { RocketIcon } from "@radix-ui/react-icons";
 import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -135,7 +134,7 @@ export default async function Page() {
               No active subscriptions.
               <Link href="/pricing">
                 <Button>
-                  <RocketIcon className="w-4 h-4 mr-2" /> Upgrade to a Pro Plan
+                  Upgrade to a Pro Plan
                 </Button>
               </Link>
             </div>

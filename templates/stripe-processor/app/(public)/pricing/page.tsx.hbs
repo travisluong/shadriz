@@ -9,7 +9,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { config } from "@/lib/config";
 import { Metadata } from "next";
-import { CheckIcon } from "@radix-ui/react-icons";
+import { CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const stripePromise = loadStripe(config.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
