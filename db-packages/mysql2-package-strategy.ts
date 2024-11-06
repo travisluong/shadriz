@@ -1,6 +1,10 @@
 import { log } from "../lib/log";
 import { DbDialect, DbPackageStrategy, ShadrizzConfig } from "../lib/types";
-import { appendToEnvLocal, renderTemplate } from "../lib/utils";
+import {
+  appendToEnvLocal,
+  insertTextAfterIfNotExists,
+  renderTemplate,
+} from "../lib/utils";
 
 export class Mysql2PackageStrategy implements DbPackageStrategy {
   opts: ShadrizzConfig;
@@ -24,11 +28,8 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
     this.copyDbInstance();
     this.copyDbInstanceForScripts();
     this.copyCreateUserScript();
-
-    renderTemplate({
-      inputPath: "db-packages/lib/custom-types.ts.mysql2.hbs",
-      outputPath: "lib/custom-types.ts",
-    });
+    this.addCustomTypes();
+    this.addServerComponentExternalPackageToNextConfig();
   }
 
   copyMigrateScript(): void {
@@ -64,6 +65,29 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
       inputPath: "db-packages/scripts/create-user.ts.hbs",
       outputPath: "scripts/create-user.ts",
     });
+  }
+
+  addCustomTypes() {
+    renderTemplate({
+      inputPath: "db-packages/lib/custom-types.ts.mysql2.hbs",
+      outputPath: "lib/custom-types.ts",
+    });
+  }
+
+  /**
+   * this is necessary to fix a production build error
+   * TypeError: r is not a constructor
+   * https://github.com/sidorares/node-mysql2/issues/1885
+   */
+  addServerComponentExternalPackageToNextConfig() {
+    const text = `\n  experimental: {
+    serverComponentsExternalPackages: ["mysql2"],
+  },`;
+    insertTextAfterIfNotExists(
+      "next.config.ts",
+      "const nextConfig: NextConfig = {",
+      text
+    );
   }
 
   printCompletionMessage(): void {
