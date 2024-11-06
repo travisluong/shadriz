@@ -1,6 +1,6 @@
 # shadrizz
 
-## Full Stack [TypeScript](https://www.typescriptlang.org) Scaffolding Framework
+## Full Stack TypeScript Scaffolding Framework
 
 Build [Next.js](https://nextjs.org/) Apps Easier and Faster With:
 
