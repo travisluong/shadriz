@@ -6,12 +6,25 @@ import { Label } from "@/components/ui/label";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default async function Page(props: {
-  searchParams: SearchParams;
-}) {
+export default async function Page(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
+
+  let error;
+  if (searchParams.error) {
+    switch (searchParams.error) {
+      case "unauthenticated":
+        error = "Unauthenticated";
+        break;
+      case "unauthorized":
+        error = "Unauthorized";
+        break;
+      default:
+        error = "Login failed";
+        break;
+    }
+  }
 
   return (
     <div className="flex min-h-screen justify-center items-center">
@@ -51,9 +64,7 @@ export default async function Page(props: {
               <span>Sign in</span>
             </Button>
           </form>
-          {searchParams.error && (
-            <div className="text-red-500">Login failed</div>
-          )}
+          {error && <div className="text-red-500">{error}</div>}
         </CardContent>
       </Card>
     </div>
