@@ -8,9 +8,9 @@ mysqlsh.exe -u root -e "drop database demo;" --sql
 mysqlsh.exe -u root -e "create database demo;" --sql
 rm -rf ~/code/demo-mysql
 cd ~/code
-shadrizz new demo-mysql -p bun --latest
+shadrizz new demo-mysql -p pnpm --latest
 cd demo-mysql
-shadrizz init -p bun --latest --db-dialect mysql -pk cuid2 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
+shadrizz init -p pnpm --latest --db-dialect mysql -pk cuid2 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
 cp ~/code/shadrizz-env/.env.local.mysql .env.local
 shadrizz add tiptap
 shadrizz scaffold -a admin admin_scaffold -c int_type:int tinyint_type:tinyint smallint_type:smallint mediumint_type:mediumint bigint_type:bigint real_type:real decimal_type:decimal double_type:double float_type:float char_type:char varchar_type:varchar text_type:text boolean_type:boolean date_type:date datetime_type:datetime time_type:time year_type:year timestamp_type:timestamp json_type:json file_type:file
@@ -27,4 +27,5 @@ npm run migrate
 npx tsx scripts/create-user.ts user@example.com pw
 npx tsx scripts/create-user.ts admin@example.com pw
 npx tsx scripts/grant-admin.ts admin@example.com
-npm run dev
+npm run build
+npm run start

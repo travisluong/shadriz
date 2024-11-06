@@ -6,9 +6,9 @@ shadrizz() {
 
 rm -rf ~/code/demo-sqlite
 cd ~/code
-shadrizz new demo-sqlite -p bun --latest
+shadrizz new demo-sqlite -p pnpm --latest
 cd ~/code/demo-sqlite
-shadrizz init -p bun --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
+shadrizz init -p pnpm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
 cp ~/code/shadrizz-env/.env.local.sqlite .env.local
 shadrizz add tiptap
 shadrizz scaffold -a admin admin_scaffold -c integer_type:integer real_type:real text_type:text boolean_type:boolean bigint_type:bigint timestamp_type:timestamp file_type:file
@@ -25,4 +25,5 @@ npm run migrate
 npx tsx scripts/create-user.ts user@example.com pw
 npx tsx scripts/create-user.ts admin@example.com pw
 npx tsx scripts/grant-admin.ts admin@example.com
-npm run dev
+npm run build
+npm run start

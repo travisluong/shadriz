@@ -8,9 +8,9 @@ PGPASSWORD=postgres dropdb -p 5433 -U postgres demo
 PGPASSWORD=postgres createdb -p 5433 -U postgres demo
 rm -rf ~/code/demo-postgresql
 cd ~/code
-shadrizz new demo-postgresql -p bun --latest
+shadrizz new demo-postgresql -p pnpm --latest
 cd demo-postgresql
-shadrizz init -p bun --latest --db-dialect postgresql -pk cuid2 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
+shadrizz init -p pnpm --latest --db-dialect postgresql -pk cuid2 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
 cp ~/code/shadrizz-env/.env.local.postgresql .env.local
 shadrizz add tiptap
 shadrizz scaffold -a admin admin_scaffold -c integer_type:integer smallint_type:smallint bigint_type:bigint serial_type:serial bigserial_type:bigserial boolean_type:boolean text_type:text varchar_type:varchar char_type:char numeric_type:numeric decimal_type:decimal real_type:real double_precision_type:doublePrecision json_type:json jsonb_type:jsonb time_type:time timestamp_type:timestamp: date_type:date file_type:file
@@ -27,4 +27,5 @@ npm run migrate
 npx tsx scripts/create-user.ts user@example.com pw
 npx tsx scripts/create-user.ts admin@example.com pw
 npx tsx scripts/grant-admin.ts admin@example.com
-npm run dev
+npm run build
+npm run start

@@ -5,16 +5,17 @@ import type { Provider } from "next-auth/providers";
 import { eq } from "drizzle-orm";
 import { users } from "@/schema/users";
 import { accounts, sessions, verificationTokens } from "@/schema/auth-tables";
+import { Adapter } from "next-auth/adapters";
 {{pkStrategyImport}}
 {{importsCode}}
 
 const adapter = {
-  ...DrizzleAdapter(db, {
+  ...(DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
-  }),
+  }) as Adapter),
   createUser: async (data: any) => {
     const newUser = {
       {{pkKeyValTemplate}}
