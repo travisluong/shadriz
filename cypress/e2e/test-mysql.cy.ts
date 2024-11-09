@@ -18,7 +18,7 @@ describe("shadriz e2e test", () => {
   it("admin scaffold happy path", () => {
     cy.get("h1").first().should("have.text", "Admin");
     cy.contains("Users").click();
-    cy.get("h1").first().should("have.text", "Users");
+    cy.contains("Users");
     cy.contains("user@example.com").should("exist");
     cy.contains("admin@example.com").should("exist");
     cy.contains("Admin Scaffolds").click();
@@ -51,7 +51,7 @@ describe("shadriz e2e test", () => {
     cy.contains("New").click();
     cy.get('input[name="title"]').type("foo");
     cy.get('button[type="submit"]').click();
-    cy.get("h1").contains("Categories");
+    cy.contains("Categories");
     cy.contains("foo").should("exist");
   });
 
@@ -60,7 +60,7 @@ describe("shadriz e2e test", () => {
     cy.contains("New").click();
     cy.get('input[name="status"]').type("bar");
     cy.get('button[type="submit"]').click();
-    cy.get("h1").contains("Post Statuses").should("exist");
+    cy.contains("Post Statuses").should("exist");
     cy.contains("bar").should("exist");
   });
 
@@ -76,6 +76,6 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="publishedAt"]').type("2008-08-08", { force: true });
     cy.get(".tiptap.ProseMirror").type("hello", { force: true });
     cy.contains("Submit").click();
-    cy.get("h1").contains("Posts").should("exist");
+    cy.contains("Posts").should("exist");
   });
 });

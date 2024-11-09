@@ -1,5 +1,13 @@
 import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { {{joinCaseVariants.pluralPascalCase}}UpdateForm } from "@/components/admin/{{leftCaseVariants.pluralKebabCase}}/{{joinCaseVariants.pluralKebabCase}}-update-form";
 import { db } from "@/lib/db";
 import { get{{leftCaseVariants.singularPascalCase}}WithRelations } from "@/repositories/{{leftCaseVariants.singularKebabCase}}-repository";
@@ -23,14 +31,33 @@ export default async function Page(props: { params: Params }) {
   });
 
   return (
-    <div>
-      <h1 className="font-bold text-xl mb-6">Edit {{rightCaseVariants.pluralCapitalCase}}</h1>
-      <p><strong>{{leftCaseVariants.singularCapitalCase}}:</strong> { {{leftCaseVariants.singularCamelCase}}.id }</p>
-      <{{joinCaseVariants.pluralPascalCase}}UpdateForm
-        id={ {{leftCaseVariants.singularCamelCase}}.id }
-        {{rightCaseVariants.singularCamelCase}}List={ {{rightCaseVariants.singularCamelCase}}List }
-        {{joinCaseVariants.singularCamelCase}}List={ {{joinCaseVariants.singularCamelCase}}List }
-      />
+    <div className="relative">
+      <div className="absolute left-8 -top-6">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/admin/{{leftCaseVariants.pluralKebabCase}}">{{leftCaseVariants.pluralCapitalCase}}</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/admin/{{leftCaseVariants.pluralKebabCase}}/${ {{leftCaseVariants.singularCamelCase}}.id }`}>
+                { {{leftCaseVariants.singularCamelCase}}.id }
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Edit {{joinCaseVariants.pluralCapitalCase}}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      <div className="pt-5">
+        <{{joinCaseVariants.pluralPascalCase}}UpdateForm
+          id={ {{leftCaseVariants.singularCamelCase}}.id }
+          {{rightCaseVariants.singularCamelCase}}List={ {{rightCaseVariants.singularCamelCase}}List }
+          {{joinCaseVariants.singularCamelCase}}List={ {{joinCaseVariants.singularCamelCase}}List }
+        />
+      </div>
     </div>
   );
 }

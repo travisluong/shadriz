@@ -10,15 +10,13 @@ describe("shadriz e2e test", () => {
 
   it("home page", () => {
     cy.visit("http://localhost:3000");
-    cy.get("h1")
-      .first()
-      .should("have.text", "Full Stack TypeScript Scaffolding Framework");
+    cy.contains("Full Stack TypeScript Scaffolding Framework");
   });
 
   it("admin scaffold happy path", () => {
-    cy.get("h1").first().should("have.text", "Admin");
+    cy.contains("Admin");
     cy.contains("Users").click();
-    cy.get("h1").first().should("have.text", "Users");
+    cy.contains("Users");
     cy.contains("user@example.com").should("exist");
     cy.contains("admin@example.com").should("exist");
     cy.contains("Admin Scaffolds").click();
@@ -42,7 +40,7 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="timestampType"]').type("2008");
     cy.get('input[name="dateType"]').type("2024-08-08");
     cy.get('button[type="submit"]').click();
-    cy.get("h1").contains("Admin Scaffolds");
+    cy.contains("Admin Scaffolds");
   });
 
   it("create category", () => {
@@ -50,7 +48,7 @@ describe("shadriz e2e test", () => {
     cy.contains("New").click();
     cy.get('input[name="title"]').type("foo");
     cy.get('button[type="submit"]').click();
-    cy.get("h1").contains("Categories");
+    cy.contains("Categories");
     cy.contains("foo").should("exist");
   });
 
@@ -59,7 +57,7 @@ describe("shadriz e2e test", () => {
     cy.contains("New").click();
     cy.get('input[name="status"]').type("bar");
     cy.get('button[type="submit"]').click();
-    cy.get("h1").contains("Post Statuses").should("exist");
+    cy.contains("Post Statuses").should("exist");
     cy.contains("bar").should("exist");
   });
 
@@ -75,6 +73,6 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="publishedAt"]').type("2008-08-08", { force: true });
     cy.get(".tiptap.ProseMirror").type("hello", { force: true });
     cy.contains("Submit").click();
-    cy.get("h1").contains("Posts").should("exist");
+    cy.contains("Posts").should("exist");
   });
 });

@@ -1,7 +1,22 @@
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
+
 export default function Page() {
   return (
-    <div>
-      <h1 className="text-xl font-bold">Dashboard</h1>
+    <div className="relative">
+      <div className="absolute left-8 -top-6">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
     </div>
   );
 }

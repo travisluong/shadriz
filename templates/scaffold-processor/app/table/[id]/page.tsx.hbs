@@ -3,6 +3,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { config } from "@/lib/config";
 {{/if}}
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { get{{tableObj.singularPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 type Params = Promise<{ id: string }>;
@@ -18,10 +26,21 @@ export default async function Page(props: { params: Params }) {
   }
 
   return (
-    <div>
-      <h1 className="text-xl font-bold mb-6">{{tableObj.originalCapitalCase}}</h1>
-      <div>
-        <p><strong>Id:</strong> { {{tableObj.singularCamelCase}}.id }</p>
+    <div className="relative">
+      <div className="absolute left-8 -top-6">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/admin/{{tableObj.pluralKebabCase}}">{{tableObj.pluralCapitalCase}}</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{ {{tableObj.singularCamelCase}}.id }</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      <div className="pt-5">
         {{#each validatedColumns}}
           {{#switch this.dataType}}
             {{#case "boolean"}}
