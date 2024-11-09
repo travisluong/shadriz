@@ -30,6 +30,7 @@ npx shadrizz@latest new my-app
 Init:
 
 ```
+cd my-app
 npx shadrizz@latest init
 ```
 
@@ -37,9 +38,7 @@ Scaffold:
 
 ```
 npx shadrizz@latest scaffold post -c title:text content:text_tiptap is_draft:boolean published_at:timestamp
-
 npx shadrizz@latest scaffold tags -c name:text
-
 npx shadrizz@latest scaffold posts_tags -c post:references tag:references
 ```
 
