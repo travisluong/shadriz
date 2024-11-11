@@ -18,9 +18,9 @@ shadrizz scaffold -a private private_scaffold -c text_field:text integer_field:i
 shadrizz scaffold -a public public_scaffold -c text_field:text integer_field:integer real_field:real decimal_field:decimal boolean_field:boolean file_field:file timestamp_field:timestamp
 shadrizz scaffold -a admin category -c title:text
 shadrizz scaffold -a admin post_status -c status:text
-shadrizz scaffold -a admin post -c category:references_combobox post_status:references_select title:text likes:integer published_at:timestamp content:text_tiptap
+shadrizz scaffold -a admin post -c category_id:references_combobox post_status:references_select title:text likes:integer published_at:timestamp content:text_tiptap
 shadrizz scaffold -a admin tags -c name:text
-shadrizz scaffold -a admin posts_tags -c post:references tag:references
+shadrizz scaffold -a admin posts_tags -c post_id:references tag_id:references
 shadrizz join -a admin posts posts_tags tags
 npm run generate
 npm run migrate

@@ -82,7 +82,10 @@ export class ScaffoldProcessor {
     const dataTypeStrategyMap = this.dbDialectStrategy.dataTypeStrategyMap;
     const validatedColumns: ValidatedColumn[] = [];
     for (const column of columns) {
-      const [columnName, dataType] = column.split(":");
+      let [columnName, dataType] = column.split(":");
+      if (columnName.endsWith("_id")) {
+        columnName = columnName.split("_id")[0];
+      }
       if (!(dataType in dataTypeStrategyMap)) {
         throw new Error(`invalid data type ${dataType}`);
       }

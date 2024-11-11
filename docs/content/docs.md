@@ -89,7 +89,7 @@ npx shadrizz@latest scaffold category -c name:text
 Create a `posts` schema:
 
 ```
-npx shadrizz@latest scaffold post -c title:text category:references_combobox content:text_tiptap is_draft:boolean published_at:timestamp
+npx shadrizz@latest scaffold post -c title:text category_id:references_combobox content:text_tiptap is_draft:boolean published_at:timestamp
 ```
 
 Run the drizzle migrations:
@@ -235,6 +235,8 @@ npx shadrizz@latest scaffold post -c category:references title:text
 ```
 
 These commands work best when the column name is singular, (e.g. `category:references`), so that shadrizz can reference the correct foreign key field (e.g. `category_id`).
+
+Note: `category_id:references` will also work. Any columns with an `_id` suffix should be handled properly.
 
 ### References Combobox
 

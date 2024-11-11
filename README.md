@@ -19,36 +19,36 @@ https://www.shadrizz.com/docs
 
 shadrizz is a full stack automation tool for building TypeScript web applications. This is an ephemeral web framework. You do not install it into your project as a dependency. It is a command line interface code generation tool. You use it to generate customizable code for full stack projects. You can scaffold database schemas and user interfaces to use as a reference to build your own full stack application.
 
-## Usage
+## Usage Examples
 
-New:
+Create a new Next.js app using the required configurations:
 
 ```
 npx shadrizz@latest new my-app
 ```
 
-Init:
+Initialize shadrizz after changing into the app directory:
 
 ```
 cd my-app
 npx shadrizz@latest init
 ```
 
-Scaffold:
+Scaffold a CRUD application:
 
 ```
-npx shadrizz@latest scaffold post -c title:text content:text_tiptap is_draft:boolean published_at:timestamp
+npx shadrizz@latest scaffold post -c title:text content:text is_draft:boolean published_at:timestamp
 npx shadrizz@latest scaffold tags -c name:text
-npx shadrizz@latest scaffold posts_tags -c post:references tag:references
+npx shadrizz@latest scaffold posts_tags -c post_id:references tag_id:references
 ```
 
-Add:
+Add an optional add-on extension:
 
 ```
 npx shadrizz@latest add tiptap
 ```
 
-Join:
+Create a checkbox list interface for managing a many-to-many relation:
 
 ```
 npx shadrizz@latest join posts posts_tags tags
