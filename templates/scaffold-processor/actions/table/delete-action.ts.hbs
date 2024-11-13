@@ -10,6 +10,9 @@ import { BaseActionState } from "@/lib/types";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
+{{#if isAdmin}}
+import { isAdmin } from "@/services/authorization-service";
+{{/if}}
 
 const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).pick({ id: true });
 
@@ -33,7 +36,7 @@ export async function delete{{tableObj.singularPascalCase}}(
   {{/if}}
 
   {{#if isAdmin}}
-    if (session?.user?.role !== "admin") {
+    if (!isAdmin(session)) {
       throw new Error("unauthorized");
     }
   {{/if}}

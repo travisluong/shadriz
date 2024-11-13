@@ -15,6 +15,9 @@ import { auth } from "@/lib/auth";
 {{#if hasDecimalColumn}}
 import { z } from "zod";
 {{/if}}
+{{#if isAdmin}}
+import { isAdmin } from "@/services/authorization-service";
+{{/if}}
 
 {{#if hasDecimalColumn}}
 const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}}, {
@@ -48,7 +51,7 @@ export async function create{{tableObj.singularPascalCase}}(
   {{/if}}
 
   {{#if isAdmin}}
-    if (session?.user?.role !== "admin") {
+    if (!isAdmin(session)) {
       throw new Error("unauthorized");
     }
   {{/if}}

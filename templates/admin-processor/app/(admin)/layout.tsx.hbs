@@ -5,6 +5,7 @@ import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { users } from "@/schema/users";
+import { isAdmin } from "@/services/authorization-service";
 
 export default async function Layout({
   children,
@@ -17,7 +18,7 @@ export default async function Layout({
     redirect("/admin-login?error=unauthenticated");
   }
 
-  if (session?.user?.role !== "admin") {
+  if (!isAdmin(session)) {
     redirect("/admin-login?error=unauthorized");
   }
 

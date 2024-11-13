@@ -62,6 +62,11 @@ export class AdminProcessor implements ShadrizzProcessor {
       outputPath: "app/(admin)/admin/settings/page.tsx",
     });
 
+    renderTemplate({
+      inputPath: "admin-processor/services/authorization-service.ts.hbs",
+      outputPath: "services/authorization-service.ts",
+    });
+
     const strategies: Record<DbDialect, string[]> = {
       postgresql: [
         "name:text",

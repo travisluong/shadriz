@@ -3,3 +3,4 @@ demo*
 .env
 dist
 /docs/dist/
+cypress/downloads
