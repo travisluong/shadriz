@@ -410,6 +410,35 @@ For example:
 npx shadrizz@latest scaffold posts -c title:text content:text_tiptap
 ```
 
+## Project Structure
+
+This is the shadrizz project structure. The scaffolding automations will write to specific folders and files, so it's recommended to not move things around.
+
+```
+- actions
+	- admin - server actions requiring admin authorization
+	- private - server actions requiring logged in user
+	- public - server actions that are publicly accessible
+- app
+	- (admin) - route group requiring admin authorization
+	- (private) - route group requiring logged in user
+	- (public) - route group that is publicly accessible
+- components
+	- admin - components for admin routes
+	- private - components for private routes
+	- public - components for public routes
+	- ui - shadcn components
+- drizzle - sql migrations
+- lib - configuration and utilities
+- public - static assets
+- repositories - reusable queries and return types
+- schema - drizzle schemas
+- scripts - executable scripts
+- services - reusable business logic
+- styles - css
+- types - module augmentation
+```
+
 ## Naming conventions
 
 shadrizz uses naming conventions as described in the table below. Number and case transformations will be applied to the generated code.
