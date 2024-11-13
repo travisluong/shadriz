@@ -27,7 +27,7 @@ npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-sr
 
 ### Step 2: Run the CLI
 
-[UPDATE](https://ui.shadcn.com/docs/react-19) for Next.js 15 + React 19. If you're using `npm`, you may need to first run `npm config set legacy-peer-deps true` in order to bypass a dependency error. `pnpm` seems to work without issue.
+[UPDATE](https://ui.shadcn.com/docs/react-19) for Next.js 15 + React 19. If you're using `npm`, you may need to first run `npm config set legacy-peer-deps true` in order to work around a dependency error. Using `pnpm` instead of `npm` is recommended if you want to avoid this issue.
 
 Run the `shadrizz init` command to setup your project.
 
