@@ -354,6 +354,8 @@ If admin was enabled, users with the `admin` role will be able to access the adm
 
 You will be able to scaffold using an `admin` authorization level. The pages will be put into the `(admin)` route group. These pages along with the server actions will require a user with the `admin` role to access.
 
+An authorization check happens at the admin `layout.tsx`. The `authorization-service.ts` contains an `isAdmin` utility function that checks the current session for the admin role.
+
 After running an admin scaffold, a new link to the resource list page will be added to `admin-sidebar.tsx`.
 
 A `grant-admin.ts` script is provided to grant users the admin role.
@@ -361,8 +363,6 @@ A `grant-admin.ts` script is provided to grant users the admin role.
 The application uses a `role` text field to determine the user's role. Any user with an `admin` role will have admin access.
 
 Users will be assigned a `user` role when created. This behavior can be changed in `auth.ts`.
-
-An authorization check happens at the admin `layout.tsx`.
 
 ## Add-on Extensions
 
