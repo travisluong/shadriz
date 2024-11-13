@@ -412,7 +412,7 @@ npx shadrizz@latest scaffold posts -c title:text content:text_tiptap
 
 ## Project Structure
 
-This is the shadrizz project structure. The scaffolding automations will write to specific folders and files, so it's recommended to not move things around.
+This is the shadrizz project structure. The scaffolding automations will write to specific folders and files, so it's recommended to not move things around if you plan to continue using shadrizz automations.
 
 ```
 - actions
