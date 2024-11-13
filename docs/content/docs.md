@@ -439,6 +439,66 @@ This is the shadrizz project structure. The scaffolding automations will write t
 - types - module augmentation
 ```
 
+## Repositories
+
+Repositories are modules containing reusable queries.
+
+Why use the repository pattern if you can write the Drizzle query directly in the server component?
+
+First, it makes the query reusable by putting it in a shared module.
+
+Second, the other major benefit is that it allows us to create a reusable Awaited ReturnType. For example:
+
+```ts
+export type PostsWithRelations = Awaited<
+  ReturnType<typeof getPostsWithRelations>
+>;
+
+export async function getPostsWithRelations() {
+  return await db.query.posts.findMany({
+    with: {
+      category: true,
+    },
+  });
+}
+```
+
+The `PostsWithRelations` type is automatically defined by whatever is returned from the `getPostsWithRelations` function.
+
+This becomes more relevant as your project grows in size and you must deal with more nested relations. Without an automatic return type, you would spend a large amount of time writing interfaces and types by hand to annotate your React component props.
+
+With the awaited return type, we get a type that might look something like this if we wrote it by hand:
+
+```ts
+type PostsWithRelations = {
+  id: string;
+  title: string;
+  content: string;
+  category: {
+    id: string;
+    name: string;
+  };
+}[];
+```
+
+Now we can annotate our components as needed without having to write the type ourself:
+
+```tsx
+import { PostsWithRelations } from "@/repositories/post-repository";
+
+export function PostTable({ postList }: { postList: PostsWithRelations }) {
+...
+}
+```
+
+You get the benefit of type safety without all of the typing (keyboard).
+
+## Services
+
+The services directory is the place for reusable business logic. Initially, you may write the logic in the server components and actions, but eventually you might want to extract that logic and put it somewhere to be shared with other parts of the app.
+
+For example, shadrizz generates an authorization service with reusable authorization logic that is used in multiple places, such as the admin layout and admin server actions.
+
 ## Naming conventions
 
 shadrizz uses naming conventions as described in the table below. Number and case transformations will be applied to the generated code.
