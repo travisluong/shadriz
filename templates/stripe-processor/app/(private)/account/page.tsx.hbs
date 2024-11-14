@@ -85,7 +85,6 @@ export default async function Page() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Product</TableHead>
-                  <TableHead>Description</TableHead>
                   <TableHead>Amount Total</TableHead>
                   <TableHead>Date</TableHead>
                 </TableRow>
@@ -94,7 +93,6 @@ export default async function Page() {
                 {paymentList.map((d) => (
                   <TableRow key={d.payments.id}>
                     <TableCell>{d.products?.name}</TableCell>
-                    <TableCell>{d.products?.description}</TableCell>
                     <TableCell>
                       {d.payments.amountTotal &&
                         (d.payments.amountTotal / 100).toLocaleString("en-US", {

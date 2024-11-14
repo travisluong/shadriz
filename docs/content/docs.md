@@ -386,9 +386,9 @@ Code will be generated for a one-time purchase, monthly subscription plan, and a
 
 A pricing page will be generated. The buttons will initiate a stripe checkout if the user is logged in. If the user is not logged in, they will redirect to the sign in page.
 
-A `create-price.ts` script is provided to create the initial products on Stripe and on the local database. This is required before using the one-time purchase and subscription plan. shadrizz does not provide the implementation for provisioning the subscription. That is marked as `TODO` in the webhook route.
+A `create-price.ts` script is provided to create the initial products on Stripe and on the local database. This is required before using the one-time purchase and subscription plan. shadrizz does not provide the implementation for fulfulling one-time purchases or provisioning subscriptions. That is marked as `TODO` in the webhook route.
 
-The dynamic pricing does not require creating and mapping to products on Stripe. Dynamic pricing is useful if you need to generate a custom price, manage products, and manage and orders in the application. shadrizz does not provide the implementation for processing dynamic orders. That is also marked as `TODO` in the webhook route.
+The dynamic pricing does not require creating and mapping to products on Stripe. Dynamic pricing is useful if you need to generate a custom price, manage products, and manage orders in your own database. shadrizz does not provide the implementation for creating and processing dynamic orders. That is also marked as `TODO` in the dynamic checkout session and webhook route.
 
 The checkout sessions will be created with the user's email on first checkout. The user's stripe customer id will be saved in the checkout completed webhook. Subsequent checkouts will use the user's stripe customer id. This ensures that the Stripe invoice records are associated to the same Stripe customer, and allows the user to see the full invoice history in the customer portal.
 

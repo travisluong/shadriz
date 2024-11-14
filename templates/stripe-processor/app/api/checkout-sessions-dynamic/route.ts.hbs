@@ -1,9 +1,10 @@
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
 import { users } from "@/schema/users";
-import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
+import { products } from "@/schema/products";
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 
@@ -22,6 +23,22 @@ export async function POST(req: Request) {
     redirect("/signin");
   }
 
+  const formData = await req.formData();
+
+  const slug = formData.get("slug")?.toString();
+
+  if (!slug) {
+    throw new Error("slug not found");
+  }
+
+  const product = await db.query.products.findFirst({
+    where: eq(products.slug, slug),
+  });
+
+  if (!product) {
+    throw new Error("product not found");
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
       customer: user.stripeCustomerId ? user.stripeCustomerId : undefined,
@@ -31,26 +48,16 @@ export async function POST(req: Request) {
         {
           price_data: {
             currency: "usd",
-            unit_amount: 500,
+            unit_amount: product.price,
             product_data: {
-              name: `line item 1`,
+              name: product.name
             },
           },
-          quantity: 1,
-        },
-        {
-          price_data: {
-            currency: "usd",
-            unit_amount: 300,
-            product_data: {
-              name: `line item 2`,
-            },
-          },
-          quantity: 1,
-        },
+          quantity: 1
+        }
       ],
       metadata: {
-        order_id: "a dynamic order id",
+        product_id: product.id,
       },
       mode: "payment",
       success_url: `${req.headers.get("origin")}/confirmation/?success=true`,

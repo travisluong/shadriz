@@ -63,6 +63,7 @@ async function handleCheckoutSessionCompleted(event: any) {
     throw new Error("user not found " + email);
   }
 
+  // save stripe customer id for subsequent checkouts
   if (!user.stripeCustomerId && stripeCustomerId) {
     await db
       .update(users)
@@ -70,15 +71,16 @@ async function handleCheckoutSessionCompleted(event: any) {
       .where(eq(users.id, user.id));
   }
 
-  // process dynamic order
-  const orderId = event.data.object.metadata.order_id;
-  if (orderId) {
+  // process dynamic product
+  const productId = event.data.object.metadata.product_id;
+  if (productId) {
     await db.insert(payments).values({
       amountTotal: event.data.object.amount_total,
       userId: user.id,
+      productId: productId,
     });
 
-    // TODO: process dynamic order
+    // TODO: fulfill dynamic order
     return;
   }
 
