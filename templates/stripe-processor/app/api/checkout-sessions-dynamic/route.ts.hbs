@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       customer: user.stripeCustomerId ? user.stripeCustomerId : undefined,
       customer_email: user.stripeCustomerId ? undefined : user.email,
+      customer_creation: user.stripeCustomerId ? undefined : "always",
       line_items: [
         {
           price_data: {

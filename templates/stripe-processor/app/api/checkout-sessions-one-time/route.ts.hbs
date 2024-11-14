@@ -43,6 +43,7 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create({
       customer: user.stripeCustomerId ? user.stripeCustomerId : undefined,
       customer_email: user.stripeCustomerId ? undefined : user.email,
+      customer_creation: user.stripeCustomerId ? undefined : "always",
       line_items: [
         {
           price: product.stripePriceId,
@@ -53,7 +54,6 @@ export async function POST(req: Request) {
       success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
       cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
       allow_promotion_codes: true,
-      customer_creation: "always",
       invoice_creation: {
         enabled: true,
       },
