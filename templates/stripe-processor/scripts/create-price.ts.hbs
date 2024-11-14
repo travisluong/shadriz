@@ -25,12 +25,12 @@ async function main() {
 
   await sdb.insert(schema.products).values({
     name: "Monthly Subscription",
-    mode: "subscription",
-    price: 1000,
-    stripePriceId: priceMonthly.id,
-    stripeProductId: productMonthly.id,
-    description: "Monthly subscription",
     slug: "monthly",
+    stripeProductId: productMonthly.id,
+    stripePriceId: priceMonthly.id,
+    stripeMode: "subscription",
+    price: 1000,
+    description: "Monthly subscription",
   });
   console.log(
     "Success! Here is your monthly subscription product id: " +
@@ -53,12 +53,12 @@ async function main() {
 
   await sdb.insert(schema.products).values({
     name: "One Time Purchase",
-    mode: "payment",
-    price: 10000,
-    stripePriceId: priceOneTime.id,
-    stripeProductId: productOneTime.id,
-    description: "One time purchase",
     slug: "one-time",
+    stripeProductId: productOneTime.id,
+    stripePriceId: priceOneTime.id,
+    stripeMode: "payment",
+    price: 10000,
+    description: "One time purchase",
   });
   console.log(
     "Success! Here is your one time purchase product id: " + productOneTime.id

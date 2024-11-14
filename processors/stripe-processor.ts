@@ -8,6 +8,7 @@ import {
 } from "../lib/types";
 import {
   appendToEnvLocal,
+  insertTextAfterIfNotExists,
   insertTextBeforeIfNotExists,
   prependToFileIfNotExists,
   renderTemplate,
@@ -30,7 +31,7 @@ export class StripeProcessor implements ShadrizzProcessor {
 
   devDependencies = [];
 
-  shadcnComponents: string[] = ["card", "badge"];
+  shadcnComponents: string[] = ["card"];
 
   dbDialectStrategy: DbDialectStrategy;
 
@@ -42,15 +43,15 @@ export class StripeProcessor implements ShadrizzProcessor {
   async render(): Promise<void> {
     this.addAccountPage();
     this.addPricingPage();
-    this.addAccessUtil();
     this.appendStripeSecretsToEnvLocal();
-    this.addCheckOutSessionsApiRoute();
+    this.addCheckOutSessionsApiRoutes();
     this.addCustomerPortalApiRoute();
     this.addWebhookApiRoute();
     this.addConfirmationPage();
     this.addCreatePriceScript();
     this.scaffold();
     this.addLinkToPrivateSidebar();
+    this.addStripeCustomerIdToUsersSchema();
   }
 
   addAccountPage() {
@@ -67,13 +68,6 @@ export class StripeProcessor implements ShadrizzProcessor {
     });
   }
 
-  addAccessUtil() {
-    renderTemplate({
-      inputPath: "stripe-processor/lib/access.ts.hbs",
-      outputPath: "lib/access.ts",
-    });
-  }
-
   appendStripeSecretsToEnvLocal() {
     appendToEnvLocal(
       "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
@@ -83,10 +77,31 @@ export class StripeProcessor implements ShadrizzProcessor {
     appendToEnvLocal("STRIPE_WEBHOOK_SECRET", "{STRIPE_WEBHOOK_SECRET}");
   }
 
-  addCheckOutSessionsApiRoute() {
+  addCheckOutSessionsApiRoutes() {
     renderTemplate({
-      inputPath: "stripe-processor/app/api/checkout_sessions/route.ts.hbs",
-      outputPath: "app/api/checkout_sessions/route.ts",
+      inputPath:
+        "stripe-processor/app/api/checkout-sessions-dynamic/route.ts.hbs",
+      outputPath: "app/api/checkout-sessions-dynamic/route.ts",
+      data: {
+        pkFunctionInvoke: pkFunctionInvoke[this.opts.pkStrategy],
+        pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
+      },
+    });
+
+    renderTemplate({
+      inputPath:
+        "stripe-processor/app/api/checkout-sessions-one-time/route.ts.hbs",
+      outputPath: "app/api/checkout-sessions-one-time/route.ts",
+      data: {
+        pkFunctionInvoke: pkFunctionInvoke[this.opts.pkStrategy],
+        pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
+      },
+    });
+
+    renderTemplate({
+      inputPath:
+        "stripe-processor/app/api/checkout-sessions-subscription/route.ts.hbs",
+      outputPath: "app/api/checkout-sessions-subscription/route.ts",
       data: {
         pkFunctionInvoke: pkFunctionInvoke[this.opts.pkStrategy],
         pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
@@ -122,6 +137,13 @@ export class StripeProcessor implements ShadrizzProcessor {
     });
   }
 
+  addCreateProductScripts() {
+    renderTemplate({
+      inputPath: "stripe-processor/scripts/create-one-time-product.ts.hbs",
+      outputPath: "scripts/scripts/create-subscription-product.ts.hbs",
+    });
+  }
+
   scaffold() {
     const stripeWebhooksColumns: Record<DbDialect, string[]> = {
       postgresql: ["payload:text"],
@@ -142,28 +164,28 @@ export class StripeProcessor implements ShadrizzProcessor {
         "slug:text",
         "stripe_product_id:text",
         "stripe_price_id:text",
+        "stripe_mode:text",
         "name:text",
         "price:integer",
         "description:text",
-        "mode:text",
       ],
       mysql: [
         "slug:varchar",
         "stripe_product_id:varchar",
         "stripe_price_id:varchar",
+        "stripe_mode:varchar",
         "name:varchar",
         "price:int",
         "description:text",
-        "mode:varchar",
       ],
       sqlite: [
         "slug:text",
         "stripe_product_id:text",
         "stripe_price_id:text",
+        "stripe_mode:text",
         "name:text",
         "price:integer",
         "description:text",
-        "mode:text",
       ],
     };
     const productsProcessor = new ScaffoldProcessor({
@@ -175,66 +197,23 @@ export class StripeProcessor implements ShadrizzProcessor {
     });
     productsProcessor.process();
 
-    const ordersColumns: Record<DbDialect, string[]> = {
+    const paymentsColumns: Record<DbDialect, string[]> = {
       postgresql: [
         "user:references",
         "product:references",
-        "note:text",
         "amount_total:integer",
       ],
-      mysql: [
-        "user:references",
-        "product:references",
-        "note:text",
-        "amount_total:int",
-      ],
-      sqlite: [
-        "user:references",
-        "product:references",
-        "note:text",
-        "amount_total:integer",
-      ],
+      mysql: ["user:references", "product:references", "amount_total:int"],
+      sqlite: ["user:references", "product:references", "amount_total:integer"],
     };
-    const ordersProcessor = new ScaffoldProcessor({
+    const paymentsProcessor = new ScaffoldProcessor({
       ...this.opts,
       authorizationLevel: "admin",
-      columns: ordersColumns[this.opts.dbDialect],
-      table: "orders",
+      columns: paymentsColumns[this.opts.dbDialect],
+      table: "payments",
       enableCompletionMessage: false,
     });
-    ordersProcessor.process();
-
-    const subscriptionsColumns: Record<DbDialect, string[]> = {
-      postgresql: [
-        "user:references",
-        "stripe_customer_id:text",
-        "product:references",
-        "start_date:date",
-        "end_date:date",
-      ],
-      mysql: [
-        "user:references",
-        "stripe_customer_id:varchar",
-        "product:references",
-        "start_date:date",
-        "end_date:date",
-      ],
-      sqlite: [
-        "user:references",
-        "stripe_customer_id:text",
-        "product:references",
-        "start_date:timestamp",
-        "end_date:timestamp",
-      ],
-    };
-    const subscriptionsProcessor = new ScaffoldProcessor({
-      ...this.opts,
-      authorizationLevel: "admin",
-      columns: subscriptionsColumns[this.opts.dbDialect],
-      table: "subscriptions",
-      enableCompletionMessage: false,
-    });
-    subscriptionsProcessor.process();
+    paymentsProcessor.process();
   }
 
   addLinkToPrivateSidebar() {
@@ -247,6 +226,20 @@ export class StripeProcessor implements ShadrizzProcessor {
       "components/private/private-sidebar.tsx",
       "// [CODE_MARK private-sidebar-items]",
       `  { title: "Account", url: "/account", icon: CreditCardIcon }`
+    );
+  }
+
+  addStripeCustomerIdToUsersSchema() {
+    const record: Record<DbDialect, string> = {
+      postgresql: "text()",
+      mysql: "varchar({ length: 255 })",
+      sqlite: "text()",
+    };
+
+    insertTextAfterIfNotExists(
+      "schema/users.ts",
+      "// [CODE_MARK users-table]",
+      `\n  stripeCustomerId: ${record[this.opts.dbDialect]},`
     );
   }
 

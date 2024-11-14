@@ -1,0 +1,67 @@
+import { auth } from "@/lib/auth";
+import { config } from "@/lib/config";
+import { db } from "@/lib/db";
+import { users } from "@/schema/users";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
+const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
+
+export async function POST(req: Request) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/signin");
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+  });
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      customer: user.stripeCustomerId ? user.stripeCustomerId : undefined,
+      customer_email: user.stripeCustomerId ? undefined : user.email,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            unit_amount: 500,
+            product_data: {
+              name: `line item 1`,
+            },
+          },
+          quantity: 1,
+        },
+        {
+          price_data: {
+            currency: "usd",
+            unit_amount: 300,
+            product_data: {
+              name: `line item 2`,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        order_id: "a dynamic order id",
+      },
+      mode: "payment",
+      success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
+      cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
+      allow_promotion_codes: true,
+      invoice_creation: {
+        enabled: true,
+      },
+    });
+    return Response.redirect(session.url);
+  } catch (err: any) {
+    console.error(err);
+    return Response.json(err.message, { status: 500 });
+  }
+}

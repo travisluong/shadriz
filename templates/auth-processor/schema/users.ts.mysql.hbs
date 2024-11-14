@@ -18,6 +18,7 @@ export const users = mysqlTable("users", {
   password: varchar({ length: 255 }),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
+  // [CODE_MARK users-table]
 })
 
 export type User = typeof users.$inferSelect;

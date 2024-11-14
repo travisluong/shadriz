@@ -53,7 +53,7 @@ export default function Page() {
             </ul>
           </CardContent>
           <CardFooter>
-            <form action="/api/checkout_sessions" method="POST">
+            <form action="/api/checkout-sessions-one-time" method="POST">
               <input type="hidden" name="slug" value="one-time" />
               <Button type="submit">Purchase</Button>
             </form>
@@ -91,7 +91,7 @@ export default function Page() {
             </ul>
           </CardContent>
           <CardFooter>
-            <form action="/api/checkout_sessions" method="POST">
+            <form action="/api/checkout-sessions-subscription" method="POST">
               <input type="hidden" name="slug" value="monthly" />
               <Button type="submit">Subscribe</Button>
             </form>
@@ -129,8 +129,7 @@ export default function Page() {
             </ul>
           </CardContent>
           <CardFooter>
-            <form action="/api/checkout_sessions" method="POST">
-              <input type="hidden" name="slug" value="dynamic" />
+            <form action="/api/checkout-sessions-dynamic" method="POST">
               <Button type="submit">Checkout</Button>
             </form>
           </CardFooter>

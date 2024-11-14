@@ -1,0 +1,66 @@
+import { auth } from "@/lib/auth";
+import { config } from "@/lib/config";
+import { db } from "@/lib/db";
+import { products } from "@/schema/products";
+import { users } from "@/schema/users";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
+const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
+
+export async function POST(req: Request) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/signin");
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+  });
+
+  if (!user) {
+    redirect("/signin");
+  }
+
+  const formData = await req.formData();
+
+  const slug = formData.get("slug")?.toString();
+
+  if (!slug) {
+    throw new Error("slug not found");
+  }
+
+  const product = await db.query.products.findFirst({
+    where: eq(products.slug, slug),
+  });
+
+  if (!product) {
+    throw new Error("product not found");
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      customer: user.stripeCustomerId ? user.stripeCustomerId : undefined,
+      customer_email: user.stripeCustomerId ? undefined : user.email,
+      line_items: [
+        {
+          price: product.stripePriceId,
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
+      cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
+      allow_promotion_codes: true,
+      customer_creation: "always",
+      invoice_creation: {
+        enabled: true,
+      },
+    });
+    return Response.redirect(session.url);
+  } catch (err: any) {
+    console.error(err);
+    return Response.json(err.message, { status: 500 });
+  }
+}

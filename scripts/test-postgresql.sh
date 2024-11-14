@@ -22,10 +22,12 @@ shadrizz scaffold -a admin post -c category_id:references_combobox post_status:r
 shadrizz scaffold -a admin tags -c name:text
 shadrizz scaffold -a admin posts_tags -c post_id:references tag_id:references
 shadrizz join -a admin posts posts_tags tags
+shadrizz add stripe
 npm run generate
 npm run migrate
 npx tsx scripts/create-user.ts user@example.com pw
 npx tsx scripts/create-user.ts admin@example.com pw
 npx tsx scripts/grant-admin.ts admin@example.com
+npx tsx scripts/create-price.ts
 npm run build
 npm run start

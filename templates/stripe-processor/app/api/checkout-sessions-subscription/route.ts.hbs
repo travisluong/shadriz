@@ -5,7 +5,6 @@ import { products } from "@/schema/products";
 import { users } from "@/schema/users";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-{{pkStrategyImport}}
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 
@@ -21,7 +20,7 @@ export async function POST(req: Request) {
   });
 
   if (!user) {
-    throw new Error("user not found");
+    redirect("/signin");
   }
 
   const formData = await req.formData();
@@ -30,38 +29,6 @@ export async function POST(req: Request) {
 
   if (!slug) {
     throw new Error("slug not found");
-  }
-
-  if (slug === "dynamic") {
-    const orderId = {{pkFunctionInvoke}}
-    try {
-      const session = await stripe.checkout.sessions.create({
-        customer_email: user.email,
-        line_items: [
-          {
-            price_data: {
-              currency: "usd",
-              unit_amount: 500,
-              product_data: {
-                name: `Custom order ${orderId}`,
-              },
-            },
-            quantity: 1,
-          },
-        ],
-        metadata: {
-          order_id: orderId,
-        },
-        mode: "payment",
-        success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
-        cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
-        allow_promotion_codes: false,
-      });
-      return Response.redirect(session.url);
-    } catch (err: any) {
-      console.error(err);
-      return Response.json(err.message, { status: 500 });
-    }
   }
 
   const product = await db.query.products.findFirst({
@@ -74,15 +41,15 @@ export async function POST(req: Request) {
 
   try {
     const session = await stripe.checkout.sessions.create({
-      customer_email: user.email,
+      customer: user.stripeCustomerId ? user.stripeCustomerId : undefined,
+      customer_email: user.stripeCustomerId ? undefined : user.email,
       line_items: [
         {
-          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
           price: product.stripePriceId,
           quantity: 1,
         },
       ],
-      mode: product?.mode,
+      mode: "subscription",
       success_url: `${req.headers.get("origin")}/confirmation/?success=true`,
       cancel_url: `${req.headers.get("origin")}/confirmation/?canceled=true`,
       allow_promotion_codes: true,

@@ -15,6 +15,7 @@ export const users = pgTable("users", {
   password: text(),
   {{createdAtTemplate}}
   {{updatedAtTemplate}}
+  // [CODE_MARK users-table]
 })
  
 export type User = typeof users.$inferSelect;

@@ -1,11 +1,10 @@
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
-import { orders } from "@/schema/orders";
+import { payments } from "@/schema/payments";
 import { products } from "@/schema/products";
 import { stripeWebhooks } from "@/schema/stripe-webhooks";
-import { subscriptions } from "@/schema/subscriptions";
 import { users } from "@/schema/users";
-import { and, eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 
 const stripe = require("stripe")(config.STRIPE_SECRET_KEY);
 
@@ -43,7 +42,7 @@ export async function POST(req: Request) {
       await handleInvoicePaymentFailed(event);
       break;
     default:
-    // Unhandled event type
+    // unhandled event type
   }
 
   return Response.json({ message: "success" });
@@ -51,26 +50,35 @@ export async function POST(req: Request) {
 
 async function handleCheckoutSessionCompleted(event: any) {
   const email = event.data.object.customer_email;
+  const stripeCustomerId = event.data.object.customer;
 
   const user = await db.query.users.findFirst({
-    where: eq(users.email, email),
+    where: or(
+      eq(users.email, email),
+      eq(users.stripeCustomerId, stripeCustomerId)
+    ),
   });
 
   if (!user) {
-    throw new Error(
-      "user not found during handle checkout session completed: " + email
-    );
+    throw new Error("user not found " + email);
+  }
+
+  if (!user.stripeCustomerId && stripeCustomerId) {
+    await db
+      .update(users)
+      .set({ stripeCustomerId: stripeCustomerId })
+      .where(eq(users.id, user.id));
   }
 
   // process dynamic order
   const orderId = event.data.object.metadata.order_id;
   if (orderId) {
-    await db.insert(orders).values({
-      id: orderId,
+    await db.insert(payments).values({
       amountTotal: event.data.object.amount_total,
       userId: user.id,
-      note: "a dynamic order",
     });
+
+    // TODO: process dynamic order
     return;
   }
 
@@ -91,12 +99,15 @@ async function handleCheckoutSessionCompleted(event: any) {
       where: eq(products.stripeProductId, stripeProductId),
     });
 
-    if (product && product.slug === "one-time") {
-      await db.insert(orders).values({
+    if (!product) {
+      throw new Error("product not found " + stripeProductId);
+    }
+
+    if (product.stripeMode === "payment") {
+      await db.insert(payments).values({
         productId: product.id,
         amountTotal: amountTotal,
         userId: user.id,
-        note: "a one time purchase",
       });
     }
   }
@@ -110,51 +121,34 @@ async function handleInvoicePaid(event: any) {
   });
 
   if (!user) {
-    throw new Error("user not found during invoice paid: " + email);
+    throw new Error("user not found " + email);
   }
 
   const data = event.data.object.lines.data;
   const total = event.data.object.total;
-  const stripeCustomerId = event.data.object.customer;
 
   for (const d of data) {
     const stripeProductId = d.price.product;
+
     const product = await db.query.products.findFirst({
       where: eq(products.stripeProductId, stripeProductId),
     });
-    if (product?.slug === "monthly") {
-      const startDate = new Date(d.period.start * 1000);
-      const endDate = new Date(d.period.end * 1000);
-      const newSubscription = {
-        userId: user.id,
-        stripeCustomerId: stripeCustomerId,
-        productId: product.id,
-        startDate: startDate,
-        endDate: endDate,
-      };
 
-      const subscription = await db.query.subscriptions.findFirst({
-        where: and(eq(users.id, user.id), eq(products.id, product.id)),
-      });
+    if (!product) {
+      throw new Error("product not found " + stripeProductId);
+    }
 
-      if (subscription) {
-        await db
-          .update(subscriptions)
-          .set({
-            endDate: endDate,
-            updatedAt: new Date(),
-          })
-          .where(eq(subscriptions.id, subscription.id));
-      } else {
-        await db.insert(subscriptions).values(newSubscription);
-      }
-
-      await db.insert(orders).values({
+    if (product.stripeMode === "subscription") {
+      await db.insert(payments).values({
         productId: product.id,
         amountTotal: total,
         userId: user.id,
-        note: "a subscription order",
       });
+
+      const startDate = new Date(d.period.start * 1000);
+      const endDate = new Date(d.period.end * 1000);
+
+      // TODO: provision subscription
     }
   }
 }

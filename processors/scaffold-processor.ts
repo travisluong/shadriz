@@ -83,7 +83,8 @@ export class ScaffoldProcessor {
     const validatedColumns: ValidatedColumn[] = [];
     for (const column of columns) {
       let [columnName, dataType] = column.split(":");
-      if (columnName.endsWith("_id")) {
+      // the dataType references check is important to prevent breaking stripe product and price ids
+      if (columnName.endsWith("_id") && dataType.startsWith("references")) {
         columnName = columnName.split("_id")[0];
       }
       if (!(dataType in dataTypeStrategyMap)) {

@@ -1,5 +1,10 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -9,16 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { hasActiveSubscription } from "@/lib/access";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { orders } from "@/schema/orders";
+import { payments } from "@/schema/payments";
 import { products } from "@/schema/products";
-import { subscriptions } from "@/schema/subscriptions";
 import { users } from "@/schema/users";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -32,115 +34,84 @@ export default async function Page() {
     redirect("/signin");
   }
 
-  const orderList = await db
-    .select()
-    .from(orders)
-    .leftJoin(products, eq(orders.productId, products.id))
-    .innerJoin(users, eq(users.id, orders.userId))
-    .where(eq(users.id, session.user.id));
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.user.id),
+  });
 
-  if (!session) {
+  if (!user) {
     redirect("/signin");
   }
 
-  const activeSubscription = await hasActiveSubscription(session.user.id!);
-
-  const subscription = await db.query.subscriptions.findFirst({
-    where: eq(subscriptions.userId, session.user.id!),
-  });
+  const paymentList = await db
+    .select()
+    .from(payments)
+    .leftJoin(products, eq(payments.productId, products.id))
+    .innerJoin(users, eq(users.id, payments.userId))
+    .where(eq(users.id, session.user.id))
+    .orderBy(desc(payments.createdAt));
 
   return (
-    <div className="max-w-4xl m-auto p-5 flex flex-col gap-5">
-      <h1 className="font-bold text-xl">Subscription</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Subscription Status
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-5">
-          {activeSubscription && (
-            <div className="flex gap-5">
-              <Badge className="bg-green-400">Subscription Active</Badge>
-              <div>Expires: {subscription?.endDate?.toLocaleDateString()}</div>
-            </div>
-          )}
-          {subscription && !activeSubscription && (
-            <div className="flex gap-5">
-              <Badge className="bg-red-400">Subscription</Badge>
-              <div>Expired: {subscription.endDate?.toLocaleDateString()}</div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-      {subscription && (
+    <div className="relative">
+      <div className="absolute left-8 -top-6">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>Account</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      {user.stripeCustomerId && (
+        <div className="pt-5">
+          <Card>
+            <CardHeader>
+              <CardTitle>Billing &amp; Payment</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action="/api/customer_portal" method="POST">
+                <Button type="submit">Edit Billing / View Invoices</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      <div className="pt-5">
         <Card>
           <CardHeader>
-            <CardTitle>
-              Manage Subscription
-            </CardTitle>
+            <CardTitle>Billing History</CardTitle>
           </CardHeader>
           <CardContent>
-            <form action="/api/customer_portal" method="POST">
-              <Button type="submit">Customer Portal</Button>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Order History
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {orderList.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Product</TableHead>
                   <TableHead>Description</TableHead>
-                  <TableHead>Note</TableHead>
-                  <TableHead>Total</TableHead>
+                  <TableHead>Amount Total</TableHead>
                   <TableHead>Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orderList.map((d) => (
-                  <TableRow key={d.orders.id}>
+                {paymentList.map((d) => (
+                  <TableRow key={d.payments.id}>
                     <TableCell>{d.products?.name}</TableCell>
+                    <TableCell>{d.products?.description}</TableCell>
                     <TableCell>
-                      {d.products?.description}
-                    </TableCell>
-                    <TableCell>
-                      {d.orders.note}
-                    </TableCell>
-                    <TableCell>
-                      {d.orders.amountTotal &&
-                        (d.orders.amountTotal / 100).toLocaleString("en-US", {
+                      {d.payments.amountTotal &&
+                        (d.payments.amountTotal / 100).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
                         })}
                     </TableCell>
                     <TableCell>
-                      {d.orders.createdAt.toLocaleDateString()}
+                      {d.payments.createdAt.toLocaleString()}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          ) : (
-            <div className="flex flex-col gap-5">
-              No active subscriptions.
-              <Link href="/pricing">
-                <Button>
-                  Upgrade to a Pro Plan
-                </Button>
-              </Link>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
