@@ -67,6 +67,22 @@ export class AdminProcessor implements ShadrizzProcessor {
       outputPath: "services/authorization-service.ts",
     });
 
+    renderTemplate({
+      inputPath:
+        "admin-processor/components/admin-login/admin-login-form.tsx.hbs",
+      outputPath: "components/admin-login/admin-login-form.tsx",
+    });
+
+    renderTemplate({
+      inputPath: "admin-processor/actions/admin-login/admin-login.ts.hbs",
+      outputPath: "actions/admin-login/admin-login.ts",
+    });
+
+    renderTemplate({
+      inputPath: "admin-processor/scripts/create-password-hash.ts.hbs",
+      outputPath: "scripts/create-password-hash.ts",
+    });
+
     const strategies: Record<DbDialect, string[]> = {
       postgresql: [
         "name:text",

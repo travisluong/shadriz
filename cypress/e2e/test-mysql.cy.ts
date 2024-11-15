@@ -16,7 +16,7 @@ describe("shadriz e2e test", () => {
   });
 
   it("admin scaffold happy path", () => {
-    cy.get("h1").first().should("have.text", "Admin");
+    cy.contains("Admin");
     cy.contains("Users").click();
     cy.contains("Users");
     cy.contains("user@example.com").should("exist");

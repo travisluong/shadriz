@@ -15,11 +15,11 @@ export default async function Layout({
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/admin-login?error=unauthenticated");
+    redirect("/admin-login");
   }
 
   if (!isAdmin(session)) {
-    redirect("/admin-login?error=unauthorized");
+    redirect("/admin-login");
   }
 
   const user = await db.query.users.findFirst({
