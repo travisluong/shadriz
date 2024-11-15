@@ -85,7 +85,7 @@ export const authStrategyMap: AuthStrategyMap = {
     printCompletionMessage: function (): void {
       log.task("create test user for credentials provider");
       log.cmdsubtask(
-        "npx tsx scripts/create-user.ts shadrizz@example.com password123"
+        "npx tsx scripts/create-user.ts user@example.com password123"
       );
     },
     textToSearchInEnv: undefined,
