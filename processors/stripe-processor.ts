@@ -8,7 +8,6 @@ import {
 } from "../lib/types";
 import {
   appendToEnvLocal,
-  insertTextAfterIfNotExists,
   insertTextBeforeIfNotExists,
   prependToFileIfNotExists,
   renderTemplate,
@@ -236,10 +235,10 @@ export class StripeProcessor implements ShadrizzProcessor {
       sqlite: "text()",
     };
 
-    insertTextAfterIfNotExists(
+    insertTextBeforeIfNotExists(
       "schema/users.ts",
       "// [CODE_MARK users-table]",
-      `\n  stripeCustomerId: ${record[this.opts.dbDialect]},`
+      `stripeCustomerId: ${record[this.opts.dbDialect]},\n  `
     );
   }
 

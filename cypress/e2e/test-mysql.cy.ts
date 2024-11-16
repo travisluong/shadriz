@@ -61,7 +61,7 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="status"]').type("bar");
     cy.get('button[type="submit"]').click();
     cy.contains("Post Statuses").should("exist");
-    cy.contains("bar").should("exist");
+    cy.get("td").contains("bar").should("exist");
   });
 
   it("create post", () => {
