@@ -111,8 +111,8 @@ export class StripeProcessor implements ShadrizzProcessor {
 
   addCustomerPortalApiRoute() {
     renderTemplate({
-      inputPath: "stripe-processor/app/api/customer_portal/route.ts.hbs",
-      outputPath: "app/api/customer_portal/route.ts",
+      inputPath: "stripe-processor/app/api/customer-portal/route.ts.hbs",
+      outputPath: "app/api/customer-portal/route.ts",
     });
   }
 
