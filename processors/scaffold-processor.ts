@@ -72,10 +72,32 @@ export class ScaffoldProcessor {
 
   validatedColumns: ValidatedColumn[];
 
+  validatedColumnsWithTimestamps: ValidatedColumn[];
+
   constructor(opts: ScaffoldProcessorOpts) {
     this.opts = opts;
     this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.validatedColumns = this.parseColumns(opts.columns);
+    this.validatedColumnsWithTimestamps =
+      this.getValidatedColumnsWithTimestamps();
+  }
+
+  getValidatedColumnsWithTimestamps() {
+    const createdAtCol: ValidatedColumn = {
+      columnName: "created_at",
+      dataType: "timestamp",
+      caseVariants: caseFactory("created_at"),
+      caseVariantsWithId: caseFactory("created_at_id"), // not used
+    };
+
+    const updatedAtCol: ValidatedColumn = {
+      columnName: "updated_at",
+      dataType: "timestamp",
+      caseVariants: caseFactory("updated_at"),
+      caseVariantsWithId: caseFactory("updated_at_id"), // not used
+    };
+
+    return this.validatedColumns.concat([createdAtCol, updatedAtCol]);
   }
 
   parseColumns(columns: string[]) {
@@ -266,7 +288,7 @@ export class ScaffoldProcessor {
       }/[id]/page.tsx`,
       data: {
         tableObj: tableObj,
-        validatedColumns: this.validatedColumns,
+        validatedColumns: this.validatedColumnsWithTimestamps,
         hasFileDataType,
       },
     });
@@ -391,7 +413,7 @@ export class ScaffoldProcessor {
   }
   addUpdateAction(): void {
     const columns = ["id"];
-    for (const validatedColumn of this.validatedColumns) {
+    for (const validatedColumn of this.validatedColumnsWithTimestamps) {
       const { columnName, dataType, caseVariants, caseVariantsWithId } =
         validatedColumn;
       const columnCases = caseFactory(columnName);
@@ -407,26 +429,28 @@ export class ScaffoldProcessor {
         this.dbDialectStrategy.pkDataType
       ];
 
-    const formDataKeyValArr = this.validatedColumns.map((validatedColumn) => {
-      const { dataType, caseVariants, caseVariantsWithId } = validatedColumn;
-      const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
+    const formDataKeyValArr = this.validatedColumnsWithTimestamps.map(
+      (validatedColumn) => {
+        const { dataType, caseVariants, caseVariantsWithId } = validatedColumn;
+        const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-      let keyName;
-      let colName;
+        let keyName;
+        let colName;
 
-      if (dataType.startsWith("references")) {
-        keyName = caseVariantsWithId.singularCamelCase;
-        colName = caseVariantsWithId.singularCamelCase;
-      } else {
-        keyName = caseVariants.originalCamelCase;
-        colName = caseVariants.originalCamelCase;
+        if (dataType.startsWith("references")) {
+          keyName = caseVariantsWithId.singularCamelCase;
+          colName = caseVariantsWithId.singularCamelCase;
+        } else {
+          keyName = caseVariants.originalCamelCase;
+          colName = caseVariants.originalCamelCase;
+        }
+
+        return strategy.getKeyValStrForFormData({
+          keyName: keyName,
+          columnName: colName,
+        });
       }
-
-      return strategy.getKeyValStrForFormData({
-        keyName: keyName,
-        columnName: colName,
-      });
-    });
+    );
 
     formDataKeyValArr.unshift(
       dataTypeStrategyForPk.getKeyValStrForFormData({
@@ -587,7 +611,7 @@ export class ScaffoldProcessor {
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-table.tsx`,
       data: {
         tableObj: tableObj,
-        validatedColumns: this.validatedColumns,
+        validatedColumns: this.validatedColumnsWithTimestamps,
         isAdmin: this.opts.authorizationLevel === "admin",
       },
     });
@@ -605,7 +629,10 @@ export class ScaffoldProcessor {
 
     html += "\n";
 
-    for (const [index, validatedColumn] of this.validatedColumns.entries()) {
+    for (const [
+      index,
+      validatedColumn,
+    ] of this.validatedColumnsWithTimestamps.entries()) {
       const { dataType } = validatedColumn;
 
       const dataTypeStrategy =

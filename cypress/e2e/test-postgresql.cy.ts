@@ -27,7 +27,7 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="serialType"]').type("4");
     cy.get('input[name="bigserialType"]').type("5");
     cy.get('input[name="booleanType"]').check({ force: true });
-    cy.get('input[name="textType"]').type("a");
+    cy.get('input[name="textType"]').type("foobar");
     cy.get('input[name="varcharType"]').type("b");
     cy.get('input[name="charType"]').type("c");
     cy.get('input[name="numericType"]').type("6");
@@ -40,7 +40,7 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="timestampType"]').type("2008");
     cy.get('input[name="dateType"]').type("2024-08-08");
     cy.get('button[type="submit"]').click();
-    cy.contains("Admin Scaffolds");
+    cy.get("td").contains("foobar");
   });
 
   it("create category", () => {

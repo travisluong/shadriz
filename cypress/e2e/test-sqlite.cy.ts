@@ -26,10 +26,10 @@ describe("shadriz e2e test", () => {
     cy.get('input[name="integerType"]').type("1");
     cy.get('input[name="realType"]').type("2");
     cy.get('input[name="booleanType"]').check({ force: true });
-    cy.get('input[name="textType"]').type("a");
+    cy.get('input[name="textType"]').type("foobar");
     cy.get('input[name="timestampType"]').type("2008");
     cy.get('button[type="submit"]').click();
-    cy.contains("Admin Scaffolds");
+    cy.get("td").contains("foobar");
   });
 
   it("create category", () => {
