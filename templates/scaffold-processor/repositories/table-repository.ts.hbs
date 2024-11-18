@@ -1,4 +1,4 @@
-import { eq, like, sql } from "drizzle-orm";
+import { eq, like, sql, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { {{tableObj.singularPascalCase}}, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
@@ -23,7 +23,8 @@ export async function get{{tableObj.pluralPascalCase}}WithRelations({
   sort?: string;
   sortOrder?: string;
 }) {
-  let orderBy;
+  let orderBy = desc({{tableObj.pluralCamelCase}}.createdAt);
+  
   if (sort && sort in {{tableObj.pluralCamelCase}}) {
     switch (sortOrder) {
       case "asc":
