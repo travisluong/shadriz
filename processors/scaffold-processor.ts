@@ -552,7 +552,10 @@ export class ScaffoldProcessor {
   getFormControlsImports(): string {
     let html = "";
     const formComponentSet = new Set<FormComponent>();
-    for (const [index, validatedColumn] of this.validatedColumns.entries()) {
+    for (const [
+      index,
+      validatedColumn,
+    ] of this.validatedColumnsWithTimestamps.entries()) {
       const { columnName, dataType } = validatedColumn;
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];

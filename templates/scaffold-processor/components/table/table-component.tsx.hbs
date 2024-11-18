@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Sortable } from "@/components/sortable";
 import { {{tableObj.pluralPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
 export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelations }) {
@@ -16,9 +17,22 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Id</TableHead>
+          <TableHead><Sortable columnName="id">Id</Sortable></TableHead>
           {{#each validatedColumns}}
-          <TableHead>{{this.caseVariants.originalCapitalCase}}</TableHead>
+            {{#switch this.dataType}}
+              {{#case "references"}}
+          <TableHead><Sortable columnName="{{this.caseVariantsWithId.originalCamelCase}}">{{this.caseVariantsWithId.originalCapitalCase}}</Sortable></TableHead>
+              {{/case}}
+              {{#case "references_select"}}
+          <TableHead><Sortable columnName="{{this.caseVariantsWithId.originalCamelCase}}">{{this.caseVariantsWithId.originalCapitalCase}}</Sortable></TableHead>
+              {{/case}}
+              {{#case "references_combobox"}}
+          <TableHead><Sortable columnName="{{this.caseVariantsWithId.originalCamelCase}}">{{this.caseVariantsWithId.originalCapitalCase}}</Sortable></TableHead>
+              {{/case}}
+              {{#default}}
+          <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
+              {{/default}}
+            {{/switch}}
           {{/each}}
           <TableHead></TableHead>
         </TableRow>

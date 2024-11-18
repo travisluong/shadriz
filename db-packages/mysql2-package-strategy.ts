@@ -80,9 +80,7 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
    * https://github.com/sidorares/node-mysql2/issues/1885
    */
   addServerComponentExternalPackageToNextConfig() {
-    const text = `\n  experimental: {
-    serverComponentsExternalPackages: ["mysql2"],
-  },`;
+    const text = `\n  serverExternalPackages: ["mysql2"],`;
     insertTextAfterIfNotExists(
       "next.config.ts",
       "const nextConfig: NextConfig = {",

@@ -1,4 +1,12 @@
-type SearchParams = { [key: string]: string | string[] | undefined };
+type SearchParams = {
+  page?: string;
+  pageIndex?: string;
+  pageSize?: string;
+  search?: string;
+  sort?: string;
+  sortOrder?: string;
+  [key: string]: string | string[] | undefined;
+};
 
 export function parseSearchParams(searchParams: SearchParams) {
   const page =
@@ -8,12 +16,15 @@ export function parseSearchParams(searchParams: SearchParams) {
     typeof searchParams.pageSize === "string"
       ? parseInt(searchParams.pageSize)
       : 10;
-  const search =
-    typeof searchParams.search === "string" ? searchParams.search : undefined;
+  const search = searchParams.search;
+  const sort = searchParams.sort;
+  const sortOrder = searchParams.sortOrder;
   return {
     page,
     pageIndex,
     pageSize,
     search,
+    sort,
+    sortOrder,
   };
 }

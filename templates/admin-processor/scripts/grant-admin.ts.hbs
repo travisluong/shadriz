@@ -21,6 +21,8 @@ async function main() {
   console.log("granted admin role to user " + email);
 
   await closeConnection();
+
+  process.exit(0);
 }
 
 main();
