@@ -161,6 +161,11 @@ export class NewProjectProcessor implements ShadrizzProcessor {
       outputPath: "components/sortable.tsx",
     });
 
+    renderTemplate({
+      inputPath: "new-project-processor/components/breadcrumb-factory.tsx.hbs",
+      outputPath: "components/breadcrumb-factory.tsx",
+    });
+
     // TODO: remove when next.js and shadcn/ui init works with dark mode
     // prettier-ignore
     removeTextFromFile("app/globals.css", `:root {

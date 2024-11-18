@@ -1,26 +1,7 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { auth } from "@/lib/auth";
 
 export default async function Page() {
   const session = await auth();
 
-  return (
-    <div className="relative">
-      <div className="absolute left-8 -top-6">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="pt-5">Email: {session?.user?.email}</div>
-    </div>
-  );
+  return <div>Email: {session?.user?.email}</div>;
 }

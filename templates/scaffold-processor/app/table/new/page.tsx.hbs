@@ -1,14 +1,6 @@
 {{#if referencesColumnList.length}}
 import { db } from "@/lib/db";
 {{/if}}
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { {{tableObj.singularPascalCase}}CreateForm } from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-create-form";
 
 export default async function Page() {
@@ -17,27 +9,12 @@ export default async function Page() {
   {{/each}}
 
   return (
-    <div className="relative">
-      <div className="absolute left-8 -top-6">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/admin/{{tableObj.pluralKebabCase}}">{{tableObj.pluralCapitalCase}}</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>New</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="pt-5">
-        <{{tableObj.singularPascalCase}}CreateForm 
-          {{#each referencesColumnList}}
-          {{this.singularCamelCase}}List={ {{this.singularCamelCase}}List }
-          {{/each}}
-        />
-      </div>
+    <div>
+      <{{tableObj.singularPascalCase}}CreateForm 
+        {{#each referencesColumnList}}
+        {{this.singularCamelCase}}List={ {{this.singularCamelCase}}List }
+        {{/each}}
+      />
     </div>
   );
 }

@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import { db } from "@/lib/db";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/search-input";
@@ -33,17 +27,8 @@ export default async function Page(props: {
   });
 
   return (
-    <div className="relative">
-      <div className="absolute left-8 -top-6">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>{{tableObj.pluralCapitalCase}}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="flex justify-between pt-5 mb-5">
+    <div className="flex flex-col gap-5">
+      <div className="flex justify-between">
         <div>
           <SearchInput placeholder="Search {{tableObj.pluralCapitalCase}}" />
         </div>
@@ -55,7 +40,7 @@ export default async function Page(props: {
           </Link>
         </div>
       </div>
-      <div className="mb-5">
+      <div>
         <{{tableObj.singularPascalCase}}Table {{tableObj.singularCamelCase}}List={ {{tableObj.singularCamelCase}}List } />
       </div>
       <div>

@@ -1,10 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -51,18 +45,9 @@ export default async function Page() {
     .orderBy(desc(payments.createdAt));
 
   return (
-    <div className="relative">
-      <div className="absolute left-8 -top-6">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Account</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+    <div className="flex flex-col gap-5">
       {user.stripeCustomerId && (
-        <div className="pt-5">
+        <div>
           <Card>
             <CardHeader>
               <CardTitle>Billing &amp; Payment</CardTitle>
@@ -75,7 +60,7 @@ export default async function Page() {
           </Card>
         </div>
       )}
-      <div className="pt-5">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>Billing History</CardTitle>

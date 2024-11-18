@@ -2,14 +2,6 @@ import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { {{tableObj.singularPascalCase}}DeleteForm } from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-delete-form";
 import { db } from "@/lib/db";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
 type Params = Promise<{ id: string }>;
@@ -24,29 +16,8 @@ export default async function Page(props: { params: Params }) {
   }
 
   return (
-    <div className="relative">
-      <div className="absolute left-8 -top-6">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/admin/{{tableObj.pluralKebabCase}}">{{tableObj.pluralCapitalCase}}</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href={`/admin/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
-                { {{tableObj.singularCamelCase}}.id }
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Delete</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-      <div className="pt-5">
-        <{{tableObj.singularPascalCase}}DeleteForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} } />
-      </div>
+    <div>
+      <{{tableObj.singularPascalCase}}DeleteForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} } />
     </div>
   );
 }
