@@ -105,7 +105,8 @@ export class ScaffoldProcessor {
     const validatedColumns: ValidatedColumn[] = [];
     for (const column of columns) {
       let [columnName, dataType] = column.split(":");
-      // the dataType references check is important to prevent breaking stripe product and price ids
+      // the dataType references check is important to prevent breaking non-reference ids like stripe product and price ids
+      // shadrizz supports something like category_id:references, however it is not advertised to keep things simple
       if (columnName.endsWith("_id") && dataType.startsWith("references")) {
         columnName = columnName.split("_id")[0];
       }
