@@ -12,4 +12,7 @@
               ))}
             </SelectContent>
           </Select>
+          {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
+            <p className="text-red-500" key={error}>{error}</p>
+          ))}
         </div>
