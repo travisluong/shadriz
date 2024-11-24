@@ -4,7 +4,6 @@ import { startTransition, useActionState } from "react";
 import { create{{tableObj.singularPascalCase}}, Create{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/create-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { FormAlert } from "@/components/form-alert";
 {{formControlsImports}}
 {{#each referencesColumnList}}
 import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
@@ -35,7 +34,7 @@ export function {{tableObj.singularPascalCase}}CreateForm({{#if hasReferences}}{
         <div>
           <Button type="submit">Submit</Button>
         </div>
-        <FormAlert state={state} />
+        {state.message && <p>{state.message}</p>}
       </form>
     </div>
   );

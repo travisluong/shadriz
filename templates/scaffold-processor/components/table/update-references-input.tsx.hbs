@@ -2,6 +2,6 @@
           <Label>{{validatedColumn.caseVariantsWithId.originalCapitalCase}}</Label>
           <Input name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}" defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariantsWithId.singularCamelCase}} ?? "" } />
           {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
-            <p className="text-red-500" key={error}>{error}</p>
+            <p className="text-destructive" key={error}>{error}</p>
           ))}
         </div>

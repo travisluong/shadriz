@@ -552,13 +552,14 @@ export class ScaffoldProcessor {
   }
   getFormControlsHtml(): string {
     let html = "";
+    const tableObj = caseFactory(this.opts.table);
     for (const [index, validatedColumn] of this.validatedColumns.entries()) {
       const { dataType } = validatedColumn;
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       html += compileTemplate({
         inputPath: dataTypeStrategy.formTemplate,
-        data: { validatedColumn: validatedColumn },
+        data: { validatedColumn: validatedColumn, tableObj },
       });
       if (index !== this.opts.columns.length - 1) html += "\n";
     }

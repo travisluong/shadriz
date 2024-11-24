@@ -2,7 +2,6 @@
 
 import { delete{{tableObj.singularPascalCase}}, Delete{{tableObj.singularPascalCase}}State } from "@/actions/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/delete-{{tableObj.singularKebabCase}}";
 import { Button } from "@/components/ui/button";
-import { FormAlert } from "@/components/form-alert";
 import { useActionState } from "react";
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
@@ -19,7 +18,7 @@ export function {{tableObj.singularPascalCase}}DeleteForm({ {{tableObj.singularC
             Delete
           </Button>
         </div>
-        <FormAlert state={state} />
+        {state.message && <p>{state.message}</p>}
       </form>
     </div>
   );

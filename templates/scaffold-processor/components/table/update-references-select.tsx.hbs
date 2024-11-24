@@ -1,6 +1,9 @@
         <div className="flex flex-col gap-2">
           <Label>{{validatedColumn.caseVariantsWithId.singularCapitalCase}}</Label>
-          <Select name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}">
+          <Select 
+            name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}"
+            defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariantsWithId.singularCamelCase}} ?? undefined }
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -13,6 +16,6 @@
             </SelectContent>
           </Select>
           {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
-            <p className="text-red-500" key={error}>{error}</p>
+            <p className="text-destructive" key={error}>{error}</p>
           ))}
         </div>

@@ -127,18 +127,8 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/components/form-alert.tsx.hbs",
-      outputPath: "components/form-alert.tsx",
-    });
-
-    renderTemplate({
       inputPath: "new-project-processor/components/search-input.tsx.hbs",
       outputPath: "components/search-input.tsx",
-    });
-
-    renderTemplate({
-      inputPath: "new-project-processor/lib/types.ts.hbs",
-      outputPath: "lib/types.ts",
     });
 
     renderTemplate({

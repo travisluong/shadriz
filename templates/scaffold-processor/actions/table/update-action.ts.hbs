@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createSelectSchema } from "drizzle-zod";
-import { BaseActionState } from "@/lib/types";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -31,73 +31,71 @@ const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableOb
 const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).partial().required({ id: true });
 {{/if}}
 
-export interface Update{{tableObj.singularPascalCase}}State extends BaseActionState {
+export interface Update{{tableObj.singularPascalCase}}State {
   errors?: {
     {{#each columns}}
     {{this}}?: string[];
     {{/each}}
   };
+  message?: string;
 }
 
 export async function update{{tableObj.singularPascalCase}}(
   prevState: Update{{tableObj.singularPascalCase}}State,
   formData: FormData
 ): Promise<Update{{tableObj.singularPascalCase}}State> {
-  try {
-  {{#if isNotPublic}}
-    const session = await auth();
+{{#if isNotPublic}}
+  const session = await auth();
 
-    if (!session?.user?.id) {
-      throw new Error("unauthenticated");
-    }
-  {{/if}}
+  if (!session?.user?.id) {
+    throw new Error("unauthenticated");
+  }
+{{/if}}
 
-  {{#if isAdmin}}
-    if (!isAdmin(session)) {
-      throw new Error("unauthorized");
-    }
-  {{/if}}
+{{#if isAdmin}}
+  if (!isAdmin(session)) {
+    throw new Error("unauthorized");
+  }
+{{/if}}
 
-  {{#each uploadColumnNames}}
-    const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
+{{#each uploadColumnNames}}
+  const {{this.singularCamelCase}}File = formData.get("{{this.originalCamelCase}}") as File;
 
-    let {{this.singularCamelCase}}Uri;
+  let {{this.singularCamelCase}}Uri;
 
-    if ({{this.singularCamelCase}}File.size) {
-      {{this.singularCamelCase}}Uri = await uploadFile({
-        file: {{this.singularCamelCase}}File,
-        dir: "{{../tableObj.pluralKebabCase}}"
-      })
-    }
-  {{/each}}
+  if ({{this.singularCamelCase}}File.size) {
+    {{this.singularCamelCase}}Uri = await uploadFile({
+      file: {{this.singularCamelCase}}File,
+      dir: "{{../tableObj.pluralKebabCase}}"
+    })
+  }
+{{/each}}
 
-    const validatedFields = update{{tableObj.singularPascalCase}}Schema.safeParse({
+  const validatedFields = update{{tableObj.singularPascalCase}}Schema.safeParse({
 {{formDataKeyVal}}
-    });
+  });
 
-    if (!validatedFields.success) {
-      return {
-        errors: validatedFields.error.flatten().fieldErrors,
-        status: "invalid",
-      };
-    }
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "invalid data",
+    };
+  }
 
+  try {
     await db
       .update({{tableObj.pluralCamelCase}})
       .set(validatedFields.data)
       .where(eq({{tableObj.pluralCamelCase}}.id, validatedFields.data.id));
-
-    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
-    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
-    revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
-
-    return {
-      status: "success",
-    };
   } catch (error) {
     console.error(error);
     return {
-      status: "error",
+      message: "database error",
     }
   }
+
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}");
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
+  revalidatePath("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id + "/edit");
+  redirect("{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/" + validatedFields.data.id);
 }

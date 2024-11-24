@@ -4,7 +4,6 @@ import { startTransition, useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { FormAlert } from "@/components/form-alert";
 import { Label } from "@/components/ui/label";
 import { AdminLoginState, adminLogin } from "@/actions/admin-login/admin-login";
 
@@ -42,7 +41,7 @@ export function AdminLoginForm() {
             <span>Sign in</span>
           </Button>
         </form>
-        <FormAlert state={state} />
+        {state.message && <p>{state.message}</p>}
       </CardContent>
     </Card>
   );
