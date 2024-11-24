@@ -31,7 +31,6 @@ import packageShadrizzJson from "./package-shadrizz.json";
 import packageJson from "./package.json";
 import { pkDependencies } from "./lib/pk-strategy";
 import { ADD_ON_REGISTRY, getAddOnHelpText } from "./lib/add-on-registry";
-import { JoinProcessor } from "./processors/join-processor";
 
 const PINNED_NEXTJS_VERSION = packageShadrizzJson.dependencies["next"];
 
@@ -524,74 +523,6 @@ program
     processor.init();
 
     processor.printCompletionMessage();
-  });
-
-program
-  .command("join")
-  .summary("generate a many to many management interface")
-  .description(
-    `this command takes 3 required arguments: the left table, join table, and right table. a checkbox list management ui will be added to the left table ui.`
-  )
-  .argument(
-    "<left>",
-    "the left table. a new link will be added on the list page of this scaffold."
-  )
-  .argument(
-    "<join>",
-    "the join table. setting the foreign keys to not null is recommended."
-  )
-  .argument(
-    "<right>",
-    "the right table. the checkbox list will reference ids from this table."
-  )
-  .addOption(
-    new Option(
-      "-a, --authorization-level <authorizationLevel>",
-      "the authorization level of this scaffold"
-    ).choices(["admin", "private", "public"])
-  )
-  .action(async (left, join, right, options) => {
-    const authorizationLevel: AuthorizationLevel =
-      options.authorizationLevel ||
-      (await select({
-        message:
-          "Which authorization level would you like to use for this scaffold?",
-        choices: [
-          {
-            value: "admin",
-            description:
-              "Requires authentication and administrative privileges.",
-          },
-          {
-            value: "private",
-            description: "Requires user authentication.",
-          },
-          {
-            value: "public",
-            description: "Accessible by anyone without authentication.",
-          },
-        ],
-      }));
-
-    if (authorizationLevel === "admin" && !fs.existsSync("app/(admin)")) {
-      log.red("(admin) route group not found. authorization must be enabled.");
-      process.exit(1);
-    }
-    if (authorizationLevel === "private" && !fs.existsSync("app/(private)")) {
-      log.red("(private) route group not found. auth must be enabled.");
-      process.exit(1);
-    }
-
-    const shadrizzConfig: ShadrizzConfig = loadShadrizzConfig();
-
-    const processor = new JoinProcessor(shadrizzConfig, {
-      authorizationLevel: authorizationLevel,
-      leftTable: left,
-      joinTable: join,
-      rightTable: right,
-    });
-
-    await processor.init();
   });
 
 program.parse();

@@ -45,13 +45,8 @@ npx shadrizz@latest scaffold posts_tags -c post_id:references tag_id:references
 Add an optional add-on extension:
 
 ```
+npx shadrizz@latest add stripe
 npx shadrizz@latest add tiptap
-```
-
-Create a checkbox list interface for managing a many-to-many relation:
-
-```
-npx shadrizz@latest join posts posts_tags tags
 ```
 
 ## License

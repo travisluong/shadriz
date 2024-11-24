@@ -169,16 +169,6 @@ Example:
 npx shadrizz@latest add tiptap
 ```
 
-### join
-
-The `join` command takes 3 arguments. The `left` table, `join` table, and `right` table. It creates a many to many management interface in the form of a searchable checkbox list. See [Many To Many Relations](#many-to-many-relations) for more details.
-
-Example:
-
-```
-npx shadrizz@latest join posts posts_tags tags
-```
-
 ## Data types
 
 The following are data types that can be used with the `scaffold` command. Most of the data types in Drizzle ORM are also supported in shadrizz.
@@ -239,26 +229,6 @@ The `references_select` data type will use a Select component where you can sele
 
 ```bash
 npx shadrizz@latest scaffold post -c category:references_select title:text
-```
-
-## Many To Many Relations
-
-The `join` command generates a basic user interface for managing many to many relations.
-
-You must have an existing scaffold for the left table, join table, and right table for this command to work.
-
-For example, if you already have a `posts` table, `posts_tags` table, and `tags` table, you can run the following command:
-
-```bash
-npx shadrizz@latest join posts posts_tags tags
-```
-
-This will add a link to each row on the posts table. The link will take you to a management interface for adding tags to the post using a generic checkbox list.
-
-Inversely, you can swap the left and right tables to add the links to the opposite table:
-
-```bash
-npx shadrizz@latest join tags posts_tags posts
 ```
 
 ## File uploads
@@ -462,8 +432,6 @@ export function PostTable({ postList }: { postList: PostsWithRelations }) {
 ...
 }
 ```
-
-You get the benefit of type safety without all of the typing (keyboard).
 
 ## Services
 

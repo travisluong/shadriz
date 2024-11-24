@@ -6,10 +6,6 @@ export type {{tableObj.pluralPascalCase}}WithRelations = Awaited<
   ReturnType<typeof get{{tableObj.pluralPascalCase}}WithRelations>
 >;
 
-export type {{tableObj.singularPascalCase}}WithRelations = Awaited<
-  ReturnType<typeof get{{tableObj.singularPascalCase}}WithRelations>
->;
-
 export async function get{{tableObj.pluralPascalCase}}WithRelations({
   limit,
   offset,
@@ -46,6 +42,10 @@ export async function get{{tableObj.pluralPascalCase}}WithRelations({
     with: undefined
   });
 }
+
+export type {{tableObj.singularPascalCase}}WithRelations = Awaited<
+  ReturnType<typeof get{{tableObj.singularPascalCase}}WithRelations>
+>;
 
 export async function get{{tableObj.singularPascalCase}}WithRelations(id: {{pkStrategyJsType}}) {
   return await db.query.{{tableObj.pluralCamelCase}}.findFirst({
