@@ -5,6 +5,7 @@ export const pkStrategyImportTemplates: Record<PkStrategy, string> = {
   uuidv7: `import { uuidv7 } from "uuidv7";`,
   uuidv4: ``,
   nanoid: `import { nanoid } from "nanoid";`,
+  auto_increment: "",
 };
 
 export const pkKeyValTemplates: Record<PkStrategy, string> = {
@@ -12,6 +13,7 @@ export const pkKeyValTemplates: Record<PkStrategy, string> = {
   uuidv7: "id: uuidv7(),",
   uuidv4: "id: crypto.randomUUID(),",
   nanoid: "id: nanoid(),",
+  auto_increment: "",
 };
 
 export const pkDependencies: Record<PkStrategy, string[]> = {
@@ -19,6 +21,7 @@ export const pkDependencies: Record<PkStrategy, string[]> = {
   uuidv7: ["uuidv7"],
   uuidv4: [],
   nanoid: ["nanoid"],
+  auto_increment: [],
 };
 
 export const pkFunctionInvoke: Record<PkStrategy, string> = {
@@ -26,4 +29,5 @@ export const pkFunctionInvoke: Record<PkStrategy, string> = {
   uuidv7: "uuidv7()",
   uuidv4: "crypto.randomUUID()",
   nanoid: "nanoid()",
+  auto_increment: "",
 };

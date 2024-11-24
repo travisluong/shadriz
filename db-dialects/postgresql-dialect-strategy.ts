@@ -294,7 +294,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -309,7 +309,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -324,7 +324,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
@@ -363,13 +363,36 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
 
 export const postgresqlDialectStrategy: DbDialectStrategy = {
   pkDataType: "text",
+  fkAutoIncrementDataType: "bigint",
   createdAtTemplate: `createdAt: timestamp().notNull().defaultNow(),`,
   updatedAtTemplate: `updatedAt: timestamp().notNull().defaultNow().$onUpdate(() => new Date()),`,
   pkStrategyTemplates: {
-    uuidv7: `id: text().primaryKey().$defaultFn(() => uuidv7()),`,
-    uuidv4: `id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
+    uuidv7: `id: uuid().primaryKey().$defaultFn(() => uuidv7()),`,
+    uuidv4: `id: uuid().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2: `id: text().primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text().primaryKey().$defaultFn(() => nanoid()),`,
+    auto_increment: `id: bigserial({ mode: "number" }).primaryKey(),`,
+  },
+  pkStrategyDataTypes: {
+    cuid2: "text",
+    uuidv7: "uuid",
+    uuidv4: "uuid",
+    nanoid: "text",
+    auto_increment: "bigserial",
+  },
+  fkStrategyTemplates: {
+    cuid2: "text()",
+    uuidv7: "uuid()",
+    uuidv4: "uuid()",
+    nanoid: "text()",
+    auto_increment: `bigint({ mode: "number" })`,
+  },
+  pkStrategyJsType: {
+    cuid2: "string",
+    uuidv7: "string",
+    uuidv4: "string",
+    nanoid: "string",
+    auto_increment: "number",
   },
   drizzleDbCorePackage: "drizzle-orm/pg-core",
   tableConstructor: "pgTable",

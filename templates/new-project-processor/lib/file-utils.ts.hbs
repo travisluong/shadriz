@@ -1,17 +1,15 @@
 import path from "path";
 import fs from "fs";
-import { init } from "@paralleldrive/cuid2";
-
-const createId = init({ length: 10 });
+import crypto from "crypto";
 
 export async function uploadFile({ file, dir }: { file: File; dir: string }) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const randomString = createId(); // abcdefghij
+  const randomString = crypto.randomBytes(16).toString("hex"); // yg10jn87m5
   const originalName = path.parse(file.name).name; // test image.png
   const sluggedName = originalName.replace(" ", "-"); // test-image.png
   const fileExt = path.extname(file.name); // .png
-  const newFileName = `${sluggedName}-${randomString}${fileExt}`; // test-image-abcdefghij.png
+  const newFileName = `${sluggedName}-${randomString}${fileExt}`; // test-image-yg10jn87m5.png
   const resolvedPath = path.join(getUploadPathByEnv(), dir, newFileName); // /var/www/uploads/test-image-abcdefghij.png
   const resolvedDirPath = path.dirname(resolvedPath); // /var/www/uploads
   const fileUri = `/${dir}/${newFileName}`; // /testdir/test-image.png

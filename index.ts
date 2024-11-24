@@ -149,7 +149,7 @@ program
     new Option(
       "-pk, --pk-strategy <pkStrategy>",
       "primary key generation strategy"
-    ).choices(["cuid2", "uuidv7", "uuidv4", "nanoid"])
+    ).choices(["cuid2", "uuidv7", "uuidv4", "nanoid", "auto_increment"])
   )
   .addOption(
     new Option(
@@ -270,6 +270,11 @@ program
               name: "nanoid",
               value: "nanoid",
               description: "Uses the nanoid package",
+            },
+            {
+              name: "auto_increment",
+              value: "auto_increment",
+              description: "auto increment",
             },
           ],
         }));

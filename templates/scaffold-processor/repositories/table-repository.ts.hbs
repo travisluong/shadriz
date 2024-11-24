@@ -47,7 +47,7 @@ export async function get{{tableObj.pluralPascalCase}}WithRelations({
   });
 }
 
-export async function get{{tableObj.singularPascalCase}}WithRelations(id: string) {
+export async function get{{tableObj.singularPascalCase}}WithRelations(id: {{pkStrategyJsType}}) {
   return await db.query.{{tableObj.pluralCamelCase}}.findFirst({
     where: eq({{tableObj.pluralCamelCase}}.id, id),
     with: undefined,

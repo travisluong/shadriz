@@ -16,7 +16,12 @@ export type AuthSolution = "authjs" | "none";
 
 export type PackageManager = "npm" | "pnpm" | "bun";
 
-export type PkStrategy = "cuid2" | "uuidv7" | "uuidv4" | "nanoid";
+export type PkStrategy =
+  | "cuid2"
+  | "uuidv7"
+  | "uuidv4"
+  | "nanoid"
+  | "auto_increment";
 
 export interface ShadrizzProcessor {
   opts: ShadrizzConfig;
@@ -42,12 +47,14 @@ export interface ScaffoldProcessorOpts extends ShadrizzConfig {
   columns: string[];
   authorizationLevel: AuthorizationLevel;
   enableCompletionMessage: boolean;
+  enableSchemaGeneration?: boolean;
 }
 
 export interface DataTypeStrategyOpts {
   keyName: string;
   columnName: string;
   referencesTable?: string;
+  fkStrategyTemplate?: string;
 }
 
 type JSType = "string" | "number" | "boolean" | "object";
@@ -75,10 +82,14 @@ export interface DbDialectStrategy {
   drizzleDbCorePackage: string;
   tableConstructor: string;
   dataTypeStrategyMap: DataTypeStrategyMap;
+  pkStrategyJsType: Record<PkStrategy, string>;
   pkStrategyTemplates: Record<PkStrategy, string>;
+  pkStrategyDataTypes: Record<PkStrategy, string>;
+  fkStrategyTemplates: Record<PkStrategy, string>;
   createdAtTemplate: string;
   updatedAtTemplate: string;
   pkDataType: string;
+  fkAutoIncrementDataType: string;
   timestampImport: string;
 }
 

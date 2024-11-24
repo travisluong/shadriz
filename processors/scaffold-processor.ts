@@ -80,6 +80,7 @@ export class ScaffoldProcessor {
     this.validatedColumns = this.parseColumns(opts.columns);
     this.validatedColumnsWithTimestamps =
       this.getValidatedColumnsWithTimestamps();
+    this.opts.enableSchemaGeneration = opts.enableSchemaGeneration ?? true;
   }
 
   getValidatedColumnsWithTimestamps() {
@@ -124,7 +125,9 @@ export class ScaffoldProcessor {
   }
 
   process(): void {
-    this.addSchema();
+    if (this.opts.enableSchemaGeneration) {
+      this.addSchema();
+    }
     this.addListView();
     this.addDetailView();
     this.addNewView();
@@ -190,7 +193,9 @@ export class ScaffoldProcessor {
   }
   generateImportsCodeFromColumns() {
     const dataTypeSet = new Set<string>();
-    dataTypeSet.add(this.dbDialectStrategy.pkDataType);
+    dataTypeSet.add(
+      this.dbDialectStrategy.pkStrategyDataTypes[this.opts.pkStrategy]
+    );
     let referenceImportsCode = "";
     let isDecimalTypePresent = false;
     for (const validatedColumn of this.validatedColumns) {
@@ -207,6 +212,7 @@ export class ScaffoldProcessor {
       // references
       if (dataType.startsWith("references")) {
         referenceImportsCode += `import { ${caseVariants.pluralCamelCase} } from "./${caseVariants.pluralKebabCase}";\n`;
+        dataTypeSet.add(this.dbDialectStrategy.fkAutoIncrementDataType);
       }
 
       // decimal types
@@ -261,6 +267,8 @@ export class ScaffoldProcessor {
         keyName: keyName,
         columnName: columnName,
         referencesTable,
+        fkStrategyTemplate:
+          this.dbDialectStrategy.fkStrategyTemplates[this.opts.pkStrategy],
       });
     str += ",";
     return str;
@@ -291,6 +299,8 @@ export class ScaffoldProcessor {
         tableObj: tableObj,
         validatedColumns: this.validatedColumnsWithTimestamps,
         hasFileDataType,
+        pkStrategyJsType:
+          this.dbDialectStrategy.pkStrategyJsType[this.opts.pkStrategy],
       },
     });
   }
@@ -313,6 +323,8 @@ export class ScaffoldProcessor {
         tableObj: tableObj,
         authorizationLevel: this.opts.authorizationLevel,
         referencesColumnList: referencesColumnList,
+        pkStrategyJsType:
+          this.dbDialectStrategy.pkStrategyJsType[this.opts.pkStrategy],
       },
     });
   }
@@ -341,6 +353,8 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         authorizationLevel: this.opts.authorizationLevel,
+        pkStrategyJsType:
+          this.dbDialectStrategy.pkStrategyJsType[this.opts.pkStrategy],
       },
     });
   }
@@ -696,6 +710,8 @@ export class ScaffoldProcessor {
       outputPath: `repositories/${tableObj.singularKebabCase}-repository.ts`,
       data: {
         tableObj,
+        pkStrategyJsType:
+          this.dbDialectStrategy.pkStrategyJsType[this.opts.pkStrategy],
       },
     });
   }

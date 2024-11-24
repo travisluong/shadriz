@@ -5,7 +5,7 @@ import { config } from "@/lib/config";
 {{/if}}
 import { get{{tableObj.singularPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
-type Params = Promise<{ id: string }>;
+type Params = Promise<{ id: {{pkStrategyJsType}} }>;
 
 export default async function Page(props: { params: Params }) {
   const params = await props.params;

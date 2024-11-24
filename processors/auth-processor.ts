@@ -9,6 +9,7 @@ import { log } from "../lib/log";
 import {
   DbDialect,
   DbDialectStrategy,
+  PkStrategy,
   ShadrizzConfig,
   ShadrizzProcessor,
 } from "../lib/types";
@@ -224,7 +225,7 @@ export class AuthProcessor implements ShadrizzProcessor {
       importsCode += "\n";
       providersCode += compileTemplate({
         inputPath: strategy.authTemplatePath,
-        data: {},
+        data: { isAutoIncrement: this.opts.pkStrategy === "auto_increment" },
       });
       providersCode += "\n";
     }
@@ -236,6 +237,7 @@ export class AuthProcessor implements ShadrizzProcessor {
         providersCode: providersCode,
         pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
         pkKeyValTemplate: pkKeyValTemplates[this.opts.pkStrategy],
+        isAutoIncrement: this.opts.pkStrategy === "auto_increment",
       },
     });
   }
@@ -303,6 +305,23 @@ export class AuthProcessor implements ShadrizzProcessor {
     const pkText =
       this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
+    const pkStrategyDataType =
+      this.dbDialectStrategy.pkStrategyDataTypes[this.opts.pkStrategy];
+    const fkStrategyTemplate =
+      this.dbDialectStrategy.fkStrategyTemplates[this.opts.pkStrategy];
+
+    /**
+     * special cases for uuid and auto increment
+     */
+    const fkDataTypeImport = {
+      uuid: "uuid", // pg
+      bigserial: "bigint", // pg
+      serial: "bigint", // mysql
+    };
+
+    const fkDataTypeImportCode =
+      fkDataTypeImport[pkStrategyDataType as keyof typeof fkDataTypeImport];
+
     renderTemplate({
       inputPath: authDbDialectStrategy[this.opts.dbDialect].authSchemaTemplate,
       outputPath: "schema/auth-tables.ts",
@@ -311,6 +330,8 @@ export class AuthProcessor implements ShadrizzProcessor {
         pkStrategyImport: pkStrategyImport,
         createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
+        fkDataTypeImportCode: fkDataTypeImportCode,
+        fkStrategyTemplate: fkStrategyTemplate,
       },
     });
 
@@ -322,6 +343,8 @@ export class AuthProcessor implements ShadrizzProcessor {
   }
 
   addUserSchema() {
+    console.log("ADD USER SCHEMA ========================");
+
     const userSchemaStrategy: Record<DbDialect, string> = {
       postgresql: "auth-processor/schema/users.ts.postgresql.hbs",
       mysql: "auth-processor/schema/users.ts.mysql.hbs",
@@ -330,12 +353,31 @@ export class AuthProcessor implements ShadrizzProcessor {
     const pkText =
       this.dbDialectStrategy.pkStrategyTemplates[this.opts.pkStrategy];
     const pkStrategyImport = pkStrategyImportTemplates[this.opts.pkStrategy];
+    const pkStrategyDataType =
+      this.dbDialectStrategy.pkStrategyDataTypes[this.opts.pkStrategy];
+    const dataTypeImportsRecord: Record<DbDialect, Set<string>> = {
+      postgresql: new Set(["timestamp", "text"]),
+      mysql: new Set(["timestamp", "varchar"]),
+      sqlite: new Set(["integer", "text"]),
+    };
+
+    const dataTypeImports = dataTypeImportsRecord[this.opts.dbDialect];
+
+    dataTypeImports.add(pkStrategyDataType);
+
+    let dataTypeImportsCode = "";
+    for (const dataType of dataTypeImports) {
+      dataTypeImportsCode += dataType + ",\n";
+    }
+
     renderTemplate({
       inputPath: userSchemaStrategy[this.opts.dbDialect],
       outputPath: "schema/users.ts",
       data: {
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
+        pkStrategyDataType: pkStrategyDataType,
+        dataTypeImports: dataTypeImportsCode,
         createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },

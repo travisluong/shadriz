@@ -167,6 +167,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
 
 export const sqliteDialectStrategy: DbDialectStrategy = {
   pkDataType: "text",
+  fkAutoIncrementDataType: "integer",
   createdAtTemplate:
     "createdAt: integer({ mode: \"timestamp\" }).notNull().default(sql`(strftime('%s', 'now'))`),",
   updatedAtTemplate:
@@ -176,6 +177,28 @@ export const sqliteDialectStrategy: DbDialectStrategy = {
     uuidv4: `id: text().primaryKey().$defaultFn(() => crypto.randomUUID()),`,
     cuid2: `id: text().primaryKey().$defaultFn(() => createId()),`,
     nanoid: `id: text().primaryKey().$defaultFn(() => nanoid()),`,
+    auto_increment: `id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),`,
+  },
+  pkStrategyDataTypes: {
+    cuid2: "text",
+    uuidv7: "text",
+    uuidv4: "text",
+    nanoid: "text",
+    auto_increment: "integer",
+  },
+  fkStrategyTemplates: {
+    cuid2: "text()",
+    uuidv7: "text()",
+    uuidv4: "text()",
+    nanoid: "text()",
+    auto_increment: "integer()",
+  },
+  pkStrategyJsType: {
+    cuid2: "string",
+    uuidv7: "string",
+    uuidv4: "string",
+    nanoid: "string",
+    auto_increment: "number",
   },
   tableConstructor: "sqliteTable",
   drizzleDbCorePackage: "drizzle-orm/sqlite-core",
