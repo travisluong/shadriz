@@ -83,6 +83,11 @@ export class AdminProcessor implements ShadrizzProcessor {
       outputPath: "scripts/create-password-hash.ts",
     });
 
+    renderTemplate({
+      inputPath: "admin-processor/app/(admin)/error.tsx.hbs",
+      outputPath: "app/(admin)/error.tsx",
+    });
+
     const strategies: Record<DbDialect, string[]> = {
       postgresql: [
         "name:text",
