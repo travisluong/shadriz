@@ -55,6 +55,7 @@ export interface DataTypeStrategyOpts {
   columnName: string;
   referencesTable?: string;
   fkStrategyTemplate?: string;
+  isAutoIncrement?: boolean;
 }
 
 type JSType = "string" | "number" | "boolean" | "object";
@@ -63,7 +64,6 @@ export type FormComponent =
   | "input"
   | "textarea"
   | "checkbox"
-  | "generic-combobox"
   | "select"
   | "tiptap-editor";
 

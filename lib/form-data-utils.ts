@@ -33,6 +33,10 @@ export const formDataUtils = {
     return `      ${key}: formData.get("${col}") as string,`;
   },
 
+  referencesAutoIncrement(key: string, col: string): string {
+    return `      ${key}: parseInt(formData.get("${col}") as string),`;
+  },
+
   file(key: string, col: string): string {
     return `      ${key}: ${caseFactory(col).singularCamelCase}Uri,`;
   },

@@ -5,6 +5,7 @@ import {
   mysqlTable,
   primaryKey,
   varchar,
+  {{fkDataTypeImportCode}}
 } from "drizzle-orm/mysql-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 import { users } from "@/schema/users"
@@ -12,7 +13,7 @@ import { users } from "@/schema/users"
 export const accounts = mysqlTable(
   "accounts",
   {
-    userId: varchar({ length: 255 })
+    userId: {{fkStrategyTemplate}}
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: varchar({ length: 255 })
@@ -37,7 +38,7 @@ export const accounts = mysqlTable(
  
 export const sessions = mysqlTable("sessions", {
   sessionToken: varchar({ length: 255 }).primaryKey(),
-  userId: varchar({ length: 255 })
+  userId: {{fkStrategyTemplate}}
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp({ mode: "date" }).notNull(),
@@ -61,7 +62,7 @@ export const authenticators = mysqlTable(
   "authenticators",
   {
     credentialID: varchar({ length: 255 }).notNull().unique(),
-    userId: varchar({ length: 255 })
+    userId: {{fkStrategyTemplate}}
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     providerAccountId: varchar({ length: 255 }).notNull(),

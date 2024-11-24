@@ -98,27 +98,12 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-  },
-  references_combobox: {
-    jsType: "string",
-    sqlType: "text",
-    formTemplate:
-      "scaffold-processor/components/table/create-references-combobox.tsx.hbs",
-    updateFormTemplate:
-      "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
-    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.keyName, opts.columnName);
-    },
-    formComponents: ["generic-combobox"],
   },
   references_select: {
     jsType: "string",
@@ -128,12 +113,12 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: text().references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
-    formComponents: ["generic-select"],
+    formComponents: ["select"],
   },
   file: {
     jsType: "string",

@@ -121,16 +121,6 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/components/generic-combobox.tsx.hbs",
-      outputPath: "components/generic-combobox.tsx",
-    });
-
-    renderTemplate({
-      inputPath: "new-project-processor/components/generic-select.tsx.hbs",
-      outputPath: "components/generic-select.tsx",
-    });
-
-    renderTemplate({
       inputPath:
         "new-project-processor/components/generic-checkbox-list.tsx.hbs",
       outputPath: "components/generic-checkbox-list.tsx",

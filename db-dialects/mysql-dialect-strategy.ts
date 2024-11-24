@@ -320,27 +320,17 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar({ length: 255 }).references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      if (opts.isAutoIncrement)
+        return formDataUtils.referencesAutoIncrement(
+          opts.keyName,
+          opts.columnName
+        );
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-  },
-  references_combobox: {
-    jsType: "string",
-    sqlType: "varchar",
-    formTemplate:
-      "scaffold-processor/components/table/create-references-combobox.tsx.hbs",
-    updateFormTemplate:
-      "scaffold-processor/components/table/update-references-combobox.tsx.hbs",
-    getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar({ length: 255 }).references(() => ${opts.referencesTable}.id)`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.keyName, opts.columnName);
-    },
-    formComponents: ["generic-combobox"],
   },
   references_select: {
     jsType: "string",
@@ -350,12 +340,17 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-references-select.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: varchar({ length: 255 }).references(() => ${opts.referencesTable}.id)`;
+      return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
+      if (opts.isAutoIncrement)
+        return formDataUtils.referencesAutoIncrement(
+          opts.keyName,
+          opts.columnName
+        );
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
-    formComponents: ["generic-select"],
+    formComponents: ["select"],
   },
   file: {
     jsType: "string",
@@ -398,14 +393,14 @@ export const mysqlDialectStrategy: DbDialectStrategy = {
     cuid2:
       "id: varchar({ length: 255 }).primaryKey().$defaultFn(() => createId()),",
     nanoid: `id: varchar({ length: 255 }).primaryKey().$defaultFn(() => nanoid()),`,
-    auto_increment: `id: serial().primaryKey(),`,
+    auto_increment: `id: bigint({ mode: "number" }).autoincrement().primaryKey(),`,
   },
   pkStrategyDataTypes: {
     cuid2: "varchar",
     uuidv7: "varchar",
     uuidv4: "varchar",
     nanoid: "varchar",
-    auto_increment: "serial",
+    auto_increment: "bigint",
   },
   fkStrategyTemplates: {
     cuid2: "varchar({ length: 255 })",

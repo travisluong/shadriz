@@ -46,15 +46,6 @@ describe("shadriz e2e test", () => {
     cy.contains("2028").should("exist");
   });
 
-  it("create category", () => {
-    cy.contains("Categories").click();
-    cy.contains("New").click();
-    cy.get('input[name="title"]').type("foo");
-    cy.get('button[type="submit"]').click();
-    cy.contains("Categories");
-    cy.contains("foo").should("exist");
-  });
-
   it("create post status", () => {
     cy.contains("Post Statuses").click();
     cy.contains("New").click();
@@ -67,8 +58,6 @@ describe("shadriz e2e test", () => {
   it("create post", () => {
     cy.contains("Posts").click();
     cy.contains("New").click();
-    cy.contains("Select Category").click();
-    cy.get("[cmdk-item]").first().click();
     // need to select the hidden vanilla select since radix ui uses portals
     cy.get('select[name="postStatusId"]').select(1, { force: true });
     cy.get('input[name="title"]').type("hello world", { force: true });

@@ -6,7 +6,7 @@
             </SelectTrigger>
             <SelectContent>
               { {{validatedColumn.caseVariants.singularCamelCase}}List.map(({{validatedColumn.caseVariants.singularCamelCase}}) => (
-                <SelectItem key={ {{validatedColumn.caseVariants.singularCamelCase}}.id } value={ {{validatedColumn.caseVariants.singularCamelCase}}.id }>
+                <SelectItem key={ {{validatedColumn.caseVariants.singularCamelCase}}.id } value={ {{validatedColumn.caseVariants.singularCamelCase}}.id.toString() }>
                   { {{validatedColumn.caseVariants.singularCamelCase}}.id}
                 </SelectItem>
               ))}

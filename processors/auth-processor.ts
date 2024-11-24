@@ -316,7 +316,7 @@ export class AuthProcessor implements ShadrizzProcessor {
     const fkDataTypeImport = {
       uuid: "uuid", // pg
       bigserial: "bigint", // pg
-      serial: "bigint", // mysql
+      bigint: "bigint", // mysql
     };
 
     const fkDataTypeImportCode =
@@ -343,8 +343,6 @@ export class AuthProcessor implements ShadrizzProcessor {
   }
 
   addUserSchema() {
-    console.log("ADD USER SCHEMA ========================");
-
     const userSchemaStrategy: Record<DbDialect, string> = {
       postgresql: "auth-processor/schema/users.ts.postgresql.hbs",
       mysql: "auth-processor/schema/users.ts.mysql.hbs",
@@ -367,7 +365,7 @@ export class AuthProcessor implements ShadrizzProcessor {
 
     let dataTypeImportsCode = "";
     for (const dataType of dataTypeImports) {
-      dataTypeImportsCode += dataType + ",\n";
+      dataTypeImportsCode += "  " + dataType + ",\n";
     }
 
     renderTemplate({

@@ -53,7 +53,6 @@ const formComponentImports: Record<FormComponent, string> = {
   input: `import { Input } from "@/components/ui/input";`,
   textarea: `import { Textarea } from "@/components/ui/textarea";`,
   checkbox: `import { Checkbox } from "@/components/ui/checkbox";`,
-  "generic-combobox": `import { GenericCombobox } from "@/components/generic-combobox";`,
   select: `import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";`,
   "tiptap-editor": `import { TiptapEditor } from "@/components/tiptap-editor";`,
 };
@@ -391,6 +390,7 @@ export class ScaffoldProcessor {
         return strategy.getKeyValStrForFormData({
           keyName: keyName,
           columnName: colName,
+          isAutoIncrement: this.opts.pkStrategy === "auto_increment",
         });
       })
       .join("\n");

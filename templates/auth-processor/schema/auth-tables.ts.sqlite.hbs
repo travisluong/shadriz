@@ -1,12 +1,12 @@
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text, primaryKey } from "drizzle-orm/sqlite-core"
+import { integer, sqliteTable, text, primaryKey, {{fkDataTypeImportCode}} } from "drizzle-orm/sqlite-core"
 import type { AdapterAccountType } from "next-auth/adapters"
 import { users } from "@/schema/users"
 
 export const accounts = sqliteTable(
   "accounts",
   {
-    userId: text()
+    userId: {{fkStrategyTemplate}}
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: text().$type<AdapterAccountType>().notNull(),
@@ -29,7 +29,7 @@ export const accounts = sqliteTable(
  
 export const sessions = sqliteTable("sessions", {
   sessionToken: text().primaryKey(),
-  userId: text()
+  userId: {{fkStrategyTemplate}}
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: integer({ mode: "timestamp_ms" }).notNull(),
@@ -53,7 +53,7 @@ export const authenticators = sqliteTable(
   "authenticators",
   {
     credentialID: text().notNull().unique(),
-    userId: text()
+    userId: {{fkStrategyTemplate}}
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     providerAccountId: text().notNull(),

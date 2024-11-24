@@ -89,7 +89,7 @@ npx shadrizz@latest scaffold category -c name:text
 Create a `posts` schema:
 
 ```
-npx shadrizz@latest scaffold post -c title:text category:references_combobox content:text_tiptap is_draft:boolean published_at:timestamp
+npx shadrizz@latest scaffold post -c title:text category:references content:text_tiptap is_draft:boolean published_at:timestamp
 ```
 
 Run the drizzle migrations:
@@ -211,7 +211,6 @@ The strategy that you choose during the `init` process will be saved in `shadriz
 shadrizz supports adding foreign key constraints using the following special data types:
 
 - `references`
-- `references_combobox`
 - `references_select`
 
 This will set up the Drizzle relations and the UI form controls for managing the relations.
@@ -234,32 +233,9 @@ The standard `references` data type will use an Input component that accepts a f
 npx shadrizz@latest scaffold post -c category:references title:text
 ```
 
-### References Combobox
-
-The `references_combobox` data type will use a Generic Combobox component where you can search for and select the related item.
-
-```bash
-npx shadrizz@latest scaffold post -c category:references_combobox title:text
-```
-
-You can add additional fields to search using the `keywordFields` prop. You can also change the template of the rendered items. For example:
-
-```tsx
-<GenericCombobox
-  list={categoryList}
-  name="categoryId"
-  valueField="id"
-  searchPlaceholder="Search Categories..."
-  selectPlaceholder="Select Category..."
-  emptyText="No category found"
-  keywordFields={["id", "title"]}
-  template={(item) => <div>{item.title}</div>}
-/>
-```
-
 ### References Select
 
-The `references_select` data type will use a Generic Select component where you can select from a dropdown list of items.
+The `references_select` data type will use a Select component where you can select from a dropdown list of items.
 
 ```bash
 npx shadrizz@latest scaffold post -c category:references_select title:text
