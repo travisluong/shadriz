@@ -274,7 +274,8 @@ program
             {
               name: "auto_increment",
               value: "auto_increment",
-              description: "auto increment",
+              description:
+                "Auto increment. Warning: Does not work with Auth.js Drizzle Adapter.",
             },
           ],
         }));
@@ -284,7 +285,13 @@ program
           message: "Which authentication solution do you want to use?",
           choices: [{ value: "authjs" }, { value: "none" }],
         }));
-
+      if (
+        partialConfig.pkStrategy === "auto_increment" &&
+        partialConfig.authSolution === "authjs"
+      ) {
+        log.red("auto_increment is not compatible with authjs");
+        process.exit(1);
+      }
       if (partialConfig.authSolution === "authjs") {
         partialConfig.authProviders =
           options.authProviders ||
