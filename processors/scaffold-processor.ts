@@ -54,7 +54,7 @@ const formComponentImports: Record<FormComponent, string> = {
   textarea: `import { Textarea } from "@/components/ui/textarea";`,
   checkbox: `import { Checkbox } from "@/components/ui/checkbox";`,
   "generic-combobox": `import { GenericCombobox } from "@/components/generic-combobox";`,
-  "generic-select": `import { GenericSelect } from "@/components/generic-select";`,
+  select: `import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";`,
   "tiptap-editor": `import { TiptapEditor } from "@/components/tiptap-editor";`,
 };
 

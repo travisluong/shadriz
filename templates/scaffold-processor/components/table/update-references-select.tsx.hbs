@@ -1,11 +1,15 @@
         <div className="flex flex-col gap-2">
           <Label>{{validatedColumn.caseVariantsWithId.singularCapitalCase}}</Label>
-          <GenericSelect
-            list={ {{validatedColumn.caseVariants.singularCamelCase}}List }
-            name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}"
-            placeholder="Select {{validatedColumn.caseVariants.singularCapitalCase}}"
-            valueField="id"
-            labelField="id"
-            defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariantsWithId.singularCamelCase}} }
-          />
+          <Select name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              { {{validatedColumn.caseVariants.singularCamelCase}}List.map(({{validatedColumn.caseVariants.singularCamelCase}}) => (
+                <SelectItem key={ {{validatedColumn.caseVariants.singularCamelCase}}.id } value={ {{validatedColumn.caseVariants.singularCamelCase}}.id }>
+                  { {{validatedColumn.caseVariants.singularCamelCase}}.id}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>

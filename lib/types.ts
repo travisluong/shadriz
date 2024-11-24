@@ -64,7 +64,7 @@ export type FormComponent =
   | "textarea"
   | "checkbox"
   | "generic-combobox"
-  | "generic-select"
+  | "select"
   | "tiptap-editor";
 
 export interface DataTypeStrategy {

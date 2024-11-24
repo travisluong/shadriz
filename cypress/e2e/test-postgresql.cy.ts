@@ -67,7 +67,7 @@ describe("shadriz e2e test", () => {
     cy.contains("Select Category").click();
     cy.get("[cmdk-item]").first().click();
     // need to select the hidden vanilla select since radix ui uses portals
-    cy.get('select[name="postStatusId"]').select(2, { force: true });
+    cy.get('select[name="postStatusId"]').select(1, { force: true });
     cy.get('input[name="title"]').type("hello world", { force: true });
     cy.get('input[name="likes"]').type("123", { force: true });
     cy.get('input[name="publishedAt"]').type("2008-08-08", { force: true });

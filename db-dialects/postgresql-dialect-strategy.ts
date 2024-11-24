@@ -329,7 +329,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
-    formComponents: ["generic-select"],
+    formComponents: ["select"],
   },
   file: {
     jsType: "string",
