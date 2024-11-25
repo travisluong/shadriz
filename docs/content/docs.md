@@ -89,7 +89,7 @@ npx shadrizz@latest scaffold category -c name:text
 Create a `posts` schema:
 
 ```
-npx shadrizz@latest scaffold post -c title:text category:references content:text_tiptap is_draft:boolean published_at:timestamp
+npx shadrizz@latest scaffold post -c title:text category_id:references content:text_tiptap is_draft:boolean published_at:timestamp
 ```
 
 Run the drizzle migrations:
@@ -217,10 +217,10 @@ Second, scaffold the `many` side of the relationship using one of the references
 
 ### References Input
 
-The standard `references` data type will use an Input component that accepts a foreign key string.
+The standard `references` data type will use an Input component that accepts a foreign key string. shadrizz will infer the referenced table name by the text to the left of `_id`.
 
 ```bash
-npx shadrizz@latest scaffold post -c category:references title:text
+npx shadrizz@latest scaffold post -c category_id:references title:text
 ```
 
 ### References Select
@@ -228,7 +228,7 @@ npx shadrizz@latest scaffold post -c category:references title:text
 The `references_select` data type will use a Select component where you can select from a dropdown list of items.
 
 ```bash
-npx shadrizz@latest scaffold post -c category:references_select title:text
+npx shadrizz@latest scaffold post -c category_id:references_select title:text
 ```
 
 ## File uploads
