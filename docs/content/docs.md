@@ -193,6 +193,7 @@ shadrizz supports the following primary key generation strategies:
 - `uuidv7` - Uses the `uuidv7` package
 - `uuidv4` - Uses the `crypto` package
 - `nanoid` - Uses the `nanoid` package
+- `auto_increment` - Auto increment (This strategy is not compatible with the Drizzle Adapter for Auth.js)
 
 The strategy that you choose during the `init` process will be saved in `shadrizz.config.json`. This will be used for the authentication, stripe, and scaffold schemas.
 
@@ -217,7 +218,7 @@ Second, scaffold the `many` side of the relationship using one of the references
 
 ### References Input
 
-The standard `references` data type will use an Input component that accepts a foreign key string. shadrizz will infer the referenced table name by the text to the left of `_id`.
+The standard `references` data type will use an Input component that accepts a foreign key string.
 
 ```bash
 npx shadrizz@latest scaffold post -c category_id:references title:text
@@ -230,6 +231,14 @@ The `references_select` data type will use a Select component where you can sele
 ```bash
 npx shadrizz@latest scaffold post -c category_id:references_select title:text
 ```
+
+### Inferred Reference Table And Column Names
+
+shadrizz will infer the referenced table name by the text to the left of `_id`.
+
+Using `category_id:references`, the referenced table will be inferred as `categories` and the column will be `category_id`
+
+Excluding the `_id` will also work. Using `category:references`, the referenced table will be inferred as `categories` and the column will be `category`.
 
 ## File uploads
 

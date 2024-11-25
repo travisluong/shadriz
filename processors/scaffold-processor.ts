@@ -117,7 +117,7 @@ export class ScaffoldProcessor {
     for (const column of columns) {
       let [columnName, dataType] = column.split(":");
       let referenceTableVars;
-      if (columnName.endsWith("_id") && dataType.startsWith("references")) {
+      if (dataType.startsWith("references")) {
         const inferredReferencesTableName = columnName.split("_id")[0];
         referenceTableVars = caseFactory(inferredReferencesTableName);
       }
