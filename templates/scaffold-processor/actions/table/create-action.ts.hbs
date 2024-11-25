@@ -19,9 +19,7 @@ import { isAdmin } from "@/services/authorization-service";
 
 const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}}, {
   {{#each validatedColumns}}
-  {{#if this.zodCode}}
   {{this.caseVariants.originalCamelCase}}: {{this.zodCode}},
-  {{/if}}
   {{/each}}
 });
 

@@ -2,6 +2,7 @@ import {
   DbDialect,
   DbDialectStrategy,
   FormComponent,
+  PkStrategy,
   ScaffoldProcessorOpts,
 } from "../lib/types";
 import {
@@ -14,20 +15,6 @@ import { log } from "../lib/log";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { caseFactory, Cases } from "../lib/case-utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
-
-// schema/posts.ts
-// lib/schema.ts
-// app/post/page.tsx
-// app/post/[id]/page.tsx
-// app/post/[id]/new/page.tsx
-// app/post/[id]/edit/page.tsx
-// app/post/[id]/delete/page.tsx
-// actions/post/create-post.ts
-// actions/post/update-post.ts
-// actions/post/delete-post.ts
-// components/post/post-create-form.tsx
-// components/post/post-update-form.tsx
-// components/post/post-delete-form.tsx
 
 interface ScaffoldDbDialectStrategy {
   schemaTableTemplatePath: string;
@@ -65,6 +52,14 @@ interface ValidatedColumn {
   referenceTableVars?: Cases; // for the table name of reference types
 }
 
+const zodCodeRecord: Record<PkStrategy, string> = {
+  cuid2: "z.coerce.string().cuid2()",
+  uuidv7: "z.coerce.string().uuid()",
+  uuidv4: "z.coerce.string().uuid()",
+  nanoid: "z.coerce.string().nanoid()",
+  auto_increment: "z.coerce.number()",
+};
+
 export class ScaffoldProcessor {
   opts: ScaffoldProcessorOpts;
 
@@ -74,12 +69,16 @@ export class ScaffoldProcessor {
 
   validatedColumnsWithTimestamps: ValidatedColumn[];
 
+  validatedColumnsWithIdAndTimestamps: ValidatedColumn[];
+
   constructor(opts: ScaffoldProcessorOpts) {
     this.opts = opts;
     this.dbDialectStrategy = dialectStrategyFactory(opts.dbDialect);
     this.validatedColumns = this.parseColumns(opts.columns);
     this.validatedColumnsWithTimestamps =
       this.getValidatedColumnsWithTimestamps();
+    this.validatedColumnsWithIdAndTimestamps =
+      this.getValidatedColumsWithIdAndTimestamps();
     this.opts.enableSchemaGeneration = opts.enableSchemaGeneration ?? true;
   }
 
@@ -88,10 +87,7 @@ export class ScaffoldProcessor {
       columnName: "id",
       dataType: this.dbDialectStrategy.pkDataType,
       caseVariants: caseFactory("id"),
-      zodCode:
-        this.dbDialectStrategy.dataTypeStrategyMap[
-          this.dbDialectStrategy.pkDataType
-        ].zodCode,
+      zodCode: zodCodeRecord[this.opts.pkStrategy],
     };
 
     return [idCol].concat(this.getValidatedColumnsWithTimestamps());
@@ -128,12 +124,16 @@ export class ScaffoldProcessor {
       if (!(dataType in dataTypeStrategyMap)) {
         throw new Error(`invalid data type ${dataType}`);
       }
+      let zodCode = dataTypeStrategyMap[dataType].zodCode;
+      if (dataType.startsWith("references")) {
+        zodCode = zodCodeRecord[this.opts.pkStrategy];
+      }
       validatedColumns.push({
         columnName,
         dataType,
         caseVariants: caseFactory(columnName),
         referenceTableVars: referenceTableVars,
-        zodCode: dataTypeStrategyMap[dataType].zodCode,
+        zodCode: zodCode,
       });
     }
 
@@ -213,10 +213,8 @@ export class ScaffoldProcessor {
       this.dbDialectStrategy.pkStrategyDataTypes[this.opts.pkStrategy]
     );
     let referenceImportsCode = "";
-    let isDecimalTypePresent = false;
     for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType, referenceTableVars } = validatedColumn;
-      const caseVariants = caseFactory(columnName);
+      const { dataType, referenceTableVars } = validatedColumn;
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       if (dataTypeStrategy.sqlType) {
@@ -228,12 +226,9 @@ export class ScaffoldProcessor {
       // references
       if (dataType.startsWith("references") && referenceTableVars) {
         referenceImportsCode += `import { ${referenceTableVars.pluralCamelCase} } from "./${referenceTableVars.pluralKebabCase}";\n`;
-        dataTypeSet.add(this.dbDialectStrategy.fkAutoIncrementDataType);
-      }
-
-      // decimal types
-      if (dataType.startsWith("decimal") || dataType.startsWith("numeric")) {
-        isDecimalTypePresent = true;
+        if (this.opts.pkStrategy === "auto_increment") {
+          dataTypeSet.add(this.dbDialectStrategy.fkAutoIncrementDataType);
+        }
       }
     }
 
@@ -247,11 +242,6 @@ export class ScaffoldProcessor {
       code += `  ${dataType},\n`;
     }
     code += `} from "${this.dbDialectStrategy.drizzleDbCorePackage}";\n`;
-
-    // custom decimal type import
-    if (isDecimalTypePresent) {
-      code += `import { customDecimal } from "@/lib/custom-types";\n`;
-    }
 
     // pk strategy import
     code += `${pkStrategyImportTemplates[this.opts.pkStrategy]}\n`;
@@ -373,7 +363,7 @@ export class ScaffoldProcessor {
   addCreateAction(): void {
     const columns = ["id"];
     for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType, caseVariants } = validatedColumn;
+      const { caseVariants } = validatedColumn;
       columns.push(caseVariants.originalCamelCase);
     }
 
@@ -395,43 +385,17 @@ export class ScaffoldProcessor {
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
         validatedColumns: this.validatedColumns,
+        isAutoIncrement: this.opts.pkStrategy === "auto_increment",
       },
     });
   }
   addUpdateAction(): void {
     const columns = ["id"];
     for (const validatedColumn of this.validatedColumnsWithTimestamps) {
-      const { columnName, dataType, caseVariants } = validatedColumn;
+      const { caseVariants } = validatedColumn;
 
       columns.push(caseVariants.originalCamelCase);
     }
-
-    const dataTypeStrategyForPk =
-      this.dbDialectStrategy.dataTypeStrategyMap[
-        this.dbDialectStrategy.pkDataType
-      ];
-
-    const formDataKeyValArr = this.validatedColumnsWithTimestamps.map(
-      (validatedColumn) => {
-        const { dataType, caseVariants } = validatedColumn;
-        const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
-
-        const keyName = caseVariants.originalCamelCase;
-        const colName = caseVariants.originalCamelCase;
-
-        return strategy.getKeyValStrForFormData({
-          keyName: keyName,
-          columnName: colName,
-        });
-      }
-    );
-
-    formDataKeyValArr.unshift(
-      dataTypeStrategyForPk.getKeyValStrForFormData({
-        keyName: "id",
-        columnName: "id",
-      })
-    );
 
     const uploadColumnNames = this.validatedColumns
       .filter((validatedColumn) => validatedColumn.dataType === "file")
@@ -450,16 +414,12 @@ export class ScaffoldProcessor {
         isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
-        validatedColumns: this.getValidatedColumsWithIdAndTimestamps(),
+        validatedColumns: this.validatedColumnsWithIdAndTimestamps,
+        isAutoIncrement: this.opts.pkStrategy === "auto_increment",
       },
     });
   }
   addDeleteAction(): void {
-    const dataTypeStrategyForPk =
-      this.dbDialectStrategy.dataTypeStrategyMap[
-        this.dbDialectStrategy.pkDataType
-      ];
-
     const tableObj = caseFactory(this.opts.table);
 
     renderTemplate({
@@ -470,7 +430,7 @@ export class ScaffoldProcessor {
         isNotPublic: this.opts.authorizationLevel !== "public",
         isPrivate: this.opts.authorizationLevel === "private",
         isAdmin: this.opts.authorizationLevel === "admin",
-        validatedColumns: this.getValidatedColumsWithIdAndTimestamps(),
+        validatedColumns: this.validatedColumnsWithIdAndTimestamps,
       },
     });
   }
@@ -511,10 +471,10 @@ export class ScaffoldProcessor {
     let html = "";
     const formComponentSet = new Set<FormComponent>();
     for (const [
-      index,
+      ,
       validatedColumn,
     ] of this.validatedColumnsWithTimestamps.entries()) {
-      const { columnName, dataType } = validatedColumn;
+      const { dataType } = validatedColumn;
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
       dataTypeStrategy.formComponents.forEach((component) => {
