@@ -302,7 +302,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-    zodCode: "z.coerce.string()",
+    zodCode: "z.coerce.number()",
   },
   timestamp: {
     jsType: "string",

@@ -12,9 +12,9 @@ export const {{tableObj.pluralCamelCase}} = mysqlTable(
 
 export const {{tableObj.pluralCamelCase}}Relations = relations({{tableObj.pluralCamelCase}}, ({ one, many }) => ({
   {{#each referencesColumnList}}
-  {{this.singularCamelCase}}: one({{this.pluralCamelCase}}, {
-    fields: [{{../tableObj.pluralCamelCase}}.{{this.singularCamelCase}}Id],
-    references: [{{this.pluralCamelCase}}.id]
+  {{this.caseVariants.singularCamelCase}}: one({{this.referenceTableVars.pluralCamelCase}}, {
+    fields: [{{../tableObj.pluralCamelCase}}.{{this.caseVariants.originalCamelCase}}],
+    references: [{{this.referenceTableVars.pluralCamelCase}}.id]
   }),
   {{/each}}
 }));
