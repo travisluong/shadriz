@@ -73,6 +73,7 @@ export interface DataTypeStrategy {
   formTemplate: string;
   updateFormTemplate: string;
   formComponents: FormComponent[];
+  zodCode: string;
   getKeyValueStrForSchema(opts: DataTypeStrategyOpts): string;
   getKeyValStrForFormData(opts: DataTypeStrategyOpts): string;
 }

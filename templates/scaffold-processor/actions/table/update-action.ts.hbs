@@ -5,6 +5,7 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import { createSelectSchema } from "drizzle-zod";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
@@ -12,24 +13,19 @@ import { uploadFile } from "@/lib/file-utils";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
-{{#if hasDecimalColumn}}
-import { z } from "zod";
-{{/if}}
 {{#if isAdmin}}
 import { isAdmin } from "@/services/authorization-service";
 {{/if}}
 
-{{#if hasDecimalColumn}}
 const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}, {
-  {{#each decimalColumns}}
-  {{this.originalCamelCase}}: z.number(),
+  {{#each validatedColumns}}
+  {{#if this.zodCode}}
+  {{this.caseVariants.originalCamelCase}}: {{this.zodCode}},
+  {{/if}}
   {{/each}}
 })
   .partial()
   .required({ id: true });
-{{else}}
-const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).partial().required({ id: true });
-{{/if}}
 
 export interface Update{{tableObj.singularPascalCase}}State {
   errors?: {
@@ -72,7 +68,16 @@ export async function update{{tableObj.singularPascalCase}}(
 {{/each}}
 
   const validatedFields = update{{tableObj.singularPascalCase}}Schema.safeParse({
-{{formDataKeyVal}}
+    {{#each validatedColumns}}
+    {{#switch this.dataType}}
+    {{#case "file"}}
+    {{this.caseVariants.originalCamelCase}}: {{this.caseVariants.singularCamelCase}}Uri,
+    {{/case}}
+    {{#default}}
+    {{this.caseVariants.originalCamelCase}}: formData.get("{{this.caseVariants.originalCamelCase}}"),
+    {{/default}}
+    {{/switch}}
+    {{/each}}    
   });
 
   if (!validatedFields.success) {

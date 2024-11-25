@@ -62,6 +62,7 @@ interface ValidatedColumn {
   dataType: string;
   caseVariants: Cases;
   caseVariantsWithId: Cases;
+  zodCode: string;
 }
 
 export class ScaffoldProcessor {
@@ -82,19 +83,36 @@ export class ScaffoldProcessor {
     this.opts.enableSchemaGeneration = opts.enableSchemaGeneration ?? true;
   }
 
+  getValidatedColumsWithIdAndTimestamps() {
+    const idCol: ValidatedColumn = {
+      columnName: "id",
+      dataType: this.dbDialectStrategy.pkDataType,
+      caseVariants: caseFactory("id"),
+      caseVariantsWithId: caseFactory("id"),
+      zodCode:
+        this.dbDialectStrategy.dataTypeStrategyMap[
+          this.dbDialectStrategy.pkDataType
+        ].zodCode,
+    };
+
+    return [idCol].concat(this.getValidatedColumnsWithTimestamps());
+  }
+
   getValidatedColumnsWithTimestamps() {
     const createdAtCol: ValidatedColumn = {
       columnName: "created_at",
       dataType: "timestamp",
       caseVariants: caseFactory("created_at"),
-      caseVariantsWithId: caseFactory("created_at_id"), // not used
+      caseVariantsWithId: caseFactory("created_at_id"),
+      zodCode: this.dbDialectStrategy.dataTypeStrategyMap["timestamp"].zodCode,
     };
 
     const updatedAtCol: ValidatedColumn = {
       columnName: "updated_at",
       dataType: "timestamp",
       caseVariants: caseFactory("updated_at"),
-      caseVariantsWithId: caseFactory("updated_at_id"), // not used
+      caseVariantsWithId: caseFactory("updated_at_id"),
+      zodCode: this.dbDialectStrategy.dataTypeStrategyMap["timestamp"].zodCode,
     };
 
     return this.validatedColumns.concat([createdAtCol, updatedAtCol]);
@@ -118,8 +136,11 @@ export class ScaffoldProcessor {
         dataType,
         caseVariants: caseFactory(columnName),
         caseVariantsWithId: caseFactory(columnName + "_id"),
+        zodCode: dataTypeStrategyMap[dataType].zodCode,
       });
     }
+    console.log(validatedColumns);
+
     return validatedColumns;
   }
 
@@ -370,44 +391,11 @@ export class ScaffoldProcessor {
       }
     }
 
-    const formDataKeyVal = this.validatedColumns
-      .map((validatedColumn) => {
-        const { columnName, dataType, caseVariants, caseVariantsWithId } =
-          validatedColumn;
-        const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
-
-        let keyName;
-        let colName;
-
-        if (dataType.startsWith("references")) {
-          keyName = caseVariantsWithId.singularCamelCase;
-          colName = caseVariantsWithId.singularCamelCase;
-        } else {
-          keyName = caseVariants.originalCamelCase;
-          colName = caseVariants.originalCamelCase;
-        }
-
-        return strategy.getKeyValStrForFormData({
-          keyName: keyName,
-          columnName: colName,
-          isAutoIncrement: this.opts.pkStrategy === "auto_increment",
-        });
-      })
-      .join("\n");
-
     const uploadColumnNames = this.validatedColumns
       .filter((validatedColumn) => validatedColumn.dataType === "file")
       .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
     const tableObj = caseFactory(this.opts.table);
-
-    const decimalColumns = this.validatedColumns
-      .filter((validatedColumn) =>
-        ["decimal", "numeric"].includes(validatedColumn.dataType)
-      )
-      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
-
-    const hasDecimalColumn = decimalColumns.length > 0;
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/create-action.ts.hbs",
@@ -415,14 +403,12 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         columns: columns,
-        formDataKeyVal: formDataKeyVal,
         isNotPublic: this.opts.authorizationLevel !== "public",
         isPrivate: this.opts.authorizationLevel === "private",
         isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
-        decimalColumns: decimalColumns,
-        hasDecimalColumn: hasDecimalColumn,
+        validatedColumns: this.validatedColumns,
       },
     });
   }
@@ -486,8 +472,6 @@ export class ScaffoldProcessor {
       )
       .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
-    const hasDecimalColumn = decimalColumns.length > 0;
-
     const tableObj = caseFactory(this.opts.table);
 
     renderTemplate({
@@ -496,14 +480,12 @@ export class ScaffoldProcessor {
       data: {
         tableObj: tableObj,
         columns: columns,
-        formDataKeyVal: formDataKeyVal,
         isNotPublic: this.opts.authorizationLevel !== "public",
         isPrivate: this.opts.authorizationLevel === "private",
         isAdmin: this.opts.authorizationLevel === "admin",
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
-        decimalColumns: decimalColumns,
-        hasDecimalColumn: hasDecimalColumn,
+        validatedColumns: this.getValidatedColumsWithIdAndTimestamps(),
       },
     });
   }
@@ -512,11 +494,6 @@ export class ScaffoldProcessor {
       this.dbDialectStrategy.dataTypeStrategyMap[
         this.dbDialectStrategy.pkDataType
       ];
-
-    const formDataKeyVal = dataTypeStrategyForPk.getKeyValStrForFormData({
-      keyName: "id",
-      columnName: "id",
-    });
 
     const tableObj = caseFactory(this.opts.table);
 
@@ -528,7 +505,7 @@ export class ScaffoldProcessor {
         isNotPublic: this.opts.authorizationLevel !== "public",
         isPrivate: this.opts.authorizationLevel === "private",
         isAdmin: this.opts.authorizationLevel === "admin",
-        formDataKeyVal: formDataKeyVal,
+        validatedColumns: this.getValidatedColumsWithIdAndTimestamps(),
       },
     });
   }

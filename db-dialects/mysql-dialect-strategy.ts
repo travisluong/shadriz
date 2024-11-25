@@ -19,6 +19,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   tinyint: {
     jsType: "number",
@@ -33,6 +34,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   smallint: {
     jsType: "number",
@@ -47,6 +49,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   mediumint: {
     jsType: "number",
@@ -61,6 +64,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   bigint: {
     jsType: "number",
@@ -75,6 +79,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   real: {
     jsType: "number",
@@ -89,6 +94,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   decimal: {
     jsType: "number",
@@ -103,6 +109,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   double: {
     jsType: "number",
@@ -117,6 +124,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   float: {
     jsType: "number",
@@ -131,6 +139,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   serial: {
     jsType: "number",
@@ -145,6 +154,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   binary: {
     jsType: "string",
@@ -158,6 +168,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       throw new Error("Function not implemented.");
     },
     formComponents: [],
+    zodCode: "z.coerce.string()",
   },
   varbinary: {
     jsType: "string",
@@ -171,6 +182,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       throw new Error("Function not implemented.");
     },
     formComponents: [],
+    zodCode: "z.coerce.string()",
   },
   char: {
     jsType: "string",
@@ -185,6 +197,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   varchar: {
     jsType: "string",
@@ -199,6 +212,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   text: {
     jsType: "string",
@@ -213,6 +227,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["textarea"],
+    zodCode: "z.coerce.string()",
   },
   boolean: {
     jsType: "boolean",
@@ -227,6 +242,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
     formComponents: ["checkbox"],
+    zodCode: "z.coerce.boolean()",
   },
   date: {
     jsType: "string",
@@ -241,6 +257,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.date()",
   },
   datetime: {
     jsType: "string",
@@ -255,6 +272,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.date()",
   },
   time: {
     jsType: "string",
@@ -269,6 +287,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   year: {
     jsType: "string",
@@ -283,6 +302,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   timestamp: {
     jsType: "string",
@@ -297,6 +317,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.date()",
   },
   json: {
     jsType: "object",
@@ -311,6 +332,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   references: {
     jsType: "string",
@@ -331,6 +353,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   references_select: {
     jsType: "string",
@@ -351,6 +374,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["select"],
+    zodCode: "z.coerce.string()",
   },
   file: {
     jsType: "string",
@@ -365,6 +389,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   text_tiptap: {
     jsType: "string",
@@ -379,6 +404,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["tiptap-editor"],
+    zodCode: "z.coerce.string()",
   },
 };
 

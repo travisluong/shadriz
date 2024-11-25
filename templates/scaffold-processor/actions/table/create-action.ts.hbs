@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { createInsertSchema } from "drizzle-zod";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
@@ -11,22 +12,19 @@ import { uploadFile } from "@/lib/file-utils";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
-{{#if hasDecimalColumn}}
-import { z } from "zod";
-{{/if}}
 {{#if isAdmin}}
 import { isAdmin } from "@/services/authorization-service";
 {{/if}}
 
-{{#if hasDecimalColumn}}
+
 const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}}, {
-  {{#each decimalColumns}}
-  {{this.originalCamelCase}}: z.number(),
+  {{#each validatedColumns}}
+  {{#if this.zodCode}}
+  {{this.caseVariants.originalCamelCase}}: {{this.zodCode}},
+  {{/if}}
   {{/each}}
 });
-{{else}}
-const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}});
-{{/if}}
+
 
 export interface Create{{tableObj.singularPascalCase}}State {
   errors?: {
@@ -69,7 +67,16 @@ export async function create{{tableObj.singularPascalCase}}(
 {{/each}}
 
   const validatedFields = insert{{tableObj.singularPascalCase}}Schema.safeParse({
-{{formDataKeyVal}}
+    {{#each validatedColumns}}
+    {{#switch this.dataType}}
+    {{#case "file"}}
+    {{this.caseVariants.originalCamelCase}}: {{this.caseVariants.singularCamelCase}}Uri,
+    {{/case}}
+    {{#default}}
+    {{this.caseVariants.originalCamelCase}}: formData.get("{{this.caseVariants.originalCamelCase}}"),
+    {{/default}}
+    {{/switch}}
+    {{/each}}
   });
 
   if (!validatedFields.success) {

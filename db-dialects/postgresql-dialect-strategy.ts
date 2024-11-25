@@ -19,6 +19,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   smallint: {
     jsType: "number",
@@ -33,6 +34,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   bigint: {
     jsType: "number",
@@ -47,6 +49,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   serial: {
     jsType: "number",
@@ -61,6 +64,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   smallserial: {
     jsType: "number",
@@ -75,6 +79,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   bigserial: {
     jsType: "number",
@@ -89,6 +94,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   boolean: {
     jsType: "boolean",
@@ -103,6 +109,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
     formComponents: ["checkbox"],
+    zodCode: "z.coerce.boolean()",
   },
   text: {
     jsType: "string",
@@ -117,6 +124,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   varchar: {
     jsType: "string",
@@ -131,6 +139,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   char: {
     jsType: "string",
@@ -145,6 +154,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   numeric: {
     jsType: "number",
@@ -153,12 +163,13 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: customDecimal()`;
+      return `${opts.keyName}: numeric()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   decimal: {
     jsType: "number",
@@ -167,12 +178,13 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: customDecimal()`;
+      return `${opts.keyName}: decimal()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   real: {
     jsType: "number",
@@ -187,6 +199,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   doublePrecision: {
     jsType: "number",
@@ -201,6 +214,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   json: {
     jsType: "object",
@@ -215,6 +229,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   jsonb: {
     jsType: "object",
@@ -229,6 +244,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   time: {
     jsType: "string",
@@ -243,6 +259,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   timestamp: {
     jsType: "string",
@@ -257,6 +274,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.date()",
   },
   date: {
     jsType: "string",
@@ -271,6 +289,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.date()",
   },
   uuid: {
     jsType: "string",
@@ -285,6 +304,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.string().uuid()",
   },
   references: {
     jsType: "string",
@@ -300,6 +320,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   references_select: {
     jsType: "string",
@@ -315,6 +336,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["select"],
+    zodCode: "z.coerce.string()",
   },
   file: {
     jsType: "string",
@@ -329,6 +351,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   text_tiptap: {
     jsType: "string",
@@ -343,6 +366,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["tiptap-editor"],
+    zodCode: "z.coerce.string()",
   },
 };
 

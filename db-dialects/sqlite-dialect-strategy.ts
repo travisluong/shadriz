@@ -19,6 +19,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   real: {
     jsType: "number",
@@ -33,6 +34,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   text: {
     jsType: "string",
@@ -47,6 +49,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   boolean: {
     jsType: "boolean",
@@ -61,6 +64,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
     formComponents: ["checkbox"],
+    zodCode: "z.coerce.boolean()",
   },
   bigint: {
     jsType: "number",
@@ -75,6 +79,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.bigint(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.number()",
   },
   timestamp: {
     jsType: "string",
@@ -89,6 +94,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.date()",
   },
   references: {
     jsType: "string",
@@ -104,6 +110,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   references_select: {
     jsType: "string",
@@ -119,6 +126,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["select"],
+    zodCode: "z.coerce.string()",
   },
   file: {
     jsType: "string",
@@ -133,6 +141,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.file(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
+    zodCode: "z.coerce.string()",
   },
   text_tiptap: {
     jsType: "string",
@@ -147,6 +156,7 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["tiptap-editor"],
+    zodCode: "z.coerce.string()",
   },
 };
 

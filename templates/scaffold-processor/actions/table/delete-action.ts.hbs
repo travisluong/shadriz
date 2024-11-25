@@ -5,6 +5,7 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import { createSelectSchema } from "drizzle-zod";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
@@ -13,7 +14,15 @@ import { auth } from "@/lib/auth";
 import { isAdmin } from "@/services/authorization-service";
 {{/if}}
 
-const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}).pick({ id: true });
+const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}, {
+  {{#each validatedColumns}}
+  {{#switch this.columnName}}
+  {{#case "id"}}
+  id: {{this.zodCode}},
+  {{/case}}
+  {{/switch}}
+  {{/each}}
+}).pick({ id: true });
 
 export interface Delete{{tableObj.singularPascalCase}}State {
   errors?: {
@@ -41,7 +50,7 @@ export async function delete{{tableObj.singularPascalCase}}(
 {{/if}}
 
   const validatedFields = delete{{tableObj.singularPascalCase}}Schema.safeParse({
-    id: formData.get("id") as string,
+    id: formData.get("id"),
   });
 
   if (!validatedFields.success) {
