@@ -60,6 +60,7 @@ export class PgPackageStrategy implements DbPackageStrategy {
   }
 
   copyCreateUserScript() {
+    if (!this.opts.authEnabled) return;
     renderTemplate({
       inputPath: "db-packages/scripts/create-user.ts.hbs",
       outputPath: "scripts/create-user.ts",

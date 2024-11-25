@@ -2,7 +2,7 @@
           <Label>{{validatedColumn.caseVariants.singularCapitalCase}}</Label>
           <Select 
             name="{{validatedColumn.caseVariants.singularCamelCase}}"
-            defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.singularCamelCase}} ?? undefined }
+            defaultValue={ {{tableObj.singularCamelCase}}.{{validatedColumn.caseVariants.singularCamelCase}}?.toString() }
           >
             <SelectTrigger>
               <SelectValue />
