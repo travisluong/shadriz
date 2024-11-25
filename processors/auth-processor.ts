@@ -226,7 +226,7 @@ export class AuthProcessor implements ShadrizzProcessor {
       importsCode += "\n";
       providersCode += compileTemplate({
         inputPath: strategy.authTemplatePath,
-        data: { isAutoIncrement: this.opts.pkStrategy === "auto_increment" },
+        data: {},
       });
       providersCode += "\n";
     }
@@ -238,7 +238,6 @@ export class AuthProcessor implements ShadrizzProcessor {
         providersCode: providersCode,
         pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
         pkKeyValTemplate: pkKeyValTemplates[this.opts.pkStrategy],
-        isAutoIncrement: this.opts.pkStrategy === "auto_increment",
       },
     });
   }

@@ -103,13 +103,13 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     updateFormTemplate:
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      return `${opts.keyName}: customDecimal()`;
+      return `${opts.keyName}: decimal()`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-    zodCode: "z.coerce.number()",
+    zodCode: "z.coerce.string()",
   },
   double: {
     jsType: "number",
@@ -345,11 +345,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      if (opts.isAutoIncrement)
-        return formDataUtils.referencesAutoIncrement(
-          opts.keyName,
-          opts.columnName
-        );
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
@@ -366,11 +361,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
     getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      if (opts.isAutoIncrement)
-        return formDataUtils.referencesAutoIncrement(
-          opts.keyName,
-          opts.columnName
-        );
       return formDataUtils.references(opts.keyName, opts.columnName);
     },
     formComponents: ["select"],

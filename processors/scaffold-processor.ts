@@ -385,7 +385,6 @@ export class ScaffoldProcessor {
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
         validatedColumns: this.validatedColumns,
-        isAutoIncrement: this.opts.pkStrategy === "auto_increment",
       },
     });
   }
@@ -415,7 +414,6 @@ export class ScaffoldProcessor {
         uploadColumnNames: uploadColumnNames,
         importFileUtils: uploadColumnNames.length > 0,
         validatedColumns: this.validatedColumnsWithIdAndTimestamps,
-        isAutoIncrement: this.opts.pkStrategy === "auto_increment",
       },
     });
   }

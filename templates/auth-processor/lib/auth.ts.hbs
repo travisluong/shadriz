@@ -11,11 +11,8 @@ import { Adapter } from "next-auth/adapters";
 
 const adapter = {
   ...(DrizzleAdapter(db, {
-    {{#if isAutoIncrement}}// @ts-expect-error authjs auto increment{{/if}}
     usersTable: users,
-    {{#if isAutoIncrement}}// @ts-expect-error authjs auto increment{{/if}}
     accountsTable: accounts,
-    {{#if isAutoIncrement}}// @ts-expect-error authjs auto increment{{/if}}
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
   }) as Adapter),
@@ -39,7 +36,6 @@ const providers: Provider[] = [
 ]
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  {{#if isAutoIncrement}}// @ts-expect-error authjs auto increment{{/if}}
   adapter: adapter,
   session: {
     strategy: "jwt",
