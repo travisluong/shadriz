@@ -17,7 +17,7 @@ export default async function Page(props: { params: Params }) {
   }
 
   {{#each referencesColumnList}}
-  const {{this.singularCamelCase}}List = await db.query.{{this.pluralCamelCase}}.findMany();
+  const {{this.referenceTableVars.singularCamelCase}}List = await db.query.{{this.referenceTableVars.pluralCamelCase}}.findMany();
   {{/each}}
 
   return (
@@ -25,7 +25,7 @@ export default async function Page(props: { params: Params }) {
       <{{tableObj.singularPascalCase}}UpdateForm 
         {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} }
         {{#each referencesColumnList}}
-        {{this.singularCamelCase}}List={ {{this.singularCamelCase}}List }
+        {{this.referenceTableVars.singularCamelCase}}List={ {{this.referenceTableVars.singularCamelCase}}List }
         {{/each}}
       />
     </div>

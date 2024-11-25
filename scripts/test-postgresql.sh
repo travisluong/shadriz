@@ -17,7 +17,7 @@ shadrizz scaffold -a admin admin_scaffold -c integer_type:integer smallint_type:
 shadrizz scaffold -a private private_scaffold -c text_field:text integer_field:integer real_field:real decimal_field:decimal boolean_field:boolean file_field:file timestamp_field:timestamp
 shadrizz scaffold -a public public_scaffold -c text_field:text integer_field:integer real_field:real decimal_field:decimal boolean_field:boolean file_field:file timestamp_field:timestamp
 shadrizz scaffold -a admin post_status -c status:text
-shadrizz scaffold -a admin post -c post_status:references_select title:text likes:integer published_at:timestamp content:text_tiptap
+shadrizz scaffold -a admin post -c post_status_id:references_select title:text likes:integer published_at:timestamp content:text_tiptap
 # shadrizz add stripe
 npm run generate
 npm run migrate

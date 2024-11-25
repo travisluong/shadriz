@@ -229,7 +229,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-    zodCode: "z.coerce.string()",
+    zodCode: "z.preprocess((val: any) => JSON.parse(val), z.any())",
   },
   jsonb: {
     jsType: "object",
@@ -244,7 +244,7 @@ const postgresqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-    zodCode: "z.coerce.string()",
+    zodCode: "z.preprocess((val: any) => JSON.parse(val), z.any())",
   },
   time: {
     jsType: "string",

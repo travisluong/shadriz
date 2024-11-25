@@ -21,13 +21,13 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
           {{#each validatedColumns}}
             {{#switch this.dataType}}
               {{#case "references"}}
-          <TableHead><Sortable columnName="{{this.caseVariantsWithId.originalCamelCase}}">{{this.caseVariantsWithId.originalCapitalCase}}</Sortable></TableHead>
+          <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/case}}
               {{#case "references_select"}}
-          <TableHead><Sortable columnName="{{this.caseVariantsWithId.originalCamelCase}}">{{this.caseVariantsWithId.originalCapitalCase}}</Sortable></TableHead>
+          <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/case}}
               {{#case "references_combobox"}}
-          <TableHead><Sortable columnName="{{this.caseVariantsWithId.originalCamelCase}}">{{this.caseVariantsWithId.originalCapitalCase}}</Sortable></TableHead>
+          <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/case}}
               {{#default}}
           <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
@@ -62,13 +62,13 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
             <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</TableCell>
                 {{/case}}
                 {{#case "references"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "references_select"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "references_combobox"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariantsWithId.singularCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "file"}}
             <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</TableCell>

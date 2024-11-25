@@ -332,7 +332,7 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
-    zodCode: "z.coerce.string()",
+    zodCode: "z.preprocess((val: any) => JSON.parse(val), z.any())",
   },
   references: {
     jsType: "string",

@@ -1,18 +1,18 @@
         <div className="flex flex-col gap-2">
-          <Label>{{validatedColumn.caseVariantsWithId.singularCapitalCase}}</Label>
-          <Select name="{{validatedColumn.caseVariantsWithId.singularCamelCase}}">
+          <Label>{{validatedColumn.caseVariants.singularCapitalCase}}</Label>
+          <Select name="{{validatedColumn.caseVariants.singularCamelCase}}">
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              { {{validatedColumn.caseVariants.singularCamelCase}}List.map(({{validatedColumn.caseVariants.singularCamelCase}}) => (
-                <SelectItem key={ {{validatedColumn.caseVariants.singularCamelCase}}.id } value={ {{validatedColumn.caseVariants.singularCamelCase}}.id.toString() }>
-                  { {{validatedColumn.caseVariants.singularCamelCase}}.id}
+              { {{validatedColumn.referenceTableVars.singularCamelCase}}List.map(({{validatedColumn.referenceTableVars.singularCamelCase}}) => (
+                <SelectItem key={ {{validatedColumn.referenceTableVars.singularCamelCase}}.id } value={ {{validatedColumn.referenceTableVars.singularCamelCase}}.id.toString() }>
+                  { {{validatedColumn.referenceTableVars.singularCamelCase}}.id}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {state.errors?.{{validatedColumn.caseVariantsWithId.singularCamelCase}}?.map((error) => (
+          {state.errors?.{{validatedColumn.caseVariants.singularCamelCase}}?.map((error) => (
             <p className="text-destructive" key={error}>{error}</p>
           ))}
         </div>

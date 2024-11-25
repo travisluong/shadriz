@@ -58,11 +58,11 @@ const formComponentImports: Record<FormComponent, string> = {
 };
 
 interface ValidatedColumn {
-  columnName: string;
-  dataType: string;
-  caseVariants: Cases;
-  caseVariantsWithId: Cases;
-  zodCode: string;
+  columnName: string; // the original column name passed in from cli
+  dataType: string; // the datatype
+  caseVariants: Cases; // the case variants of the original column
+  zodCode: string; // the zod coersion code
+  referenceTableVars?: Cases; // for the table name of reference types
 }
 
 export class ScaffoldProcessor {
@@ -88,7 +88,6 @@ export class ScaffoldProcessor {
       columnName: "id",
       dataType: this.dbDialectStrategy.pkDataType,
       caseVariants: caseFactory("id"),
-      caseVariantsWithId: caseFactory("id"),
       zodCode:
         this.dbDialectStrategy.dataTypeStrategyMap[
           this.dbDialectStrategy.pkDataType
@@ -103,7 +102,6 @@ export class ScaffoldProcessor {
       columnName: "created_at",
       dataType: "timestamp",
       caseVariants: caseFactory("created_at"),
-      caseVariantsWithId: caseFactory("created_at_id"),
       zodCode: this.dbDialectStrategy.dataTypeStrategyMap["timestamp"].zodCode,
     };
 
@@ -111,7 +109,6 @@ export class ScaffoldProcessor {
       columnName: "updated_at",
       dataType: "timestamp",
       caseVariants: caseFactory("updated_at"),
-      caseVariantsWithId: caseFactory("updated_at_id"),
       zodCode: this.dbDialectStrategy.dataTypeStrategyMap["timestamp"].zodCode,
     };
 
@@ -123,10 +120,10 @@ export class ScaffoldProcessor {
     const validatedColumns: ValidatedColumn[] = [];
     for (const column of columns) {
       let [columnName, dataType] = column.split(":");
-      // the dataType references check is important to prevent breaking non-reference ids like stripe product and price ids
-      // shadrizz supports something like category_id:references, however it is not advertised to keep things simple
+      let referenceTableVars;
       if (columnName.endsWith("_id") && dataType.startsWith("references")) {
-        columnName = columnName.split("_id")[0];
+        const inferredReferencesTableName = columnName.split("_id")[0];
+        referenceTableVars = caseFactory(inferredReferencesTableName);
       }
       if (!(dataType in dataTypeStrategyMap)) {
         throw new Error(`invalid data type ${dataType}`);
@@ -135,11 +132,10 @@ export class ScaffoldProcessor {
         columnName,
         dataType,
         caseVariants: caseFactory(columnName),
-        caseVariantsWithId: caseFactory(columnName + "_id"),
+        referenceTableVars: referenceTableVars,
         zodCode: dataTypeStrategyMap[dataType].zodCode,
       });
     }
-    console.log(validatedColumns);
 
     return validatedColumns;
   }
@@ -219,7 +215,7 @@ export class ScaffoldProcessor {
     let referenceImportsCode = "";
     let isDecimalTypePresent = false;
     for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType } = validatedColumn;
+      const { columnName, dataType, referenceTableVars } = validatedColumn;
       const caseVariants = caseFactory(columnName);
       const dataTypeStrategy =
         this.dbDialectStrategy.dataTypeStrategyMap[dataType];
@@ -230,8 +226,8 @@ export class ScaffoldProcessor {
       }
 
       // references
-      if (dataType.startsWith("references")) {
-        referenceImportsCode += `import { ${caseVariants.pluralCamelCase} } from "./${caseVariants.pluralKebabCase}";\n`;
+      if (dataType.startsWith("references") && referenceTableVars) {
+        referenceImportsCode += `import { ${referenceTableVars.pluralCamelCase} } from "./${referenceTableVars.pluralKebabCase}";\n`;
         dataTypeSet.add(this.dbDialectStrategy.fkAutoIncrementDataType);
       }
 
@@ -269,24 +265,20 @@ export class ScaffoldProcessor {
   }
   getKeyValueStrForSchema(validatedColumn: ValidatedColumn): string {
     const { dataTypeStrategyMap } = this.dbDialectStrategy;
-    let { columnName, dataType, caseVariants, caseVariantsWithId } =
+    let { columnName, dataType, caseVariants, referenceTableVars } =
       validatedColumn;
     const strategy = dataTypeStrategyMap[dataType];
 
-    let keyName = caseVariants.originalCamelCase;
-    let referencesTable;
     if (dataType.startsWith("references")) {
-      referencesTable = caseVariants.pluralCamelCase;
-      columnName = caseVariantsWithId.singularSnakeCase;
-      keyName = caseVariantsWithId.singularCamelCase;
+      columnName = caseVariants.singularSnakeCase;
     }
 
     let str =
       "    " +
       strategy.getKeyValueStrForSchema({
-        keyName: keyName,
+        keyName: caseVariants.originalCamelCase,
         columnName: columnName,
-        referencesTable,
+        referencesTable: referenceTableVars?.pluralCamelCase,
         fkStrategyTemplate:
           this.dbDialectStrategy.fkStrategyTemplates[this.opts.pkStrategy],
       });
@@ -381,14 +373,8 @@ export class ScaffoldProcessor {
   addCreateAction(): void {
     const columns = ["id"];
     for (const validatedColumn of this.validatedColumns) {
-      const { columnName, dataType, caseVariants, caseVariantsWithId } =
-        validatedColumn;
-      const columnCases = caseFactory(columnName);
-      if (dataType.startsWith("references")) {
-        columns.push(caseVariantsWithId.singularCamelCase);
-      } else {
-        columns.push(caseVariants.originalCamelCase);
-      }
+      const { columnName, dataType, caseVariants } = validatedColumn;
+      columns.push(caseVariants.originalCamelCase);
     }
 
     const uploadColumnNames = this.validatedColumns
@@ -415,14 +401,9 @@ export class ScaffoldProcessor {
   addUpdateAction(): void {
     const columns = ["id"];
     for (const validatedColumn of this.validatedColumnsWithTimestamps) {
-      const { columnName, dataType, caseVariants, caseVariantsWithId } =
-        validatedColumn;
-      const columnCases = caseFactory(columnName);
-      if (dataType.startsWith("references")) {
-        columns.push(caseVariantsWithId.singularCamelCase);
-      } else {
-        columns.push(caseVariants.originalCamelCase);
-      }
+      const { columnName, dataType, caseVariants } = validatedColumn;
+
+      columns.push(caseVariants.originalCamelCase);
     }
 
     const dataTypeStrategyForPk =
@@ -432,19 +413,11 @@ export class ScaffoldProcessor {
 
     const formDataKeyValArr = this.validatedColumnsWithTimestamps.map(
       (validatedColumn) => {
-        const { dataType, caseVariants, caseVariantsWithId } = validatedColumn;
+        const { dataType, caseVariants } = validatedColumn;
         const strategy = this.dbDialectStrategy.dataTypeStrategyMap[dataType];
 
-        let keyName;
-        let colName;
-
-        if (dataType.startsWith("references")) {
-          keyName = caseVariantsWithId.singularCamelCase;
-          colName = caseVariantsWithId.singularCamelCase;
-        } else {
-          keyName = caseVariants.originalCamelCase;
-          colName = caseVariants.originalCamelCase;
-        }
+        const keyName = caseVariants.originalCamelCase;
+        const colName = caseVariants.originalCamelCase;
 
         return strategy.getKeyValStrForFormData({
           keyName: keyName,
@@ -460,16 +433,8 @@ export class ScaffoldProcessor {
       })
     );
 
-    const formDataKeyVal = formDataKeyValArr.join("\n");
-
     const uploadColumnNames = this.validatedColumns
       .filter((validatedColumn) => validatedColumn.dataType === "file")
-      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
-
-    const decimalColumns = this.validatedColumns
-      .filter((validatedColumn) =>
-        ["decimal", "numeric"].includes(validatedColumn.dataType)
-      )
       .map((validatedColumn) => caseFactory(validatedColumn.columnName));
 
     const tableObj = caseFactory(this.opts.table);
@@ -566,7 +531,7 @@ export class ScaffoldProcessor {
       .filter((validatedColumn) =>
         validatedColumn.dataType.startsWith(startsWith)
       )
-      .map((validatedColumn) => validatedColumn.caseVariants);
+      .map((validatedColumn) => validatedColumn);
     return referencesColumnList;
   }
   addUpdateForm(): void {
@@ -641,7 +606,8 @@ export class ScaffoldProcessor {
         data: { validatedColumn: validatedColumn, tableObj: tableObj },
       });
 
-      if (index !== this.opts.columns.length - 1) html += "\n";
+      if (index !== this.validatedColumnsWithTimestamps.length - 1)
+        html += "\n";
     }
     return html;
   }

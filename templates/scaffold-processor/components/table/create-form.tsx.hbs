@@ -6,16 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 {{formControlsImports}}
 {{#each referencesColumnList}}
-import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
+import { {{this.referenceTableVars.singularPascalCase}} } from "@/schema/{{this.referenceTableVars.pluralKebabCase}}";
 {{/each}}
 
 export function {{tableObj.singularPascalCase}}CreateForm({{#if hasReferences}}{
   {{#each referencesColumnList}}
-  {{this.singularCamelCase}}List,
+  {{this.referenceTableVars.singularCamelCase}}List,
   {{/each}}
 }: {
   {{#each referencesColumnList}}
-  {{this.singularCamelCase}}List: {{this.singularPascalCase}}[];
+  {{this.referenceTableVars.singularCamelCase}}List: {{this.referenceTableVars.singularPascalCase}}[];
   {{/each}}
 }{{/if}}) {
   const initialState: Create{{tableObj.singularPascalCase}}State = {};

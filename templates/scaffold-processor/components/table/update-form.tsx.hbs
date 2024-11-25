@@ -13,18 +13,18 @@ import { config } from "@/lib/config";
 {{/if}}
 import { {{tableObj.singularPascalCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 {{#each referencesColumnList}}
-import { {{this.singularPascalCase}} } from "@/schema/{{this.pluralKebabCase}}";
+import { {{this.referenceTableVars.singularPascalCase}} } from "@/schema/{{this.referenceTableVars.pluralKebabCase}}";
 {{/each}}
 
 export function {{tableObj.singularPascalCase}}UpdateForm({ 
   {{tableObj.singularCamelCase}},
   {{#each referencesColumnList}}
-  {{this.singularCamelCase}}List,
+  {{this.referenceTableVars.singularCamelCase}}List,
   {{/each}}
 }: { 
   {{tableObj.singularCamelCase}}: {{tableObj.singularPascalCase}};
   {{#each referencesColumnList}}
-  {{this.singularCamelCase}}List: {{this.singularPascalCase}}[];
+  {{this.referenceTableVars.singularCamelCase}}List: {{this.referenceTableVars.singularPascalCase}}[];
   {{/each}}
 }) {
   const initialState: Update{{tableObj.singularPascalCase}}State = {};

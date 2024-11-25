@@ -5,14 +5,14 @@ import { {{tableObj.singularPascalCase}}CreateForm } from "@/components/{{author
 
 export default async function Page() {
   {{#each referencesColumnList}}
-  const {{this.singularCamelCase}}List = await db.query.{{this.pluralCamelCase}}.findMany();
+  const {{this.referenceTableVars.singularCamelCase}}List = await db.query.{{this.referenceTableVars.pluralCamelCase}}.findMany();
   {{/each}}
 
   return (
     <div>
       <{{tableObj.singularPascalCase}}CreateForm 
         {{#each referencesColumnList}}
-        {{this.singularCamelCase}}List={ {{this.singularCamelCase}}List }
+        {{this.referenceTableVars.singularCamelCase}}List={ {{this.referenceTableVars.singularCamelCase}}List }
         {{/each}}
       />
     </div>
