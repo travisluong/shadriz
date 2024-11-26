@@ -246,6 +246,15 @@ export class AuthProcessor implements ShadrizzProcessor {
         pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
         pkKeyValTemplate: pkKeyValTemplates[this.opts.pkStrategy],
         userObj: caseFactory("user", { pluralize: this.opts.pluralizeEnabled }),
+        accountObj: caseFactory("account", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
+        sessionObj: caseFactory("session", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
+        verificationTokenObj: caseFactory("verificationToken", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
       },
     });
   }
@@ -350,6 +359,18 @@ export class AuthProcessor implements ShadrizzProcessor {
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
         fkDataTypeImportCode: fkDataTypeImportCode,
         fkStrategyTemplate: fkStrategyTemplate,
+        accountObj: caseFactory("account", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
+        sessionObj: caseFactory("session", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
+        verificationTokenObj: caseFactory("verificationToken", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
+        authenticatorObj: caseFactory("authenticator", {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
       },
     });
 

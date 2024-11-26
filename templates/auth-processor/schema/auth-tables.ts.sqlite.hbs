@@ -3,8 +3,8 @@ import { integer, sqliteTable, text, primaryKey, {{fkDataTypeImportCode}} } from
 import type { AdapterAccountType } from "next-auth/adapters"
 import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}"
 
-export const accounts = sqliteTable(
-  "accounts",
+export const {{accountObj.pluralCamelCase}} = sqliteTable(
+  "{{accountObj.pluralSnakeCase}}",
   {
     userId: {{fkStrategyTemplate}}
       .notNull()
@@ -27,7 +27,7 @@ export const accounts = sqliteTable(
   })
 )
  
-export const sessions = sqliteTable("sessions", {
+export const {{sessionObj.pluralCamelCase}} = sqliteTable("{{sessionObj.pluralSnakeCase}}", {
   sessionToken: text().primaryKey(),
   userId: {{fkStrategyTemplate}}
     .notNull()
@@ -35,8 +35,8 @@ export const sessions = sqliteTable("sessions", {
   expires: integer({ mode: "timestamp_ms" }).notNull(),
 })
  
-export const verificationTokens = sqliteTable(
-  "verification_tokens",
+export const {{verificationTokenObj.pluralCamelCase}} = sqliteTable(
+  "{{verificationTokenObj.pluralSnakeCase}}",
   {
     identifier: text().notNull(),
     token: text().notNull(),
@@ -49,8 +49,8 @@ export const verificationTokens = sqliteTable(
   })
 )
  
-export const authenticators = sqliteTable(
-  "authenticators",
+export const {{authenticatorObj.pluralCamelCase}} = sqliteTable(
+  "{{authenticatorObj.pluralSnakeCase}}",
   {
     credentialID: text().notNull().unique(),
     userId: {{fkStrategyTemplate}}

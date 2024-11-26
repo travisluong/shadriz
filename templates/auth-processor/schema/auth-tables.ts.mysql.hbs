@@ -10,8 +10,8 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters"
 import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}"
 
-export const accounts = mysqlTable(
-  "accounts",
+export const {{accountObj.pluralCamelCase}} = mysqlTable(
+  "{{accountObj.pluralSnakeCase}}",
   {
     userId: {{fkStrategyTemplate}}
       .notNull()
@@ -36,7 +36,7 @@ export const accounts = mysqlTable(
   })
 )
  
-export const sessions = mysqlTable("sessions", {
+export const {{sessionObj.pluralCamelCase}} = mysqlTable("{{sessionObj.pluralSnakeCase}}", {
   sessionToken: varchar({ length: 255 }).primaryKey(),
   userId: {{fkStrategyTemplate}}
     .notNull()
@@ -44,8 +44,8 @@ export const sessions = mysqlTable("sessions", {
   expires: timestamp({ mode: "date" }).notNull(),
 })
  
-export const verificationTokens = mysqlTable(
-  "verification_tokens",
+export const {{verificationTokenObj.pluralCamelCase}} = mysqlTable(
+  "{{verificationTokenObj.pluralSnakeCase}}",
   {
     identifier: varchar({ length: 255 }).notNull(),
     token: varchar({ length: 255 }).notNull(),
@@ -58,8 +58,8 @@ export const verificationTokens = mysqlTable(
   })
 )
  
-export const authenticators = mysqlTable(
-  "authenticators",
+export const {{authenticatorObj.pluralCamelCase}} = mysqlTable(
+  "{{authenticatorObj.pluralSnakeCase}}",
   {
     credentialID: varchar({ length: 255 }).notNull().unique(),
     userId: {{fkStrategyTemplate}}

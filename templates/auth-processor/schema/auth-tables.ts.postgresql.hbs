@@ -10,8 +10,8 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters"
 import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}"
  
-export const accounts = pgTable(
-  "accounts",
+export const {{accountObj.pluralCamelCase}} = pgTable(
+  "{{accountObj.pluralSnakeCase}}",
   {
     userId: {{fkStrategyTemplate}}
       .notNull()
@@ -34,7 +34,7 @@ export const accounts = pgTable(
   })
 )
  
-export const sessions = pgTable("sessions", {
+export const {{sessionObj.pluralCamelCase}} = pgTable("{{sessionObj.pluralSnakeCase}}", {
   sessionToken: text().primaryKey(),
   userId: {{fkStrategyTemplate}}
     .notNull()
@@ -42,8 +42,8 @@ export const sessions = pgTable("sessions", {
   expires: timestamp({ mode: "date" }).notNull(),
 })
  
-export const verificationTokens = pgTable(
-  "verification_tokens",
+export const {{verificationTokenObj.pluralCamelCase}} = pgTable(
+  "{{verificationTokenObj.pluralSnakeCase}}",
   {
     identifier: text().notNull(),
     token: text().notNull(),
@@ -56,8 +56,8 @@ export const verificationTokens = pgTable(
   })
 )
  
-export const authenticators = pgTable(
-  "authenticators",
+export const {{authenticatorObj.pluralCamelCase}} = pgTable(
+  "{{authenticatorObj.pluralSnakeCase}}",
   {
     credentialID: text().notNull().unique(),
     userId: {{fkStrategyTemplate}}
