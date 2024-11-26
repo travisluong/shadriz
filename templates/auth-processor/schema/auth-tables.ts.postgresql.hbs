@@ -8,14 +8,14 @@ import {
   {{fkDataTypeImportCode}}
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-import { users } from "@/schema/users"
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}"
  
 export const accounts = pgTable(
   "accounts",
   {
     userId: {{fkStrategyTemplate}}
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
     type: text().$type<AdapterAccountType>().notNull(),
     provider: text().notNull(),
     providerAccountId: text().notNull(),
@@ -38,7 +38,7 @@ export const sessions = pgTable("sessions", {
   sessionToken: text().primaryKey(),
   userId: {{fkStrategyTemplate}}
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
   expires: timestamp({ mode: "date" }).notNull(),
 })
  
@@ -62,7 +62,7 @@ export const authenticators = pgTable(
     credentialID: text().notNull().unique(),
     userId: {{fkStrategyTemplate}}
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
     providerAccountId: text().notNull(),
     credentialPublicKey: text().notNull(),
     counter: integer().notNull(),

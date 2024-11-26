@@ -13,6 +13,7 @@ import {
 } from "../lib/utils";
 import { pkStrategyImportTemplates } from "../lib/pk-strategy";
 import { ScaffoldProcessor } from "./scaffold-processor";
+import { caseFactory } from "../lib/case-utils";
 
 export class AdminProcessor implements ShadrizzProcessor {
   opts: ShadrizzConfig;
@@ -32,9 +33,13 @@ export class AdminProcessor implements ShadrizzProcessor {
   }
 
   async render(): Promise<void> {
+    const userObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "admin-processor/app/(admin)/layout.tsx.hbs",
       outputPath: "app/(admin)/layout.tsx",
+      data: { userObj },
     });
 
     renderTemplate({
@@ -50,11 +55,17 @@ export class AdminProcessor implements ShadrizzProcessor {
     renderTemplate({
       inputPath: `admin-processor/scripts/grant-admin.ts.hbs`,
       outputPath: "scripts/grant-admin.ts",
+      data: {
+        userObj,
+      },
     });
 
     renderTemplateIfNotExists({
       inputPath: `admin-processor/components/admin/admin-sidebar.tsx.hbs`,
       outputPath: `components/admin/admin-sidebar.tsx`,
+      data: {
+        userObj,
+      },
     });
 
     renderTemplate({
@@ -119,7 +130,7 @@ export class AdminProcessor implements ShadrizzProcessor {
       ...this.opts,
       authorizationLevel: "admin",
       columns: strategies[this.opts.dbDialect],
-      table: "users",
+      table: this.opts.pluralizeEnabled ? "users" : "user",
       enableCompletionMessage: false,
       enableSchemaGeneration: false,
     });

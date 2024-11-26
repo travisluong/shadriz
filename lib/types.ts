@@ -10,6 +10,7 @@ export interface ShadrizzConfig {
   authProviders: AuthProvider[];
   adminEnabled: boolean;
   install: boolean;
+  pluralizeEnabled: boolean;
 }
 
 export type AuthSolution = "authjs" | "none";

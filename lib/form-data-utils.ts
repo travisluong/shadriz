@@ -38,6 +38,8 @@ export const formDataUtils = {
   },
 
   file(key: string, col: string): string {
-    return `      ${key}: ${caseFactory(col).singularCamelCase}Uri,`;
+    return `      ${key}: ${
+      caseFactory(col, { pluralize: true }).singularCamelCase
+    }Uri,`;
   },
 };

@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { Provider } from "next-auth/providers";
 import { eq } from "drizzle-orm";
-import { users } from "@/schema/users";
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
 import { accounts, sessions, verificationTokens } from "@/schema/auth-tables";
 import { Adapter } from "next-auth/adapters";
 {{pkStrategyImport}}
@@ -11,7 +11,7 @@ import { Adapter } from "next-auth/adapters";
 
 const adapter = {
   ...(DrizzleAdapter(db, {
-    usersTable: users,
+    usersTable: {{userObj.pluralCamelCase}},
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
@@ -26,7 +26,7 @@ const adapter = {
       role: "user"
     };
 
-    await db.insert(users).values(newUser);
+    await db.insert({{userObj.pluralCamelCase}}).values(newUser);
     return newUser;
   },
 };

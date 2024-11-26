@@ -86,7 +86,9 @@ export class ScaffoldProcessor {
     const idCol: ValidatedColumn = {
       columnName: "id",
       dataType: this.dbDialectStrategy.pkDataType,
-      caseVariants: caseFactory("id"),
+      caseVariants: caseFactory("id", {
+        pluralize: this.opts.pluralizeEnabled,
+      }),
       zodCode: zodCodeRecord[this.opts.pkStrategy],
     };
 
@@ -97,14 +99,18 @@ export class ScaffoldProcessor {
     const createdAtCol: ValidatedColumn = {
       columnName: "created_at",
       dataType: "timestamp",
-      caseVariants: caseFactory("created_at"),
+      caseVariants: caseFactory("created_at", {
+        pluralize: this.opts.pluralizeEnabled,
+      }),
       zodCode: this.dbDialectStrategy.dataTypeStrategyMap["timestamp"].zodCode,
     };
 
     const updatedAtCol: ValidatedColumn = {
       columnName: "updated_at",
       dataType: "timestamp",
-      caseVariants: caseFactory("updated_at"),
+      caseVariants: caseFactory("updated_at", {
+        pluralize: this.opts.pluralizeEnabled,
+      }),
       zodCode: this.dbDialectStrategy.dataTypeStrategyMap["timestamp"].zodCode,
     };
 
@@ -119,7 +125,9 @@ export class ScaffoldProcessor {
       let referenceTableVars;
       if (dataType.startsWith("references")) {
         const inferredReferencesTableName = columnName.split("_id")[0];
-        referenceTableVars = caseFactory(inferredReferencesTableName);
+        referenceTableVars = caseFactory(inferredReferencesTableName, {
+          pluralize: this.opts.pluralizeEnabled,
+        });
       }
       if (!(dataType in dataTypeStrategyMap)) {
         throw new Error(`invalid data type ${dataType}`);
@@ -131,7 +139,9 @@ export class ScaffoldProcessor {
       validatedColumns.push({
         columnName,
         dataType,
-        caseVariants: caseFactory(columnName),
+        caseVariants: caseFactory(columnName, {
+          pluralize: this.opts.pluralizeEnabled,
+        }),
         referenceTableVars: referenceTableVars,
         zodCode: zodCode,
       });
@@ -157,7 +167,9 @@ export class ScaffoldProcessor {
     this.addDeleteForm();
     this.addTableComponent();
     this.addRepository();
-    insertSchemaToSchemaIndex(this.opts.table);
+    insertSchemaToSchemaIndex(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     if (this.opts.authorizationLevel === "admin") {
       this.addLinkToAdminSidebar();
     }
@@ -192,7 +204,9 @@ export class ScaffoldProcessor {
 
     // generate imports code
     const importsCode = this.generateImportsCodeFromColumns();
-    const tableObj = caseFactory(table);
+    const tableObj = caseFactory(table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     const referencesColumnList = this.getReferencesColumnList("references");
     renderTemplate({
       inputPath:
@@ -276,7 +290,9 @@ export class ScaffoldProcessor {
     return str;
   }
   addListView(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "scaffold-processor/app/table/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -290,7 +306,9 @@ export class ScaffoldProcessor {
     });
   }
   addDetailView(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     const hasFileDataType = this.hasFileDataType();
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/page.tsx.hbs",
@@ -314,7 +332,9 @@ export class ScaffoldProcessor {
     );
   }
   addEditView(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/edit/page.tsx.hbs",
@@ -331,7 +351,9 @@ export class ScaffoldProcessor {
     });
   }
   addNewView(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/app/table/new/page.tsx.hbs",
@@ -346,7 +368,9 @@ export class ScaffoldProcessor {
     });
   }
   addDeleteView(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "scaffold-processor/app/table/[id]/delete/page.tsx.hbs",
       outputPath: `app/${this.authorizationRouteGroup()}${
@@ -369,9 +393,15 @@ export class ScaffoldProcessor {
 
     const uploadColumnNames = this.validatedColumns
       .filter((validatedColumn) => validatedColumn.dataType === "file")
-      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
+      .map((validatedColumn) =>
+        caseFactory(validatedColumn.columnName, {
+          pluralize: this.opts.pluralizeEnabled,
+        })
+      );
 
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/create-action.ts.hbs",
@@ -398,9 +428,15 @@ export class ScaffoldProcessor {
 
     const uploadColumnNames = this.validatedColumns
       .filter((validatedColumn) => validatedColumn.dataType === "file")
-      .map((validatedColumn) => caseFactory(validatedColumn.columnName));
+      .map((validatedColumn) =>
+        caseFactory(validatedColumn.columnName, {
+          pluralize: this.opts.pluralizeEnabled,
+        })
+      );
 
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/update-action.ts.hbs",
@@ -418,7 +454,9 @@ export class ScaffoldProcessor {
     });
   }
   addDeleteAction(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
 
     renderTemplate({
       inputPath: "scaffold-processor/actions/table/delete-action.ts.hbs",
@@ -435,7 +473,9 @@ export class ScaffoldProcessor {
   addCreateForm(): void {
     const formControlsImports = this.getFormControlsImports();
     const formControlsHtml = this.getFormControlsHtml();
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     const referencesColumnList = this.getReferencesColumnList("references_");
     renderTemplate({
       inputPath: "scaffold-processor/components/table/create-form.tsx.hbs",
@@ -452,7 +492,9 @@ export class ScaffoldProcessor {
   }
   getFormControlsHtml(): string {
     let html = "";
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     for (const [index, validatedColumn] of this.validatedColumns.entries()) {
       const { dataType } = validatedColumn;
       const dataTypeStrategy =
@@ -493,7 +535,9 @@ export class ScaffoldProcessor {
     return referencesColumnList;
   }
   addUpdateForm(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     const formControlsImports = this.getFormControlsImports();
     const formControlsHtml = this.getUpdateFormControlsHtml();
     const referencesColumnList = this.getReferencesColumnList("references_");
@@ -512,7 +556,9 @@ export class ScaffoldProcessor {
     });
   }
   addDeleteForm(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "scaffold-processor/components/table/delete-form.tsx.hbs",
       outputPath: `components/${this.opts.authorizationLevel}/${tableObj.pluralKebabCase}/${tableObj.singularKebabCase}-delete-form.tsx`,
@@ -523,7 +569,9 @@ export class ScaffoldProcessor {
     });
   }
   addTableComponent(): void {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
 
     renderTemplate({
       inputPath: "scaffold-processor/components/table/table-component.tsx.hbs",
@@ -536,7 +584,9 @@ export class ScaffoldProcessor {
     });
   }
   getUpdateFormControlsHtml(): string {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
 
     let html = "";
 
@@ -570,7 +620,9 @@ export class ScaffoldProcessor {
     return html;
   }
   addLinkToAdminSidebar() {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     insertTextBeforeIfNotExists(
       "components/admin/admin-sidebar.tsx",
       "// [CODE_MARK admin-sidebar-items]",
@@ -578,7 +630,9 @@ export class ScaffoldProcessor {
     );
   }
   addLinkToPrivateSidebar() {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     insertTextBeforeIfNotExists(
       "components/private/private-sidebar.tsx",
       "// [CODE_MARK private-sidebar-items]",
@@ -606,7 +660,9 @@ export class ScaffoldProcessor {
     }
   }
   addRepository() {
-    const tableObj = caseFactory(this.opts.table);
+    const tableObj = caseFactory(this.opts.table, {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "scaffold-processor/repositories/table-repository.ts.hbs",
       outputPath: `repositories/${tableObj.singularKebabCase}-repository.ts`,

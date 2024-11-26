@@ -15,7 +15,10 @@
     "test-postgresql": "sh ./scripts/test-postgresql.sh",
     "test-sqlite": "sh ./scripts/test-sqlite.sh",
     "test-mysql": "sh ./scripts/test-mysql.sh",
-    "test-postgresql-auto-increment": "sh ./scripts/test-postgresql-auto-increment.sh"
+    "test-postgresql-auto-increment": "sh ./scripts/test-postgresql-auto-increment.sh",
+    "test-postgresql-no-pluralize": "sh ./scripts/test-postgresql-no-pluralize.sh",
+    "test-mysql-no-pluralize": "sh ./scripts/test-mysql-no-pluralize.sh",
+    "test-sqlite-no-pluralize": "sh ./scripts/test-sqlite-no-pluralize.sh"
   },
   "author": "travisluong",
   "license": "MIT",

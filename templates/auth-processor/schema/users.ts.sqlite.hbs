@@ -5,7 +5,7 @@ import {
 } from "drizzle-orm/sqlite-core"
 {{pkStrategyImport}}
 
-export const users = sqliteTable("users", {
+export const {{userObj.pluralCamelCase}} = sqliteTable("{{userObj.pluralSnakeCase}}", {
   {{pkText}}
   name: text(),
   email: text().notNull(),
@@ -18,4 +18,4 @@ export const users = sqliteTable("users", {
   // [CODE_MARK users-table]
 })
 
-export type User = typeof users.$inferSelect;
+export type {{userObj.singularPascalCase}} = typeof {{userObj.pluralCamelCase}}.$inferSelect;

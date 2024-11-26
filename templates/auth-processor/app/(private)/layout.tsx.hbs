@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { PrivateSidebar } from "@/components/private/private-sidebar";
-import { users } from "@/schema/users";
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
 import { Separator } from "@/components/ui/separator";
 import { BreadcrumbFactory } from "@/components/breadcrumb-factory";
 
@@ -19,18 +19,18 @@ export default async function Layout({
     redirect("/signin");
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, session.user.id),
+  const userObj = await db.query.{{userObj.pluralCamelCase}}.findFirst({
+    where: eq({{userObj.pluralCamelCase}}.id, session.user.id),
   });
 
-  if (!user) {
+  if (!userObj) {
     redirect("/signin");
   }
 
   return (
     <div>
       <SidebarProvider>
-        <PrivateSidebar user={user} />
+        <PrivateSidebar user={userObj} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger />

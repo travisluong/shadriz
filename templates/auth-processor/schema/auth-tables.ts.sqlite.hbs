@@ -1,14 +1,14 @@
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text, primaryKey, {{fkDataTypeImportCode}} } from "drizzle-orm/sqlite-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-import { users } from "@/schema/users"
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}"
 
 export const accounts = sqliteTable(
   "accounts",
   {
     userId: {{fkStrategyTemplate}}
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
     type: text().$type<AdapterAccountType>().notNull(),
     provider: text().notNull(),
     providerAccountId: text().notNull(),
@@ -31,7 +31,7 @@ export const sessions = sqliteTable("sessions", {
   sessionToken: text().primaryKey(),
   userId: {{fkStrategyTemplate}}
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
   expires: integer({ mode: "timestamp_ms" }).notNull(),
 })
  
@@ -55,7 +55,7 @@ export const authenticators = sqliteTable(
     credentialID: text().notNull().unique(),
     userId: {{fkStrategyTemplate}}
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
     providerAccountId: text().notNull(),
     credentialPublicKey: text().notNull(),
     counter: integer().notNull(),

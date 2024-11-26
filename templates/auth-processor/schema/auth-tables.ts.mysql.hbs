@@ -8,14 +8,14 @@ import {
   {{fkDataTypeImportCode}}
 } from "drizzle-orm/mysql-core"
 import type { AdapterAccountType } from "next-auth/adapters"
-import { users } from "@/schema/users"
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}"
 
 export const accounts = mysqlTable(
   "accounts",
   {
     userId: {{fkStrategyTemplate}}
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
     type: varchar({ length: 255 })
       .$type<AdapterAccountType>()
       .notNull(),
@@ -40,7 +40,7 @@ export const sessions = mysqlTable("sessions", {
   sessionToken: varchar({ length: 255 }).primaryKey(),
   userId: {{fkStrategyTemplate}}
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
   expires: timestamp({ mode: "date" }).notNull(),
 })
  
@@ -64,7 +64,7 @@ export const authenticators = mysqlTable(
     credentialID: varchar({ length: 255 }).notNull().unique(),
     userId: {{fkStrategyTemplate}}
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => {{userObj.pluralCamelCase}}.id, { onDelete: "cascade" }),
     providerAccountId: varchar({ length: 255 }).notNull(),
     credentialPublicKey: varchar({
       length: 255,

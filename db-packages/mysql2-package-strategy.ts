@@ -1,3 +1,4 @@
+import { caseFactory } from "../lib/case-utils";
 import { log } from "../lib/log";
 import { DbDialect, DbPackageStrategy, ShadrizzConfig } from "../lib/types";
 import {
@@ -62,9 +63,15 @@ export class Mysql2PackageStrategy implements DbPackageStrategy {
 
   copyCreateUserScript() {
     if (!this.opts.authEnabled) return;
+    const tableObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "db-packages/scripts/create-user.ts.hbs",
       outputPath: "scripts/create-user.ts",
+      data: {
+        tableObj,
+      },
     });
   }
 

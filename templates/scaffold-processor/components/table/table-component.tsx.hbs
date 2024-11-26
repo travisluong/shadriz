@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Sortable } from "@/components/sortable";
-import { {{tableObj.pluralPascalCase}}WithRelations } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
+import { {{tableObj.pluralPascalCase}}WithRelationsList } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
 
-export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelations }) {
+export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelationsList }) {
   return (
     <Table>
       <TableHeader>

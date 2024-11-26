@@ -2,11 +2,11 @@ import { eq, like, sql, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { {{tableObj.singularPascalCase}}, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
-export type {{tableObj.pluralPascalCase}}WithRelations = Awaited<
-  ReturnType<typeof get{{tableObj.pluralPascalCase}}WithRelations>
+export type {{tableObj.pluralPascalCase}}WithRelationsList = Awaited<
+  ReturnType<typeof get{{tableObj.pluralPascalCase}}WithRelationsList>
 >;
 
-export async function get{{tableObj.pluralPascalCase}}WithRelations({
+export async function get{{tableObj.pluralPascalCase}}WithRelationsList({
   limit,
   offset,
   search,

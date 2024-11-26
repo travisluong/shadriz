@@ -455,6 +455,7 @@ export function completeShadrizzConfig(
     authProviders: partialConfig.authProviders ?? ["credentials", "github"],
     adminEnabled: partialConfig.adminEnabled ?? false,
     install: partialConfig.install ?? true,
+    pluralizeEnabled: partialConfig.pluralizeEnabled ?? true,
   };
   return completeConfig;
 }
@@ -473,8 +474,11 @@ export function removeTextFromFile(
   fs.writeFileSync(filePath, updatedContent, "utf8");
 }
 
-export function insertSchemaToSchemaIndex(table: string) {
-  const tableObj = caseFactory(table);
+export function insertSchemaToSchemaIndex(
+  table: string,
+  opts: { pluralize: boolean }
+) {
+  const tableObj = caseFactory(table, { pluralize: opts.pluralize });
   prependToFileIfNotExists(
     "lib/schema.ts",
     `import * as ${tableObj.pluralCamelCase} from "@/schema/${tableObj.pluralKebabCase}";\n`

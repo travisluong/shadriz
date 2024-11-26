@@ -17,30 +17,55 @@ export interface Cases {
   pluralKebabCase: string;
 }
 
-const cache: { [key: string]: Cases } = {};
+interface CaseFactoryOpts {
+  pluralize: boolean;
+}
 
-export function caseFactory(str: string) {
-  if (str in cache) {
-    return cache[str];
-  }
+const defaultOpts: CaseFactoryOpts = {
+  pluralize: true,
+};
 
-  const obj = {
-    original: str,
-    originalCamelCase: Case.camel(str),
-    originalCapitalCase: Case.capital(str),
-    singularCapitalCase: Case.capital(pluralize.singular(str)),
-    pluralCapitalCase: Case.capital(pluralize.plural(str)),
-    singularSnakeCase: Case.snake(pluralize.singular(str)),
-    singularCamelCase: Case.camel(pluralize.singular(str)),
-    singularPascalCase: Case.pascal(pluralize.singular(str)),
-    singularKebabCase: Case.kebab(pluralize.singular(str)),
-    pluralSnakeCase: Case.snake(pluralize.plural(str)),
-    pluralCamelCase: Case.camel(pluralize.plural(str)),
-    pluralPascalCase: Case.pascal(pluralize.plural(str)),
-    pluralKebabCase: Case.kebab(pluralize.plural(str)),
+export function caseFactory(str: string, opts: CaseFactoryOpts) {
+  const mergedOpts: CaseFactoryOpts = {
+    ...defaultOpts,
+    ...opts,
   };
 
-  cache[str] = obj;
+  let obj;
+
+  if (mergedOpts.pluralize) {
+    obj = {
+      original: str,
+      originalCamelCase: Case.camel(str),
+      originalCapitalCase: Case.capital(str),
+      singularCapitalCase: Case.capital(pluralize.singular(str)),
+      pluralCapitalCase: Case.capital(pluralize.plural(str)),
+      singularSnakeCase: Case.snake(pluralize.singular(str)),
+      singularCamelCase: Case.camel(pluralize.singular(str)),
+      singularPascalCase: Case.pascal(pluralize.singular(str)),
+      singularKebabCase: Case.kebab(pluralize.singular(str)),
+      pluralSnakeCase: Case.snake(pluralize.plural(str)),
+      pluralCamelCase: Case.camel(pluralize.plural(str)),
+      pluralPascalCase: Case.pascal(pluralize.plural(str)),
+      pluralKebabCase: Case.kebab(pluralize.plural(str)),
+    };
+  } else {
+    obj = {
+      original: str,
+      originalCamelCase: Case.camel(str),
+      originalCapitalCase: Case.capital(str),
+      singularCapitalCase: Case.capital(str),
+      pluralCapitalCase: Case.capital(str),
+      singularSnakeCase: Case.snake(str),
+      singularCamelCase: Case.camel(str),
+      singularPascalCase: Case.pascal(str),
+      singularKebabCase: Case.kebab(str),
+      pluralSnakeCase: Case.snake(str),
+      pluralCamelCase: Case.camel(str),
+      pluralPascalCase: Case.pascal(str),
+      pluralKebabCase: Case.kebab(str),
+    };
+  }
 
   return obj;
 }

@@ -9,15 +9,15 @@ type Params = Promise<{ id: {{pkStrategyJsType}} }>;
 export default async function Page(props: { params: Params }) {
   const params = await props.params;
   const { id } = params;
-  const {{tableObj.singularCamelCase}} = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
+  const {{tableObj.singularCamelCase}}Obj = await db.query.{{tableObj.pluralCamelCase}}.findFirst({ where: eq({{tableObj.pluralCamelCase}}.id, id) });
 
-  if (!{{tableObj.singularCamelCase}}) {
+  if (!{{tableObj.singularCamelCase}}Obj) {
     notFound();
   }
 
   return (
     <div>
-      <{{tableObj.singularPascalCase}}DeleteForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} } />
+      <{{tableObj.singularPascalCase}}DeleteForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}}Obj } />
     </div>
   );
 }

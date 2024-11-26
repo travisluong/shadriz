@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { openConnection } from "./sdb";
-import { users } from "@/schema/users";
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
 import { db } from "@/lib/db";
 
 async function main() {
@@ -8,15 +8,15 @@ async function main() {
 
   const email = process.argv[2];
 
-  const user = await sdb.query.users.findFirst({
-    where: eq(users.email, email),
+  const {{userObj.singularCamelCase}}Obj = await sdb.query.{{userObj.pluralCamelCase}}.findFirst({
+    where: eq({{userObj.pluralCamelCase}}.email, email),
   });
 
-  if (!user) {
+  if (!{{userObj.singularCamelCase}}Obj) {
     throw new Error("user not found " + email);
   }
 
-  await db.update(users).set({ role: "admin" }).where(eq(users.email, email));
+  await db.update({{userObj.pluralCamelCase}}).set({ role: "admin" }).where(eq({{userObj.pluralCamelCase}}.email, email));
 
   console.log("granted admin role to user " + email);
 

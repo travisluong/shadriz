@@ -10,9 +10,9 @@ type Params = Promise<{ id: {{pkStrategyJsType}} }>;
 export default async function Page(props: { params: Params }) {
   const params = await props.params;
   const { id } = params;
-  const {{tableObj.singularCamelCase}} = await get{{tableObj.singularPascalCase}}WithRelations(id);
+  const {{tableObj.singularCamelCase}}Obj = await get{{tableObj.singularPascalCase}}WithRelations(id);
 
-  if (!{{tableObj.singularCamelCase}}) {
+  if (!{{tableObj.singularCamelCase}}Obj) {
     notFound();
   }
 
@@ -23,7 +23,7 @@ export default async function Page(props: { params: Params }) {
   return (
     <div>
       <{{tableObj.singularPascalCase}}UpdateForm 
-        {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}} }
+        {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}}Obj }
         {{#each referencesColumnList}}
         {{this.referenceTableVars.singularCamelCase}}List={ {{this.referenceTableVars.singularCamelCase}}List }
         {{/each}}

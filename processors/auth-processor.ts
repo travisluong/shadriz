@@ -18,6 +18,7 @@ import {
   pkStrategyImportTemplates,
 } from "../lib/pk-strategy";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
+import { caseFactory } from "../lib/case-utils";
 
 interface AuthStrategy {
   importTemplatePath: string;
@@ -211,12 +212,18 @@ export class AuthProcessor implements ShadrizzProcessor {
     renderTemplateIfNotExists({
       inputPath: "auth-processor/components/private/private-sidebar.tsx.hbs",
       outputPath: "components/private/private-sidebar.tsx",
+      data: {
+        userObj: caseFactory("user", { pluralize: this.opts.pluralizeEnabled }),
+      },
     });
   }
 
   addAuthConfig() {
     let importsCode = "";
     let providersCode = "";
+    const userObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     for (const provider of this.opts.authProviders) {
       const strategy = authStrategyMap[provider];
       importsCode += compileTemplate({
@@ -226,7 +233,7 @@ export class AuthProcessor implements ShadrizzProcessor {
       importsCode += "\n";
       providersCode += compileTemplate({
         inputPath: strategy.authTemplatePath,
-        data: {},
+        data: { userObj },
       });
       providersCode += "\n";
     }
@@ -238,6 +245,7 @@ export class AuthProcessor implements ShadrizzProcessor {
         providersCode: providersCode,
         pkStrategyImport: pkStrategyImportTemplates[this.opts.pkStrategy],
         pkKeyValTemplate: pkKeyValTemplates[this.opts.pkStrategy],
+        userObj: caseFactory("user", { pluralize: this.opts.pluralizeEnabled }),
       },
     });
   }
@@ -265,9 +273,15 @@ export class AuthProcessor implements ShadrizzProcessor {
   }
 
   addPrivateLayout() {
+    const userObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: "auth-processor/app/(private)/layout.tsx.hbs",
       outputPath: "app/(private)/layout.tsx",
+      data: {
+        userObj,
+      },
     });
   }
 
@@ -322,10 +336,14 @@ export class AuthProcessor implements ShadrizzProcessor {
     const fkDataTypeImportCode =
       fkDataTypeImport[pkStrategyDataType as keyof typeof fkDataTypeImport];
 
+    const userObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: authDbDialectStrategy[this.opts.dbDialect].authSchemaTemplate,
       outputPath: "schema/auth-tables.ts",
       data: {
+        userObj,
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
         createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
@@ -335,7 +353,9 @@ export class AuthProcessor implements ShadrizzProcessor {
       },
     });
 
-    insertSchemaToSchemaIndex("auth_tables");
+    insertSchemaToSchemaIndex("auth_tables", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
   }
 
   addAuthTrustHostToEnv() {
@@ -367,11 +387,16 @@ export class AuthProcessor implements ShadrizzProcessor {
     for (const dataType of dataTypeImports) {
       dataTypeImportsCode += "  " + dataType + ",\n";
     }
-
+    const userObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
     renderTemplate({
       inputPath: userSchemaStrategy[this.opts.dbDialect],
-      outputPath: "schema/users.ts",
+      outputPath: this.opts.pluralizeEnabled
+        ? "schema/users.ts"
+        : "schema/user.ts",
       data: {
+        userObj: userObj,
         pkText: pkText,
         pkStrategyImport: pkStrategyImport,
         pkStrategyDataType: pkStrategyDataType,

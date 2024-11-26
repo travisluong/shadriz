@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
-import { users } from "@/schema/users";
+import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
 import { isAdmin } from "@/services/authorization-service";
 import { Separator } from "@/components/ui/separator";
 import { BreadcrumbFactory } from "@/components/breadcrumb-factory";
@@ -28,18 +28,18 @@ export default async function Layout({
     redirect("/admin-login");
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, session.user.id),
+  const userObj = await db.query.{{userObj.pluralCamelCase}}.findFirst({
+    where: eq({{userObj.pluralCamelCase}}.id, session.user.id),
   });
 
-  if (!user) {
+  if (!userObj) {
     redirect("/admin-login");
   }
 
   return (
     <div>
       <SidebarProvider>
-        <AdminSidebar user={user} />
+        <AdminSidebar user={userObj} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger />

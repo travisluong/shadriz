@@ -178,6 +178,14 @@ program
   )
   .option("-ad, --admin", "admin dashboard with role-based authorization")
   .option("--no-admin", "no admin dashboard")
+  .option(
+    "--pluralize",
+    "enable the automatic pluralization of variable naming conventions"
+  )
+  .option(
+    "--no-pluralize",
+    "disable the automatic pluralization of variable naming conventions"
+  )
   .action(async (options) => {
     try {
       preflightChecks();
@@ -314,6 +322,13 @@ program
             default: true,
           }));
       }
+      partialConfig.pluralizeEnabled =
+        options.pluralize ??
+        (await confirm({
+          message:
+            "Do you want to enable the automatic pluralization of variable names?",
+          default: true,
+        }));
 
       // process
 
