@@ -160,7 +160,7 @@ export class AuthProcessor implements ShadrizzProcessor {
 
   devDependencies = [];
 
-  shadcnComponents: string[] = ["separator", "avatar"];
+  shadcnComponents: string[] = ["separator", "avatar", "sidebar"];
 
   dbDialectStrategy: DbDialectStrategy;
 
@@ -425,6 +425,10 @@ export class AuthProcessor implements ShadrizzProcessor {
         createdAtTemplate: this.dbDialectStrategy.createdAtTemplate,
         updatedAtTemplate: this.dbDialectStrategy.updatedAtTemplate,
       },
+    });
+
+    insertSchemaToSchemaIndex("user", {
+      pluralize: this.opts.pluralizeEnabled,
     });
   }
 

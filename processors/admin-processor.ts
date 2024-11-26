@@ -18,7 +18,7 @@ export class AdminProcessor implements ShadrizzProcessor {
   opts: ShadrizzConfig;
   dependencies: string[] = [];
   devDependencies: string[] = [];
-  shadcnComponents: string[] = ["card", "sidebar"];
+  shadcnComponents: string[] = ["card"];
   dbDialectStrategy: DbDialectStrategy;
 
   constructor(opts: ShadrizzConfig) {

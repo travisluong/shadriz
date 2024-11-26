@@ -11,7 +11,7 @@
     "mysql2": "^3.11.0",
     "nanoid": "^5.0.7",
     "nanoid-dictionary": "5.0.0-beta.1",
-    "next": "15.0.1",
+    "next": "15.0.3",
     "next-auth": "5.0.0-beta.25",
     "next-themes": "^0.3.0",
     "nodemailer": "^6.9.15",

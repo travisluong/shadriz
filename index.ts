@@ -359,7 +359,7 @@ program
         authProcessor = new AuthProcessor(completeConfig);
         processors.push(authProcessor);
       }
-      if (completeConfig.authSolution !== "none") {
+      if (completeConfig.adminEnabled) {
         adminProcessor = new AdminProcessor(completeConfig);
         processors.push(adminProcessor);
       }
