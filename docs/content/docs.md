@@ -25,6 +25,12 @@ Start by creating a new Next.js project using `create-next-app`.
 npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack
 ```
 
+Alternatively, use the `new` command to generate a new project using the above settings.
+
+```
+npx shadrizz@latest new my-app
+```
+
 ### Step 2: Run the CLI
 
 [UPDATE](https://ui.shadcn.com/docs/react-19) for Next.js 15 + React 19. If you're using `npm`, you may need to first run `npm config set legacy-peer-deps true` in order to work around a dependency error. Using `pnpm` instead of `npm` is recommended if you want to avoid this issue.
@@ -34,6 +40,12 @@ Run the `shadrizz init` command to setup your project.
 ```
 cd my-app
 npx shadrizz@latest init
+```
+
+Alternatively, you can also run the command non-interactively:
+
+```bash
+npx shadrizz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --admin
 ```
 
 ### Step 3: Configure project
@@ -48,7 +60,7 @@ You will be asked a few questions to configure the app:
 ? Which authentication solution do you want to use? authjs
 ? Which auth providers would you like to use? credentials
 ? Do you want to add an admin dashboard with role-based authorization? yes
-? Do you want to enable the automatic pluralization of table and variable names?
+? Do you want to enable the automatic pluralization of table and variable names? yes
 ```
 
 ### Step 4: Project checklist
@@ -110,36 +122,6 @@ npm run dev
 
 Go to http://localhost:3000/admin-login and log in with the admin user.
 
-## Command List
-
-### new
-
-Generate a new Next.js project using the required settings.
-
-```
-npx shadrizz@latest new my-app
-```
-
-This is the same as:
-
-```
-npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack
-```
-
-### init
-
-Initialize a new project with a series of interactive prompts.
-
-```
-npx shadrizz@latest init
-```
-
-Alternatively, you can also run the command non-interactively:
-
-```bash
-npx shadrizz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-solution authjs --auth-providers github,google,credentials --admin
-```
-
 ### scaffold
 
 After the initial configuration is completed, you can create full stack scaffolding with the `scaffold` command.
@@ -158,16 +140,6 @@ Example:
 
 ```
 npx shadrizz@latest scaffold products -c title:varchar price:decimal description:text stock_quantity:integer
-```
-
-### add
-
-The `add` command adds optional extensions to the codebase, such as Stripe payment processing and Tiptap wysiwyg editor. See [Add-on Extensions](#add-on-extensions) for more details.
-
-Example:
-
-```
-npx shadrizz@latest add tiptap
 ```
 
 ## Data types
@@ -233,13 +205,7 @@ The `references_select` data type will use a Select component where you can sele
 npx shadrizz@latest scaffold post -c category_id:references_select title:text
 ```
 
-### Inferred Reference Table And Column Names
-
-shadrizz will infer the referenced table name by the text to the left of `_id`.
-
-Using `category_id:references`, the referenced table will be inferred as `categories` and the column will be `category_id`
-
-Excluding the `_id` will also work. Using `category:references`, the referenced table will be inferred as `categories` and the column will be `category`.
+The component will initially show a list of ids, however it is easy to customize by changing the code in the form. For example, changing the react code from `{category.id}` to `{category.title}`.
 
 ## File uploads
 
@@ -523,7 +489,7 @@ Many decisions happen at the beginnings of projects. A developer must decide on:
 
 Once the technologies are decided on, the next step is to wire everything together such that the application works as a cohesive whole. This means making sure the database connection is working, the UI component library is installed, and that integrations with external services are working.
 
-Developers will often use libraries to add capabilities such as authentication, data validations, and payments. However, setting these up can be time consuming. shadrizz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadrizz will write all the code necessary for the selected features.
+Developers will often use libraries to add capabilities such as authentication, authorization, and data validations. However, setting these up can be time consuming. shadrizz provides an `init` command which allows you to choose from a short menu of features that you can add to your Next.js app. shadrizz will write all the code necessary for the selected features.
 
 By having a simple working example, you'll save time not having to build it entirely from scratch. You can customize the generated code to fit your project requirements. Additionally, shadrizz will display a checklist of tasks to complete the initial configuration. The `init` command is intended to be run once at the beginning of a new project.
 
@@ -541,9 +507,13 @@ What is the purpose of the scaffolded code? It is to provide a fully working ful
 
 Nostalgia for Ruby on Rails style development is one motivation that led to the creation of shadrizz. The `shadrizz scaffold` command was modeled after the `rails scaffold` command. With a predefined set of conventions, you'll spend less time configuring things, and more time building.
 
-### Django
+### shadcn/ui
 
-Django features a powerful built-in admin interface that seamlessly integrates with your database models, allowing for quick and intuitive content management.
+shadcn/ui is the tool that copies and pastes beautifully styled components into your projects. Similarly, shadrizz generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
+
+### Drizzle ORM
+
+A Headless TypeScript ORM that provides both SQL-like and relational queries, as well as schema generation and database migrations. If you know SQL, you know Drizzle. If you prefer an ORM, you can use their query API. Drizzle always outputs 1 query.
 
 ### TypeScript
 
@@ -553,13 +523,9 @@ TypeScript adds additional syntax for types to JavaScript. This enables the earl
 
 Many of the full stack patterns used in shadrizz are based on the official Next.js documentation. Next.js provides many conveniences out of the box, such as file system routing, server side rendering, code bundling, and more.
 
-### shadcn/ui
+### Django
 
-shadcn/ui is the tool that copies and pastes beautifully styled components into your projects. Similarly, shadrizz generates full stack components into your Next.js project. You have full control of the code that is generated instead of the code being hidden behind an external package.
-
-### Drizzle ORM
-
-Drizzle ORM provides both SQL-like and relational queries, as well as schema generation and database migrations. If you know SQL, you know Drizzle. If you prefer an ORM, you can use their query API. Drizzle always outputs 1 query.
+Django has a built-in admin interface as part of the core framework. It works out of the box with your custom data models. This was the main inspiration for the auth and admin dashboard of shadrizz.
 
 ### TailwindCSS
 
@@ -571,7 +537,7 @@ shadrizz favors proven, open-source solutions that let you maintain control over
 
 ### Zod
 
-shadrizz uses `zod` and `drizzle-zod` for data validations. Each server action that is generated by the scaffolding tool will also contain zod validations to check for the correctness of data being submitted.
+shadrizz uses `zod` and `drizzle-zod` for data validations. Each server action that is generated by the scaffolding tool will also contain zod validations to check for the correctness of data being submitted. Zod also provides tools for the parsing of form data.
 
 ## FAQ
 
@@ -585,7 +551,7 @@ A scaffold is all of the starter code, including the UI and data layer, that is 
 
 **Why not a boilerplate?**
 
-Boilerplates go obsolete fast. shadrizz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, Stripe, TailwindCSS, Zod, and more. If you prefer a more stable version, choose the `pinned` option during initialization and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadrizz.json` in the shadrizz GitHub repo.
+Boilerplates go obsolete fast. shadrizz offers a `latest` option to install latest dependencies. This means you'll get the latest version of Drizzle ORM, shadcn/ui components, Auth.js, TailwindCSS, Zod, and more. If you prefer a more stable version, choose the `pinned` option during initialization and you'll get the pinned versions of each top-level dependency. The pinned versions can be found in `package-shadrizz.json` in the shadrizz GitHub repo.
 
 ## Author
 
