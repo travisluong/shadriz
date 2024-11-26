@@ -1,4 +1,3 @@
-import { formDataUtils } from "../lib/form-data-utils";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
@@ -15,9 +14,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: int()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -29,9 +25,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: tinyint()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
@@ -45,9 +38,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: smallint()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -59,9 +49,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: mediumint()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
@@ -75,9 +62,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: bigint({ mode: "number" })`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -89,9 +73,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: real()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
@@ -105,9 +86,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: decimal()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -119,9 +97,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: double()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
@@ -135,9 +110,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: float()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -150,9 +122,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: serial()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -164,9 +133,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       throw new Error("Function not implemented.");
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      throw new Error("Function not implemented.");
-    },
     formComponents: [],
     zodCode: "z.coerce.string()",
   },
@@ -176,9 +142,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     formTemplate: "",
     updateFormTemplate: "",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
-      throw new Error("Function not implemented.");
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
       throw new Error("Function not implemented.");
     },
     formComponents: [],
@@ -193,9 +156,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: char()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -207,9 +167,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar({ length: 255 })`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
@@ -223,9 +180,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: text()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
-    },
     formComponents: ["textarea"],
     zodCode: "z.coerce.string()",
   },
@@ -237,9 +191,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: boolean()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
     formComponents: ["checkbox"],
     zodCode: "z.coerce.boolean()",
@@ -253,9 +204,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: date()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.date()",
   },
@@ -267,9 +215,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: datetime()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.date()",
@@ -283,9 +228,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: time()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -297,9 +239,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: year()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
@@ -313,9 +252,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: timestamp()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.date()",
   },
@@ -327,9 +263,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input-json.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: json()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.json(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.preprocess((val: any) => JSON.parse(val), z.any())",
@@ -344,9 +277,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -360,9 +290,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.keyName, opts.columnName);
-    },
     formComponents: ["select"],
     zodCode: "z.coerce.string()",
   },
@@ -375,9 +302,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: varchar({ length: 255 })`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.file(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -389,9 +313,6 @@ const mysqlDataTypeStrategies: DataTypeStrategyMap = {
       "tiptap-processor/components/update-tiptap-editor.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: text()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["tiptap-editor"],
     zodCode: "z.coerce.string()",

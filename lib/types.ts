@@ -75,7 +75,6 @@ export interface DataTypeStrategy {
   formComponents: FormComponent[];
   zodCode: string;
   getKeyValueStrForSchema(opts: DataTypeStrategyOpts): string;
-  getKeyValStrForFormData(opts: DataTypeStrategyOpts): string;
 }
 
 export interface DbDialectStrategy {

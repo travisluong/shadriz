@@ -1,4 +1,3 @@
-import { formDataUtils } from "../lib/form-data-utils";
 import {
   DataTypeStrategyMap,
   DataTypeStrategyOpts,
@@ -15,9 +14,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts) {
       return `${opts.keyName}: integer()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.integer(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -29,9 +25,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: real()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.float(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
@@ -45,9 +38,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: text()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -59,9 +49,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-checkbox.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: integer({ mode: "boolean" } )`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.boolean(opts.keyName, opts.columnName);
     },
     formComponents: ["checkbox"],
     zodCode: "z.coerce.boolean()",
@@ -75,9 +62,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: blob({ mode: "bigint" })`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.bigint(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.number()",
   },
@@ -89,9 +73,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "scaffold-processor/components/table/update-input-timestamp.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: integer({ mode: "timestamp" })`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.date(opts.keyName, opts.columnName);
     },
     formComponents: ["input"],
     zodCode: "z.coerce.date()",
@@ -106,9 +87,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -122,9 +100,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: ${opts.fkStrategyTemplate}.references(() => ${opts.referencesTable}.id)`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.references(opts.keyName, opts.columnName);
-    },
     formComponents: ["select"],
     zodCode: "z.coerce.string()",
   },
@@ -137,9 +112,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: text()`;
     },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.file(opts.keyName, opts.columnName);
-    },
     formComponents: ["input"],
     zodCode: "z.coerce.string()",
   },
@@ -151,9 +123,6 @@ const sqliteDataTypeStrategies: DataTypeStrategyMap = {
       "tiptap-processor/components/update-tiptap-editor.tsx.hbs",
     getKeyValueStrForSchema: function (opts: DataTypeStrategyOpts): string {
       return `${opts.keyName}: text()`;
-    },
-    getKeyValStrForFormData: function (opts: DataTypeStrategyOpts): string {
-      return formDataUtils.string(opts.keyName, opts.columnName);
     },
     formComponents: ["tiptap-editor"],
     zodCode: "z.coerce.string()",
