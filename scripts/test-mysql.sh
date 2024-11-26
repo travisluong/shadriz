@@ -10,7 +10,7 @@ rm -rf ~/code/demo-mysql
 cd ~/code
 shadrizz new demo-mysql -p pnpm --latest
 cd demo-mysql
-shadrizz init -p pnpm --latest --db-dialect mysql -pk uuidv7 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
+shadrizz init -p pnpm --latest --db-dialect mysql -pk uuidv7 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin --pluralize
 cp ~/code/shadrizz-env/.env.local.mysql .env.local
 shadrizz add tiptap
 shadrizz scaffold -a admin admin_scaffold -c int_type:int tinyint_type:tinyint smallint_type:smallint mediumint_type:mediumint bigint_type:bigint real_type:real decimal_type:decimal double_type:double float_type:float char_type:char varchar_type:varchar text_type:text boolean_type:boolean date_type:date datetime_type:datetime time_type:time year_type:year timestamp_type:timestamp json_type:json file_type:file

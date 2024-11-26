@@ -8,7 +8,7 @@ rm -rf ~/code/demo-sqlite
 cd ~/code
 shadrizz new demo-sqlite -p pnpm --latest
 cd ~/code/demo-sqlite
-shadrizz init -p pnpm --latest --db-dialect sqlite -pk uuidv4 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin
+shadrizz init -p pnpm --latest --db-dialect sqlite -pk uuidv4 --auth-solution authjs --auth-providers github,google,postmark,nodemailer,credentials --admin --pluralize
 cp ~/code/shadrizz-env/.env.local.sqlite .env.local
 shadrizz add tiptap
 shadrizz scaffold -a admin admin_scaffold -c integer_type:integer real_type:real text_type:text boolean_type:boolean timestamp_type:timestamp file_type:file

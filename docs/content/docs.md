@@ -48,6 +48,7 @@ You will be asked a few questions to configure the app:
 ? Which authentication solution do you want to use? authjs
 ? Which auth providers would you like to use? credentials
 ? Do you want to add an admin dashboard with role-based authorization? yes
+? Do you want to enable the automatic pluralization of table and variable names?
 ```
 
 ### Step 4: Project checklist
@@ -450,26 +451,67 @@ For example, shadrizz generates an authorization service with reusable authoriza
 
 ## Naming conventions
 
-shadrizz uses naming conventions as described in the table below. Number and case transformations will be applied to the generated code.
+Number and case transformations will be automatically applied to the generated code.
 
-| Generated Code                     | Number           | Case         | Example                 |
-| :--------------------------------- | :--------------- | :----------- | ----------------------- |
-| Class names                        | singular         | pascal case  | FooBar                  |
-| Database table names               | plural           | snake case   | foo_bars                |
-| Database column names              | original         | snake case   | foo_bar                 |
-| Database foreign keys              | singular         | snake case   | foo_bar_id              |
-| Drizzle table variable names       | plural           | camel case   | fooBars                 |
-| Drizzle column property names      | original         | camel case   | fooBar                  |
-| Drizzle foreign key property names | singular         | camel case   | fooBarId                |
-| Drizzle findMany variable names    | singular         | camel case   | fooBarList              |
-| Drizzle findFirst variable names   | singular         | camel case   | fooBar                  |
-| File names                         | singular, plural | kebab case   | foo-bar.ts, foo-bars.ts |
-| Form input names                   | original         | camel case   | fooBar                  |
-| React array props                  | singular         | camel case   | fooBarList              |
-| React object props                 | singular         | camel case   | fooBar                  |
-| URL pathnames                      | singular, plural | kebab case   | /foo-bar, /foo-bars     |
-| Query string parameters            | original         | camel case   | ?fooBar=baz             |
-| UI table and column names          | singular, plural | capital case | Foo Bar, Foo Bars       |
+shadrizz has two options when it comes to naming conventions. Plurize Enabled and Pluralize Disabled.
+
+Case transformations (camel case, snake case, etc) will always be applied, however number transformations (singular/plural/original) will be applied depending on the pluralize mode used.
+
+Original, in this context, means no transformations are applied.
+
+You can change the mode in `shadrizz.config.json` by setting the `pluralizeEnabled` boolean.
+
+### Pluralize Enabled
+
+With pluralize enabled, shadrizz uses naming conventions as described in the table below.
+
+Regardless of whether you pass in `foo_bar` or `foo_bars` as the table name, the number transformations will be applied to each part of the code, along with the case transformation.
+
+| Generated Code                     | Number   | Case         | Example     |
+| :--------------------------------- | :------- | :----------- | ----------- |
+| Class names                        | singular | pascal case  | FooBar      |
+| Database table names               | plural   | snake case   | foo_bars    |
+| Database column names              | original | snake case   | foo_bar     |
+| Database foreign keys              | singular | snake case   | foo_bar_id  |
+| Drizzle table variable names       | plural   | camel case   | fooBars     |
+| Drizzle column property names      | original | camel case   | fooBar      |
+| Drizzle foreign key property names | singular | camel case   | fooBarId    |
+| Drizzle findMany variable names    | singular | camel case   | fooBarList  |
+| Drizzle findFirst variable names   | singular | camel case   | fooBarObj   |
+| File names                         | any      | kebab case   | foo-bar.ts  |
+| Form input names                   | original | camel case   | fooBar      |
+| React array props                  | singular | camel case   | fooBarList  |
+| React object props                 | singular | camel case   | fooBar      |
+| URL pathnames                      | any      | kebab case   | /foo-bar    |
+| Query string parameters            | original | camel case   | ?fooBar=baz |
+| UI table and column names          | any      | capital case | Foo Bar     |
+
+### Pluralize Disabled
+
+With pluralize disabled, shadrizz will not apply any number transformations to the generated code.
+
+If you pass in `foo_bar` as the table name, it will always use the singular form.
+
+If you pass in `foo_bars` as the table name, it will always use the plural form.
+
+| Generated Code                     | Number   | Case         | Singular    | Plural       |
+| :--------------------------------- | :------- | :----------- | ----------- | ------------ |
+| Class names                        | original | pascal case  | FooBar      | FooBars      |
+| Database table names               | original | snake case   | foo_bar     | foo_bars     |
+| Database column names              | original | snake case   | foo_bar     | foo_bars     |
+| Database foreign keys              | original | snake case   | foo_bar_id  | foo_bars_id  |
+| Drizzle table variable names       | original | camel case   | fooBar      | fooBars      |
+| Drizzle column property names      | original | camel case   | fooBar      | fooBars      |
+| Drizzle foreign key property names | original | camel case   | fooBarId    | fooBarsId    |
+| Drizzle findMany variable names    | original | camel case   | fooBarList  | fooBarsList  |
+| Drizzle findFirst variable names   | original | camel case   | fooBarObj   | fooBarsObj   |
+| File names                         | any      | kebab case   | foo-bar.ts  | foo-bars.ts  |
+| Form input names                   | original | camel case   | fooBar      | fooBars      |
+| React array props                  | original | camel case   | fooBarList  | fooBarsList  |
+| React object props                 | original | camel case   | fooBar      | fooBars      |
+| URL pathnames                      | any      | kebab case   | /foo-bar    | /foo-bars    |
+| Query string parameters            | original | camel case   | ?fooBar=baz | ?fooBars=baz |
+| UI table and column names          | any      | capital case | Foo Bar     | Foo Bars     |
 
 ## Philosophy
 

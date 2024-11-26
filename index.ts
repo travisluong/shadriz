@@ -326,7 +326,7 @@ program
         options.pluralize ??
         (await confirm({
           message:
-            "Do you want to enable the automatic pluralization of variable names?",
+            "Do you want to enable the automatic pluralization of table and variable names?",
           default: true,
         }));
 
