@@ -9,7 +9,6 @@ import { log } from "../lib/log";
 import {
   DbDialect,
   DbDialectStrategy,
-  PkStrategy,
   ShadrizzConfig,
   ShadrizzProcessor,
 } from "../lib/types";
