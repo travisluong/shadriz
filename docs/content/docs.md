@@ -122,7 +122,7 @@ npm run dev
 
 Go to http://localhost:3000/admin-login and log in with the admin user.
 
-### scaffold
+## Scaffold
 
 After the initial configuration is completed, you can create full stack scaffolding with the `scaffold` command.
 
@@ -451,6 +451,8 @@ Regardless of whether you pass in `foo_bar` or `foo_bars` as the table name, the
 | URL pathnames                      | any      | kebab case   | /foo-bar    |
 | Query string parameters            | original | camel case   | ?fooBar=baz |
 | UI table and column names          | any      | capital case | Foo Bar     |
+
+<br>
 
 ### Pluralize Disabled
 
