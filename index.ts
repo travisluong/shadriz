@@ -7,6 +7,7 @@ import { newCommand } from "./commands/new-command";
 import { initCommand } from "./commands/init-command";
 import { scaffoldCommand } from "./commands/scaffold-command";
 import { addCommand } from "./commands/add-command";
+import { aiCommand } from "./commands/ai-command";
 
 const VERSION = packageJson["version"];
 
@@ -24,5 +25,6 @@ program.addCommand(initCommand);
 program.addCommand(scaffoldCommand);
 program.addCommand(addCommand);
 program.addCommand(configCommand);
+program.addCommand(aiCommand);
 
 program.parse();

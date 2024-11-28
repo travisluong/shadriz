@@ -24,7 +24,7 @@ configCommand
 
 configCommand
   .command("get-api-key")
-  .description("get the stored API key")
+  .description("get the stored api key")
   .action(() => {
     if (fs.existsSync(configFile)) {
       const configData = JSON.parse(fs.readFileSync(configFile, "utf8"));
