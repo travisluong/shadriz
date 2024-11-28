@@ -79,7 +79,6 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
               {{/switch}}
             {{/each}}
             <TableCell className="justify-end flex gap-2">
-              {/* [CODE_MARK table-actions] */}
               <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
                 <Button size="icon" variant="outline">
                   <EyeIcon />
