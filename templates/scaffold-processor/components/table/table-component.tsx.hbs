@@ -38,58 +38,58 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
         </TableRow>
       </TableHeader>
       <TableBody>
-        { {{tableObj.singularCamelCase}}List.map(({{tableObj.singularCamelCase}}) => (
-          <TableRow key={ {{tableObj.singularCamelCase}}.id }>
-            <TableCell>{ {{tableObj.singularCamelCase}}.id }</TableCell>
+        { {{tableObj.singularCamelCase}}List.map(({{tableObj.singularCamelCase}}Obj) => (
+          <TableRow key={ {{tableObj.singularCamelCase}}Obj.id }>
+            <TableCell>{ {{tableObj.singularCamelCase}}Obj.id }</TableCell>
             {{#each validatedColumns}}
               {{#switch this.dataType}}
                 {{#case "boolean"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} ? "true" : "false" }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}} ? "true" : "false" }</TableCell>
                 {{/case}}
                 {{#case "date"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleDateString() }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}}?.toLocaleDateString() }</TableCell>
                 {{/case}}
                 {{#case "datetime"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</TableCell>
                 {{/case}}
                 {{#case "timestamp"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}}?.toLocaleString() }</TableCell>
                 {{/case}}
                 {{#case "json"}}
-            <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</TableCell>
+            <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}}) }</TableCell>
                 {{/case}}
                 {{#case "jsonb"}}
-            <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}}) }</TableCell>
+            <TableCell>{ JSON.stringify({{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}}) }</TableCell>
                 {{/case}}
                 {{#case "references"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.singularCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "references_select"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.singularCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "references_combobox"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.singularCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "file"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}} }</TableCell>
                 {{/case}}
                 {{#default}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}.{{this.caseVariants.originalCamelCase}} }</TableCell>
+            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}} }</TableCell>
                 {{/default}}
               {{/switch}}
             {{/each}}
             <TableCell className="justify-end flex gap-2">
-              <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }`}>
+              <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}Obj.id }`}>
                 <Button size="icon" variant="outline">
                   <EyeIcon />
                 </Button>
               </Link>
-              <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/edit`}>
+              <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}Obj.id }/edit`}>
                 <Button size="icon" variant="outline">
                   <PencilIcon />
                 </Button>
               </Link>
-              <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}.id }/delete`}>
+              <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}Obj.id }/delete`}>
                 <Button size="icon" variant="outline">
                   <TrashIcon />
                 </Button>
