@@ -44,8 +44,7 @@ aiCommand
       method: "POST",
     });
     if (!res.ok) {
-      log.red("something went wrong.");
-      process.exit(1);
+      handleError(res);
     }
     let json = await res.json();
 
@@ -82,18 +81,19 @@ aiCommand
 
       switch (value2) {
         case "make_adjustment":
-          const adjustmentAnswer = await input({
+          const adjustmentText = await input({
             message: "What changes would you like to make?",
           });
           log.blue("Making adjustment");
+          console.log(schemaText);
+
           const res = await fetchScaffoldAdjustment(apiKey, {
-            adjustmentAnswer,
+            adjustmentText,
             schemaText,
             threadId,
           });
           if (!res.ok) {
-            log.red("something went wrong.");
-            process.exit(1);
+            handleError(res);
           }
           json = await res.json();
           break;
@@ -137,7 +137,7 @@ async function generateScaffold(schema: SchemaType) {
 async function fetchScaffoldAdjustment(
   apiKey: string,
   body: {
-    adjustmentAnswer: string;
+    adjustmentText: string;
     schemaText: string;
     threadId: string;
   }
@@ -175,11 +175,23 @@ function getIdDataType() {
 function getSchemaText(schema: SchemaType) {
   let text = "";
   for (const table of schema.data.tables) {
-    text += table;
+    text += table.tableName + "\n";
     for (const column of table.columns) {
       text += column.columnName + ":" + column.dataType + "\n";
     }
     text += "\n";
   }
   return text;
+}
+
+function handleError(res: Response) {
+  switch (res.status) {
+    case 429:
+      log.red("api quota exceeded");
+      break;
+    default:
+      log.red("something went wrong");
+      break;
+  }
+  process.exit(1);
 }
