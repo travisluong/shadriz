@@ -4,6 +4,9 @@ import { getApiKey } from "../lib/auth";
 import { z } from "zod";
 import boxen from "boxen";
 import { log } from "../lib/log";
+import { ScaffoldProcessor } from "../processors/scaffold-processor";
+import { loadShadrizzConfig } from "../lib/utils";
+import { dialectStrategyFactory } from "../lib/strategy-factory";
 
 export const aiCommand = new Command("ai");
 
@@ -45,7 +48,6 @@ aiCommand
       process.exit(1);
     }
     let json = await res.json();
-    console.log(JSON.stringify(json));
 
     while (true) {
       const validatedFields = schema.safeParse(json);
@@ -84,18 +86,11 @@ aiCommand
             message: "What changes would you like to make?",
           });
           log.blue("Making adjustment");
-          const res = await fetch(
-            "http://localhost:3000/api/ai/scaffold-adjustment",
-            {
-              headers: { "Api-Key": apiKey },
-              body: JSON.stringify({
-                text: adjustmentAnswer,
-                schemaText,
-                threadId,
-              }),
-              method: "POST",
-            }
-          );
+          const res = await fetchScaffoldAdjustment(apiKey, {
+            adjustmentAnswer,
+            schemaText,
+            threadId,
+          });
           if (!res.ok) {
             log.red("something went wrong.");
             process.exit(1);
@@ -104,6 +99,7 @@ aiCommand
           break;
         case "generate_scaffold":
           log.blue("Generating scaffold");
+          await generateScaffold(validatedFields.data);
           break;
         case "cancel":
           log.log("AI-assisted scaffold canceled");
@@ -115,14 +111,65 @@ aiCommand
     }
   });
 
+async function generateScaffold(schema: SchemaType) {
+  for (const table of schema.data.tables) {
+    const columnArr = table.columns
+      .filter(
+        (col) => !["id", "created_at", "updated_at"].includes(col.columnName)
+      )
+      .map((col) => col.columnName + ":" + col.dataType);
+    // generate scaffold
+    const shadrizzConfig = loadShadrizzConfig();
+    const processor = new ScaffoldProcessor({
+      ...shadrizzConfig,
+      table: table.tableName,
+      columns: columnArr,
+      authorizationLevel: "public",
+      enableCompletionMessage: true,
+      enableSchemaGeneration: true,
+    });
+    processor.process();
+  }
+  log.success("AI-assisted scaffolding complete.");
+  process.exit(0);
+}
+
+async function fetchScaffoldAdjustment(
+  apiKey: string,
+  body: {
+    adjustmentAnswer: string;
+    schemaText: string;
+    threadId: string;
+  }
+) {
+  return await fetch("http://localhost:3000/api/ai/scaffold-adjustment", {
+    headers: { "Api-Key": apiKey },
+    body: JSON.stringify(body),
+    method: "POST",
+  });
+}
+
 function renderTableSchema(schema: SchemaType) {
+  const idDataType = getIdDataType();
   for (const table of schema.data.tables) {
     let columnText = "";
     for (const column of table.columns) {
-      columnText += column.columnName + ":" + column.dataType + "\n";
+      if (column.columnName === "id") {
+        columnText += column.columnName + ":" + idDataType + "\n";
+      } else {
+        columnText += column.columnName + ":" + column.dataType + "\n";
+      }
     }
     console.log(boxen(columnText, { title: table.tableName }));
   }
+}
+
+function getIdDataType() {
+  const shadrizzConfig = loadShadrizzConfig();
+  const dbDialectStrategy = dialectStrategyFactory(shadrizzConfig.dbDialect);
+  const pkStrategyDataTypes = dbDialectStrategy.pkStrategyDataTypes;
+  const idDataType = pkStrategyDataTypes[shadrizzConfig.pkStrategy];
+  return idDataType;
 }
 
 function getSchemaText(schema: SchemaType) {
