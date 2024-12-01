@@ -2,7 +2,6 @@ import { input, select } from "@inquirer/prompts";
 import { Command } from "commander";
 import { getApiKey } from "../lib/auth";
 import { z } from "zod";
-import boxen from "boxen";
 import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../processors/scaffold-processor";
 import { loadShadrizzConfig } from "../lib/utils";
@@ -160,7 +159,8 @@ function renderTableSchema(schema: SchemaType) {
         columnText += column.columnName + ":" + column.dataType + "\n";
       }
     }
-    console.log(boxen(columnText, { title: table.tableName }));
+    log.yellow(table.tableName);
+    log.log(columnText);
   }
 }
 
