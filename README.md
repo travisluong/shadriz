@@ -13,7 +13,7 @@ Build [Next.js](https://nextjs.org/) Apps Easier and Faster With:
 
 ## Documentation
 
-https://www.shadrizz.com/docs
+https://docs.shadrizz.com
 
 ## Introduction
 
