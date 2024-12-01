@@ -26,13 +26,13 @@ async function main() {
   const toc = await getTableOfContents();
   const version = packageJson["version"];
 
-  renderTemplate({
-    inputPath: "index.hbs",
-    outputPath: "docs/dist/index.html",
-  });
+  // renderTemplate({
+  //   inputPath: "index.hbs",
+  //   outputPath: "docs/dist/index.html",
+  // });
   renderTemplate({
     inputPath: "docs.hbs",
-    outputPath: "docs/dist/docs.html",
+    outputPath: "docs/dist/index.html",
     data: {
       docsHtml: docsHtml,
       toc: toc,
