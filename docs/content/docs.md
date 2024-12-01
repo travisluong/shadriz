@@ -1,4 +1,4 @@
-# shadrizz
+# shadrizz Documentation
 
 ## Full Stack TypeScript Scaffolding Framework
 
