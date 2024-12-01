@@ -40,7 +40,7 @@ aiCommand
     const value = await input({ message: "What would you like to build?" });
     const res = await fetch("http://localhost:3000/api/ai/scaffold", {
       headers: { "Api-Key": apiKey },
-      body: JSON.stringify({ text: value }),
+      body: JSON.stringify({ ideaText: value }),
       method: "POST",
     });
     if (!res.ok) {
