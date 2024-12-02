@@ -44,7 +44,7 @@ aiCommand
       method: "POST",
     });
     if (!res.ok) {
-      handleError(res);
+      await handleError(res);
     }
     let json = await res.json();
 
@@ -93,7 +93,7 @@ aiCommand
             threadId,
           });
           if (!res.ok) {
-            handleError(res);
+            await handleError(res);
           }
           json = await res.json();
           break;
@@ -186,14 +186,8 @@ function getSchemaText(schema: SchemaType) {
   return text;
 }
 
-function handleError(res: Response) {
-  switch (res.status) {
-    case 429:
-      log.red("api quota exceeded");
-      break;
-    default:
-      log.red("something went wrong");
-      break;
-  }
+async function handleError(res: Response) {
+  const json = await res.json();
+  log.red(json.message);
   process.exit(1);
 }
