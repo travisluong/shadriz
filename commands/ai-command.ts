@@ -37,10 +37,14 @@ aiCommand
   .action(async () => {
     const apiKey = getApiKey();
     const apiUrl = getApiUrl();
+    const shadrizzConfig = loadShadrizzConfig();
     const value = await input({ message: "What would you like to build?" });
     const res = await fetch(`${apiUrl}/api/ai/scaffold`, {
       headers: { "Api-Key": apiKey },
-      body: JSON.stringify({ ideaText: value }),
+      body: JSON.stringify({
+        ideaText: value,
+        dbDialect: shadrizzConfig.dbDialect,
+      }),
       method: "POST",
     });
     if (!res.ok) {
@@ -86,11 +90,12 @@ aiCommand
           });
           log.blue("Making adjustment");
           console.log(schemaText);
-
+          const shadrizzConfig = loadShadrizzConfig();
           const res = await fetchScaffoldAdjustment(apiKey, apiUrl, {
             adjustmentText,
             schemaText,
             threadId,
+            dbDialect: shadrizzConfig.dbDialect,
           });
           if (!res.ok) {
             await handleError(res);
@@ -141,6 +146,7 @@ async function fetchScaffoldAdjustment(
     adjustmentText: string;
     schemaText: string;
     threadId: string;
+    dbDialect: string;
   }
 ) {
   return await fetch(`${apiUrl}/api/ai/scaffold-adjustment`, {
@@ -157,6 +163,8 @@ function renderTableSchema(schema: SchemaType) {
     for (const column of table.columns) {
       if (column.columnName === "id") {
         columnText += column.columnName + ":" + idDataType + "\n";
+      } else if (["created_at", "updated_at"].includes(column.columnName)) {
+        // do not show the timstamps
       } else {
         columnText += column.columnName + ":" + column.dataType + "\n";
       }
