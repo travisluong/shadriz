@@ -11,8 +11,15 @@ export function getApiKey() {
     return configData.apiKey;
   } else {
     console.log(
-      "No API Key found. Register at https://www.shadrizz.com. Use `config set-api-key <key>` to set one."
+      "No API Key found. Register at https://www.shadrizz.com. Use `config set-api-key <key>` to set api key."
     );
     process.exit(1);
+  }
+}
+
+export function getApiUrl() {
+  if (fs.existsSync(configFile)) {
+    const configData = JSON.parse(fs.readFileSync(configFile, "utf8"));
+    return configData.apiUrl ?? "https://www.shadrizz.com";
   }
 }

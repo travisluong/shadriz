@@ -1,6 +1,6 @@
 import { input, select } from "@inquirer/prompts";
 import { Command } from "commander";
-import { getApiKey } from "../lib/auth";
+import { getApiKey, getApiUrl } from "../lib/auth";
 import { z } from "zod";
 import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../processors/scaffold-processor";
@@ -36,8 +36,9 @@ aiCommand
   )
   .action(async () => {
     const apiKey = getApiKey();
+    const apiUrl = getApiUrl();
     const value = await input({ message: "What would you like to build?" });
-    const res = await fetch("http://localhost:3000/api/ai/scaffold", {
+    const res = await fetch(`${apiUrl}/api/ai/scaffold`, {
       headers: { "Api-Key": apiKey },
       body: JSON.stringify({ ideaText: value }),
       method: "POST",
@@ -86,7 +87,7 @@ aiCommand
           log.blue("Making adjustment");
           console.log(schemaText);
 
-          const res = await fetchScaffoldAdjustment(apiKey, {
+          const res = await fetchScaffoldAdjustment(apiKey, apiUrl, {
             adjustmentText,
             schemaText,
             threadId,
@@ -135,13 +136,14 @@ async function generateScaffold(schema: SchemaType) {
 
 async function fetchScaffoldAdjustment(
   apiKey: string,
+  apiUrl: string,
   body: {
     adjustmentText: string;
     schemaText: string;
     threadId: string;
   }
 ) {
-  return await fetch("http://localhost:3000/api/ai/scaffold-adjustment", {
+  return await fetch(`${apiUrl}/api/ai/scaffold-adjustment`, {
     headers: { "Api-Key": apiKey },
     body: JSON.stringify(body),
     method: "POST",
