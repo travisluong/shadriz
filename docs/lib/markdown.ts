@@ -24,7 +24,7 @@ const renderer = {
 };
 
 export async function getHtml(filename: string) {
-  // @ts-ignore
+  // @ts-expect-error err
   marked.use({ renderer });
   const md = getMarkdown(filename);
   const html = await marked(md);

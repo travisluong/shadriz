@@ -21,18 +21,17 @@ Handlebars.registerHelper("layout", function (options) {
 });
 
 async function main() {
-  const docsHtml = await getHtml("docs.md");
-  const changelogHtml = await getHtml("changelog.md");
-  const toc = await getTableOfContents("docs.md");
+  await renderDocs();
+  await renderAi();
+  renderJs();
+  renderCss();
+}
+
+async function renderDocs() {
   const version = packageJson["version"];
+  const docsHtml = await getHtml("docs.md");
+  const toc = await getTableOfContents("docs.md");
 
-  const aiHtml = await getHtml("ai.md");
-  const aiToc = await getTableOfContents("ai.md");
-
-  // renderTemplate({
-  //   inputPath: "index.hbs",
-  //   outputPath: "docs/dist/index.html",
-  // });
   renderTemplate({
     inputPath: "docs.hbs",
     outputPath: "docs/dist/index.html",
@@ -42,17 +41,13 @@ async function main() {
       version: version,
     },
   });
-  // renderTemplate({
-  //   inputPath: "page.hbs",
-  //   outputPath: "docs/dist/changelog.html",
-  //   data: {
-  //     content: changelogHtml,
-  //   },
-  // });
-  renderTemplate({
-    inputPath: "app.js",
-    outputPath: "docs/dist/app.js",
-  });
+}
+
+async function renderAi() {
+  const version = packageJson["version"];
+  const aiHtml = await getHtml("ai.md");
+  const aiToc = await getTableOfContents("ai.md");
+
   renderTemplate({
     inputPath: "docs.hbs",
     outputPath: "docs/dist/ai.html",
@@ -62,7 +57,16 @@ async function main() {
       version: version,
     },
   });
+}
 
+function renderJs() {
+  renderTemplate({
+    inputPath: "app.js",
+    outputPath: "docs/dist/app.js",
+  });
+}
+
+function renderCss() {
   exec(
     "npx tailwindcss -i ./docs/templates/style.css -o ./docs/dist/output.css",
     // @ts-ignore

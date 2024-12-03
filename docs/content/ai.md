@@ -1,4 +1,4 @@
-# shadrizz AI Documentation
+# shadrizz AI Docs
 
 This is the documentation for the AI-assisted scaffolding and AI developer tools.
 
