@@ -8,19 +8,19 @@ AI is a premium feature of shadrizz. You must obtain an API key by signing into 
 
 See a list of config commands:
 
-```
+```bash
 npx shadrizz@latest config
 ```
 
 Set api key:
 
-```
+```bash
 npx shadrizz@latest config set-api-key <key>
 ```
 
 Get api key:
 
-```
+```bash
 npx shadrizz@latest config get-api-key
 ```
 
@@ -30,7 +30,7 @@ The api key will be stored in `~/.shadrizz/config.json`.
 
 See a list of ai commands.
 
-```
+```bash
 npx shadrizz@latest ai -h
 ```
 
@@ -40,6 +40,6 @@ AI-assisted scaffolding wizard. Running this command will start an interactive p
 
 Simply describe your app and the AI will suggest a scaffold. You can make adjustments to the schema and run the scaffold when you are satisfied with the design.
 
-```
+```bash
 npx shadrizz@latest ai scaffold
 ```

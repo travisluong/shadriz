@@ -21,13 +21,13 @@ shadrizz is a full stack automation tool for building TypeScript web application
 
 Start by creating a new Next.js project using `create-next-app`.
 
-```
+```bash
 npx create-next-app@latest my-app --typescript --eslint --tailwind --app --no-src-dir --no-import-alias --turbopack
 ```
 
 Alternatively, use the `new` command to generate a new project using the above settings.
 
-```
+```bash
 npx shadrizz@latest new my-app
 ```
 
@@ -37,7 +37,7 @@ npx shadrizz@latest new my-app
 
 Run the `shadrizz init` command to setup your project.
 
-```
+```bash
 cd my-app
 npx shadrizz@latest init
 ```
@@ -52,7 +52,7 @@ npx shadrizz@latest init -p npm --latest --db-dialect sqlite -pk cuid2 --auth-so
 
 You will be asked a few questions to configure the app:
 
-```
+```text
 ? Which package manager do you want to use? npm
 ? Do you want to install latest packages or pinned packages? pinned
 ? Which database dialect would you like to use? sqlite
@@ -67,14 +67,14 @@ You will be asked a few questions to configure the app:
 
 Generate and run the drizzle migrations:
 
-```
+```bash
 npm run generate
 npm run migrate
 ```
 
 Create a test user and grant admin role:
 
-```
+```bash
 npx tsx scripts/create-user.ts user@example.com password123
 npx tsx scripts/grant-admin.ts user@example.com
 ```
@@ -87,7 +87,7 @@ First, open a new terminal.
 
 Install the tiptap add-on:
 
-```
+```bash
 npx shadrizz@latest add tiptap
 ```
 
@@ -95,19 +95,19 @@ For the following scaffolds, make sure to choose `admin` as the authorization le
 
 Create a `categories` schema:
 
-```
+```bash
 npx shadrizz@latest scaffold category -c name:text
 ```
 
 Create a `posts` schema:
 
-```
+```bash
 npx shadrizz@latest scaffold post -c title:text category_id:references content:text_tiptap is_draft:boolean published_at:timestamp
 ```
 
 Run the drizzle migrations:
 
-```
+```bash
 npm run generate
 npm run migrate
 ```
@@ -116,7 +116,7 @@ npm run migrate
 
 Start the dev server:
 
-```
+```bash
 npm run dev
 ```
 
@@ -138,7 +138,7 @@ Note that the table names will be transformed according to the [Naming Conventio
 
 Example:
 
-```
+```bash
 npx shadrizz@latest scaffold products -c title:varchar price:decimal description:text stock_quantity:integer
 ```
 
@@ -229,7 +229,7 @@ The file URI will be saved to the database. The upload paths can be changed in `
 
 Example nginx config:
 
-```
+```text
 server {
       listen 80;
       server_name www.example.com;
@@ -332,7 +332,7 @@ npx shadrizz@latest scaffold posts -c title:text content:text_tiptap
 
 This is the shadrizz project structure. The scaffolding automations will write to specific folders and files, so it's recommended to not move things around if you plan to continue using shadrizz automations.
 
-```
+```text
 - actions
 	- admin - server actions requiring admin authorization
 	- private - server actions requiring logged in user

@@ -62,16 +62,16 @@ a {
 .shadrizz-docs p {
   margin-bottom: 20px;
 }
-.shadrizz-docs pre {
+/* .shadrizz-docs pre {
   background-color: #d4d4d8;
   padding: 20px;
   margin-bottom: 20px;
   overflow: auto;
   border-radius: 5px;
-}
-.shadrizz-docs code {
+} */
+/* .shadrizz-docs code {
   background-color: #d4d4d8;
-}
+} */
 .shadrizz-docs ul {
   margin-bottom: 20px;
 }
@@ -103,12 +103,12 @@ a {
   .shadrizz-sidebar {
     background-color: black;
   }
-  .shadrizz-docs pre {
+  /* .shadrizz-docs pre {
     background-color: #333333;
   }
   .shadrizz-docs code {
     background-color: #333333;
-  }
+  } */
   .shadrizz-sidebar ul li a {
     color: white;
   }
