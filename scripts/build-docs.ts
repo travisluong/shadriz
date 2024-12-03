@@ -6,11 +6,6 @@ import packageJson from "../package.json";
 
 const { exec } = require("child_process");
 
-const BASE_URL = {
-  dev: "http://localhost:3000",
-  prod: "https://www.shadrizz.com/docs",
-};
-
 Handlebars.registerPartial(
   "layout",
   fs.readFileSync(path.join(process.cwd(), "docs/templates/layout.hbs"), "utf8")
@@ -30,7 +25,6 @@ async function main() {
   const changelogHtml = await getHtml("changelog.md");
   const toc = await getTableOfContents("docs.md");
   const version = packageJson["version"];
-  const baseUrl = BASE_URL[process.env.APP_ENV as keyof typeof BASE_URL];
 
   const aiHtml = await getHtml("ai.md");
   const aiToc = await getTableOfContents("ai.md");
@@ -46,7 +40,6 @@ async function main() {
       docsHtml: docsHtml,
       toc: toc,
       version: version,
-      baseUrl: baseUrl,
     },
   });
   // renderTemplate({
@@ -67,7 +60,6 @@ async function main() {
       docsHtml: aiHtml,
       toc: aiToc,
       version: version,
-      baseUrl: baseUrl,
     },
   });
 
