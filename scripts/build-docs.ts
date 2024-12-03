@@ -6,6 +6,11 @@ import packageJson from "../package.json";
 
 const { exec } = require("child_process");
 
+const BASE_URL = {
+  dev: "http://localhost:3000",
+  prod: "https://www.shadrizz.com",
+};
+
 Handlebars.registerPartial(
   "layout",
   fs.readFileSync(path.join(process.cwd(), "docs/templates/layout.hbs"), "utf8")
@@ -23,20 +28,25 @@ Handlebars.registerHelper("layout", function (options) {
 async function main() {
   const docsHtml = await getHtml("docs.md");
   const changelogHtml = await getHtml("changelog.md");
-  const toc = await getTableOfContents();
+  const toc = await getTableOfContents("docs.md");
   const version = packageJson["version"];
+  const baseUrl = BASE_URL[process.env.APP_ENV as keyof typeof BASE_URL];
 
-  // renderTemplate({
-  //   inputPath: "index.hbs",
-  //   outputPath: "docs/dist/index.html",
-  // });
+  const aiHtml = await getHtml("ai.md");
+  const aiToc = await getTableOfContents("ai.md");
+
+  renderTemplate({
+    inputPath: "index.hbs",
+    outputPath: "docs/dist/index.html",
+  });
   renderTemplate({
     inputPath: "docs.hbs",
-    outputPath: "docs/dist/index.html",
+    outputPath: "docs/dist/docs.html",
     data: {
       docsHtml: docsHtml,
       toc: toc,
       version: version,
+      baseUrl: baseUrl,
     },
   });
   // renderTemplate({
@@ -49,6 +59,16 @@ async function main() {
   renderTemplate({
     inputPath: "app.js",
     outputPath: "docs/dist/app.js",
+  });
+  renderTemplate({
+    inputPath: "docs.hbs",
+    outputPath: "docs/dist/ai.html",
+    data: {
+      docsHtml: aiHtml,
+      toc: aiToc,
+      version: version,
+      baseUrl: baseUrl,
+    },
   });
 
   exec(

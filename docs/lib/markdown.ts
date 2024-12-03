@@ -31,35 +31,36 @@ export async function getHtml(filename: string) {
   return html;
 }
 
-let headings: string[] = [];
-
-function walkTokens(token: any) {
-  if (token.type === "heading") {
-    const escapedText = token.text.toLowerCase().replace(/[^\w]+/g, "-");
-    let className;
-    switch (token.depth) {
-      case 1:
-        className = "level-1";
-        break;
-      case 2:
-        className = "level-2";
-        break;
-      case 3:
-        className = "level-3";
-        break;
-      default:
-        break;
+function getWalkTokensFn(headings: string[]) {
+  return function walkTokens(token: any) {
+    if (token.type === "heading") {
+      const escapedText = token.text.toLowerCase().replace(/[^\w]+/g, "-");
+      let className;
+      switch (token.depth) {
+        case 1:
+          className = "level-1";
+          break;
+        case 2:
+          className = "level-2";
+          break;
+        case 3:
+          className = "level-3";
+          break;
+        default:
+          break;
+      }
+      headings.push(
+        `<li class="${className}"><a href="#${escapedText}">${token.text}</a></li>`
+      );
     }
-    headings.push(
-      `<li class="${className}"><a href="#${escapedText}">${token.text}</a></li>`
-    );
-  }
+  };
 }
 
-export async function getTableOfContents() {
-  headings = [];
+export async function getTableOfContents(filename: string) {
+  const headings: string[] = [];
+  const walkTokens = getWalkTokensFn(headings);
   marked.use({ walkTokens });
-  const md = getMarkdown("docs.md");
+  const md = getMarkdown(filename);
   const html = await marked(md);
   return headings;
 }
