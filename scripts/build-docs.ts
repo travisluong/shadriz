@@ -8,7 +8,7 @@ const { exec } = require("child_process");
 
 const BASE_URL = {
   dev: "http://localhost:3000",
-  prod: "https://www.shadrizz.com",
+  prod: "https://www.shadrizz.com/docs",
 };
 
 Handlebars.registerPartial(
@@ -35,13 +35,13 @@ async function main() {
   const aiHtml = await getHtml("ai.md");
   const aiToc = await getTableOfContents("ai.md");
 
-  renderTemplate({
-    inputPath: "index.hbs",
-    outputPath: "docs/dist/index.html",
-  });
+  // renderTemplate({
+  //   inputPath: "index.hbs",
+  //   outputPath: "docs/dist/index.html",
+  // });
   renderTemplate({
     inputPath: "docs.hbs",
-    outputPath: "docs/dist/docs.html",
+    outputPath: "docs/dist/index.html",
     data: {
       docsHtml: docsHtml,
       toc: toc,
