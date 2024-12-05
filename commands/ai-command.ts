@@ -4,8 +4,9 @@ import { getApiKey, getApiUrl } from "../lib/auth";
 import { z } from "zod";
 import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../processors/scaffold-processor";
-import { loadShadrizzConfig } from "../lib/utils";
+import { getFilenamesFromFolder, loadShadrizzConfig } from "../lib/utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
+import { caseFactory } from "../lib/case-utils";
 
 export const aiCommand = new Command("ai");
 
@@ -116,8 +117,42 @@ aiCommand
     }
   });
 
+function checkIfTableAlreadyExists(
+  existingSchemas: string[],
+  tableName: string
+) {
+  const tableObj = caseFactory(tableName, { pluralize: true });
+  for (const caseVar of Object.values(tableObj)) {
+    for (const existingSchema of existingSchemas) {
+      if (existingSchema === caseVar) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 async function generateScaffold(schema: SchemaType) {
+  const existingSchemas = getFilenamesFromFolder("schema").map(
+    (filename) => filename.split(".")[0]
+  );
+
   for (const table of schema.data.tables) {
+    let answer = "override";
+    if (checkIfTableAlreadyExists(existingSchemas, table.tableName)) {
+      answer = await select({
+        message: `${table.tableName} already exists.`,
+        choices: [
+          { value: "skip", name: `skip ${table.tableName}` },
+          { value: "override", name: `override ${table.tableName}` },
+        ],
+      });
+    }
+
+    if (answer === "skip") {
+      continue;
+    }
+
     const columnArr = table.columns
       .filter(
         (col) => !["id", "created_at", "updated_at"].includes(col.columnName)
