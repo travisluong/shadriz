@@ -7,6 +7,7 @@ import { ScaffoldProcessor } from "../processors/scaffold-processor";
 import { getFilenamesFromFolder, loadShadrizzConfig } from "../lib/utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 import { caseFactory } from "../lib/case-utils";
+import { AuthorizationLevel } from "../lib/types";
 
 export const aiCommand = new Command("ai");
 
@@ -133,6 +134,25 @@ function checkIfTableAlreadyExists(
 }
 
 async function generateScaffold(schema: SchemaType) {
+  const authorizationLevel: AuthorizationLevel = await select({
+    message:
+      "Which authorization level would you like to use for this scaffold?",
+    choices: [
+      {
+        value: "admin",
+        description: "Requires authentication and administrative privileges.",
+      },
+      {
+        value: "private",
+        description: "Requires user authentication.",
+      },
+      {
+        value: "public",
+        description: "Accessible by anyone without authentication.",
+      },
+    ],
+  });
+
   const existingSchemas = getFilenamesFromFolder("schema").map(
     (filename) => filename.split(".")[0]
   );
@@ -164,7 +184,7 @@ async function generateScaffold(schema: SchemaType) {
       ...shadrizzConfig,
       table: table.tableName,
       columns: columnArr,
-      authorizationLevel: "public",
+      authorizationLevel: authorizationLevel,
       enableCompletionMessage: true,
       enableSchemaGeneration: true,
     });
