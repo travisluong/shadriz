@@ -29,6 +29,8 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/pg": "^8.11.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "drizzle-kit": "0.26.2"
   }
 }

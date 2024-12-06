@@ -20,7 +20,7 @@ export class NewProjectProcessor implements ShadrizzProcessor {
 
   dependencies = ["drizzle-orm", "dotenv", "zod", "drizzle-zod"];
 
-  devDependencies = ["drizzle-kit"];
+  devDependencies = ["drizzle-kit", "@types/react", "@types/react-dom"];
 
   shadcnComponents: string[] = [
     "table",
@@ -118,12 +118,6 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     renderTemplate({
       inputPath: "new-project-processor/.eslintrc.json.hbs",
       outputPath: ".eslintrc.json",
-    });
-
-    renderTemplate({
-      inputPath:
-        "new-project-processor/components/generic-checkbox-list.tsx.hbs",
-      outputPath: "components/generic-checkbox-list.tsx",
     });
 
     renderTemplate({
