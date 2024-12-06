@@ -8,6 +8,7 @@ import { getFilenamesFromFolder, loadShadrizzConfig } from "../lib/utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 import { caseFactory } from "../lib/case-utils";
 import { AuthorizationLevel } from "../lib/types";
+import chalk from "chalk";
 
 export const aiCommand = new Command("ai");
 
@@ -91,7 +92,6 @@ aiCommand
             message: "What changes would you like to make?",
           });
           log.blue("Making adjustment");
-          console.log(schemaText);
           const shadrizzConfig = loadShadrizzConfig();
           const res = await fetchScaffoldAdjustment(apiKey, apiUrl, {
             adjustmentText,
@@ -217,13 +217,16 @@ function renderTableSchema(schema: SchemaType) {
     let columnText = "";
     for (const column of table.columns) {
       if (column.columnName === "id") {
-        columnText += column.columnName + ":" + idDataType + "\n";
+        columnText += chalk.gray(column.columnName + ":" + idDataType + "\n");
       } else if (["created_at", "updated_at"].includes(column.columnName)) {
-        // do not show the timstamps
+        // do not include timestamps from ai
       } else {
         columnText += column.columnName + ":" + column.dataType + "\n";
       }
     }
+    const timestampDataType = getTimestampDataType();
+    columnText += chalk.gray("created_at:" + timestampDataType + "\n");
+    columnText += chalk.gray("updated_at:" + timestampDataType + "\n");
     log.yellow(table.tableName);
     log.log(columnText);
   }
@@ -235,6 +238,13 @@ function getIdDataType() {
   const pkStrategyDataTypes = dbDialectStrategy.pkStrategyDataTypes;
   const idDataType = pkStrategyDataTypes[shadrizzConfig.pkStrategy];
   return idDataType;
+}
+
+function getTimestampDataType() {
+  const shadrizzConfig = loadShadrizzConfig();
+  const dbDialectStrategy = dialectStrategyFactory(shadrizzConfig.dbDialect);
+  const timestampDataType = dbDialectStrategy.timestampImport;
+  return timestampDataType;
 }
 
 function getSchemaText(schema: SchemaType) {
