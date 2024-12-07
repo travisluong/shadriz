@@ -34,7 +34,7 @@ See a list of ai commands.
 npx shadrizz@latest ai -h
 ```
 
-### The AI scaffold command
+### 1. The AI scaffold tool
 
 AI-assisted scaffolding wizard. Running this command will start an interactive prompt.
 
@@ -42,4 +42,16 @@ Simply describe your app and the AI will suggest a scaffold. You can make adjust
 
 ```bash
 npx shadrizz@latest ai scaffold
+```
+
+### 2. The AI scaffold adjustment tool
+
+This tool is a continuation of the first tool and is run as part of the first command. It takes the generated scaffold and makes any adjustment as described by the user.
+
+### 3. The color palette tool
+
+This command will ask the user for the ideal color palette. The AI will then generate a color palette based on the user's description, and write the results to `globals.css` in the correct hsl format.
+
+```bash
+npx shadrizz@latest ai color-palette
 ```
