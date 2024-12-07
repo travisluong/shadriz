@@ -4,7 +4,12 @@ import { getApiKey, getApiUrl } from "../lib/auth";
 import { z } from "zod";
 import { log } from "../lib/log";
 import { ScaffoldProcessor } from "../processors/scaffold-processor";
-import { getFilenamesFromFolder, loadShadrizzConfig } from "../lib/utils";
+import {
+  compileTemplate,
+  getFilenamesFromFolder,
+  loadShadrizzConfig,
+  writeToFile,
+} from "../lib/utils";
 import { dialectStrategyFactory } from "../lib/strategy-factory";
 import { caseFactory } from "../lib/case-utils";
 import { AuthorizationLevel } from "../lib/types";
@@ -31,6 +36,11 @@ type SchemaType = z.infer<typeof schema>;
 aiCommand
   .summary("ai commands")
   .description("ai-assisted scaffolding, ai dev tools, and more");
+
+/**
+ * 1. scaffold
+ * 2. scaffold adjustment
+ */
 
 aiCommand
   .command("scaffold")
@@ -264,3 +274,42 @@ async function handleError(res: Response) {
   log.red(json.message);
   process.exit(1);
 }
+
+/**
+ * 3. color palette
+ */
+
+aiCommand
+  .command("color-palette")
+  .description("have ai generate a color palette based on your description")
+  .action(async () => {
+    const apiKey = getApiKey();
+    const apiUrl = getApiUrl();
+    const value = await input({
+      message: "Describe your ideal color palette.",
+    });
+    const cssText = compileTemplate({
+      inputPath: "ai-templates/color-palette/globals.css.hbs",
+    });
+    log.blue("generating color palette...");
+    const res = await fetch(`${apiUrl}/api/ai/color-palette`, {
+      headers: { "Api-Key": apiKey },
+      method: "POST",
+      body: JSON.stringify({
+        description: value,
+        cssText,
+      }),
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      log.blue("after:");
+      log.log(json.data.cssResult);
+      log.log("");
+      writeToFile("app/globals.css", json.data.cssResult);
+      log.blue("summary:");
+      log.log(json.data.summary);
+      log.blue("reasoning:");
+      log.log(json.data.reasoning);
+    }
+  });
