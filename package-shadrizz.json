@@ -6,7 +6,7 @@
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^11.4.0",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.35.2",
+    "drizzle-orm": "^0.37.0",
     "drizzle-zod": "^0.5.1",
     "mysql2": "^3.11.0",
     "nanoid": "^5.0.7",
@@ -31,6 +31,6 @@
     "@types/pg": "^8.11.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "drizzle-kit": "0.26.2"
+    "drizzle-kit": "0.30.0"
   }
 }
