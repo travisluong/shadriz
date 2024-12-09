@@ -26,9 +26,6 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
               {{#case "references_select"}}
           <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/case}}
-              {{#case "references_combobox"}}
-          <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
-              {{/case}}
               {{#default}}
           <TableHead><Sortable columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/default}}
@@ -65,9 +62,6 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
             <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "references_select"}}
-            <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</TableCell>
-                {{/case}}
-                {{#case "references_combobox"}}
             <TableCell>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</TableCell>
                 {{/case}}
                 {{#case "file"}}

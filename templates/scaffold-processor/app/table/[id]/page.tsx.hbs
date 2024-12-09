@@ -45,9 +45,6 @@ export default async function Page(props: { params: Params }) {
           {{#case "references_select"}}
       <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</p>
           {{/case}}
-          {{#case "references_combobox"}}
-      <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> { {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.singularCamelCase}} }</p>
-          {{/case}}
           {{#case "file"}}
       <p><strong>{{this.caseVariants.originalCapitalCase}}:</strong> <Link href={`${config.NEXT_PUBLIC_UPLOAD_BASE_URL}/${ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}} }`}>{ {{../tableObj.singularCamelCase}}Obj.{{this.caseVariants.originalCamelCase}} }</Link></p>
           {{/case}}
