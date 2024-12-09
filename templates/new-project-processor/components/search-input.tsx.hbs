@@ -25,11 +25,11 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
       <form className="flex items-center gap-2" onSubmit={handleSearch}>
         <Input
           type="text"
-          placeholder={placeholder ?? "Search"}
+          placeholder={placeholder}
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <Button type="submit">
+        <Button type="submit" variant="secondary">
           <SearchIcon />
         </Button>
       </form>

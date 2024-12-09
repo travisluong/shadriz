@@ -16,14 +16,14 @@ const items = [
 
 export function PrivateHeader({ user }: { user: User }) {
   return (
-    <header className="flex h-8 shrink-0 items-center gap-2 border-b bg-zinc-100 dark:bg-zinc-900 fixed w-full z-10 justify-between">
+    <header className="flex h-8 shrink-0 items-center gap-2 border-b bg-muted fixed w-full z-10 justify-between">
       <div className="flex w-full justify-between items-center">
         <div className="font-mono px-2">
           <Link href="/">shadrizz</Link>
         </div>
         <div>
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none hover:bg-zinc-200 dark:hover:bg-zinc-800 h-8 px-2">
+            <DropdownMenuTrigger  className="flex items-center gap-2 focus:outline-none hover:bg-muted h-8 px-2">
               <Avatar className="w-6 h-6">
                 <AvatarImage src={user.image ?? undefined} />
                 <AvatarFallback>
