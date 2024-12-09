@@ -21,7 +21,7 @@ export default async function Page(props: { params: Params }) {
   {{/each}}
 
   return (
-    <div>
+    <div className="p-2">
       <{{tableObj.singularPascalCase}}UpdateForm 
         {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}}Obj }
         {{#each referencesColumnList}}

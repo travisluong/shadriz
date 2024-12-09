@@ -9,19 +9,17 @@ const items = [
 
 export function AdminSidebar() {
   return (
-    <div className="flex flex-col gap-2 min-w-40 max-w-40 bg-zinc-100 dark:bg-zinc-900 fixed min-h-screen z-10 top-8 border-r">
-      <div className="flex flex-col">
-        {items.map((item) => (
-          <Link
-            key={item.title}
-            href={item.url}
-            className="flex text-sm items-center gap-2 p-1 px-2 hover:bg-zinc-200 dark:hover:bg-zinc-800"
-          >
-            <item.icon className="flex-shrink-0 w-4 h-4" />
-            <span>{item.title}</span>
-          </Link>
-        ))}
-      </div>
+    <div className="flex flex-col text-sm min-w-40 max-w-40 bg-zinc-100 dark:bg-zinc-900 fixed min-h-screen z-10 top-8 border-r">
+      {items.map((item) => (
+        <Link
+          key={item.title}
+          href={item.url}
+          className="flex items-center gap-1 p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+        >
+          <item.icon className="flex-shrink-0 w-4 h-4" />
+          <span>{item.title}</span>
+        </Link>
+      ))}
     </div>
   );
 }

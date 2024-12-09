@@ -15,7 +15,7 @@ import { ResponsiveTable } from "@/components/responsive-table";
 export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelationsList }) {
   return (
     <ResponsiveTable>
-      <TableHeader>
+      <TableHeader className="bg-background sticky top-0">
         <TableRow>
           <TableHead><Sortable columnName="id">Id</Sortable></TableHead>
           {{#each validatedColumns}}

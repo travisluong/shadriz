@@ -9,7 +9,7 @@ export default async function Page() {
   {{/each}}
 
   return (
-    <div>
+    <div className="p-2">
       <{{tableObj.singularPascalCase}}CreateForm 
         {{#each referencesColumnList}}
         {{this.referenceTableVars.singularCamelCase}}List={ {{this.referenceTableVars.singularCamelCase}}List }

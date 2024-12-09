@@ -18,7 +18,7 @@ export default async function Page(props: { params: Params }) {
   }
 
   return (
-    <div>
+    <div className="p-2">
       {{#each validatedColumns}}
         {{#switch this.dataType}}
           {{#case "boolean"}}
