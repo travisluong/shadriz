@@ -1,7 +1,6 @@
 import { EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -11,10 +10,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sortable } from "@/components/sortable";
 import { {{tableObj.pluralPascalCase}}WithRelationsList } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
+import { ResponsiveTable } from "@/components/responsive-table";
 
 export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelationsList }) {
   return (
-    <Table>
+    <ResponsiveTable>
       <TableHeader>
         <TableRow>
           <TableHead><Sortable columnName="id">Id</Sortable></TableHead>
@@ -98,6 +98,6 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+    </ResponsiveTable>
   );
 }

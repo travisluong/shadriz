@@ -159,7 +159,7 @@ export class AuthProcessor implements ShadrizzProcessor {
 
   devDependencies = [];
 
-  shadcnComponents: string[] = ["separator", "avatar", "sidebar"];
+  shadcnComponents: string[] = ["separator", "avatar"];
 
   dbDialectStrategy: DbDialectStrategy;
 
@@ -186,6 +186,20 @@ export class AuthProcessor implements ShadrizzProcessor {
     this.addUserSchema();
     this.addNextAuthModuleAugmentation();
     this.addErrorBoundary();
+    this.addPrivateHeader();
+  }
+
+  addPrivateHeader() {
+    const userObj = caseFactory("user", {
+      pluralize: this.opts.pluralizeEnabled,
+    });
+    renderTemplate({
+      inputPath: "auth-processor/components/private/private-header.tsx.hbs",
+      outputPath: "components/private/private-header.tsx",
+      data: {
+        userObj,
+      },
+    });
   }
 
   validateOptions() {

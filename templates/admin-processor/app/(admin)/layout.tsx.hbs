@@ -1,8 +1,3 @@
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
@@ -10,8 +5,7 @@ import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
 import { isAdmin } from "@/services/authorization-service";
-import { Separator } from "@/components/ui/separator";
-import { BreadcrumbFactory } from "@/components/breadcrumb-factory";
+import { AdminHeader } from "@/components/admin/admin-header";
 
 export default async function Layout({
   children,
@@ -38,17 +32,13 @@ export default async function Layout({
 
   return (
     <div>
-      <SidebarProvider>
-        <AdminSidebar user={userObj} />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <BreadcrumbFactory />
-          </header>
-          <div className="p-4">{children}</div>
-        </SidebarInset>
-      </SidebarProvider>
+      <AdminHeader user={userObj} />
+      <div>
+        <AdminSidebar />
+        <div className="flex flex-col ml-40">
+          <div className="mt-8">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }

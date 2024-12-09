@@ -136,13 +136,13 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/components/breadcrumb-factory.tsx.hbs",
-      outputPath: "components/breadcrumb-factory.tsx",
+      inputPath: "new-project-processor/app/(public)/error.tsx.hbs",
+      outputPath: "app/(public)/error.tsx",
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/app/(public)/error.tsx.hbs",
-      outputPath: "app/(public)/error.tsx",
+      inputPath: "new-project-processor/components/responsive-table.tsx.hbs",
+      outputPath: "components/responsive-table.tsx",
     });
 
     // TODO: remove when next.js and shadcn/ui init works with dark mode

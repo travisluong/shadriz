@@ -27,8 +27,8 @@ export default async function Page(props: {
   });
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex justify-between">
+    <div className="flex flex-col">
+      <div className="flex justify-between p-1">
         <div>
           <SearchInput placeholder="Search {{tableObj.pluralCapitalCase}}" />
         </div>
@@ -43,8 +43,8 @@ export default async function Page(props: {
       <div>
         <{{tableObj.singularPascalCase}}Table {{tableObj.singularCamelCase}}List={ {{tableObj.singularCamelCase}}List } />
       </div>
-      <div>
-        <Pagination page={page} pageSize={pageSize} totalPages={totalPages} />
+      <div className="fixed bottom-0 w-full">
+        <Pagination page={page} pageSize={pageSize} totalPages={totalPages} count={count} />
       </div>
     </div>
   );

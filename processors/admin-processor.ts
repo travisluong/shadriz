@@ -62,9 +62,6 @@ export class AdminProcessor implements ShadrizzProcessor {
     renderTemplateIfNotExists({
       inputPath: `admin-processor/components/admin/admin-sidebar.tsx.hbs`,
       outputPath: `components/admin/admin-sidebar.tsx`,
-      data: {
-        userObj,
-      },
     });
 
     renderTemplate({
@@ -96,6 +93,14 @@ export class AdminProcessor implements ShadrizzProcessor {
     renderTemplate({
       inputPath: "admin-processor/app/(admin)/error.tsx.hbs",
       outputPath: "app/(admin)/error.tsx",
+    });
+
+    renderTemplate({
+      inputPath: "admin-processor/components/admin/admin-header.tsx.hbs",
+      outputPath: "components/admin/admin-header.tsx",
+      data: {
+        userObj,
+      },
     });
 
     const strategies: Record<DbDialect, string[]> = {

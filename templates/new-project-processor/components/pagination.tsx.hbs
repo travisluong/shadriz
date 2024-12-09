@@ -16,19 +16,23 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
+import { useState } from "react";
 
 export function Pagination({
   page,
   totalPages,
   pageSize,
+  count,
 }: {
   page: number;
   totalPages: number;
   pageSize: number;
+  count: number;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const [value, setValue] = useState<string>(page.toString());
 
   function first() {
     const params = new URLSearchParams(searchParams);
@@ -54,10 +58,20 @@ export function Pagination({
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  function changePage(e: React.ChangeEvent<HTMLInputElement>) {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", e.target.value);
-    router.push(`${pathname}?${params.toString()}`);
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      const params = new URLSearchParams(searchParams);
+
+      const num = parseInt(value);
+      if (Number.isInteger(num)) {
+        params.set("page", num.toString());
+        router.push(`${pathname}?${params.toString()}`);
+      } else {
+        params.set("page", "1");
+        router.push(`${pathname}?${params.toString()}`);
+        setValue("1");
+      }
+    }
   }
 
   function changePageSize(str: string) {
@@ -67,10 +81,11 @@ export function Pagination({
   }
 
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-1 p-1 bg-primary-foreground">
+      <div className="text-nowrap">{count} items</div>
       <div>
         <Button
-          variant="outline"
+          variant="secondary"
           size="icon"
           onClick={first}
           disabled={page <= 1}
@@ -80,7 +95,7 @@ export function Pagination({
       </div>
       <div>
         <Button
-          variant="outline"
+          variant="secondary"
           size="icon"
           onClick={previous}
           disabled={page <= 1}
@@ -88,9 +103,19 @@ export function Pagination({
           <ChevronLeftIcon className="h-4 w-4" />
         </Button>
       </div>
+      <div className="text-nowrap">
+        <Input
+          name="page"
+          className="w-12"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+      <div className="text-nowrap">of {totalPages}</div>
       <div>
         <Button
-          variant="outline"
+          variant="secondary"
           size="icon"
           onClick={next}
           disabled={page >= totalPages}
@@ -100,7 +125,7 @@ export function Pagination({
       </div>
       <div>
         <Button
-          variant="outline"
+          variant="secondary"
           size="icon"
           onClick={last}
           disabled={page >= totalPages}
@@ -108,35 +133,24 @@ export function Pagination({
           <ChevronsRightIcon className="h-4 w-4" />
         </Button>
       </div>
-      <div className="text-nowrap">
-        Page: {page} of {totalPages}
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="text-nowrap">Go to page:</div>
-        <Input
-          name="page"
-          type="number"
-          className="w-20"
-          defaultValue={page}
-          onChange={changePage}
-        />
-      </div>
-      <div>
+      <div className="flex items-center gap-1">
         <Select
           onValueChange={changePageSize}
           defaultValue={pageSize.toString()}
         >
-          <SelectTrigger className="w-[120px]">
+          <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="10">Show 10</SelectItem>
-            <SelectItem value="20">Show 20</SelectItem>
-            <SelectItem value="50">Show 50</SelectItem>
-            <SelectItem value="100">Show 100</SelectItem>
-            <SelectItem value="200">Show 200</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="20">20</SelectItem>
+            <SelectItem value="50">50</SelectItem>
+            <SelectItem value="100">100</SelectItem>
+            <SelectItem value="200">200</SelectItem>
+            <SelectItem value="1000">1000</SelectItem>
           </SelectContent>
         </Select>
+        <div className="text-nowrap">page size</div>
       </div>
     </div>
   );
