@@ -2,11 +2,11 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const ResponsiveTable = React.forwardRef<
+const CustomTable = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto h-[calc(100vh-120px)]">
+  <div className="relative w-full">
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
@@ -14,6 +14,6 @@ const ResponsiveTable = React.forwardRef<
     />
   </div>
 ));
-ResponsiveTable.displayName = "Table";
+CustomTable.displayName = "Table";
 
-export { ResponsiveTable };
+export { CustomTable };

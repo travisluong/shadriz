@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Sortable } from "@/components/sortable";
 import { {{tableObj.pluralPascalCase}}WithRelationsList } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
-import { ResponsiveTable } from "@/components/responsive-table";
+import { CustomTable } from "@/components/custom-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,8 +20,8 @@ import {
 
 export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelationsList }) {
   return (
-    <ResponsiveTable>
-      <TableHeader className="bg-background sticky top-0 z-20">
+    <CustomTable>
+      <TableHeader className="bg-background">
         <TableRow>
           <TableHead><Sortable columnName="id">Id</Sortable></TableHead>
           {{#each validatedColumns}}
@@ -107,6 +107,6 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
           </TableRow>
         ))}
       </TableBody>
-    </ResponsiveTable>
+    </CustomTable>
   );
 }
