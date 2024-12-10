@@ -34,7 +34,7 @@ export function AdminHeader({ user }: { user: User }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {items.map((item) => (
-                <DropdownMenuItem key={item.title}>
+                <DropdownMenuItem key={item.title} asChild>
                   <Link
                     key={item.title}
                     href={item.url}

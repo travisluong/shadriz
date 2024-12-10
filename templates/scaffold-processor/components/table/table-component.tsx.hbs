@@ -86,17 +86,17 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}Obj.id }`} className="flex text-sm items-center gap-2">
                       <EyeIcon className="flex-shrink-0 w-4 h-4" /> Show
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}Obj.id }/edit`} className="flex text-sm items-center gap-2">
                       <PencilIcon className="flex-shrink-0 w-4 h-4" /> Edit
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href={`{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/${ {{tableObj.singularCamelCase}}Obj.id }/delete`} className="flex text-sm items-center gap-2">
                       <TrashIcon className="flex-shrink-0 w-4 h-4" /> Delete
                     </Link>
