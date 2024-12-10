@@ -3,10 +3,11 @@
 import { MoveUpIcon, MoveDownIcon } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { TableHead } from "./ui/table";
 
 type SortOrder = "asc" | "desc" | "none";
 
-export function Sortable({
+export function CustomTableHead({
   children,
   columnName,
 }: {
@@ -53,14 +54,16 @@ export function Sortable({
   }
 
   return (
-    <div
-      onClick={handleClick}
-      className="flex items-center cursor-pointer select-none"
-    >
-      <div className="text-nowrap">{children}</div>
-      {sortOrder === "asc" && <MoveUpIcon className="w-3 h-3" />}
-      {sortOrder === "desc" && <MoveDownIcon className="w-3 h-3" />}
-      {sortOrder === "none" && <div className="w-3 h-3"></div>}
-    </div>
+    <TableHead>
+      <div
+        onClick={handleClick}
+        className="flex items-center cursor-pointer select-none"
+      >
+        <div className="text-nowrap">{children}</div>
+        {sortOrder === "asc" && <MoveUpIcon className="w-3 h-3" />}
+        {sortOrder === "desc" && <MoveDownIcon className="w-3 h-3" />}
+        {sortOrder === "none" && <div className="w-3 h-3"></div>}
+      </div>
+    </TableHead>
   );
 }
