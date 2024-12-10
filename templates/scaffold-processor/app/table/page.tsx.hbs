@@ -27,9 +27,9 @@ export default async function Page(props: {
   });
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col text-sm">
       <div className="flex gap-2 p-1 flex-wrap items-center">
-        <div className="px-1">{{tableObj.pluralCapitalCase}}</div>
+        <div className="px-1 font-bold">{{tableObj.pluralCapitalCase}}</div>
         <div>
           <Link href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
             <Button variant="outline">
@@ -40,7 +40,7 @@ export default async function Page(props: {
         <div>
           <SearchInput />
         </div>
-        <div className="px-1">
+        <div className="px-1 ml-auto">
           <Pagination
             page={page}
             pageSize={pageSize}

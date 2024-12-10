@@ -1,4 +1,4 @@
-import { EllipsisVerticalIcon, EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { EllipsisIcon, EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import {
   TableBody,
@@ -37,7 +37,7 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
               {{/default}}
             {{/switch}}
           {{/each}}
-          <TableHead className="sticky right-0 bg-primary-foreground"></TableHead>
+          <TableHead className="sticky right-0 bg-background"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -78,11 +78,11 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
                 {{/default}}
               {{/switch}}
             {{/each}}
-            <TableCell className="sticky right-0 p-0 h-full bg-primary-foreground align-top">
-              <DropdownMenu>
+            <TableCell className="sticky right-0 p-0 h-full bg-primary-foreground">
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <Button size="icon" variant="link">
-                    <EllipsisVerticalIcon />
+                  <Button size="icon" variant="ghost">
+                    <EllipsisIcon />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

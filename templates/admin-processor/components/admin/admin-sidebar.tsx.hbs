@@ -1,6 +1,9 @@
-import { Table2Icon, GaugeIcon } from "lucide-react";
+"use client";
 
+import { Table2Icon, GaugeIcon } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 const items = [
   { title: "Admin", url: "/admin", icon: GaugeIcon },
@@ -8,13 +11,18 @@ const items = [
 ];
 
 export function AdminSidebar() {
+  const pathname = usePathname();
+
   return (
-    <div className="flex flex-col text-sm min-w-40 max-w-40 bg-primary-foreground fixed min-h-screen z-20 top-8 border-r">
+    <div className="flex flex-col text-sm min-w-40 max-w-40 fixed min-h-screen z-20 top-8 border-r">
       {items.map((item) => (
         <Link
           key={item.title}
           href={item.url}
-          className="flex items-center gap-1 py-1 px-2 hover:bg-muted"
+          className={cn(
+            "flex items-center gap-1 p-1 hover:bg-primary-foreground m-1 rounded",
+            pathname === item.url && "bg-muted"
+          )}
         >
           <item.icon className="flex-shrink-0 w-4 h-4" />
           <span>{item.title}</span>
