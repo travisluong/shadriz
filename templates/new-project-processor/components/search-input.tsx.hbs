@@ -13,7 +13,7 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
 
   const [text, setText] = useState("");
 
-  function handleSearch(e: any) {
+  function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     const params = new URLSearchParams(searchParams);
     params.set("search", text);

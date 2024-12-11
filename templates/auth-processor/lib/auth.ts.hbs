@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import type { Provider } from "next-auth/providers";
 import { eq } from "drizzle-orm";
-import { {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
+import { {{userObj.singularPascalCase}}, {{userObj.pluralCamelCase}} } from "@/schema/{{userObj.pluralKebabCase}}";
 import { {{accountObj.pluralCamelCase}}, {{sessionObj.pluralCamelCase}}, {{verificationTokenObj.pluralCamelCase}} } from "@/schema/auth-tables";
 import { Adapter } from "next-auth/adapters";
 {{pkStrategyImport}}
@@ -16,7 +16,7 @@ const adapter = {
     sessionsTable: {{sessionObj.pluralCamelCase}},
     verificationTokensTable: {{verificationTokenObj.pluralCamelCase}},
   }) as Adapter),
-  createUser: async (data: any) => {
+  createUser: async (data: User) => {
     const newUser = {
       {{pkKeyValTemplate}}
       email: data.email,
