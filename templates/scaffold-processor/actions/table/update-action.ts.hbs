@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { createSelectSchema } from "drizzle-zod";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -17,7 +16,7 @@ import { auth } from "@/lib/auth";
 import { isAdmin } from "@/services/authorization-service";
 {{/if}}
 
-const update{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}, {
+const update{{tableObj.singularPascalCase}}Schema = z.object({
   {{#each validatedColumns}}
   {{this.caseVariants.originalCamelCase}}: {{this.zodCode}},
   {{/each}}

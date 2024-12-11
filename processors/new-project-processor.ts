@@ -19,7 +19,7 @@ import packageShadrizzJson from "../package-shadrizz.json";
 export class NewProjectProcessor implements ShadrizzProcessor {
   opts: ShadrizzConfig;
 
-  dependencies = ["drizzle-orm", "dotenv", "zod", "drizzle-zod"];
+  dependencies = ["drizzle-orm", "dotenv", "zod"];
 
   devDependencies = ["drizzle-kit", "@types/react", "@types/react-dom"];
 
@@ -32,7 +32,6 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     "checkbox",
     "select",
     "popover",
-    "command",
     "alert",
   ];
 

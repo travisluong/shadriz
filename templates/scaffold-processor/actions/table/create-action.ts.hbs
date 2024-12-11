@@ -5,7 +5,6 @@ import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCas
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
 {{#if importFileUtils}}
 import { uploadFile } from "@/lib/file-utils";
 {{/if}}
@@ -17,7 +16,7 @@ import { isAdmin } from "@/services/authorization-service";
 {{/if}}
 
 
-const insert{{tableObj.singularPascalCase}}Schema = createInsertSchema({{tableObj.pluralCamelCase}}, {
+const insert{{tableObj.singularPascalCase}}Schema = z.object({
   {{#each validatedColumns}}
   {{this.caseVariants.originalCamelCase}}: {{this.zodCode}},
   {{/each}}

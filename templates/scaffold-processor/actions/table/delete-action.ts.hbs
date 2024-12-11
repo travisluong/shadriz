@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { createSelectSchema } from "drizzle-zod";
 {{#if isNotPublic}}
 import { auth } from "@/lib/auth";
 {{/if}}
@@ -14,7 +13,7 @@ import { auth } from "@/lib/auth";
 import { isAdmin } from "@/services/authorization-service";
 {{/if}}
 
-const delete{{tableObj.singularPascalCase}}Schema = createSelectSchema({{tableObj.pluralCamelCase}}, {
+const delete{{tableObj.singularPascalCase}}Schema = z.object({
   {{#each validatedColumns}}
   {{#switch this.columnName}}
   {{#case "id"}}
