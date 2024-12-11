@@ -1,7 +1,8 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
-import { useEffect, useState } from "react";
+import Link from "@tiptap/extension-link";
+import { useCallback, useEffect, useState } from "react";
 import {
   AlignCenterIcon,
   AlignLeftIcon,
@@ -11,6 +12,10 @@ import {
   Heading2Icon,
   Heading3Icon,
   ItalicIcon,
+  LinkIcon,
+  ListIcon,
+  ListOrderedIcon,
+  UnlinkIcon,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import "@/styles/tiptap-editor.css";
@@ -30,9 +35,32 @@ export const TiptapEditor = ({
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      Link,
     ],
     content: html,
   });
+
+  const setLink = useCallback(() => {
+    if (!editor) return;
+
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
+
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+
+      return;
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+  }, [editor]);
 
   useEffect(() => {
     if (!editor) {
@@ -51,12 +79,13 @@ export const TiptapEditor = ({
   }
 
   return (
-    <div className="border border-input p-5 rounded-md">
+    <div className="border border-input p-0 rounded-md">
       {/* Toolbar */}
-      <div className="mb-5 flex gap-2">
+      <div className="flex gap-2 border-b">
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() => editor.chain().focus().toggleBold().run()}
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className={editor.isActive("bold") ? "is-active" : ""}
@@ -66,6 +95,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className={editor.isActive("italic") ? "is-active" : ""}
@@ -75,6 +105,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()
           }
@@ -88,6 +119,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
@@ -101,6 +133,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
@@ -114,6 +147,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
           className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
         >
@@ -122,6 +156,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
           className={
             editor.isActive({ textAlign: "center" }) ? "is-active" : ""
@@ -132,6 +167,7 @@ export const TiptapEditor = ({
         <Button
           type="button"
           size="icon"
+          variant="ghost"
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
           className={
             editor.isActive({ textAlign: "center" }) ? "is-active" : ""
@@ -139,9 +175,47 @@ export const TiptapEditor = ({
         >
           <AlignRightIcon />
         </Button>
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive("bulletList") ? "is-active" : ""}
+        >
+          <ListIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editor.isActive("orderedList") ? "is-active" : ""}
+        >
+          <ListOrderedIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          onClick={setLink}
+          className={editor.isActive("link") ? "is-active" : ""}
+        >
+          <LinkIcon />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          onClick={() => editor.chain().focus().unsetLink().run()}
+          disabled={!editor.isActive("link")}
+        >
+          <UnlinkIcon />
+        </Button>
       </div>
 
-      <EditorContent editor={editor} />
+      <div className="p-3">
+        <EditorContent editor={editor} />
+      </div>
 
       <input type="hidden" name={name} value={editorContent} />
     </div>
