@@ -116,8 +116,8 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/.eslintrc.json.hbs",
-      outputPath: ".eslintrc.json",
+      inputPath: "new-project-processor/eslint.config.mjs.hbs",
+      outputPath: "eslint.config.mjs",
     });
 
     renderTemplate({
