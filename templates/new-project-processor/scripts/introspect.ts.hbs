@@ -7,7 +7,7 @@
  */
 
 import { schema } from "@/lib/schema";
-import { getTableConfig } from "drizzle-orm/mysql-core";
+import { getTableConfig } from "{{drizzleDbCorePackage}}";
 import fs from "fs";
 
 type PackageManagers = "npm" | "pnpm" | "bun";
