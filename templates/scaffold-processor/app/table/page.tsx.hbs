@@ -8,6 +8,7 @@ import { parseSearchParams } from "@/lib/search-params-utils";
 import { {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 import { {{tableObj.singularPascalCase}}Table } from "@/components/{{authorizationLevel}}/{{tableObj.pluralKebabCase}}/{{tableObj.singularKebabCase}}-table";
 import { get{{tableObj.pluralPascalCase}}WithRelationsList } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
+import { like } from "drizzle-orm";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -16,7 +17,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const { page, pageIndex, pageSize, search, sort, sortOrder } = parseSearchParams(searchParams);
-  const count = await db.$count({{tableObj.pluralCamelCase}});
+  const count = await db.$count({{tableObj.pluralCamelCase}}, like({{tableObj.pluralCamelCase}}.id, `%${search}%`));
   const totalPages = Math.ceil(count / pageSize);
   const {{tableObj.singularCamelCase}}List = await get{{tableObj.pluralPascalCase}}WithRelationsList({
     limit: pageSize,
