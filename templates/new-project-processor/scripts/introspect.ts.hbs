@@ -1,0 +1,69 @@
+/**
+ * introspect.
+ * this is a utility script for reading an existing drizzle table
+ * and generating a shadrizz scaffold command from the table.
+ * this command only looks at the column name and underlying data type.
+ * it does not account for special types like references and file.
+ */
+
+import { schema } from "@/lib/schema";
+import { getTableConfig } from "drizzle-orm/mysql-core";
+import fs from "fs";
+
+type PackageManagers = "npm" | "pnpm" | "bun";
+
+const PACKAGE_MANAGER_RECORD: Record<PackageManagers, string> = {
+  npm: "npx",
+  pnpm: "pnpm dlx",
+  bun: "bunx",
+};
+
+async function main() {
+  const tableName = process.argv[2];
+
+  const shadrizzConfig = JSON.parse(
+    fs.readFileSync("shadrizz.config.json", "utf-8")
+  );
+
+  const pkg =
+    PACKAGE_MANAGER_RECORD[shadrizzConfig.packageManager as PackageManagers];
+
+  const table = schema[tableName as keyof typeof schema];
+
+  if (!table) {
+    throw new Error(`${tableName} schema not found`);
+  }
+
+  const cols = getTableConfig(table as any);
+
+  let command =
+    `${pkg} shadrizz@latest scaffold ${camelToSnakeCase(tableName)}` + ` -c `;
+
+  for (const col of cols.columns) {
+    if (
+      ["id", "created_at", "updated_at"].includes(camelToSnakeCase(col.name))
+    ) {
+      continue;
+    }
+    command +=
+      camelToSnakeCase(col.name) +
+      ":" +
+      transformSQLType(col.getSQLType()) +
+      " ";
+  }
+
+  console.log(command);
+}
+
+function camelToSnakeCase(str: string): string {
+  return str.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+}
+
+function transformSQLType(str: string) {
+  if (str.startsWith("varchar")) {
+    return "varchar";
+  }
+  return str;
+}
+
+main();

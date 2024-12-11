@@ -1,4 +1,5 @@
 import { log } from "../lib/log";
+import { dialectStrategyFactory } from "../lib/strategy-factory";
 import {
   PackageManager,
   ShadrizzConfig,
@@ -142,6 +143,16 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     renderTemplate({
       inputPath: "new-project-processor/components/custom-table.tsx.hbs",
       outputPath: "components/custom-table.tsx",
+    });
+
+    const dialectStrategy = dialectStrategyFactory(this.opts.dbDialect);
+
+    renderTemplate({
+      inputPath: "new-project-processor/scripts/introspect.ts.hbs",
+      outputPath: "scripts/introspect.ts",
+      data: {
+        drizzleDbCorePackage: dialectStrategy.drizzleDbCorePackage,
+      },
     });
 
     // TODO: remove when next.js and shadcn/ui init works with dark mode

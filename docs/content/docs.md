@@ -142,6 +142,26 @@ Example:
 npx shadrizz@latest scaffold products -c title:varchar price:decimal description:text stock_quantity:integer
 ```
 
+## Introspect
+
+shadrizz will create an `introspect.ts` script that can be used to generate a scaffold command from an existing drizzle table.
+
+For example:
+
+```bash
+npx tsx scripts/introspect.ts products
+```
+
+This would output something like:
+
+```text
+npx shadrizz@latest scaffold products -c title:varchar price:decimal description:text stock_quantity:integer
+```
+
+You can make changes to the output as needed and run the command to generate a scaffold for the table. If the scaffold code already exists, it will override the existing scaffold.
+
+Note: This command only accounts for the column name and underlying data type. Special data types like `references` and `file` will be generated as `text`. You'll have to manually changes these back to `references` or `file` as needed.
+
 ## Data types
 
 The following are data types that can be used with the `scaffold` command. Most of the data types in Drizzle ORM are also supported in shadrizz.
