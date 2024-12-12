@@ -17,7 +17,10 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   const { page, pageIndex, pageSize, search, sort, sortOrder } = parseSearchParams(searchParams);
-  const count = await db.$count({{tableObj.pluralCamelCase}}, like({{tableObj.pluralCamelCase}}.id, `%${search}%`));
+  const count = await db.$count(
+    {{tableObj.pluralCamelCase}},
+    search ? like({{tableObj.pluralCamelCase}}.id, `%${search}%`) : undefined
+  );
   const totalPages = Math.ceil(count / pageSize);
   const {{tableObj.singularCamelCase}}List = await get{{tableObj.pluralPascalCase}}WithRelationsList({
     limit: pageSize,
