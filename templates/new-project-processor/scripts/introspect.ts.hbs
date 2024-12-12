@@ -2,8 +2,7 @@
  * introspect.
  * this is a utility script for reading an existing drizzle table
  * and generating a shadrizz scaffold command from the table.
- * this command only looks at the column name and underlying data type.
- * it does not account for special types like references and file.
+ * usage example: tsx scripts/introspect.ts myTable
  */
 
 import { schema } from "@/lib/schema";
@@ -34,21 +33,31 @@ async function main() {
     throw new Error(`${tableName} schema not found`);
   }
 
-  const cols = getTableConfig(table as any);
+  const conf = getTableConfig(table as any);
+
+  const fkSet = new Set<string>();
+
+  for (const fk of conf.foreignKeys) {
+    const ref = fk.reference();
+    for (const column of ref.columns) {
+      fkSet.add(column.name);
+    }
+  }
 
   let command =
     `${pkg} shadrizz@latest scaffold ${camelToSnakeCase(tableName)}` + ` -c `;
 
-  for (const col of cols.columns) {
+  for (const col of conf.columns) {
     if (
       ["id", "created_at", "updated_at"].includes(camelToSnakeCase(col.name))
     ) {
       continue;
     }
+
     command +=
       camelToSnakeCase(col.name) +
       ":" +
-      transformSQLType(col.getSQLType()) +
+      transformSQLType(col.getSQLType(), col.name, fkSet) +
       " ";
   }
 
@@ -59,11 +68,24 @@ function camelToSnakeCase(str: string): string {
   return str.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
 }
 
-function transformSQLType(str: string) {
-  if (str.startsWith("varchar")) {
+function transformSQLType(
+  sqlType: string,
+  columnName: string,
+  fkSet: Set<string>
+) {
+  if (columnName.endsWith("Id") && fkSet.has(columnName)) {
+    return "references";
+  }
+  if (sqlType.startsWith("varchar")) {
     return "varchar";
   }
-  return str;
+  if (sqlType.startsWith("char")) {
+    return "char";
+  }
+  if (sqlType.startsWith("double precision")) {
+    return "doublePrecision";
+  }
+  return sqlType;
 }
 
 main();
