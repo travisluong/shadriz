@@ -3,16 +3,13 @@ import Link from "next/link";
 export function Header() {
   return (
     <header>
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="container mx-auto px-6 py-4 flex flex-col gap-5 sm:gap-0 sm:flex-row justify-between items-center">
         <div className="flex items-center">
-          <Link href="/" className="font-bold">
+          <Link href="/" className="font-bold font-mono">
             shadrizz
           </Link>
         </div>
         <div>
-          <Link href="https://www.shadrizz.com/docs" className="mr-4">
-            Docs
-          </Link>
           <Link href="/dashboard" className="mr-4">
             Dashboard
           </Link>

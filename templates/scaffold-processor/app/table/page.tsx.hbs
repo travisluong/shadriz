@@ -33,7 +33,7 @@ export default async function Page(props: {
         <div className="px-1 font-bold">{{tableObj.pluralCapitalCase}}</div>
         <div>
           <Link href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
-            <Button variant="outline">
+            <Button variant="secondary">
               <PlusIcon /> New
             </Button>
           </Link>
