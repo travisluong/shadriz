@@ -17,6 +17,7 @@ export default async function Page(props: { params: Params }) {
 
   return (
     <div className="p-2">
+      <h1 className="font-bold">Delete {{tableObj.singularCapitalCase}}</h1>
       <{{tableObj.singularPascalCase}}DeleteForm {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}}Obj } />
     </div>
   );

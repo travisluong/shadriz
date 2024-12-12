@@ -10,6 +10,7 @@ export default async function Page() {
 
   return (
     <div className="p-2">
+      <h1 className="font-bold">New {{tableObj.singularCapitalCase}}</h1>
       <{{tableObj.singularPascalCase}}CreateForm 
         {{#each referencesColumnList}}
         {{this.referenceTableVars.singularCamelCase}}List={ {{this.referenceTableVars.singularCamelCase}}List }

@@ -31,9 +31,9 @@ export default async function Page(props: {
   });
 
   return (
-    <div className="flex flex-col text-sm">
-      <div className="flex gap-2 p-1 flex-wrap items-center">
-        <div className="px-1 font-bold">{{tableObj.pluralCapitalCase}}</div>
+    <div className="flex flex-col">
+      <div className="flex gap-2 p-2 flex-wrap">
+        <h1 className="font-bold">{{tableObj.pluralCapitalCase}}</h1>
         <div>
           <Link href="{{#if isAdmin}}/admin{{/if}}/{{tableObj.pluralKebabCase}}/new">
             <Button variant="secondary">
@@ -44,7 +44,7 @@ export default async function Page(props: {
         <div>
           <SearchInput />
         </div>
-        <div className="px-1">
+        <div>
           <Pagination
             page={page}
             pageSize={pageSize}

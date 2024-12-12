@@ -22,6 +22,7 @@ export default async function Page(props: { params: Params }) {
 
   return (
     <div className="p-2">
+      <h1 className="font-bold">Editing {{tableObj.singularCapitalCase}}</h1>
       <{{tableObj.singularPascalCase}}UpdateForm 
         {{tableObj.singularCamelCase}}={ {{tableObj.singularCamelCase}}Obj }
         {{#each referencesColumnList}}

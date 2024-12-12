@@ -19,6 +19,7 @@ export default async function Page(props: { params: Params }) {
 
   return (
     <div className="p-2">
+      <h1 className="font-bold">{{tableObj.singularCapitalCase}}</h1>
       {{#each validatedColumns}}
         {{#switch this.dataType}}
           {{#case "boolean"}}
