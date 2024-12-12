@@ -20,8 +20,8 @@ export function AdminSidebar() {
           key={item.title}
           href={item.url}
           className={cn(
-            "flex items-center gap-1 p-1 hover:bg-primary-foreground m-1 rounded",
-            pathname === item.url && "bg-primary-foreground"
+            "flex items-center gap-1 p-1 hover:bg-muted m-1 rounded",
+            pathname === item.url && "bg-muted"
           )}
         >
           <item.icon className="flex-shrink-0 w-4 h-4" />
