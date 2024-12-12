@@ -185,7 +185,6 @@ export class AuthProcessor implements ShadrizzProcessor {
     this.addPrivateSidebar();
     this.addUserSchema();
     this.addNextAuthModuleAugmentation();
-    this.addErrorBoundary();
     this.addPrivateHeader();
   }
 
@@ -449,13 +448,6 @@ export class AuthProcessor implements ShadrizzProcessor {
     renderTemplate({
       inputPath: "auth-processor/types/next-auth.d.ts.hbs",
       outputPath: "types/next-auth.d.ts",
-    });
-  }
-
-  addErrorBoundary() {
-    renderTemplate({
-      inputPath: "auth-processor/app/(private)/error.tsx.hbs",
-      outputPath: "app/(private)/error.tsx",
     });
   }
 

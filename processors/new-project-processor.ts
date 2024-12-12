@@ -135,11 +135,6 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/app/(public)/error.tsx.hbs",
-      outputPath: "app/(public)/error.tsx",
-    });
-
-    renderTemplate({
       inputPath: "new-project-processor/components/custom-table.tsx.hbs",
       outputPath: "components/custom-table.tsx",
     });
