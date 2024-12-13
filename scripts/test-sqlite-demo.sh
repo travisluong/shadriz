@@ -26,7 +26,7 @@ shadrizz scaffold -a public contact_message -c name:text email:text message:text
 # shadrizz add stripe
 npm run generate
 npm run migrate
-npx tsx scripts/create-user.ts test@example.com password123
+npx tsx scripts/create-user.ts test@example.com pw
 npx tsx scripts/grant-admin.ts test@example.com
 # npx tsx scripts/create-price.ts
 npm run build
