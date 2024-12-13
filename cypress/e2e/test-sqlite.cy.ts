@@ -10,9 +10,7 @@ describe("shadriz e2e test", () => {
 
   it("home page", () => {
     cy.visit("http://localhost:3000");
-    cy.get("h1")
-      .first()
-      .should("have.text", "Full Stack TypeScript Scaffolding Framework");
+    cy.get("h1").first().should("have.text", "shadrizz");
   });
 
   it("private scaffold happy path", () => {
