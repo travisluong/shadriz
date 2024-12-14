@@ -93,7 +93,7 @@ export function Pagination({
   }
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       <div className="text-nowrap">
         {count} {count === 1 ? "row" : "rows"}
       </div>
@@ -147,7 +147,7 @@ export function Pagination({
           <ChevronsRightIcon className="h-4 w-4" />
         </Button>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         <Input
           name="pageSize"
           value={pageSizeValue}
