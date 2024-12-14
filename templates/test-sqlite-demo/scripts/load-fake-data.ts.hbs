@@ -1,0 +1,84 @@
+import { faker } from "@faker-js/faker";
+import { openConnection } from "./sdb";
+import { posts } from "@/schema/posts";
+import { categories } from "@/schema/categories";
+import { todos } from "@/schema/todos";
+import { contactMessages } from "@/schema/contact-messages";
+import { users } from "@/schema/users";
+
+type Post = typeof posts.$inferInsert;
+type Category = typeof categories.$inferInsert;
+type Todo = typeof todos.$inferInsert;
+type ContactMessage = typeof contactMessages.$inferInsert;
+type User = typeof users.$inferInsert;
+
+async function main() {
+  const { sdb, closeConnection } = await openConnection();
+  const postList: Post[] = [];
+  const categoryList: Category[] = [];
+  const todoList: Todo[] = [];
+  const contactMessageList: ContactMessage[] = [];
+  const userList: User[] = [];
+
+  for (let i = 0; i < 100; i++) {
+    postList.push({
+      title: faker.lorem.sentence(),
+      publishedAt: faker.date.past(),
+      content: faker.lorem.paragraphs(3),
+    });
+  }
+
+  for (let i = 0; i < 100; i++) {
+    categoryList.push({
+      name: faker.commerce.department(),
+    });
+  }
+
+  for (let i = 0; i < 100; i++) {
+    todoList.push({
+      title: faker.lorem.sentence(),
+      completed: faker.datatype.boolean(),
+    });
+  }
+
+  for (let i = 0; i < 100; i++) {
+    contactMessageList.push({
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      message: faker.lorem.paragraph(),
+    });
+  }
+
+  userList.push({
+    name: "test",
+    email: "test@example.com",
+    image: faker.image.avatar(),
+    role: "admin",
+    password: "$2b$10$3hyMqhFf3VAZ.8m9HTeGH.6WdS.lFYo9/ELOHh8oMhbbhV49LEMna",
+  });
+
+  for (let i = 0; i < 10; i++) {
+    userList.push({
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      image: faker.image.avatar(),
+      role: faker.helpers.arrayElement(["user", "admin"]),
+    });
+  }
+
+  await sdb.delete(posts);
+  await sdb.delete(categories);
+  await sdb.delete(todos);
+  await sdb.delete(contactMessages);
+  await sdb.delete(users);
+
+  await sdb.insert(posts).values(postList);
+  await sdb.insert(categories).values(categoryList);
+  await sdb.insert(todos).values(todoList);
+  await sdb.insert(contactMessages).values(contactMessageList);
+  await sdb.insert(users).values(userList);
+
+  await closeConnection();
+}
+
+main();

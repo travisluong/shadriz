@@ -1,6 +1,7 @@
 import { EllipsisIcon, EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import {
+  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -8,9 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { CustomTableHead } from "@/components/custom-table-head";
+import { Sortable } from "@/components/sortable";
 import { {{tableObj.pluralPascalCase}}WithRelationsList } from "@/repositories/{{tableObj.singularKebabCase}}-repository";
-import { CustomTable } from "@/components/custom-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,24 +20,24 @@ import {
 
 export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelCase}}List }: { {{tableObj.singularCamelCase}}List: {{tableObj.pluralPascalCase}}WithRelationsList }) {
   return (
-    <CustomTable>
+    <Table>
       <TableHeader className="bg-background">
         <TableRow>
-          <CustomTableHead columnName="id">Id</CustomTableHead>
+          <TableHead><Sortable column="id">Id</Sortable></TableHead>
           {{#each validatedColumns}}
             {{#switch this.dataType}}
               {{#case "references"}}
-          <CustomTableHead columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</CustomTableHead>
+          <TableHead><Sortable column="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/case}}
               {{#case "references_select"}}
-          <CustomTableHead columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</CustomTableHead>
+          <TableHead><Sortable column="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/case}}
               {{#default}}
-          <CustomTableHead columnName="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</CustomTableHead>
+          <TableHead><Sortable column="{{this.caseVariants.originalCamelCase}}">{{this.caseVariants.originalCapitalCase}}</Sortable></TableHead>
               {{/default}}
             {{/switch}}
           {{/each}}
-          <TableHead className="sticky right-0 bg-background"></TableHead>
+          <TableHead className="sticky right-0"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -107,6 +107,6 @@ export function {{tableObj.singularPascalCase}}Table({ {{tableObj.singularCamelC
           </TableRow>
         ))}
       </TableBody>
-    </CustomTable>
+    </Table>
   );
 }

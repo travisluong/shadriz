@@ -130,13 +130,8 @@ export class NewProjectProcessor implements ShadrizzProcessor {
     });
 
     renderTemplate({
-      inputPath: "new-project-processor/components/custom-table-head.tsx.hbs",
-      outputPath: "components/custom-table-head.tsx",
-    });
-
-    renderTemplate({
-      inputPath: "new-project-processor/components/custom-table.tsx.hbs",
-      outputPath: "components/custom-table.tsx",
+      inputPath: "new-project-processor/components/sortable.tsx.hbs",
+      outputPath: "components/sortable.tsx",
     });
 
     const dialectStrategy = dialectStrategyFactory(this.opts.dbDialect);

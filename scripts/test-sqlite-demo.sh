@@ -4,7 +4,9 @@ shadrizz() {
     tsx "$SHADRIZZ_PATH" "$@"
 }
 
+# rm -rf ~/code/shadrizz-demo
 cd ~/code
+# shadrizz new shadrizz-demo -p pnpm --latest
 cd ~/code/shadrizz-demo
 shadrizz init -p pnpm --latest \
     --db-dialect sqlite \
@@ -13,7 +15,9 @@ shadrizz init -p pnpm --latest \
     --auth-providers credentials \
     --admin \
     --pluralize
+pnpm add @faker-js/faker
 cp ~/code/shadrizz-env/.env.local.sqlite .env.local
+cp ~/code/shadrizz/templates/test-sqlite-demo/scripts/load-fake-data.ts.hbs scripts/load-fake-data.ts
 shadrizz add tiptap
 shadrizz scaffold -a admin category -c name:text
 shadrizz scaffold -a admin post -c category_id:references_select title:text published_at:timestamp content:text_tiptap
@@ -27,5 +31,6 @@ npm run migrate
 npx tsx scripts/create-user.ts test@example.com pw
 npx tsx scripts/grant-admin.ts test@example.com
 # npx tsx scripts/create-price.ts
+npx tsx scripts/load-fake-data.ts
 npm run build
 npm run start

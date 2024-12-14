@@ -3,16 +3,15 @@
 import { MoveUpIcon, MoveDownIcon } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { TableHead } from "./ui/table";
 
 type SortOrder = "asc" | "desc" | "none";
 
-export function CustomTableHead({
+export function Sortable({
   children,
-  columnName,
+  column,
 }: {
   children: ReactNode;
-  columnName: string;
+  column: string;
 }) {
   const [sortOrder, setSortOrder] = useState<SortOrder>("none");
   const router = useRouter();
@@ -21,10 +20,10 @@ export function CustomTableHead({
 
   useEffect(() => {
     const sort = searchParams.get("sort");
-    if (sort !== columnName) {
+    if (sort !== column) {
       setSortOrder("none");
     }
-  }, [searchParams, columnName]);
+  }, [searchParams, column]);
 
   function handleClick() {
     const params = new URLSearchParams(searchParams);
@@ -33,7 +32,7 @@ export function CustomTableHead({
       case "asc":
         setSortOrder("desc");
         params.set("sortOrder", "desc");
-        params.set("sort", columnName);
+        params.set("sort", column);
         break;
       case "desc":
         setSortOrder("none");
@@ -43,7 +42,7 @@ export function CustomTableHead({
       case "none":
         setSortOrder("asc");
         params.set("sortOrder", "asc");
-        params.set("sort", columnName);
+        params.set("sort", column);
         break;
       default:
         const exhaustiveCheck: never = sortOrder;
@@ -54,16 +53,14 @@ export function CustomTableHead({
   }
 
   return (
-    <TableHead>
-      <div
-        onClick={handleClick}
-        className="flex items-center cursor-pointer select-none"
-      >
-        <div className="text-nowrap">{children}</div>
-        {sortOrder === "asc" && <MoveUpIcon className="w-3 h-3" />}
-        {sortOrder === "desc" && <MoveDownIcon className="w-3 h-3" />}
-        {sortOrder === "none" && <div className="w-3 h-3"></div>}
-      </div>
-    </TableHead>
+    <div
+      onClick={handleClick}
+      className="flex items-center cursor-pointer select-none"
+    >
+      <div className="text-nowrap">{children}</div>
+      {sortOrder === "asc" && <MoveUpIcon className="w-3 h-3" />}
+      {sortOrder === "desc" && <MoveDownIcon className="w-3 h-3" />}
+      {sortOrder === "none" && <div className="w-3 h-3"></div>}
+    </div>
   );
 }
