@@ -4,9 +4,9 @@ shadrizz() {
     tsx "$SHADRIZZ_PATH" "$@"
 }
 
-# rm -rf ~/code/shadrizz-demo
+rm -rf ~/code/shadrizz-demo
 cd ~/code
-# shadrizz new shadrizz-demo -p pnpm --latest
+shadrizz new shadrizz-demo -p pnpm --latest
 cd ~/code/shadrizz-demo
 shadrizz init -p pnpm --latest \
     --db-dialect sqlite \
@@ -21,10 +21,8 @@ cp ~/code/shadrizz/templates/test-sqlite-demo/scripts/load-fake-data.ts.hbs scri
 shadrizz add tiptap
 shadrizz scaffold -a admin category -c name:text
 shadrizz scaffold -a admin post -c category_id:references_select title:text published_at:timestamp content:text_tiptap
-shadrizz scaffold -a admin contact_message -c name:text email:text message:text
-shadrizz scaffold -a private todo -c user_id:references title:text completed:boolean
-shadrizz scaffold -a private note -c user_id:references title:text content:text_tiptap
-shadrizz scaffold -a public contact_message -c name:text email:text message:text
+shadrizz scaffold -a private todo -c title:text completed:boolean
+shadrizz scaffold -a private note -c title:text content:text_tiptap
 # shadrizz add stripe
 npm run generate
 npm run migrate

@@ -3,13 +3,11 @@ import { openConnection } from "./sdb";
 import { posts } from "@/schema/posts";
 import { categories } from "@/schema/categories";
 import { todos } from "@/schema/todos";
-import { contactMessages } from "@/schema/contact-messages";
 import { users } from "@/schema/users";
 
 type Post = typeof posts.$inferInsert;
 type Category = typeof categories.$inferInsert;
 type Todo = typeof todos.$inferInsert;
-type ContactMessage = typeof contactMessages.$inferInsert;
 type User = typeof users.$inferInsert;
 
 async function main() {
@@ -17,14 +15,13 @@ async function main() {
   const postList: Post[] = [];
   const categoryList: Category[] = [];
   const todoList: Todo[] = [];
-  const contactMessageList: ContactMessage[] = [];
   const userList: User[] = [];
 
   for (let i = 0; i < 100; i++) {
     postList.push({
       title: faker.lorem.sentence(),
       publishedAt: faker.date.past(),
-      content: faker.lorem.paragraphs(3),
+      content: faker.lorem.paragraphs(1),
     });
   }
 
@@ -38,14 +35,6 @@ async function main() {
     todoList.push({
       title: faker.lorem.sentence(),
       completed: faker.datatype.boolean(),
-    });
-  }
-
-  for (let i = 0; i < 100; i++) {
-    contactMessageList.push({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      message: faker.lorem.paragraph(),
     });
   }
 
@@ -69,13 +58,11 @@ async function main() {
   await sdb.delete(posts);
   await sdb.delete(categories);
   await sdb.delete(todos);
-  await sdb.delete(contactMessages);
   await sdb.delete(users);
 
   await sdb.insert(posts).values(postList);
   await sdb.insert(categories).values(categoryList);
   await sdb.insert(todos).values(todoList);
-  await sdb.insert(contactMessages).values(contactMessageList);
   await sdb.insert(users).values(userList);
 
   await closeConnection();

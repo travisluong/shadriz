@@ -14,7 +14,7 @@ export function PrivateSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col text-sm min-w-40 max-w-40 fixed min-h-screen bg-background z-10 top-8 border-r">
+    <div className="flex flex-col text-sm w-8 sm:w-40 fixed min-h-screen bg-background z-20 top-8 border-r">
       {items.map((item) => (
         <Link
           key={item.title}
@@ -25,7 +25,7 @@ export function PrivateSidebar() {
           )}
         >
           <item.icon className="flex-shrink-0 w-4 h-4" />
-          <span>{item.title}</span>
+          <span className="hidden sm:block">{item.title}</span>
         </Link>
       ))}
     </div>

@@ -13,15 +13,6 @@ describe("shadriz e2e test", () => {
     cy.get("h1").first().should("have.text", "shadrizz");
   });
 
-  it("contact message happy path", () => {
-    cy.visit("http://localhost:3000/contact-messages/new");
-    cy.get('input[name="name"]').type("john smith");
-    cy.get('input[name="email"]').type("johnsmith@example.com");
-    cy.get('input[name="message"]').type("hello world");
-    cy.get('button[type="submit"]').click();
-    cy.get("td").contains("john smith");
-  });
-
   it("create category", () => {
     cy.get("a").contains("Categories").click();
     cy.get("button").contains("New").click();
