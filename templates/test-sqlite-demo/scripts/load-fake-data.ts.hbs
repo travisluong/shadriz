@@ -47,9 +47,15 @@ async function main() {
   });
 
   for (let i = 0; i < 10; i++) {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
     userList.push({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
+      name: faker.person.fullName({ firstName, lastName }),
+      email: faker.internet.email({
+        firstName,
+        lastName,
+        provider: "example.com",
+      }),
       image: faker.image.avatar(),
       role: faker.helpers.arrayElement(["user", "admin"]),
     });
