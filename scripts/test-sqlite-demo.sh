@@ -4,9 +4,7 @@ shadrizz() {
     tsx "$SHADRIZZ_PATH" "$@"
 }
 
-rm -rf ~/code/shadrizz-demo
 cd ~/code
-shadrizz new shadrizz-demo -p pnpm --latest
 cd ~/code/shadrizz-demo
 shadrizz init -p pnpm --latest \
     --db-dialect sqlite \
