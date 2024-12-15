@@ -1,0 +1,27 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+export default function Page() {
+  return (
+    <div className="p-2">
+      <h1 className="font-bold mb-2">Dashboard</h1>
+      <Alert>
+        <AlertTitle className="font-bold">Note</AlertTitle>
+        <AlertDescription className="flex flex-col gap-2">
+          <p>Use this space to build out your user dashboard.</p>
+          <p>
+            Users with the <strong>admin</strong> role or <strong>user</strong>{" "}
+            role will have access here.
+          </p>
+          <p>
+            The following commands were used in generating this scaffolding:
+          </p>
+          <pre className="text-wrap">
+            $ shadrizz scaffold -a private todo -c title:text completed:boolean
+            <br />$ shadrizz scaffold -a private note -c title:text
+            content:text_tiptap
+          </pre>
+        </AlertDescription>
+      </Alert>
+    </div>
+  );
+}

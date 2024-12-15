@@ -1,0 +1,29 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+export default function Page() {
+  return (
+    <div className="p-2">
+      <h1 className="font-bold mb-2">Admin</h1>
+      <Alert>
+        <AlertTitle className="font-bold">Note</AlertTitle>
+        <AlertDescription className="flex flex-col gap-2">
+          <p>Use this space to build out your admin dashboard.</p>
+          <p>
+            Users with the <strong>admin</strong> role will have access here.
+          </p>
+          <p>
+            The following commands were used in generating this scaffolding:
+          </p>
+          <pre className="text-wrap">
+            $ npx shadrizz@latest add tiptap
+            <br />
+            $ npx shadrizz@latest scaffold -a admin category -c name:text
+            <br />$ npx shadrizz@latest scaffold -a admin post -c
+            category_id:references_select title:text published_at:timestamp
+            content:text_tiptap
+          </pre>
+        </AlertDescription>
+      </Alert>
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import { eq, like, sql, desc } from "drizzle-orm";
+import { eq, asc, desc, SQL } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { {{tableObj.singularPascalCase}}, {{tableObj.pluralCamelCase}} } from "@/schema/{{tableObj.pluralKebabCase}}";
 
@@ -7,38 +7,35 @@ export type {{tableObj.pluralPascalCase}}WithRelationsList = Awaited<
 >;
 
 export async function get{{tableObj.pluralPascalCase}}WithRelationsList({
+  filters,
   limit,
   offset,
-  search,
   sort,
   sortOrder,
 }: {
-  limit: number;
-  offset: number;
-  search?: string;
+  filters?: SQL;
+  limit?: number;
+  offset?: number;
   sort?: string;
   sortOrder?: string;
 }) {
-  let orderBy = desc({{tableObj.pluralCamelCase}}.createdAt);
-  
+  let orderBy;
   if (sort && sort in {{tableObj.pluralCamelCase}}) {
     switch (sortOrder) {
       case "asc":
-        orderBy = sql`${ {{tableObj.pluralCamelCase}}[sort as keyof {{tableObj.singularPascalCase}}] } asc`;
+        orderBy = asc({{tableObj.pluralCamelCase}}[sort as keyof {{tableObj.singularPascalCase}}]);
         break;
       case "desc":
-        orderBy = sql`${ {{tableObj.pluralCamelCase}}[sort as keyof {{tableObj.singularPascalCase}}] } desc`;
-        break;
-      default:
+        orderBy = desc({{tableObj.pluralCamelCase}}[sort as keyof {{tableObj.singularPascalCase}}]);
         break;
     }
   }
 
   return await db.query.{{tableObj.pluralCamelCase}}.findMany({
+    where: filters,
+    orderBy: orderBy,
     limit: limit,
     offset: offset,
-    where: search ? like({{tableObj.pluralCamelCase}}.id, `%${search}%`) : undefined,
-    orderBy: orderBy,
     with: undefined
   });
 }

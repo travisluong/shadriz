@@ -10,12 +10,14 @@ type SearchParams = {
 
 export function parseSearchParams(searchParams: SearchParams) {
   const page =
-    typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1;
-  const pageIndex = page - 1;
+    typeof searchParams.page === "string"
+      ? parseInt(searchParams.page)
+      : undefined;
+  const pageIndex = page ? page - 1 : undefined;
   const pageSize =
     typeof searchParams.pageSize === "string"
       ? parseInt(searchParams.pageSize)
-      : 10;
+      : undefined;
   const search = searchParams.search;
   const sort = searchParams.sort;
   const sortOrder = searchParams.sortOrder;

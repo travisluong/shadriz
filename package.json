@@ -16,7 +16,7 @@
     "test-sqlite": "sh ./scripts/test-sqlite.sh",
     "test-mysql": "sh ./scripts/test-mysql.sh",
     "test-postgresql-auto-increment": "sh ./scripts/test-postgresql-auto-increment.sh",
-    "test-sqlite-demo": "sh ./scripts/test-sqlite-demo.sh",
+    "test-demo": "sh ./scripts/test-demo.sh",
     "merge-package-json": "tsx ./scripts/merge-package-json.ts"
   },
   "author": "travisluong",
