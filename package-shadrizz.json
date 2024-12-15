@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/better-sqlite3": "^7.6.12",
     "@types/pg": "^8.11.6",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
