@@ -12,7 +12,7 @@ export class BetterSqlite3PackageStrategy implements DbPackageStrategy {
   shadcnComponents: string[] = [];
   dialect: DbDialect = "sqlite";
   dependencies: string[] = ["better-sqlite3"];
-  devDependencies: string[] = [];
+  devDependencies: string[] = ["@types/better-sqlite3"];
 
   constructor(opts: ShadrizzConfig) {
     this.opts = opts;
