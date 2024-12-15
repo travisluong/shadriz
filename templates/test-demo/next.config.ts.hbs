@@ -1,0 +1,13 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["demo.shadrizz.com"],
+      bodySizeLimit: "5mb",
+    },
+  },
+};
+
+export default nextConfig;
