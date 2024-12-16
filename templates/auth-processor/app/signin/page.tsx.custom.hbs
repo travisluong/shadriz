@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+{{#if providers.credentials}}
+import { SignInForm } from "@/components/signin/signin-form";
+{{/if}}
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
@@ -15,9 +19,11 @@ export default async function Page(props: {
 
   return (
     <div className="flex min-h-screen justify-center items-center">
-      <div className="flex flex-col gap-2 items-center border rounded p-5 max-w-xs">
-        <div>Sign In</div>
-
+      <Card>
+        <CardHeader>
+          <CardTitle>Sign In</CardTitle>
+        </CardHeader>
+        <CardContent>
         {{#if providers.google}}
             <form
               key={"google"}
@@ -67,41 +73,7 @@ export default async function Page(props: {
             <Separator className="my-4" />
         {{/if}}
         {{#if providers.credentials}}
-            <form
-              key={"credentials"}
-              className="flex flex-col gap-2 items-center w-full"
-              action={async (formData: FormData) => {
-                "use server";
-                try {
-                  await signIn("credentials", {
-                    redirectTo: "/dashboard",
-                    email: formData.get("email"),
-                    password: formData.get("password"),
-                  });
-                } catch (error) {
-                  if (error instanceof AuthError) {
-                    return redirect(`/signin/?error=${error.type}`);
-                  }
-                  throw error;
-                }
-              }}
-            >
-              <div className="w-full">
-                <Label>Email</Label>
-                <Input
-                  type="text"
-                  name="email"
-                  placeholder="user@example.com"
-                />
-              </div>
-              <div className="w-full">
-                <Label>Password</Label>
-                <Input type="password" name="password" placeholder="password" />
-              </div>
-              <Button className="w-full" type="submit">
-                <span>Sign in with Credentials</span>
-              </Button>
-            </form>
+            <SignInForm />
             <Separator className="my-4" />
         {{/if}}
         {{#if providers.postmark}}
@@ -136,10 +108,11 @@ export default async function Page(props: {
             </form>
             <Separator className="my-4" />
         {{/if}}
-        {searchParams.error && (
-          <div className="text-destructive">Login failed</div>
-        )}
-      </div>
+          {searchParams.error && (
+            <p>Login failed</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

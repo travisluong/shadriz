@@ -1,9 +1,17 @@
 import { AdminLoginForm } from "@/components/admin-login/admin-login-form";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default async function Page() {
   return (
     <div className="flex min-h-screen justify-center items-center">
-      <AdminLoginForm />
+      <Card>
+        <CardHeader>
+          <CardTitle>Admin Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <AdminLoginForm />
+        </CardContent>
+      </Card>
     </div>
   );
 }

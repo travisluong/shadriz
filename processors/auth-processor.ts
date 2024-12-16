@@ -186,6 +186,24 @@ export class AuthProcessor implements ShadrizzProcessor {
     this.addUserSchema();
     this.addNextAuthModuleAugmentation();
     this.addPrivateHeader();
+    if (this.opts.authProviders.includes("credentials")) {
+      this.addSignInForm();
+      this.addSignInAction();
+    }
+  }
+
+  addSignInAction() {
+    renderTemplate({
+      inputPath: "auth-processor/actions/signin/signin-action.ts.hbs",
+      outputPath: "actions/signin/signin-action.ts",
+    });
+  }
+
+  addSignInForm() {
+    renderTemplate({
+      inputPath: "auth-processor/components/signin/signin-form.tsx.hbs",
+      outputPath: "components/signin/signin-form.tsx",
+    });
   }
 
   addPrivateHeader() {

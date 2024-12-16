@@ -2,14 +2,13 @@
 
 import { startTransition, useActionState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AdminLoginState, adminLogin } from "@/actions/admin-login/admin-login";
+import { SignInState, signInAction } from "@/actions/signin/signin-action";
 
-export function AdminLoginForm() {
-  const initialState: AdminLoginState = {};
-  const [state, dispatch] = useActionState(adminLogin, initialState);
+export function SignInForm() {
+  const initialState: SignInState = {};
+  const [state, dispatch] = useActionState(signInAction, initialState);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,11 +25,21 @@ export function AdminLoginForm() {
     >
       <div className="w-full">
         <Label>Email</Label>
-        <Input type="text" name="email" placeholder="user@example.com" />
+        <Input
+          type="text"
+          name="email"
+          placeholder="user@example.com"
+          defaultValue="test@example.com"
+        />
       </div>
       <div className="w-full">
         <Label>Password</Label>
-        <Input type="password" name="password" placeholder="password" />
+        <Input
+          type="password"
+          name="password"
+          placeholder="password"
+          defaultValue="12345678"
+        />
       </div>
       <Button className="w-full" type="submit">
         <span>Sign in</span>
