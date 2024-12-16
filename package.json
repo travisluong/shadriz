@@ -1,6 +1,6 @@
 {
   "name": "shadrizz",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "main": "dist/index.js",
   "bin": {
     "shadrizz": "./dist/index.js"
