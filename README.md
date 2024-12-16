@@ -1,15 +1,14 @@
 # shadrizz
 
-## Full Stack TypeScript Scaffolding Framework
+## TypeScript Scaffolding Automation Web Framework
 
-Build [Next.js](https://nextjs.org/) Apps Easier and Faster With:
+A CLI Tool That Generates Full Stack Apps Using Next.js, shadcn/ui, and Drizzle ORM.
 
-✅ [shadcn/ui](https://ui.shadcn.com/) - Customizable Components<br>
-✅ [Drizzle ORM](https://orm.drizzle.team/) - Database Migrations and Queries<br>
-✅ [Ruby on Rails Inspired](https://rubyonrails.org/) - Scaffold Automations<br>
-✅ [Auth.js](https://authjs.dev/) - Authentication and Authorization<br>
-✅ [Django Inspired](https://www.djangoproject.com/) - Admin Dashboard<br>
-✅ [Zod](https://zod.dev/) - Data Validation
+- [Next.js](https://nextjs.org/) - React Framework<br>
+- [shadcn/ui](https://ui.shadcn.com/) - Customizable Components<br>
+- [Drizzle ORM](https://orm.drizzle.team/) - Database Migrations, ORM, and Query Builder<br>
+- [Auth.js](https://authjs.dev/) - Authentication<br>
+- [Zod](https://zod.dev/) - Data Validation
 
 ## Documentation
 

@@ -1,8 +1,8 @@
 # shadrizz docs
 
-## Full Stack TypeScript Scaffolding Framework
+## TypeScript Scaffolding Automation Web Framework
 
-Build Web Apps Easier and Faster
+A CLI Tool That Generates Full Stack Apps Using Next.js, shadcn/ui, and Drizzle ORM.
 
 - [Next.js](https://nextjs.org/) - React Framework<br>
 - [shadcn/ui](https://ui.shadcn.com/) - Customizable Components<br>
