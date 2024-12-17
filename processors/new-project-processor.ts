@@ -158,7 +158,7 @@ export class NewProjectProcessor implements ShadrizzProcessor {
   }
 }`)
 
-    appendToFileIfTextNotExists(".gitignore", "/uploads", "/uploads");
+    appendToFileIfTextNotExists(".gitignore", "uploads/", "uploads/");
 
     appendToEnvLocal(
       "NEXT_PUBLIC_UPLOAD_BASE_URL",
